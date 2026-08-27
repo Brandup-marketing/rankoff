@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">HOLD ONE mark</title>
+  <desc id="desc">A red open hold frame containing a black number one.</desc>
+  <rect width="128" height="128" rx="12" fill="#FAFAFA"/>
+  <path d="M44 16H16v32m68-32h28v32M44 112H16V80m68 32h28V80" fill="none" stroke="#E33B2E" stroke-width="12" stroke-linecap="square"/>
+  <path d="M57 40 76 28v72H58V51l-12 8-9-14 20-13Z" fill="#19191D"/>
+</svg>

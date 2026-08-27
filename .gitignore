@@ -1,0 +1,6 @@
+.DS_Store
+.impeccable/critique/.index-html-current.md
+.env
+.env.*
+node_modules/
+dist/
