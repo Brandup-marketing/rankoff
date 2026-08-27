@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Why Rankoff exists: a public market for sponsored attention." />
+    <meta name="theme-color" content="#090a0c" />
+    <title>About RANKOFF</title>
+    <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
+    <link rel="stylesheet" href="./about.css?v=1" />
+    <script defer data-website-id="dfid_pq3rgtr30XTFoq5raZRvX" data-domain="rankoff.my" src="https://datafa.st/js/script.js"></script>
+  </head>
+  <body>
+    <main class="about-shell">
+      <header class="about-header">
+        <a class="about-brand" href="./index.html" aria-label="RANKOFF home"><img src="./assets/rankoff-header-lockup.png?v=1" alt="RANKOFF — Bid your way to number one" width="420" height="120" /></a>
+        <nav aria-label="Main navigation"><a href="./index.html">Board</a><a href="./about.html" aria-current="page">About</a><a href="./legal.html#rules">Rules</a></nav>
+      </header>
+
+      <section class="about-hero" aria-labelledby="about-title">
+        <p class="eyebrow">The story behind the board</p>
+        <h1 id="about-title">Attention has a price.<br /><span>Make it visible.</span></h1>
+        <p class="about-lede">RANKOFF is a public sponsored leaderboard where products compete for the attention they earn. One board, one clear rule: the highest valid bid takes the highest sponsored position.</p>
+      </section>
+
+      <section class="origin-grid" aria-label="Rankoff origin">
+        <article class="origin-copy">
+          <p class="eyebrow">Why it exists</p>
+          <h2>Rankoff started with one question.</h2>
+          <p>What if a product launch had a visible market instead of a hidden ad slot? What if anyone could see who was winning, what the position cost, and how much attention the board generated?</p>
+          <p>Rankoff turns that question into a public place to compete. Listings are clear, bids are visible, and sponsored placement is labelled as sponsored.</p>
+        </article>
+        <aside class="principles" aria-label="Rankoff principles">
+          <div><strong>01</strong><span>Public by default</span><p>Every rank, bid, and listing has a visible record.</p></div>
+          <div><strong>02</strong><span>One simple rule</span><p>A higher valid bid moves a listing higher on the board.</p></div>
+          <div><strong>03</strong><span>Evidence over promises</span><p>Clicks and analytics are labelled by how they were measured.</p></div>
+        </aside>
+      </section>
+
+      <section class="live-state" aria-labelledby="live-title">
+        <div><p class="eyebrow">The board today</p><h2 id="live-title">A live market, in public.</h2></div>
+        <div class="about-stats">
+          <div><strong data-about-listings>8</strong><span>demo listings</span></div>
+          <div><strong data-about-clicks>12.4K</strong><span>measured clicks</span></div>
+          <div><strong data-about-bid>$2,480</strong><span>current top bid</span></div>
+        </div>
+        <p class="about-disclosure" data-about-state>Demo board values · connect DataFast for live analytics.</p>
+      </section>
+
+      <section class="timeline" aria-labelledby="timeline-title">
+        <p class="eyebrow">What happens next</p>
+        <h2 id="timeline-title">The board keeps moving.</h2>
+        <div class="timeline-grid">
+          <div><span>Now</span><h3>Submit a listing</h3><p>Enter a URL, choose a market, and set the bid that feels worth the position.</p></div>
+          <div><span>Then</span><h3>Compete in public</h3><p>Your favicon, listing, bid, and position appear on the board after review.</p></div>
+          <div><span>Next</span><h3>Measure the outcome</h3><p>Verified referral clicks and public activity make the market legible over time.</p></div>
+        </div>
+      </section>
+
+      <footer class="about-footer"><span>RANKOFF</span><span>Bid your way to #1.</span><a href="./index.html">Return to board →</a></footer>
+    </main>
+    <script>
+      const endpoint = window.RANKOFF_ANALYTICS_ENDPOINT || "./api/public-analytics";
+      fetch(endpoint, { headers: { Accept: "application/json" }, cache: "no-store" }).then((response) => response.ok ? response.json() : Promise.reject()).then((data) => {
+        if (Number.isFinite(Number(data.visitors))) document.querySelector("[data-about-clicks]").textContent = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 }).format(Number(data.visitors));
+        const state = document.querySelector("[data-about-state]");
+        if (state) state.textContent = "Live visitor analytics · powered by DataFast.";
+      }).catch(() => {});
+    </script>
+  </body>
+</html>

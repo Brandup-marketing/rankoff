@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="RANKOFF is a public sponsored leaderboard where higher bids move products up the board."
+    />
+    <meta name="theme-color" content="#090a0c" />
+    <title>RANKOFF | Sponsored Leaderboard</title>
+    <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
+    <link rel="stylesheet" href="./styles.css?v=9" />
+    <script defer data-website-id="dfid_pq3rgtr30XTFoq5raZRvX" data-domain="rankoff.my" src="https://datafa.st/js/script.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#board">Skip to leaderboard</a>
+
+    <main class="app-shell">
+      <header class="topbar" aria-label="RANKOFF">
+        <a class="brand" href="./" aria-label="RANKOFF home">
+          <img class="brand-lockup-image" src="./assets/rankoff-header-lockup.png?v=1" alt="RANKOFF — Bid your way to number one" width="420" height="120" />
+        </a>
+
+        <nav class="time-tabs" aria-label="Ranking timeframe">
+          <button type="button" data-board-window="all" aria-pressed="true">All-time</button>
+          <button type="button" data-board-window="today" aria-pressed="false">Today</button>
+        </nav>
+        <span class="demo-state"><i aria-hidden="true"></i> Demo market</span>
+        <nav class="site-nav" aria-label="Main navigation"><a href="./index.html">Board</a><a href="./about.html">About</a></nav>
+      </header>
+
+      <section class="claim-stage" aria-labelledby="page-title">
+        <div class="claim-panel">
+          <p class="market-status"><span><i aria-hidden="true"></i> <b data-online-count>—</b> online</span><span><b data-visitor-count>—</b> visitors</span><span data-analytics-state>Demo telemetry</span><a href="./legal.html#privacy">See analytics →</a></p>
+          <h1 id="page-title">Take the lead for <span data-hero-next-price>$0</span></h1>
+          <p class="claim-copy" data-hero-context>
+            The highest bid takes the highest sponsored position.
+          </p>
+
+          <div class="market-entry">
+            <form class="bid-console" data-inline-challenge aria-label="Challenge the leaderboard">
+              <div class="amount-control">
+                <button type="button" data-inline-adjust="-10" aria-label="Decrease bid by ten dollars">−</button>
+                <label>
+                  <span>Your total bid</span>
+                  <span class="money-field">
+                    <b aria-hidden="true">$</b>
+                    <input name="challengeAmount" type="number" inputmode="numeric" min="1" max="1000000" step="1" required data-inline-bid />
+                  </span>
+                </label>
+                <button type="button" data-inline-adjust="10" aria-label="Increase bid by ten dollars">+</button>
+              </div>
+
+              <label class="field field-wide">
+                <span>Your product URL or @handle</span>
+                <input name="productUrl" type="text" placeholder="yourproduct.com or @handle" autocomplete="url" required data-inline-url />
+              </label>
+
+              <label class="field">
+                <span>Market</span>
+                <select name="productCategory" required data-category-select>
+                  <option value="">Choose a market</option>
+                </select>
+              </label>
+
+              <button class="primary-action" type="submit">Review challenge</button>
+              <p class="demo-note">Demo market · no payment collected</p>
+            </form>
+
+            <aside class="bid-terms" aria-labelledby="bid-terms-heading">
+              <h2 id="bid-terms-heading">What your bid buys</h2>
+              <dl>
+                <div><dt>Position</dt><dd>Held until a higher verified bid wins.</dd></div>
+                <div><dt>Charge</dt><dd>One payment after review—never automatic.</dd></div>
+                <div><dt>Reporting</dt><dd>Clicks shown for the selected timeframe.</dd></div>
+              </dl>
+              <a href="./legal.html#rules">Read the ranking rules</a>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="category-market" aria-labelledby="category-heading">
+        <h2 id="category-heading">Markets</h2>
+        <div class="category-rail" data-category-rail aria-label="Filter by category"></div>
+      </section>
+
+      <section class="board-section" id="board" aria-labelledby="board-heading">
+        <div class="board-toolbar">
+          <div>
+            <h2 id="board-heading">Live leaderboard</h2>
+          </div>
+          <div class="board-context">
+            <p data-board-summary>Highest valid bid ranks first.</p>
+            <details class="measurement-note">
+              <summary>How clicks are measured</summary>
+              <p>Verified clicks represent first-party redirect events for the selected timeframe. Demo estimates are clearly labelled and exclude no known bot traffic.</p>
+            </details>
+          </div>
+        </div>
+
+        <div class="top-three" data-top-three aria-label="Top three sponsored listings"></div>
+
+        <div class="board-header" aria-hidden="true">
+          <span>Rank</span>
+          <span>Listing</span>
+          <span>Bid</span>
+          <span>Clicks</span>
+          <span>Action</span>
+        </div>
+        <div class="board-list" data-board-list aria-live="polite" aria-label="Sponsored listings ranked fourth and below"></div>
+      </section>
+
+      <footer class="footer">
+        <span class="footer-brand">RANKOFF</span>
+        <span class="footer-links"><a href="./legal.html#rules">Rules</a><a href="./legal.html#terms">Terms</a><a href="./legal.html#privacy">Privacy</a><a href="./legal.html#payments">Payments</a></span>
+      </footer>
+    </main>
+
+    <dialog class="dialog" data-bid-dialog aria-labelledby="bid-dialog-title">
+      <form method="dialog" class="dialog-panel" data-bid-form>
+        <div class="dialog-heading">
+          <div>
+            <p class="section-label">Challenge review</p>
+            <h2 id="bid-dialog-title">Confirm your position</h2>
+          </div>
+          <button class="icon-button" type="button" data-close-bid aria-label="Close dialog">x</button>
+        </div>
+
+        <div class="bid-target" data-bid-target></div>
+
+        <section class="order-summary" aria-label="Challenge terms">
+          <div><span>Position</span><strong data-order-position>Calculated from your final bid</strong></div>
+          <div><span>Charge</span><strong>One-time payment after review</strong></div>
+          <div><span>Duration</span><strong>Until a higher verified bid wins</strong></div>
+          <div><span>Reporting</span><strong>Clicks shown for this board timeframe</strong></div>
+        </section>
+
+        <label class="field" for="bid-amount">
+          <span>Your total bid</span>
+          <span class="dialog-stepper">
+            <button type="button" data-bid-adjust="-1" aria-label="Decrease bid by one dollar">-</button>
+            <span class="money-field">
+              <b aria-hidden="true">$</b>
+              <input id="bid-amount" name="bidAmount" inputmode="numeric" min="1" max="1000000" step="1" required />
+            </span>
+            <button type="button" data-bid-adjust="1" aria-label="Increase bid by one dollar">+</button>
+          </span>
+        </label>
+
+        <p class="field-hint" data-bid-hint></p>
+
+        <label class="acknowledgement">
+          <input type="checkbox" required />
+          <span>I reviewed the position, charge timing, and ranking rules. I agree to the <a href="./legal.html#terms" target="_blank" rel="noopener">Terms</a> and <a href="./legal.html#privacy" target="_blank" rel="noopener">Privacy Policy</a>.</span>
+        </label>
+
+        <section class="payment-preview" aria-label="Payment method preview">
+          <div>
+            <span class="section-label">Payment method</span>
+            <strong>Hosted checkout by Dodo Payments</strong>
+          </div>
+          <span class="payment-status">Demo preview</span>
+          <p>In production, card details and billing identity would be entered on the provider-hosted checkout. This demo never sends or stores payment data.</p>
+        </section>
+
+        <div class="dialog-actions">
+          <button class="secondary-action" type="button" data-close-bid>Cancel</button>
+          <button class="primary-action" type="submit">Confirm challenge</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="toast" data-toast role="status" aria-live="polite" aria-atomic="true"></div>
+    <script src="./app.js?v=9" defer></script>
+  </body>
+</html>

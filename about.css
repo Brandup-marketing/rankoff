@@ -1,0 +1,42 @@
+:root { color-scheme: dark; --bg: oklch(12% 0.008 25); --surface: oklch(16% 0.009 25); --line: oklch(28% 0.012 25); --ink: oklch(94% 0.004 25); --muted: oklch(70% 0.01 25); --accent: oklch(64% 0.225 28); --accent-soft: oklch(21% 0.055 28); --up: oklch(74% 0.145 160); --blue: oklch(72% 0.15 255); }
+* { box-sizing: border-box; }
+html { background: var(--bg); color: var(--ink); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+body { min-width: 20rem; margin: 0; background: var(--bg); font-size: 1rem; line-height: 1.55; }
+a { color: inherit; text-underline-offset: 0.18em; }
+.about-shell { width: min(calc(100% - 2rem), 76rem); margin: 0 auto; padding-bottom: 2rem; }
+.about-header { display: flex; align-items: center; justify-content: space-between; min-height: 5rem; border-bottom: 1px solid var(--line); }
+.about-brand { display: block; width: 11.9rem; height: 3.55rem; overflow: hidden; background: #050505; line-height: 0; }
+.about-brand img { display: block; width: 12.5rem; height: 3.55rem; object-fit: cover; object-position: left center; }
+.about-header nav { display: flex; gap: 1.25rem; color: var(--muted); font-size: 0.84rem; font-weight: 700; }
+.about-header nav a[aria-current="page"] { color: var(--ink); }
+.about-hero { max-width: 58rem; padding: clamp(5rem, 12vw, 9rem) 0 6rem; }
+.eyebrow { margin: 0 0 1rem; color: var(--accent); font-size: 0.72rem; font-weight: 850; letter-spacing: 0.08em; text-transform: uppercase; }
+h1, h2, h3, p { text-wrap: pretty; }
+h1 { margin: 0; font-size: clamp(3.2rem, 8vw, 7rem); letter-spacing: -0.04em; line-height: 0.94; }
+h1 span { color: var(--accent); }
+.about-lede { max-width: 47rem; margin: 2rem 0 0; color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.3rem); line-height: 1.55; }
+.origin-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(19rem, 0.9fr); gap: clamp(2rem, 7vw, 8rem); padding: 4rem 0; border-top: 1px solid var(--line); }
+h2 { margin: 0; font-size: clamp(1.8rem, 4vw, 3.2rem); letter-spacing: -0.03em; line-height: 1.05; }
+.origin-copy > p:not(.eyebrow) { max-width: 39rem; color: var(--muted); }
+.principles { display: grid; gap: 1.2rem; }
+.principles div { display: grid; grid-template-columns: 2.5rem 1fr; gap: 0.3rem 0.75rem; padding-bottom: 1.2rem; border-bottom: 1px solid var(--line); }
+.principles strong { grid-row: span 2; color: var(--accent); font-size: 0.85rem; }
+.principles span { font-weight: 850; }
+.principles p { grid-column: 2; margin: 0; color: var(--muted); font-size: 0.85rem; }
+.live-state { display: grid; grid-template-columns: minmax(13rem, 0.8fr) minmax(0, 1.2fr); gap: 2rem; align-items: end; padding: 4rem 0; border-block: 1px solid var(--line); }
+.about-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.about-stats div { padding: 1rem 0; border-top: 2px solid var(--accent); }
+.about-stats strong { display: block; color: var(--ink); font-size: clamp(1.5rem, 3vw, 2.5rem); font-variant-numeric: tabular-nums; }
+.about-stats span, .about-disclosure { color: var(--muted); font-size: 0.75rem; }
+.about-disclosure { grid-column: 2; margin: -1.2rem 0 0; }
+.timeline { padding: 7rem 0 5rem; }
+.timeline-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2.5rem; }
+.timeline-grid div { padding-top: 1rem; border-top: 1px solid var(--line); }
+.timeline-grid span { color: var(--accent); font-size: 0.72rem; font-weight: 850; text-transform: uppercase; }
+.timeline-grid h3 { margin: 1rem 0 0.4rem; font-size: 1.1rem; }
+.timeline-grid p { margin: 0; color: var(--muted); font-size: 0.86rem; }
+.about-footer { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.78rem; }
+.about-footer span:first-child { color: var(--ink); font-weight: 900; letter-spacing: 0.05em; }
+.about-footer a { color: var(--accent); font-weight: 800; }
+@media (max-width: 44rem) { .about-shell { width: min(calc(100% - 1rem), 76rem); } .about-header nav { gap: 0.7rem; font-size: 0.75rem; } .about-hero { padding: 4rem 0 4.5rem; } .origin-grid, .live-state { grid-template-columns: 1fr; gap: 2.5rem; } .about-disclosure { grid-column: auto; margin: -1.5rem 0 0; } .timeline-grid { grid-template-columns: 1fr; gap: 2rem; } .about-footer { flex-wrap: wrap; } }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
