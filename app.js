@@ -440,8 +440,8 @@
       ? (production ? "实时赞助榜单" : "预览赞助榜单")
       : (production ? "Live sponsored leaderboard" : "Preview sponsored leaderboard");
     if (elements.activityNote) elements.activityNote.textContent = chinese
-      ? (production ? "实时成交滚动播报 · 立即出价抢位" : "竞价预览 · 立即出价抢位")
-      : (production ? "Live settlements · Bid before the next move" : "Market preview · Bid before the next move");
+      ? "实时动态 · 关注下一步变化"
+      : "Live activity · Watch the next move";
     if (elements.liveDot) elements.liveDot.hidden = !production;
     if (elements.measurementSummary) elements.measurementSummary.textContent = chinese
       ? (production ? "点击如何统计" : "预览点击说明")
@@ -1083,7 +1083,10 @@
       if (duplicate) name.tabIndex = -1;
     }
     identity.append(name);
-    if (listing.description) identity.append(createElement("span", "activity-description", listing.description));
+    if (listing.description) {
+      const description = listing.description.length > 60 ? `${listing.description.slice(0, 57).trimEnd()}…` : listing.description;
+      identity.append(createElement("span", "activity-description", description));
+    }
     identity.append(createElement("span", "activity-context", presentation.context));
     const action = createElement("span", `activity-action activity-action-${presentation.type}`, presentation.action);
     const metric = createElement("div", "activity-metric");
