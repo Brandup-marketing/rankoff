@@ -193,7 +193,6 @@
     todayRankingList: document.querySelector("[data-today-ranking-list]"),
     todaySeeAll: document.querySelector("[data-today-see-all]"),
     activityList: document.querySelector("[data-activity-list]"),
-    activityViewport: document.querySelector(".activity-ticker-viewport"),
     activityNote: document.querySelector("[data-activity-note]"),
     liveDot: document.querySelector(".live-dot"),
     panelToggles: Array.from(document.querySelectorAll("[data-panel-toggle]")),
@@ -1532,22 +1531,6 @@
       updatePanelToggleLabels();
     });
   });
-
-  elements.activityViewport?.addEventListener("wheel", (event) => {
-    if (event.deltaMode === 0 && Math.abs(event.deltaY) < 1 && Math.abs(event.deltaX) < 1) return;
-    const viewport = elements.activityViewport;
-    const maxScroll = viewport.scrollWidth - viewport.clientWidth;
-    if (maxScroll <= 0) return;
-
-    const direction = event.deltaX || event.deltaY;
-    const nextScroll = viewport.scrollLeft + direction;
-    const canScrollLeft = direction < 0 && viewport.scrollLeft > 0;
-    const canScrollRight = direction > 0 && viewport.scrollLeft < maxScroll;
-    if (!canScrollLeft && !canScrollRight) return;
-
-    event.preventDefault();
-    viewport.scrollLeft = Math.max(0, Math.min(maxScroll, nextScroll));
-  }, { passive: false });
 
   document.addEventListener("click", (event) => {
     const target = event.target instanceof Element ? event.target : null;

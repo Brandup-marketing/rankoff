@@ -289,8 +289,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .section-heading-line h2 { margin: 0; font-size: 1.05rem; font-weight: 850; }
 .section-note { color: var(--muted); font-size: .72rem; }
 .live-dot { width: .45rem; height: .45rem; border-radius: 50%; background: var(--accent); animation: live-pulse 1.8s ease-out infinite; }
-.activity-ticker-viewport { overflow-x: auto; overflow-y: hidden; padding-block: .15rem; overscroll-behavior-inline: contain; scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; cursor: grab; }
-.activity-ticker-viewport:active { cursor: grabbing; }
+.activity-ticker-viewport { overflow: hidden; padding-block: .15rem; }
 .activity-tape { display: flex; width: max-content; gap: .55rem; margin: 0; padding: 0; animation: market-ticker var(--ticker-duration, 36s) linear infinite; will-change: transform; }
 .activity-tape.is-empty { width: 100%; animation: none; }
 .activity-ticker-viewport:hover .activity-tape, .activity-ticker-viewport:focus-within .activity-tape { animation-play-state: paused; }
@@ -324,7 +323,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 @keyframes market-ticker { to { transform: translateX(calc(-50% - .275rem)); } }
 @media (prefers-reduced-motion: reduce) {
   .live-dot, .activity-tape, .activity-tape li.is-latest { animation: none; }
-  .activity-ticker-viewport { overflow-x: auto; scrollbar-width: thin; }
+  .activity-ticker-viewport { overflow: hidden; }
   .activity-tape li.is-duplicate { display: none; }
 }
 .ranking-rules { display: grid; grid-template-columns: minmax(13rem, 1fr) minmax(0, 2fr) auto; align-items: center; gap: 1.25rem; margin-top: 2rem; padding: 1.25rem 0; border-block: 1px solid var(--line); }
