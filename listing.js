@@ -2,6 +2,7 @@
   "use strict";
 
   const STORE_KEY = "rankoff-mvp-demo-v3";
+  const categoryLabels = { Agents: "AI Agents & Infrastructure", SEO: "SEO & AI Visibility", Marketing: "Marketing & Advertising", Crypto: "Crypto, Web3 & Investing", Developer: "Developer Tools", Business: "Business, Finance & Legal", Security: "Security, Privacy & Compliance", Health: "Health, Fitness & Wellness", Social: "Social Media & Creator Tools", Attention: "Leaderboards & Attention Markets", Careers: "Hiring, Jobs & Careers", Education: "Education & Learning", Agencies: "Agencies, Studios & Services", Ecommerce: "Ecommerce & Retail", Domains: "Domains & Web Assets", Games: "Games & Entertainment", People: "People & Profiles", Productivity: "Productivity & Personal Tools", Design: "Design & Creative", Writing: "Writing & Content", Discovery: "Directories, Launch & Discovery", AIMedia: "AI Media Generation", Audio: "Audio, Voice & Podcasting", Sales: "Sales & Lead Generation", Travel: "Travel, Local & Lifestyle", RealEstate: "Real Estate & Property", News: "Media & News", Hardware: "Hardware & Devices", Other: "Other" };
   const previewListings = [
     ["model-harbor", "Model Harbor", "A release desk for production AI models, approvals, and customer notices.", "https://modelharbor.example/", "Agents", 2480, 2840],
     ["trackline", "Trackline", "Campaign reporting for teams that need a clean answer to what moved.", "https://trackline.example/", "Marketing", 2160, 1910],
@@ -181,7 +182,7 @@
     const verified = model.mode === "production";
     const clickLabel = verified ? text("verifiedClicks") : text("sampleClicks");
     elements.title.textContent = model.title;
-    elements.category.textContent = model.category;
+    elements.category.textContent = categoryLabels[model.category] || model.category;
     elements.description.textContent = model.description;
     elements.rank.textContent = `#${model.rank}`;
     elements.bid.textContent = money.format(model.bid);

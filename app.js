@@ -7,24 +7,41 @@
   const BOARD_API_ENDPOINT = "./api/v1/board";
   const categories = [
     "Agents",
+    "SEO",
     "Marketing",
+    "Crypto",
     "Developer",
     "Business",
+    "Security",
+    "Health",
+    "Social",
+    "Attention",
+    "Careers",
+    "Education",
     "Agencies",
     "Ecommerce",
+    "Domains",
+    "Games",
+    "People",
     "Productivity",
     "Design",
-    "SEO",
-    "Crypto",
-    "Security",
+    "Writing",
+    "Discovery",
+    "AIMedia",
+    "Audio",
+    "Sales",
+    "Travel",
+    "RealEstate",
+    "News",
+    "Hardware",
     "Other",
   ];
   const translations = {
     en: { navBoard: "Board", navAbout: "About", heroCopy: "Put your product where people look first. Your listing stays at the top until someone pays more.", totalBid: "Your total bid", productUrl: "Your product URL or @handle", chooseMarket: "Choose a market", challengeCategory: "Challenge category", categoryRule: "Must match the listing you’ll outrank.", reviewBid: "Review your bid", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest valid bid takes #1. Pay more to move up.", todayRanking: "Today’s top ranking", latestActivity: "Latest activity", liveUpdates: "Live bid updates", howItWorks: "How ranking works" },
     zh: { navBoard: "榜单", navAbout: "关于", heroCopy: "把你的产品放到大家最先看到的位置。只要没有更高出价，你的介绍就会保持在榜首。", totalBid: "你的总出价", productUrl: "产品网址或 @账号", chooseMarket: "选择市场", challengeCategory: "挑战分类", categoryRule: "必须与您要超越的条目相同。", reviewBid: "确认出价", markets: "市场分类", liveLeaderboard: "实时榜单", boardSummary: "最高有效出价获得第 1 名。提高出价即可上升。", todayRanking: "今日热门排名", latestActivity: "最新动态", liveUpdates: "实时竞价更新", howItWorks: "排名规则" },
   };
-  const categoryLabels = { Agents: "AI Agents & Infrastructure", Marketing: "Marketing & Advertising", Developer: "Developer Tools & Infrastructure", Business: "Business & Finance", Agencies: "Agencies & Services", Ecommerce: "Ecommerce & Retail", Productivity: "Productivity & Collaboration", Design: "Design & Creative", SEO: "SEO & AI Visibility", Crypto: "Crypto, Web3 & Investing", Security: "Security, Privacy & Compliance", Other: "Other" };
-  const categoryTranslations = { Agents: "AI 代理与基础设施", Marketing: "营销与广告", Developer: "开发者工具与基础设施", Business: "商业与金融", Agencies: "代理机构与服务", Ecommerce: "电商与零售", Productivity: "效率与协作", Design: "设计与创意", SEO: "SEO 与 AI 可见性", Crypto: "加密、Web3 与投资", Security: "安全、隐私与合规", Other: "其他" };
+  const categoryLabels = { Agents: "AI Agents & Infrastructure", SEO: "SEO & AI Visibility", Marketing: "Marketing & Advertising", Crypto: "Crypto, Web3 & Investing", Developer: "Developer Tools", Business: "Business, Finance & Legal", Security: "Security, Privacy & Compliance", Health: "Health, Fitness & Wellness", Social: "Social Media & Creator Tools", Attention: "Leaderboards & Attention Markets", Careers: "Hiring, Jobs & Careers", Education: "Education & Learning", Agencies: "Agencies, Studios & Services", Ecommerce: "Ecommerce & Retail", Domains: "Domains & Web Assets", Games: "Games & Entertainment", People: "People & Profiles", Productivity: "Productivity & Personal Tools", Design: "Design & Creative", Writing: "Writing & Content", Discovery: "Directories, Launch & Discovery", AIMedia: "AI Media Generation", Audio: "Audio, Voice & Podcasting", Sales: "Sales & Lead Generation", Travel: "Travel, Local & Lifestyle", RealEstate: "Real Estate & Property", News: "Media & News", Hardware: "Hardware & Devices", Other: "Other" };
+  const categoryTranslations = { Agents: "AI 代理与基础设施", SEO: "SEO 与 AI 可见性", Marketing: "营销与广告", Crypto: "加密、Web3 与投资", Developer: "开发者工具", Business: "商业、金融与法律", Security: "安全、隐私与合规", Health: "健康、健身与生活方式", Social: "社交媒体与创作者工具", Attention: "排行榜与注意力市场", Careers: "招聘、工作与职业", Education: "教育与学习", Agencies: "代理机构、工作室与服务", Ecommerce: "电商与零售", Domains: "域名与网络资产", Games: "游戏与娱乐", People: "人物与个人资料", Productivity: "效率与个人工具", Design: "设计与创意", Writing: "写作与内容", Discovery: "目录、发布与发现", AIMedia: "AI 媒体生成", Audio: "音频、语音与播客", Sales: "销售与潜客获取", Travel: "旅行、本地与生活方式", RealEstate: "房地产与物业", News: "媒体与新闻", Hardware: "硬件与设备", Other: "其他" };
 
   const currency = new Intl.NumberFormat("en-US", {
     style: "currency",
