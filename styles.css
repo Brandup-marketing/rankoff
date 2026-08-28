@@ -373,8 +373,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .claim-panel h1 { font-size: 2.2rem; }
   .claim-copy { margin-top: 0.45rem; font-size: 0.82rem; }
   .market-entry { margin-top: 0.55rem; }
-  .bid-console { grid-template-columns: 1fr; padding: 0.6rem; }
-  .field-wide, .field:not(.field-wide), .amount-control, .bid-console > .primary-action { grid-column: 1; grid-row: auto; }
+  .bid-console { grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); padding: 0.6rem; }
+  .field-wide, .field:not(.field-wide) { grid-column: 1 / -1; grid-row: auto; }
+  .amount-control { grid-column: 1; grid-row: auto; }
+  .bid-console > .primary-action { grid-column: 2; grid-row: auto; }
   .field-wide { order: 1; }
   .field:not(.field-wide) { order: 2; }
   .amount-control { order: 3; }
@@ -394,7 +396,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .featured-rank { width: 2.65rem; height: 2.65rem; font-size: 0.84rem; }
   .featured-listing .product-mark { width: 2.65rem; height: 2.65rem; flex-basis: 2.65rem; }
   .featured-listing .product-meta { display: flex; gap: .2rem .38rem; margin-top: .14rem; font-size: .62rem; line-height: 1.2; }
-  .featured-listing .product-meta .sponsored-chip, .featured-listing .product-meta .verified-chip, .featured-listing .product-meta .estimated-chip { font-size: .56rem; }
+  .featured-listing .product-meta .sponsored-chip, .featured-listing .product-meta .verified-chip, .featured-listing .product-meta .estimated-chip { display: none; }
   .featured-listing .listing-description { display: -webkit-box; margin-top: 0.12rem; font-size: 0.67rem; line-height: 1.3; -webkit-line-clamp: 1; }
   .featured-listing .product-name { font-size: 0.9rem; }
   .featured-evidence { display: block; justify-self: end; }
