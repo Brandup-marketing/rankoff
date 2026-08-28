@@ -59,12 +59,13 @@
         </nav>
         <span class="demo-state" data-board-state><i aria-hidden="true"></i> Preview board</span>
         <nav class="site-nav" aria-label="Main navigation"><a href="./index.html">Board</a><a href="./about.html">About</a></nav>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch colour theme" aria-pressed="true">Light</button>
       </header>
 
       <section class="claim-stage" aria-labelledby="page-title">
         <div class="claim-panel">
           <h1 id="page-title">Pay to take <span>#1</span> for <strong data-hero-next-price>$0</strong></h1>
-          <p class="claim-copy" data-hero-context>The highest verified bid owns the top sponsored spot. Your product, description, and favicon stay in view until someone bids higher.</p>
+          <p class="claim-copy" data-hero-context>Put your product where people look first. Your listing stays at the top until someone pays more.</p>
 
           <div class="market-entry">
             <form class="bid-console" data-inline-challenge aria-label="Challenge the leaderboard">
@@ -92,8 +93,8 @@
                 </select>
               </label>
 
-              <button class="primary-action" type="submit" data-inline-submit>Review challenge</button>
-              <p class="demo-note" data-demo-note>Preview only · no payment is collected</p>
+              <button class="primary-action" type="submit" data-inline-submit>Review your bid</button>
+              <p class="demo-note" data-demo-note>Preview board · no payment is collected</p>
             </form>
 
           </div>
@@ -113,7 +114,7 @@
             <h2 id="board-heading">Live leaderboard</h2>
           </div>
           <div class="board-context">
-            <p data-board-summary>Highest valid bid ranks first.</p>
+            <p data-board-summary>Highest valid bid takes #1. Pay more to move up.</p>
             <details class="measurement-note">
               <summary>How clicks are measured</summary>
               <p>Verified clicks represent first-party redirect events for the selected timeframe. Demo estimates are clearly labelled and exclude no known bot traffic.</p>
@@ -131,14 +132,14 @@
       </section>
 
       <section class="activity-section" aria-labelledby="activity-heading">
-        <div class="section-heading-line"><h2 id="activity-heading">Latest activity</h2><span class="live-dot" aria-hidden="true"></span><span class="section-note">Live market updates</span></div>
+        <div class="section-heading-line"><h2 id="activity-heading">Latest activity</h2><span class="live-dot" aria-hidden="true"></span><span class="section-note">Live bid updates</span></div>
         <div class="activity-tape" data-activity-list aria-live="polite"></div>
       </section>
 
       <section class="ranking-rules" aria-labelledby="ranking-rules-heading">
         <div>
           <h2 id="ranking-rules-heading">How ranking works</h2>
-          <p>Every listing is sponsored. Higher verified bids rank above lower bids.</p>
+          <p>Every listing is sponsored. The highest verified bid ranks first.</p>
         </div>
         <dl>
           <div><dt>Position</dt><dd>Held until a higher verified bid wins.</dd></div>

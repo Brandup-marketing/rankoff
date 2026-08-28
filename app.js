@@ -601,7 +601,7 @@
     }
 
     if (elements.boardSummary) {
-      elements.boardSummary.textContent = `${windowLabel()} board: ${listings.length} sponsored listings. Highest valid bid ranks first.`;
+      elements.boardSummary.textContent = `${windowLabel()} board: ${listings.length} sponsored listings. Highest valid bid takes #1.`;
     }
   }
 
@@ -610,6 +610,9 @@
     card.dataset.rank = String(position);
     card.dataset.listingId = listing.id;
     card.dataset.claimLabel = `Claim this rank for ${money(getBid(ranked[0]) + 1)}`;
+    card.setAttribute("role", "button");
+    card.setAttribute("tabindex", "0");
+    card.setAttribute("aria-label", `Rank ${position}: ${listing.name}. Claim this rank for ${money(getBid(ranked[0]) + 1)}.`);
     if (listing.id === changedListingId) card.classList.add("is-updated");
 
     const rank = createElement("div", "featured-rank", `#${position}`);
@@ -669,7 +672,7 @@
 
     if (elements.heroPrice) elements.heroPrice.textContent = money(nextPrice);
     if (elements.heroContext) {
-      elements.heroContext.textContent = `${money(nextPrice)} takes #1 on the ${state.category === DEFAULT_CATEGORY ? windowLabel().toLowerCase() : state.category} board. Your product story stays visible until a higher verified bid wins.`;
+      elements.heroContext.textContent = `${money(nextPrice)} takes #1 on the ${state.category === DEFAULT_CATEGORY ? windowLabel().toLowerCase() : state.category} board. Your product story stays visible until someone pays more.`;
     }
     if (elements.leaderBid) elements.leaderBid.textContent = money(getBid(leader));
     if (elements.leaderClicks) elements.leaderClicks.textContent = compact.format(getClicks(leader));
@@ -736,10 +739,11 @@
   }
 
   function renderTheme() {
-    elements.root.dataset.theme = "dark";
+    elements.root.dataset.theme = state.theme === "light" ? "light" : "dark";
     if (elements.themeToggle) {
       elements.themeToggle.textContent = state.theme === "dark" ? "Light" : "Dark";
       elements.themeToggle.setAttribute("aria-pressed", String(state.theme === "dark"));
+      elements.themeToggle.setAttribute("aria-label", `Switch to ${state.theme === "dark" ? "light" : "dark"} theme`);
     }
   }
 
@@ -1069,6 +1073,16 @@
     if (shareTrigger instanceof HTMLElement) {
       shareListing(shareTrigger.dataset.listingId);
     }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    const target = event.target instanceof HTMLElement ? event.target : null;
+    if (!target || target.closest("a, button, input, select, textarea")) return;
+    const card = target.closest(".featured-listing, .rank-row");
+    if (!(card instanceof HTMLElement)) return;
+    event.preventDefault();
+    card.click();
   });
 
   elements.inlineChallenge?.addEventListener("submit", (event) => {
