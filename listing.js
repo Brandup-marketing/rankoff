@@ -1,0 +1,251 @@
+(() => {
+  "use strict";
+
+  const STORE_KEY = "rankoff-mvp-demo-v3";
+  const previewListings = [
+    ["model-harbor", "Model Harbor", "A release desk for production AI models, approvals, and customer notices.", "https://modelharbor.example/", "Agents", 2480, 2840],
+    ["trackline", "Trackline", "Campaign reporting for teams that need a clean answer to what moved.", "https://trackline.example/", "Marketing", 2160, 1910],
+    ["patchnote", "Patchnote", "Release notes that turn product changes into useful customer updates.", "https://patchnote.example/", "Developer", 1930, 2180],
+    ["canvas-relay", "Canvas Relay", "Creative hand-offs, feedback, and approved files in one focused space.", "https://canvasrelay.example/", "Design", 1180, 1490],
+    ["switchboard", "Switchboard", "A routing layer for the AI tools already inside an operator stack.", "https://switchboard.example/", "Agents", 940, 1210],
+  ].map(([id, title, description, url, category, bid, clicks], index) => ({
+    id, title, description, url, category, bid, clicks, rank: index + 1, icon: "",
+  }));
+
+  const copy = {
+    en: {
+      board: "Board", about: "About", back: "← Back to leaderboard", loading: "Loading listing evidence…",
+      notFoundTitle: "Listing not found", notFoundCopy: "This listing may have moved or is no longer on the public board.", returnBoard: "Return to the board",
+      sponsored: "Sponsored", visit: "Visit website", share: "Share rank", evidence: "Public ranking evidence", rank: "Current rank", bid: "Bid", past24: "Past 24h",
+      rule: "Highest valid bid takes #1", claimNumberOne: "Claim #1 for", startClaim: "Start your claim",
+      footer: "Transparent sponsored ranking. Every position has a visible price.",
+      previewListing: "Preview listing", verifiedPlacement: "Verified placement", previewData: "Preview data", verifiedData: "Verified data",
+      sampleClicks: "Sample clicks", verifiedClicks: "Verified clicks", estimatedClicks: "Estimated clicks",
+      previewEvidence: "Preview values are illustrative and are not verified performance.",
+      verifiedEvidence: "Rank and bid come from settled placements. Clicks are first-party redirect events recorded by Rankoff.",
+      claimCopy: "Put your product above this listing. Your full business description stays visible until someone pays more.",
+      previewDisclosure: "Preview board · no payment is collected", liveDisclosure: "Payment is confirmed only after secure hosted checkout settles.",
+      unavailable: "Preview website unavailable", copied: "Rank link copied.", shareText: "is ranked",
+    },
+    zh: {
+      board: "榜单", about: "关于", back: "← 返回排行榜", loading: "正在加载上榜证据…",
+      notFoundTitle: "找不到此条目", notFoundCopy: "此条目可能已移动，或已不在公开榜单中。", returnBoard: "返回榜单",
+      sponsored: "赞助", visit: "访问网站", share: "分享排名", evidence: "公开排名证据", rank: "当前排名", bid: "出价", past24: "近 24 小时",
+      rule: "最高有效出价获得第 1 名", claimNumberOne: "以此价格抢下第 1 名", startClaim: "开始认领",
+      footer: "透明的赞助排名。每个位置都有公开价格。",
+      previewListing: "预览条目", verifiedPlacement: "已确认展示", previewData: "预览数据", verifiedData: "已验证数据",
+      sampleClicks: "示例点击", verifiedClicks: "已验证点击", estimatedClicks: "估算点击",
+      previewEvidence: "预览数值仅作展示，并非已验证的实际表现。",
+      verifiedEvidence: "排名与出价来自已结算展示；点击为 Rankoff 记录的第一方跳转事件。",
+      claimCopy: "让你的产品排在此条目之上。完整业务介绍会持续展示，直到有人出价更高。",
+      previewDisclosure: "预览榜单 · 不会收取费用", liveDisclosure: "仅在安全托管结账完成后，付款才会确认。",
+      unavailable: "预览网站不可访问", copied: "排名链接已复制。", shareText: "目前排名",
+    },
+  };
+
+  const elements = {
+    root: document.documentElement,
+    detail: document.querySelector("[data-content]"), loading: document.querySelector("[data-loading]"), error: document.querySelector("[data-error]"),
+    language: document.querySelector("[data-language-toggle]"), theme: document.querySelector("[data-theme-toggle]"),
+    mark: document.querySelector("[data-mark]"), initials: document.querySelector("[data-initials]"), title: document.querySelector("[data-title]"),
+    category: document.querySelector("[data-category]"), placement: document.querySelector("[data-placement-label]"), host: document.querySelector("[data-host]"),
+    description: document.querySelector("[data-description]"), visit: document.querySelector("[data-visit]"), share: document.querySelector("[data-share]"),
+    mode: document.querySelector("[data-mode]"), evidenceNote: document.querySelector("[data-evidence-note]"), rank: document.querySelector("[data-rank]"),
+    bid: document.querySelector("[data-bid]"), clicks: document.querySelector("[data-clicks]"), clickLabels: document.querySelectorAll("[data-click-label], [data-click-label-today]"),
+    todayRank: document.querySelector("[data-today-rank]"), todayBid: document.querySelector("[data-today-bid]"), todayClicks: document.querySelector("[data-today-clicks]"),
+    nextBid: document.querySelector("[data-next-bid]"), claimCopy: document.querySelector("[data-claim-copy]"), claim: document.querySelector("[data-claim]"),
+    disclosure: document.querySelector("[data-claim-disclosure]"), toast: document.querySelector("[data-toast]"),
+  };
+
+  let preferences = loadPreferences();
+  let model = null;
+  let toastTimer = null;
+  const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+  const count = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
+
+  function loadPreferences() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORE_KEY));
+      return { theme: saved?.theme === "light" ? "light" : "dark", language: saved?.language === "zh" ? "zh" : "en", listings: saved?.listings || [] };
+    } catch {
+      return { theme: "dark", language: "en", listings: [] };
+    }
+  }
+
+  function savePreferences() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORE_KEY)) || {};
+      localStorage.setItem(STORE_KEY, JSON.stringify({ ...saved, theme: preferences.theme, language: preferences.language }));
+    } catch { /* Preference persistence is optional. */ }
+  }
+
+  function text(key) { return copy[preferences.language][key] || copy.en[key] || key; }
+
+  function applyPreferences() {
+    elements.root.dataset.theme = preferences.theme;
+    elements.root.lang = preferences.language === "zh" ? "zh-CN" : "en";
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", preferences.theme === "light" ? "#faf7f5" : "#090a0c");
+    document.querySelectorAll("[data-copy]").forEach((node) => { node.textContent = text(node.dataset.copy); });
+    elements.language.textContent = preferences.language === "zh" ? "EN" : "中文";
+    elements.language.setAttribute("aria-pressed", String(preferences.language === "zh"));
+    elements.theme.textContent = preferences.theme === "dark" ? "Light" : "Dark";
+    elements.theme.setAttribute("aria-pressed", String(preferences.theme === "dark"));
+    elements.theme.setAttribute("aria-label", `Switch to ${preferences.theme === "dark" ? "light" : "dark"} theme`);
+    if (model) renderModel();
+  }
+
+  function localListing(id) {
+    const saved = preferences.listings.find((item) => String(item?.id) === id);
+    if (saved) return {
+      id, title: String(saved.name || "Listing"), description: String(saved.description || "Sponsored listing on Rankoff."),
+      url: String(saved.url || ""), category: String(saved.category || "Other"), bid: Number(saved.bids?.all || 0), clicks: Number(saved.clicks || 0),
+      rank: [...preferences.listings].sort((a, b) => Number(b?.bids?.all || 0) - Number(a?.bids?.all || 0)).findIndex((item) => String(item?.id) === id) + 1,
+      icon: String(saved.iconUrl || ""), todayBid: Number(saved.bids?.today || 0), todayClicks: Number(saved.todayClicks || 0), isLocal: true,
+    };
+    return previewListings.find((item) => item.id === id) || null;
+  }
+
+  function fromRanking(entry) {
+    return {
+      id: String(entry.listing.id), title: String(entry.listing.title), description: String(entry.listing.description || "Sponsored listing on Rankoff."),
+      url: String(entry.listing.url || ""), category: String(entry.listing.category || "Other"), icon: String(entry.listing.favicon_url || ""),
+      rank: Number(entry.rank), bid: Math.ceil(Number(entry.bid?.amount_minor || 0) / 100), clicks: Number(entry.clicks || 0),
+      snapshot: "", mode: "preview",
+    };
+  }
+
+  async function loadListing() {
+    const id = new URL(location.href).searchParams.get("id") || "";
+    if (!id) return showError();
+    let fallback = localListing(id);
+
+    if (/^https?:$/.test(location.protocol)) {
+      try {
+        const allUrl = new URL("./api/v1/board?board=global&period=all&limit=100", location.href);
+        const todayUrl = new URL("./api/v1/board?board=global&period=today&limit=100", location.href);
+        const [allResponse, todayResponse] = await Promise.all([fetch(allUrl, { cache: "no-store" }), fetch(todayUrl, { cache: "no-store" })]);
+        if (allResponse.ok && todayResponse.ok) {
+          const [allPayload, todayPayload] = await Promise.all([allResponse.json(), todayResponse.json()]);
+          const allEntry = allPayload.rankings?.find((entry) => String(entry.listing?.id) === id);
+          const todayEntry = todayPayload.rankings?.find((entry) => String(entry.listing?.id) === id);
+          if (allEntry) {
+            model = fromRanking(allEntry);
+            model.mode = allPayload.mode === "production" ? "production" : "preview";
+            model.snapshot = allPayload.snapshot_id || "";
+            model.nextBid = Math.ceil(Number(allPayload.next_bid_minor || 100) / 100);
+            if (todayEntry) {
+              model.todayRank = Number(todayEntry.rank);
+              model.todayBid = Math.ceil(Number(todayEntry.bid?.amount_minor || 0) / 100);
+              model.todayClicks = Number(todayEntry.clicks || 0);
+            }
+          }
+        }
+      } catch { /* The local preview below remains useful offline. */ }
+    }
+
+    if (!model && fallback) model = { ...fallback, mode: "preview", nextBid: Math.max(...previewListings.map((item) => item.bid), fallback.bid) + 1 };
+    if (!model) return showError();
+    renderModel();
+    elements.loading.hidden = true;
+    elements.detail.hidden = false;
+    document.querySelector("#listing-detail")?.setAttribute("aria-busy", "false");
+  }
+
+  function initials(url, title) {
+    try { return new URL(url).hostname.split(".")[0].split(/[-_]/).map((part) => part[0]).join("").slice(0, 3).toUpperCase(); }
+    catch { return String(title).split(/\s+/).map((part) => part[0]).join("").slice(0, 3).toUpperCase(); }
+  }
+
+  function setIcon() {
+    elements.mark.querySelector("img")?.remove();
+    elements.mark.classList.remove("has-icon");
+    elements.initials.textContent = initials(model.url, model.title);
+    let host = "";
+    try { host = new URL(model.url).hostname; } catch { return; }
+    if (host.endsWith(".example") && !model.icon) return;
+    const sources = [...new Set([model.icon, `${new URL(model.url).origin}/favicon.ico`, `https://icons.duckduckgo.com/ip3/${encodeURIComponent(host)}.ico`].filter(Boolean))];
+    if (!sources.length) return;
+    const img = new Image();
+    img.alt = "";
+    img.referrerPolicy = "no-referrer";
+    img.decoding = "async";
+    let index = 0;
+    const next = () => { if (index >= sources.length) return img.remove(); img.src = sources[index++]; };
+    img.addEventListener("load", () => elements.mark.classList.add("has-icon"), { once: true });
+    img.addEventListener("error", next);
+    elements.mark.append(img);
+    next();
+  }
+
+  function renderModel() {
+    const verified = model.mode === "production";
+    const clickLabel = verified ? text("verifiedClicks") : text("sampleClicks");
+    elements.title.textContent = model.title;
+    elements.category.textContent = model.category;
+    elements.description.textContent = model.description;
+    elements.rank.textContent = `#${model.rank}`;
+    elements.bid.textContent = money.format(model.bid);
+    elements.clicks.textContent = count.format(model.clicks);
+    elements.todayRank.textContent = model.todayRank ? `#${model.todayRank}` : "—";
+    elements.todayBid.textContent = model.todayBid ? money.format(model.todayBid) : "—";
+    elements.todayClicks.textContent = Number.isFinite(model.todayClicks) ? count.format(model.todayClicks) : "—";
+    elements.clickLabels.forEach((node) => { node.textContent = clickLabel; });
+    elements.placement.textContent = verified ? text("verifiedPlacement") : text("previewListing");
+    elements.placement.className = verified ? "verified-chip" : "estimated-chip";
+    elements.mode.textContent = verified ? text("verifiedData") : text("previewData");
+    elements.mode.classList.toggle("is-verified", verified);
+    elements.evidenceNote.textContent = verified ? text("verifiedEvidence") : text("previewEvidence");
+    elements.nextBid.textContent = money.format(model.nextBid || model.bid + 1);
+    elements.claimCopy.textContent = text("claimCopy");
+    elements.disclosure.textContent = verified ? text("liveDisclosure") : text("previewDisclosure");
+    elements.claim.href = `./index.html#claim`;
+    let host = model.url;
+    try { host = new URL(model.url).hostname.replace(/^www\./, ""); } catch { /* Keep raw URL. */ }
+    elements.host.textContent = host;
+
+    const unavailable = !model.url || (/\.example$/i.test(host) && !verified);
+    if (unavailable) {
+      elements.visit.removeAttribute("href");
+      elements.visit.setAttribute("aria-disabled", "true");
+      elements.visit.querySelector("span").textContent = text("unavailable");
+    } else {
+      const destination = verified ? new URL(`./go/${encodeURIComponent(model.id)}`, location.href) : new URL(model.url);
+      if (verified && model.snapshot) destination.searchParams.set("snapshot", model.snapshot);
+      if (verified && model.rank) destination.searchParams.set("rank", String(model.rank));
+      elements.visit.href = destination.toString();
+      elements.visit.removeAttribute("aria-disabled");
+      elements.visit.querySelector("span").textContent = text("visit");
+    }
+    setIcon();
+    document.title = `${model.title} — #${model.rank} on RANKOFF`;
+    document.querySelector('meta[property="og:title"]')?.setAttribute("content", document.title);
+    document.querySelector('meta[name="description"]')?.setAttribute("content", model.description);
+  }
+
+  function showError() {
+    elements.loading.hidden = true;
+    elements.error.hidden = false;
+    document.querySelector("#listing-detail")?.setAttribute("aria-busy", "false");
+  }
+
+  function showToast(message) {
+    clearTimeout(toastTimer);
+    elements.toast.textContent = message;
+    elements.toast.classList.add("is-visible");
+    toastTimer = setTimeout(() => elements.toast.classList.remove("is-visible"), 3200);
+  }
+
+  elements.theme.addEventListener("click", () => { preferences.theme = preferences.theme === "dark" ? "light" : "dark"; savePreferences(); applyPreferences(); });
+  elements.language.addEventListener("click", () => { preferences.language = preferences.language === "zh" ? "en" : "zh"; savePreferences(); applyPreferences(); });
+  elements.share.addEventListener("click", async () => {
+    const share = { title: `${model.title} — RANKOFF`, text: `${model.title} ${text("shareText")} #${model.rank} on RANKOFF.`, url: location.href };
+    try {
+      if (navigator.share) return await navigator.share(share);
+      await navigator.clipboard.writeText(`${share.text} ${share.url}`);
+      showToast(text("copied"));
+    } catch (error) { if (error?.name !== "AbortError") showToast(text("copied")); }
+  });
+
+  applyPreferences();
+  void loadListing();
+})();

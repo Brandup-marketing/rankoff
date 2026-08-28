@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="View a sponsored product's current Rankoff position, bid, and measured clicks." />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://rankoff.my/listing.html" />
+    <meta property="og:site_name" content="RANKOFF" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Sponsored listing | RANKOFF" />
+    <meta property="og:description" content="See the bid, rank, and measured attention behind this sponsored listing." />
+    <meta property="og:image" content="https://rankoff.my/assets/rankoff-brand-lockup.png" />
+    <meta name="theme-color" content="#090a0c" />
+    <title>Sponsored listing | RANKOFF</title>
+    <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
+    <link rel="stylesheet" href="./styles.css?v=11" />
+    <link rel="stylesheet" href="./listing.css?v=1" />
+  </head>
+  <body>
+    <a class="skip-link" href="#listing-detail">Skip to listing details</a>
+
+    <main class="app-shell listing-shell">
+      <header class="topbar listing-topbar" aria-label="RANKOFF">
+        <a class="brand" href="./index.html" aria-label="RANKOFF home">
+          <img class="brand-lockup-image" src="./assets/rankoff-header-lockup.png?v=1" alt="RANKOFF — Bid your way to number one" width="420" height="120" />
+        </a>
+        <nav class="site-nav" aria-label="Main navigation"><a href="./index.html" data-copy="board">Board</a><a href="./about.html" data-copy="about">About</a></nav>
+        <button class="language-toggle" type="button" data-language-toggle aria-pressed="false">中文</button>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch colour theme" aria-pressed="true">Light</button>
+      </header>
+
+      <div class="listing-breadcrumb"><a href="./index.html" data-copy="back">← Back to leaderboard</a></div>
+
+      <section id="listing-detail" class="listing-detail" aria-live="polite" aria-busy="true">
+        <div class="listing-loading" data-loading>
+          <span></span><span></span><span></span>
+          <p data-copy="loading">Loading listing evidence…</p>
+        </div>
+
+        <div class="listing-error" data-error hidden>
+          <h1 data-copy="notFoundTitle">Listing not found</h1>
+          <p data-copy="notFoundCopy">This listing may have moved or is no longer on the public board.</p>
+          <a class="primary-action" href="./index.html" data-copy="returnBoard">Return to the board</a>
+        </div>
+
+        <div class="listing-content" data-content hidden>
+          <div class="listing-main">
+            <div class="listing-identity">
+              <span class="listing-mark" data-mark aria-hidden="true"><span data-initials>R</span></span>
+              <div>
+                <div class="listing-labels">
+                  <span class="sponsored-chip" data-copy="sponsored">Sponsored</span>
+                  <span data-category></span>
+                  <span class="estimated-chip" data-placement-label>Preview listing</span>
+                </div>
+                <h1 data-title>Listing</h1>
+                <p class="listing-host" data-host></p>
+              </div>
+            </div>
+
+            <p class="listing-story" data-description></p>
+
+            <div class="listing-actions">
+              <a class="secondary-action listing-visit" data-visit target="_blank" rel="sponsored nofollow noopener noreferrer"><span data-copy="visit">Visit website</span> ↗</a>
+              <button class="secondary-action" type="button" data-share data-copy="share">Share rank</button>
+            </div>
+
+            <section class="evidence-section" aria-labelledby="evidence-heading">
+              <div class="evidence-heading">
+                <div>
+                  <h2 id="evidence-heading" data-copy="evidence">Public ranking evidence</h2>
+                  <p data-evidence-note>Preview values are illustrative and are not verified performance.</p>
+                </div>
+                <span class="evidence-status" data-mode>Preview data</span>
+              </div>
+
+              <dl class="evidence-metrics">
+                <div><dt data-copy="rank">Current rank</dt><dd data-rank>—</dd></div>
+                <div><dt data-copy="bid">All-time bid</dt><dd data-bid>—</dd></div>
+                <div><dt data-click-label>Sample clicks</dt><dd data-clicks>—</dd></div>
+              </dl>
+
+              <div class="period-comparison" data-today-row>
+                <div><span data-copy="past24">Past 24h</span><strong data-today-rank>—</strong></div>
+                <div><span data-copy="bid">All-time bid</span><strong data-today-bid>—</strong></div>
+                <div><span data-click-label-today>Sample clicks</span><strong data-today-clicks>—</strong></div>
+              </div>
+            </section>
+          </div>
+
+          <aside class="claim-ticket" aria-labelledby="claim-heading">
+            <p class="claim-ticket-rule" data-copy="rule">Highest valid bid takes #1</p>
+            <h2 id="claim-heading"><span data-copy="claimNumberOne">Claim #1 for</span> <strong data-next-bid>—</strong></h2>
+            <p data-claim-copy>Put your product above this listing. Your full business description stays visible until someone pays more.</p>
+            <a class="primary-action" href="./index.html#claim" data-claim><span data-copy="startClaim">Start your claim</span> →</a>
+            <p class="claim-disclosure" data-claim-disclosure>Preview board · no payment is collected</p>
+          </aside>
+        </div>
+      </section>
+
+      <footer class="footer listing-footer">
+        <span class="footer-brand">RANKOFF</span>
+        <span data-copy="footer">Transparent sponsored ranking. Every position has a visible price.</span>
+        <span class="footer-links"><a href="./legal.html">Legal</a><a href="mailto:hello@rankoff.my">Contact</a></span>
+      </footer>
+    </main>
+
+    <div class="toast" role="status" aria-live="polite" data-toast></div>
+    <script src="./listing.js?v=1" defer></script>
+  </body>
+</html>

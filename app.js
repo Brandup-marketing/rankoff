@@ -543,17 +543,10 @@
 
   function listingLink(listing) {
     const link = createElement("a", "product-name", listing.name);
-    if (boardSource === "production") {
-      const tracked = new URL(`./go/${encodeURIComponent(listing.id)}`, window.location.href);
-      if (remoteSnapshotId) tracked.searchParams.set("snapshot", remoteSnapshotId);
-      if (listing.serverRank) tracked.searchParams.set("rank", String(listing.serverRank));
-      link.href = tracked.toString();
-    } else {
-      link.href = listing.url;
-    }
-    link.target = "_blank";
-    link.rel = "sponsored nofollow noopener noreferrer";
-    link.setAttribute("aria-label", state.language === "zh" ? `在新窗口访问 ${listing.name}` : `Visit ${listing.name} in a new tab`);
+    const detail = new URL("./listing.html", window.location.href);
+    detail.searchParams.set("id", listing.id);
+    link.href = detail.toString();
+    link.setAttribute("aria-label", state.language === "zh" ? `查看 ${listing.name} 的榜单详情` : `View ${listing.name} ranking details`);
     return link;
   }
 
