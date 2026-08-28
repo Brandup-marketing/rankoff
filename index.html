@@ -58,8 +58,8 @@
           <button type="button" data-board-window="today" aria-pressed="false">Past 24h</button>
         </nav>
         <span class="demo-state" data-board-state><i aria-hidden="true"></i> Preview board</span>
-        <nav class="site-nav" aria-label="Main navigation"><a href="./index.html" data-i18n="navBoard">Board</a><a href="./categories.html">Categories</a><a href="./about.html" data-i18n="navAbout">About</a></nav>
-        <button class="search-toggle" type="button" data-search-toggle aria-expanded="false" aria-controls="site-search" aria-label="Search products and categories"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.6 4.6"></path></svg></button>
+        <nav class="site-nav" aria-label="Main navigation"><a href="./index.html" data-i18n="navBoard">Board</a><a href="./categories.html" data-i18n="navCategories">Categories</a><a href="./about.html" data-i18n="navAbout">About</a></nav>
+        <button class="search-toggle" type="button" data-search-toggle aria-expanded="false" aria-controls="site-search" data-i18n-aria-label="searchPlaceholder" aria-label="Search products and categories"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.6 4.6"></path></svg></button>
         <button class="language-toggle" type="button" data-language-toggle aria-pressed="false">中文</button>
         <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch colour theme" aria-pressed="true">Light</button>
       </header>
@@ -67,9 +67,9 @@
       <form class="site-search" id="site-search" data-site-search role="search" hidden>
         <div class="site-search-field">
           <span class="site-search-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.6 4.6"></path></svg></span>
-          <label class="visually-hidden" for="site-search-input">Search products and categories</label>
-          <input id="site-search-input" data-site-search-input type="search" autocomplete="off" placeholder="Search products and categories…" />
-          <button class="search-close" type="button" data-search-close>Close</button>
+          <label class="visually-hidden" for="site-search-input" data-i18n="searchPlaceholder">Search products and categories…</label>
+          <input id="site-search-input" data-site-search-input data-i18n-placeholder="searchPlaceholder" type="search" autocomplete="off" placeholder="Search products and categories…" />
+          <button class="search-close" type="button" data-search-close data-i18n="close">Close</button>
         </div>
         <div class="site-search-results" data-search-results role="listbox" aria-label="Search results" hidden></div>
       </form>
@@ -117,12 +117,12 @@
             <section class="today-ranking-panel pulse-panel" aria-labelledby="today-ranking-heading">
               <div class="section-heading-line section-heading-line-spread">
                 <div>
-                  <p class="eyebrow">Past 24h</p>
+                  <p class="eyebrow" data-i18n="past24">Past 24h</p>
                   <h2 id="today-ranking-heading" data-i18n="todayRanking">Today’s top ranking</h2>
                 </div>
                 <div class="panel-actions">
-                  <a class="text-link" data-today-see-all href="./index.html?period=today#board">See all</a>
-                  <button class="panel-toggle" type="button" data-panel-toggle aria-expanded="true" aria-controls="today-ranking-content" data-panel-title="Today’s top ranking" data-panel-title-zh="今日热门排名"><span data-panel-toggle-label>Minimize</span><span class="panel-toggle-icon" aria-hidden="true">−</span></button>
+                  <a class="text-link" data-today-see-all data-i18n="seeAll" href="./index.html?period=today#board">See all</a>
+                  <button class="panel-toggle" type="button" data-panel-toggle aria-expanded="true" aria-controls="today-ranking-content" data-panel-title="Today’s top ranking" data-panel-title-zh="今日热门榜"><span data-panel-toggle-label>Minimize</span><span class="panel-toggle-icon" aria-hidden="true">−</span></button>
                 </div>
               </div>
               <div id="today-ranking-content" data-panel-content>
@@ -133,7 +133,7 @@
             <section class="activity-section pulse-panel" aria-labelledby="activity-heading">
               <div class="section-heading-line section-heading-line-spread">
                 <div>
-                  <p class="eyebrow">Live pulse</p>
+                  <p class="eyebrow" data-i18n="livePulse">Live updates</p>
                   <h2 id="activity-heading" data-i18n="latestActivity">Latest activity</h2>
                 </div>
                 <div class="panel-actions">
@@ -170,10 +170,10 @@
         </div>
 
         <div class="board-header" aria-hidden="true">
-          <span>Rank</span>
-          <span>Listing</span>
-          <span>Bid</span>
-          <span>Clicks</span>
+          <span data-i18n="rank">Rank</span>
+          <span data-i18n="listing">Listing</span>
+          <span data-i18n="bid">Bid</span>
+          <span data-i18n="clicks">Clicks</span>
         </div>
         <div class="board-list" data-board-list aria-live="polite" aria-label="Sponsored listings ranked fourth and below"></div>
       </section>
@@ -181,19 +181,19 @@
       <section class="ranking-rules" aria-labelledby="ranking-rules-heading">
         <div>
           <h2 id="ranking-rules-heading" data-i18n="howItWorks">How ranking works</h2>
-          <p>Every listing is sponsored. The highest verified bid ranks first.</p>
+          <p data-i18n="rules">Every listing is sponsored. The highest verified bid ranks first.</p>
         </div>
         <dl>
-          <div><dt>Position</dt><dd>Held until a higher verified bid wins.</dd></div>
-          <div><dt>Charge</dt><dd>One payment after review.</dd></div>
-          <div><dt>Reporting</dt><dd>Clicks shown for the selected timeframe.</dd></div>
+          <div><dt data-i18n="position">Position</dt><dd data-i18n="positionCopy">Held until a higher verified bid wins.</dd></div>
+          <div><dt data-i18n="charge">Charge</dt><dd data-i18n="chargeCopy">One payment after review.</dd></div>
+          <div><dt data-i18n="reporting">Reporting</dt><dd data-i18n="reportingCopy">Clicks shown for the selected timeframe.</dd></div>
         </dl>
-        <a href="./legal.html#rules">Read all rules →</a>
+        <a href="./legal.html#rules" data-i18n="readRules">Read all rules →</a>
       </section>
 
       <footer class="footer">
         <a class="footer-brand" href="./index.html" aria-label="RANKOFF home"><img class="footer-logo-image" src="./assets/rankoff-final-logo.png?v=2" alt="RANKOFF" width="1254" height="1254" /></a>
-        <span class="footer-links"><a href="./legal.html#rules">Rules</a><a href="./legal.html#terms">Terms</a><a href="./legal.html#privacy">Privacy</a><a href="./legal.html#payments">Payments</a></span>
+        <span class="footer-links"><a href="./legal.html#rules" data-i18n="rulesLink">Rules</a><a href="./legal.html#terms" data-i18n="terms">Terms</a><a href="./legal.html#privacy" data-i18n="privacyLink">Privacy</a><a href="./legal.html#payments" data-i18n="payments">Payments</a></span>
       </footer>
     </main>
 
@@ -201,8 +201,8 @@
       <form method="dialog" class="dialog-panel" data-bid-form>
         <div class="dialog-heading">
           <div>
-            <p class="section-label">Challenge review</p>
-            <h2 id="bid-dialog-title">Confirm your position</h2>
+            <p class="section-label" data-i18n="challengeReview">Challenge review</p>
+            <h2 id="bid-dialog-title" data-i18n="confirmPosition">Confirm your position</h2>
           </div>
           <button class="icon-button" type="button" data-close-bid aria-label="Close dialog">×</button>
         </div>
@@ -210,14 +210,14 @@
         <div class="bid-target" data-bid-target></div>
 
         <section class="order-summary" aria-label="Challenge terms">
-          <div><span>Position</span><strong data-order-position>Calculated from your final bid</strong></div>
-          <div><span>Charge</span><strong>One-time payment after review</strong></div>
-          <div><span>Duration</span><strong>Until a higher verified bid wins</strong></div>
-          <div><span>Reporting</span><strong>Clicks shown for this board timeframe</strong></div>
+          <div><span data-i18n="position">Position</span><strong data-order-position data-i18n="calculatedBid">Calculated from your final bid</strong></div>
+          <div><span data-i18n="charge">Charge</span><strong data-i18n="oneTimePayment">One-time payment after review</strong></div>
+          <div><span data-i18n="duration">Duration</span><strong data-i18n="durationCopy">Until a higher verified bid wins</strong></div>
+          <div><span data-i18n="reporting">Reporting</span><strong data-i18n="clickTimeframe">Clicks shown for this board timeframe</strong></div>
         </section>
 
         <label class="field" for="bid-amount">
-          <span>Your total bid</span>
+          <span data-i18n="totalBid">Your total bid</span>
           <span class="dialog-stepper">
             <button type="button" data-bid-adjust="-1" aria-label="Decrease bid by one dollar">-</button>
             <span class="money-field">
@@ -232,12 +232,12 @@
 
         <label class="acknowledgement">
           <input type="checkbox" required />
-          <span>I reviewed the position, charge timing, and ranking rules. I agree to the <a href="./legal.html#terms" target="_blank" rel="noopener">Terms</a> and <a href="./legal.html#privacy" target="_blank" rel="noopener">Privacy Policy</a>.</span>
+          <span><span data-i18n="acknowledgement">I reviewed the position, charge timing, and ranking rules. I agree to the</span> <a href="./legal.html#terms" target="_blank" rel="noopener" data-i18n="terms">Terms</a> <span data-i18n="and">and</span> <a href="./legal.html#privacy" target="_blank" rel="noopener" data-i18n="privacyPolicy">Privacy Policy</a>.</span>
         </label>
 
         <section class="payment-preview" aria-label="Payment method preview">
           <div>
-            <span class="section-label" data-checkout-title>Checkout status</span>
+            <span class="section-label" data-checkout-title data-i18n="checkoutStatus">Checkout status</span>
             <strong data-checkout-provider>Preview only — no payment method connected</strong>
           </div>
           <span class="payment-status" data-checkout-status>Preview only</span>
@@ -245,8 +245,8 @@
         </section>
 
         <div class="dialog-actions">
-          <button class="secondary-action" type="button" data-close-bid>Cancel</button>
-          <button class="primary-action" type="submit">Confirm challenge</button>
+          <button class="secondary-action" type="button" data-close-bid data-i18n="cancel">Cancel</button>
+          <button class="primary-action" type="submit" data-i18n="confirmChallenge">Confirm challenge</button>
         </div>
       </form>
     </dialog>

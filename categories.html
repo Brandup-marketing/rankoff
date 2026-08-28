@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="./categories.css?v=1" />
   </head>
   <body>
-    <a class="skip-link" href="#categories">Skip to categories</a>
+    <a class="skip-link" href="#categories" data-copy="skipCategories">Skip to categories</a>
 
     <main class="categories-shell">
       <header class="topbar categories-topbar" aria-label="RANKOFF">
@@ -33,9 +33,9 @@
         </nav>
 
         <nav class="site-nav categories-nav" aria-label="Main navigation">
-          <a href="./index.html">Board</a>
-          <a href="./categories.html" aria-current="page">Categories</a>
-          <a href="./about.html">About</a>
+          <a href="./index.html" data-copy="board">Board</a>
+          <a href="./categories.html" aria-current="page" data-copy="categories">Categories</a>
+          <a href="./about.html" data-copy="about">About</a>
         </nav>
         <button class="search-toggle" type="button" data-search-toggle aria-expanded="false" aria-controls="site-search" aria-label="Search products and categories"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.6 4.6"></path></svg></button>
         <div class="category-actions">
@@ -60,19 +60,19 @@
         <span>·</span>
         <span data-category-count>8 listings</span>
         <span>·</span>
-        <a href="./index.html">See board <span aria-hidden="true">→</span></a>
+        <a href="./index.html"><span data-copy="seeBoard">See board</span> <span aria-hidden="true">→</span></a>
       </section>
 
       <section class="category-hero" aria-labelledby="categories-title">
-        <p class="section-kicker">Browse the markets</p>
-        <h1 id="categories-title">Categories</h1>
-        <p>Every category has its own ranking. Pick one to see who is leading.</p>
+        <p class="section-kicker" data-copy="browseMarkets">Browse the markets</p>
+        <h1 id="categories-title" data-copy="categories">Categories</h1>
+        <p data-copy="heroCopy">Every category has its own ranking. Choose one to see its leaders.</p>
       </section>
 
       <section class="active-section" aria-labelledby="active-heading">
         <div class="section-heading">
           <span class="section-dot" aria-hidden="true"></span>
-          <h2 id="active-heading">Most active categories</h2>
+          <h2 id="active-heading" data-copy="activeHeading">Most active categories</h2>
         </div>
         <div class="active-category-list" data-active-categories></div>
       </section>
@@ -81,16 +81,16 @@
         <div class="section-heading section-heading-spread">
           <div>
             <span class="section-dot" aria-hidden="true"></span>
-            <h2 id="all-categories-heading">All categories</h2>
+            <h2 id="all-categories-heading" data-copy="allHeading">All categories</h2>
           </div>
-          <p>Choose a market to view its live board.</p>
+          <p data-copy="allCopy">Choose a market to view its live board.</p>
         </div>
         <div class="category-grid" data-category-grid></div>
       </section>
 
       <footer class="footer categories-footer">
         <a class="footer-brand" href="./index.html" aria-label="RANKOFF home"><img class="footer-logo-image" src="./assets/rankoff-final-logo.png?v=2" alt="RANKOFF" width="1254" height="1254" /></a>
-        <span class="footer-links"><a href="./index.html">Board</a><a href="./about.html">About</a><a href="./legal.html#rules">Rules</a><a href="./legal.html#privacy">Privacy</a></span>
+        <span class="footer-links"><a href="./index.html" data-copy="board">Board</a><a href="./about.html" data-copy="about">About</a><a href="./legal.html#rules" data-copy="rules">Rules</a><a href="./legal.html#privacy" data-copy="privacy">Privacy</a></span>
       </footer>
     </main>
 

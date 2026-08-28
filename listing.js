@@ -3,6 +3,7 @@
 
   const STORE_KEY = "rankoff-mvp-demo-v3";
   const categoryLabels = { Agents: "AI Agents & Infrastructure", SEO: "SEO & AI Visibility", Marketing: "Marketing & Advertising", Crypto: "Crypto, Web3 & Investing", Developer: "Developer Tools", Business: "Business, Finance & Legal", Security: "Security, Privacy & Compliance", Health: "Health, Fitness & Wellness", Social: "Social Media & Creator Tools", Attention: "Leaderboards & Attention Markets", Careers: "Hiring, Jobs & Careers", Education: "Education & Learning", Agencies: "Agencies, Studios & Services", Ecommerce: "Ecommerce & Retail", Domains: "Domains & Web Assets", Games: "Games & Entertainment", People: "People & Profiles", Productivity: "Productivity & Personal Tools", Design: "Design & Creative", Writing: "Writing & Content", Discovery: "Directories, Launch & Discovery", AIMedia: "AI Media Generation", Audio: "Audio, Voice & Podcasting", Sales: "Sales & Lead Generation", Travel: "Travel, Local & Lifestyle", RealEstate: "Real Estate & Property", News: "Media & News", Hardware: "Hardware & Devices", Other: "Other" };
+  const categoryTranslations = { Agents: "AI 智能体与基础设施", SEO: "SEO 与 AI 曝光", Marketing: "营销与广告", Crypto: "加密、Web3 与投资", Developer: "开发者工具", Business: "商业、金融与法律", Security: "安全、隐私与合规", Health: "健康、健身与生活方式", Social: "社交媒体与创作者工具", Attention: "排行榜与注意力市场", Careers: "招聘、工作与职业", Education: "教育与学习", Agencies: "代理机构、工作室与服务", Ecommerce: "电商与零售", Domains: "域名与网络资产", Games: "游戏与娱乐", People: "人物与个人资料", Productivity: "效率与个人工具", Design: "设计与创意", Writing: "写作与内容", Discovery: "目录、发布与探索", AIMedia: "AI 媒体生成", Audio: "音频、语音与播客", Sales: "销售与潜客获取", Travel: "旅行、本地与生活方式", RealEstate: "房地产与物业", News: "媒体与新闻", Hardware: "硬件与设备", Other: "其他" };
   const previewListings = [
     ["model-harbor", "Model Harbor", "A release desk for production AI models, approvals, and customer notices.", "https://modelharbor.example/", "Agents", 2480, 2840],
     ["trackline", "Trackline", "Campaign reporting for teams that need a clean answer to what moved.", "https://trackline.example/", "Marketing", 2160, 1910],
@@ -15,10 +16,10 @@
 
   const copy = {
     en: {
-      board: "Board", about: "About", back: "← Back to leaderboard", loading: "Loading listing evidence…",
+      board: "Board", about: "About", legal: "Legal", contact: "Contact", back: "← Back to leaderboard", loading: "Loading ranking details…",
       notFoundTitle: "Listing not found", notFoundCopy: "This listing may have moved or is no longer on the public board.", returnBoard: "Return to the board",
-      sponsored: "Sponsored", visit: "Visit website", share: "Share rank", evidence: "Public ranking evidence", rank: "Current rank", bid: "Bid", past24: "Past 24h",
-      rule: "Highest valid bid takes #1", claimNumberOne: "Claim #1 for", startClaim: "Start your claim",
+      sponsored: "Sponsored", visit: "Visit website", share: "Share rank", evidence: "Public ranking record", rank: "Current rank", bid: "Bid", allTimeBid: "All-time bid", duration: "Duration", past24: "Past 24h",
+      rule: "Highest valid bid takes #1", claimNumberOne: "Claim #1 for", startClaim: "Challenge this rank",
       footer: "Transparent sponsored ranking. Every position has a visible price.",
       previewListing: "Preview listing", verifiedPlacement: "Verified placement", previewData: "Preview data", verifiedData: "Verified data",
       sampleClicks: "Sample clicks", verifiedClicks: "Verified clicks", estimatedClicks: "Estimated clicks",
@@ -26,21 +27,21 @@
       verifiedEvidence: "Rank and bid come from settled placements. Clicks are first-party redirect events recorded by Rankoff.",
       claimCopy: "Put your product above this listing. Your full business description stays visible until someone pays more.",
       previewDisclosure: "Listings are reviewed before a rank is published.", liveDisclosure: "Payment is confirmed only after secure hosted checkout settles.",
-      unavailable: "Preview website unavailable", copied: "Rank link copied.", shareText: "is ranked",
+      unavailable: "Preview website temporarily unavailable", copied: "Rank link copied.", shareText: "is ranked",
     },
     zh: {
-      board: "榜单", about: "关于", back: "← 返回排行榜", loading: "正在加载上榜证据…",
+      board: "榜单", about: "关于", legal: "法律条款", contact: "联系", back: "← 返回榜单", loading: "正在加载排名信息…",
       notFoundTitle: "找不到此条目", notFoundCopy: "此条目可能已移动，或已不在公开榜单中。", returnBoard: "返回榜单",
-      sponsored: "赞助", visit: "访问网站", share: "分享排名", evidence: "公开排名证据", rank: "当前排名", bid: "出价", past24: "近 24 小时",
-      rule: "最高有效出价获得第 1 名", claimNumberOne: "以此价格抢下第 1 名", startClaim: "开始认领",
+      sponsored: "赞助", visit: "访问网站", share: "分享排名", evidence: "公开排名记录", rank: "当前排名", bid: "出价", allTimeBid: "全时段出价", duration: "有效期", past24: "近 24 小时",
+      rule: "最高有效出价获得第 1 名", claimNumberOne: "以此价格争夺第 1 名", startClaim: "挑战此排名",
       footer: "透明的赞助排名。每个位置都有公开价格。",
-      previewListing: "预览条目", verifiedPlacement: "已确认展示", previewData: "预览数据", verifiedData: "已验证数据",
+      previewListing: "预览条目", verifiedPlacement: "已验证展示", previewData: "预览数据", verifiedData: "已验证数据",
       sampleClicks: "示例点击", verifiedClicks: "已验证点击", estimatedClicks: "估算点击",
       previewEvidence: "预览数值仅作展示，并非已验证的实际表现。",
       verifiedEvidence: "排名与出价来自已结算展示；点击为 Rankoff 记录的第一方跳转事件。",
-      claimCopy: "让你的产品排在此条目之上。完整业务介绍会持续展示，直到有人出价更高。",
-      previewDisclosure: "条目需要审核后才会发布排名。", liveDisclosure: "仅在安全托管结账完成后，付款才会确认。",
-      unavailable: "预览网站不可访问", copied: "排名链接已复制。", shareText: "目前排名",
+      claimCopy: "让你的产品排在这个条目之前。完整业务介绍会持续展示，直到有人出价更高。",
+      previewDisclosure: "条目会在审核通过后发布。", liveDisclosure: "付款会在安全的托管付款页面完成并确认。",
+      unavailable: "预览网站暂时不可访问", copied: "排名链接已复制。", shareText: "目前排名",
     },
   };
 
@@ -81,6 +82,7 @@
   }
 
   function text(key) { return copy[preferences.language][key] || copy.en[key] || key; }
+  function categoryName(category) { return preferences.language === "zh" ? (categoryTranslations[category] || category) : (categoryLabels[category] || category); }
 
   function applyPreferences() {
     elements.root.dataset.theme = preferences.theme;
@@ -182,7 +184,7 @@
     const verified = model.mode === "production";
     const clickLabel = verified ? text("verifiedClicks") : text("sampleClicks");
     elements.title.textContent = model.title;
-    elements.category.textContent = categoryLabels[model.category] || model.category;
+    elements.category.textContent = categoryName(model.category);
     elements.description.textContent = model.description;
     elements.rank.textContent = `#${model.rank}`;
     elements.bid.textContent = money.format(model.bid);

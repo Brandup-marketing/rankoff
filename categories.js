@@ -5,8 +5,8 @@
   const compact = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
   const currency = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
   const categoryConfig = [
-    { id: "Agents", name: "AI Agents & Infrastructure", zh: "AI 代理与基础设施", icon: "✦" },
-    { id: "SEO", name: "SEO & AI Visibility", zh: "SEO 与 AI 可见性", icon: "⌕" },
+    { id: "Agents", name: "AI Agents & Infrastructure", zh: "AI 智能体与基础设施", icon: "✦" },
+    { id: "SEO", name: "SEO & AI Visibility", zh: "SEO 与 AI 曝光", icon: "⌕" },
     { id: "Marketing", name: "Marketing & Advertising", zh: "营销与广告", icon: "◒" },
     { id: "Crypto", name: "Crypto, Web3 & Investing", zh: "加密、Web3 与投资", icon: "₿" },
     { id: "Developer", name: "Developer Tools", zh: "开发者工具", icon: "⌘" },
@@ -25,7 +25,7 @@
     { id: "Productivity", name: "Productivity & Personal Tools", zh: "效率与个人工具", icon: "＋" },
     { id: "Design", name: "Design & Creative", zh: "设计与创意", icon: "◇" },
     { id: "Writing", name: "Writing & Content", zh: "写作与内容", icon: "╱" },
-    { id: "Discovery", name: "Directories, Launch & Discovery", zh: "目录、发布与发现", icon: "◈" },
+    { id: "Discovery", name: "Directories, Launch & Discovery", zh: "目录、发布与探索", icon: "◈" },
     { id: "AIMedia", name: "AI Media Generation", zh: "AI 媒体生成", icon: "✧" },
     { id: "Audio", name: "Audio, Voice & Podcasting", zh: "音频、语音与播客", icon: "◖" },
     { id: "Sales", name: "Sales & Lead Generation", zh: "销售与潜客获取", icon: "◎" },
@@ -62,6 +62,11 @@
     themeToggle: document.querySelector("[data-theme-toggle]"),
   };
 
+  const staticCopy = {
+    en: { skipCategories: "Skip to categories", board: "Board", categories: "Categories", about: "About", rules: "Rules", privacy: "Privacy", seeBoard: "See board", browseMarkets: "Browse the markets", heroCopy: "Every category has its own ranking. Choose one to see its leaders.", activeHeading: "Most active categories", allHeading: "All categories", allCopy: "Choose a market to view its live board." },
+    zh: { skipCategories: "跳至分类", board: "榜单", categories: "分类", about: "关于", rules: "规则", privacy: "隐私", seeBoard: "查看榜单", browseMarkets: "浏览市场", heroCopy: "每个类别都有自己的榜单。选择一个市场，看看谁在领先。", activeHeading: "最活跃的分类", allHeading: "全部分类", allCopy: "选择一个市场，查看其实时榜单。" },
+  };
+
   function readPreferences() {
     try {
       const saved = JSON.parse(window.localStorage.getItem(STORE_KEY));
@@ -80,7 +85,12 @@
     if (!value) return elements.language === "zh" ? "最近" : "Recently";
     if (value === "1d") return elements.language === "zh" ? "1 天前" : "1 day ago";
     const match = value.match(/^(\d+)([hm])$/i);
-    if (match) return elements.language === "zh" ? `${match[1]} ${match[2].toLowerCase() === "h" ? "小时前" : "分钟前"}` : `${match[1]} ${match[2].toLowerCase() === "h" ? "hours" : "minutes"} ago`;
+    if (match) {
+      const amount = Number(match[1]);
+      if (elements.language === "zh") return `${match[1]} ${match[2].toLowerCase() === "h" ? "小时前" : "分钟前"}`;
+      const unit = match[2].toLowerCase() === "h" ? (amount === 1 ? "hour" : "hours") : (amount === 1 ? "minute" : "minutes");
+      return `${match[1]} ${unit} ago`;
+    }
     return elements.language === "zh" ? `${value} 前` : `${value} ago`;
   }
 
@@ -168,7 +178,7 @@
       const heading = document.createElement("h3");
       heading.textContent = label(config);
       const detail = document.createElement("p");
-      detail.textContent = elements.language === "zh" ? `${rows.length} 个条目 · 最高出价 ${currency.format(rows[0].bid)}` : `${rows.length} ${rows.length === 1 ? "listing" : "listings"} · top bid ${currency.format(rows[0].bid)}`;
+      detail.textContent = elements.language === "zh" ? `${rows.length} 个上榜产品 · 最高出价 ${currency.format(rows[0].bid)}` : `${rows.length} ${rows.length === 1 ? "listing" : "listings"} · highest bid ${currency.format(rows[0].bid)}`;
       copy.append(heading, detail);
       const time = document.createElement("time");
       time.textContent = ageLabel(rows[0].age);
@@ -232,6 +242,9 @@
 
   function render() {
     const rows = selectedRows();
+    const labels = staticCopy[elements.language];
+    document.querySelectorAll("[data-copy]").forEach((node) => { if (labels[node.dataset.copy]) node.textContent = labels[node.dataset.copy]; });
+    elements.grid?.setAttribute("aria-label", elements.language === "zh" ? "全部市场分类" : "All market categories");
     if (elements.status) elements.status.textContent = elements.language === "zh"
       ? (elements.mode === "production" ? "实时榜单" : elements.mode === "api" ? "已连接预览" : "预览榜单")
       : (elements.mode === "production" ? "Live board" : elements.mode === "api" ? "Connected preview" : "Preview board");

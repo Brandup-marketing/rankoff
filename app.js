@@ -37,11 +37,11 @@
     "Other",
   ];
   const translations = {
-    en: { navBoard: "Board", navAbout: "About", heroCopy: "Put your product where people look first. Your listing stays at the top until someone pays more.", totalBid: "Your total bid", productUrl: "Your product URL or @handle", chooseMarket: "Choose a market", challengeCategory: "Challenge category", categoryRule: "Must match the listing you’ll outrank.", reviewBid: "Review your bid", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest valid bid takes #1. Pay more to move up.", todayRanking: "Today’s top ranking", latestActivity: "Latest activity", liveUpdates: "Live bid updates", howItWorks: "How ranking works" },
-    zh: { navBoard: "榜单", navAbout: "关于", heroCopy: "把你的产品放到大家最先看到的位置。只要没有更高出价，你的介绍就会保持在榜首。", totalBid: "你的总出价", productUrl: "产品网址或 @账号", chooseMarket: "选择市场", challengeCategory: "挑战分类", categoryRule: "必须与您要超越的条目相同。", reviewBid: "确认出价", markets: "市场分类", liveLeaderboard: "实时榜单", boardSummary: "最高有效出价获得第 1 名。提高出价即可上升。", todayRanking: "今日热门排名", latestActivity: "最新动态", liveUpdates: "实时竞价更新", howItWorks: "排名规则" },
+    en: { navBoard: "Board", navCategories: "Categories", navAbout: "About", heroCopy: "Put your product in the spot people see first. Your listing stays at the top until someone pays more.", totalBid: "Your total bid", productUrl: "Your product URL or @handle", chooseMarket: "Choose a market", challengeCategory: "Challenge category", categoryRule: "Must match the listing you’ll outrank.", reviewBid: "Review your bid", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest valid bid takes #1. Pay more to move up.", todayRanking: "Today’s top ranking", latestActivity: "Latest activity", liveUpdates: "Latest updates", howItWorks: "How ranking works", searchPlaceholder: "Search products and categories…", close: "Close", seeAll: "See all", past24: "Past 24h", livePulse: "Live updates", rank: "Rank", listing: "Listing", bid: "Bid", clicks: "Clicks", sponsored: "Sponsored", rules: "Every listing is sponsored. The highest verified bid ranks first.", position: "Position", positionCopy: "Held until a higher verified bid wins.", charge: "Charge", chargeCopy: "One payment after review.", reporting: "Reporting", reportingCopy: "Clicks shown for the selected timeframe.", readRules: "Read all rules →", rulesLink: "Rules", terms: "Terms", privacyLink: "Privacy", payments: "Payments", challengeReview: "Challenge review", confirmPosition: "Confirm your position", challengeTerms: "Challenge terms", calculatedBid: "Calculated from your final bid", oneTimePayment: "One-time payment after review", duration: "Duration", durationCopy: "Until a higher verified bid wins", clickTimeframe: "Clicks shown for this board timeframe", acknowledgement: "I reviewed the position, charge timing, and ranking rules. I agree to the", and: "and", privacyPolicy: "Privacy Policy", checkoutStatus: "Checkout status", cancel: "Cancel", confirmChallenge: "Confirm challenge" },
+    zh: { navBoard: "榜单", navCategories: "分类", navAbout: "关于", heroCopy: "把产品放到最显眼的位置。只要没有更高的有效出价，你的介绍就会留在榜首。", totalBid: "你的总出价", productUrl: "产品网址或 @账号", chooseMarket: "选择市场", challengeCategory: "挑战类别", categoryRule: "必须与您要超越的条目类别相同。", reviewBid: "确认出价", markets: "市场", liveLeaderboard: "实时榜单", boardSummary: "最高有效出价获得第 1 名。提高出价即可上升。", todayRanking: "今日热门榜", latestActivity: "最新动态", liveUpdates: "最新动态", howItWorks: "排名规则", searchPlaceholder: "搜索产品和分类…", close: "关闭", seeAll: "查看全部", past24: "近 24 小时", livePulse: "实时更新", rank: "排名", listing: "条目", bid: "出价", clicks: "点击", sponsored: "赞助", rules: "每个条目都是赞助展示。最高的已验证出价排名第一。", position: "排名位置", positionCopy: "保持到有人以更高的已验证出价胜出。", charge: "费用", chargeCopy: "审核后一次性付款。", reporting: "数据", reportingCopy: "显示所选时间范围内的点击。", readRules: "查看完整规则 →", rulesLink: "规则", terms: "条款", privacyLink: "隐私", payments: "付款", challengeReview: "出价确认", confirmPosition: "确认你的排名", challengeTerms: "出价条款", calculatedBid: "根据最终出价计算", oneTimePayment: "审核后一次性付款", duration: "有效期", durationCopy: "保持到有人以更高的已验证出价胜出", clickTimeframe: "显示此榜单时间范围内的点击", acknowledgement: "我已阅读排名、付款时间和排名规则，并同意", and: "和", privacyPolicy: "《隐私政策》", checkoutStatus: "付款状态", cancel: "取消", confirmChallenge: "确认出价" },
   };
   const categoryLabels = { Agents: "AI Agents & Infrastructure", SEO: "SEO & AI Visibility", Marketing: "Marketing & Advertising", Crypto: "Crypto, Web3 & Investing", Developer: "Developer Tools", Business: "Business, Finance & Legal", Security: "Security, Privacy & Compliance", Health: "Health, Fitness & Wellness", Social: "Social Media & Creator Tools", Attention: "Leaderboards & Attention Markets", Careers: "Hiring, Jobs & Careers", Education: "Education & Learning", Agencies: "Agencies, Studios & Services", Ecommerce: "Ecommerce & Retail", Domains: "Domains & Web Assets", Games: "Games & Entertainment", People: "People & Profiles", Productivity: "Productivity & Personal Tools", Design: "Design & Creative", Writing: "Writing & Content", Discovery: "Directories, Launch & Discovery", AIMedia: "AI Media Generation", Audio: "Audio, Voice & Podcasting", Sales: "Sales & Lead Generation", Travel: "Travel, Local & Lifestyle", RealEstate: "Real Estate & Property", News: "Media & News", Hardware: "Hardware & Devices", Other: "Other" };
-  const categoryTranslations = { Agents: "AI 代理与基础设施", SEO: "SEO 与 AI 可见性", Marketing: "营销与广告", Crypto: "加密、Web3 与投资", Developer: "开发者工具", Business: "商业、金融与法律", Security: "安全、隐私与合规", Health: "健康、健身与生活方式", Social: "社交媒体与创作者工具", Attention: "排行榜与注意力市场", Careers: "招聘、工作与职业", Education: "教育与学习", Agencies: "代理机构、工作室与服务", Ecommerce: "电商与零售", Domains: "域名与网络资产", Games: "游戏与娱乐", People: "人物与个人资料", Productivity: "效率与个人工具", Design: "设计与创意", Writing: "写作与内容", Discovery: "目录、发布与发现", AIMedia: "AI 媒体生成", Audio: "音频、语音与播客", Sales: "销售与潜客获取", Travel: "旅行、本地与生活方式", RealEstate: "房地产与物业", News: "媒体与新闻", Hardware: "硬件与设备", Other: "其他" };
+  const categoryTranslations = { Agents: "AI 智能体与基础设施", SEO: "SEO 与 AI 曝光", Marketing: "营销与广告", Crypto: "加密、Web3 与投资", Developer: "开发者工具", Business: "商业、金融与法律", Security: "安全、隐私与合规", Health: "健康、健身与生活方式", Social: "社交媒体与创作者工具", Attention: "排行榜与注意力市场", Careers: "招聘、工作与职业", Education: "教育与学习", Agencies: "代理机构、工作室与服务", Ecommerce: "电商与零售", Domains: "域名与网络资产", Games: "游戏与娱乐", People: "人物与个人资料", Productivity: "效率与个人工具", Design: "设计与创意", Writing: "写作与内容", Discovery: "目录、发布与探索", AIMedia: "AI 媒体生成", Audio: "音频、语音与播客", Sales: "销售与潜客获取", Travel: "旅行、本地与生活方式", RealEstate: "房地产与物业", News: "媒体与新闻", Hardware: "硬件与设备", Other: "其他" };
 
   const currency = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -346,6 +346,8 @@
   function renderLanguage() {
     document.documentElement.lang = state.language === "zh" ? "zh-CN" : "en";
     document.querySelectorAll("[data-i18n]").forEach((node) => { node.textContent = languageText(node.dataset.i18n); });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach((node) => { node.setAttribute("placeholder", languageText(node.dataset.i18nPlaceholder)); });
+    document.querySelectorAll("[data-i18n-aria-label]").forEach((node) => { node.setAttribute("aria-label", languageText(node.dataset.i18nAriaLabel)); });
     if (elements.languageToggle) {
       elements.languageToggle.textContent = state.language === "zh" ? "EN" : "中文";
       elements.languageToggle.setAttribute("aria-pressed", String(state.language === "zh"));
@@ -424,8 +426,8 @@
       ? (production ? "实时赞助榜单" : "预览赞助榜单")
       : (production ? "Live sponsored leaderboard" : "Preview sponsored leaderboard");
     if (elements.activityNote) elements.activityNote.textContent = chinese
-      ? (production ? "已验证竞价动态" : "预览市场动态")
-      : (production ? "Verified market events" : "Preview market activity");
+      ? (production ? "已验证竞价动态" : "预览动态")
+      : (production ? "Verified market events" : "Preview activity");
     if (elements.liveDot) elements.liveDot.hidden = !production;
     if (elements.measurementSummary) elements.measurementSummary.textContent = chinese
       ? (production ? "点击如何统计" : "预览点击说明")
@@ -433,15 +435,15 @@
     if (elements.measurementCopy) elements.measurementCopy.textContent = chinese
       ? (production ? "已验证点击来自所选时间范围内的第一方跳转记录。" : "预览点击数仅作演示；开启实时追踪后才会显示已验证点击。")
       : (production ? "Verified clicks represent first-party redirect events for the selected timeframe." : "Preview click totals are illustrative. Verified click reporting begins only after live tracking is enabled.");
-    if (elements.checkoutTitle) elements.checkoutTitle.textContent = chinese ? "结账状态" : "Checkout status";
+    if (elements.checkoutTitle) elements.checkoutTitle.textContent = chinese ? "付款状态" : "Checkout status";
     if (elements.checkoutProvider) elements.checkoutProvider.textContent = chinese
-      ? (production ? "由 Dodo Payments 提供的托管结账" : "仅供预览 · 尚未连接付款方式")
+      ? (production ? "由 Dodo Payments 提供的托管付款" : "仅供预览 · 尚未连接支付方式")
       : (production ? "Hosted checkout by Dodo Payments" : "Preview only — no payment method connected");
     if (elements.checkoutStatus) elements.checkoutStatus.textContent = chinese
-      ? (production ? "安全结账" : "仅供预览")
+      ? (production ? "安全付款" : "仅供预览")
       : (production ? "Secure checkout" : "Preview only");
     if (elements.checkoutCopy) elements.checkoutCopy.textContent = chinese
-      ? (production ? "付款资料只在支付服务商的托管结账页面输入。排名仅在付款确认后发布。" : "此预览不会发送或保存任何付款资料；仅当 Rankoff 启用付款后才会出现托管结账。")
+      ? (production ? "支付信息只会在支付服务商托管的付款页面填写。付款确认后，排名才会发布。" : "此预览不会发送或保存任何支付信息。只有启用正式付款后，才会出现托管付款页面。")
       : (production ? "Payment details are entered only on the provider-hosted checkout. A rank is published only after payment settlement." : "This preview never sends or stores payment data. A hosted checkout appears only after Rankoff enables payments.");
   }
 
@@ -514,7 +516,7 @@
 
   function claimLabel(amount) {
     return state.language === "zh"
-      ? `以 ${money(amount)} 认领此排名`
+      ? `出价 ${money(amount)} 争夺此排名`
       : `Claim this rank for ${money(amount)}`;
   }
 
@@ -863,7 +865,7 @@
     }
     if (elements.categoryRule) {
       elements.categoryRule.textContent = state.language === "zh"
-        ? `必须与 ${leader.name} 的${categoryName(leader.category)}分类相同。`
+        ? `必须与要超越的 ${leader.name} 属于同一类别。`
         : `Must match ${leader.name}’s ${categoryName(leader.category)} category.`;
     }
     const nextPrice = boardSource === "local" || !remoteNextBid ? getBid(leader) + 1 : remoteNextBid;
@@ -901,7 +903,7 @@
 
     if (item.type === "outbid") {
       return chinese
-        ? `${listingName} 以 ${money(amount)} 超越 ${displacedName}，抢下${board}第 1 名。`
+        ? `${listingName} 以 ${money(amount)} 超越 ${displacedName}，拿下${board}第 1 名。`
         : `${listingName} outbid ${displacedName} at ${money(amount)} and claimed #1 on the ${board}.`;
     }
     if (item.type === "challenge") {
@@ -956,7 +958,7 @@
       if (!activity.length) {
         const empty = createElement("li", "activity-empty");
         empty.append(
-          createElement("strong", "", state.language === "zh" ? "等待首个已验证挑战" : "Waiting for the first verified challenge"),
+          createElement("strong", "", state.language === "zh" ? "等待首个已验证挑战" : "Waiting for the first settled challenge"),
           createElement("span", "", state.language === "zh" ? "付款确认后的排名变化会显示在这里。" : "Settled rank changes will appear here."),
         );
         elements.activityList.replaceChildren(empty);
@@ -1036,7 +1038,9 @@
       activeBid?.type === "new"
         ? pendingChallenge?.name || "Your demo listing"
         : state.listings.find((listing) => listing.id === activeBid?.listingId)?.name || "Selected listing";
-    const label = activeBid?.type === "new" ? "Challenge #1" : "Challenge this position";
+    const label = state.language === "zh"
+      ? (activeBid?.type === "new" ? "挑战第 1 名" : "挑战此排名")
+      : (activeBid?.type === "new" ? "Challenge #1" : "Challenge this position");
     elements.bidTarget.replaceChildren(createElement("span", "", label), createElement("strong", "", targetName));
   }
 
