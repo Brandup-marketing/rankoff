@@ -182,10 +182,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .category-market { display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem 0; border-block: 1px solid var(--line); }
 .category-market h2 { flex: 0 0 auto; margin: 0; color: var(--muted); font-size: 0.72rem; font-weight: 850; letter-spacing: 0.04em; text-transform: uppercase; }
 .category-rail { display: flex; min-width: 0; max-width: 100%; flex: 1 1 auto; gap: 0.25rem; overflow-x: auto; padding-bottom: 0.1rem; overscroll-behavior-inline: contain; scrollbar-width: thin; }
-.category-chip { flex: 0 0 auto; min-width: 2.75rem; min-height: 2.75rem; padding: 0.35rem 0.7rem; border: 0; border-radius: 0.25rem; background: transparent; color: var(--muted); font-size: 0.78rem; font-weight: 720; white-space: nowrap; }
+.category-chip { display: inline-flex; flex: 0 0 auto; min-width: 2.75rem; min-height: 2.75rem; align-items: center; justify-content: center; gap: 0.4rem; padding: 0.35rem 0.7rem; border: 0; border-radius: 0.25rem; background: transparent; color: var(--muted); font-size: 0.78rem; font-weight: 720; white-space: nowrap; }
 .category-chip:hover { background: var(--surface-subtle); color: var(--ink); }
 .category-chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
-.category-explore { display: inline-flex; align-items: center; justify-content: center; margin-left: auto; color: var(--ink); text-decoration: none; }
+.category-chip-icon { display: inline-grid; min-width: 1rem; place-items: center; color: var(--accent-strong); font-size: 0.82rem; font-weight: 850; line-height: 1; }
+.category-chip[aria-pressed="true"] .category-chip-icon { color: inherit; }
+.category-chip-label { line-height: 1; }
+.category-explore { margin-left: auto; color: var(--ink); text-decoration: none; }
 .category-explore:hover { color: var(--accent-strong); text-decoration: none; }
 
 .board-toolbar { display: flex; align-items: end; justify-content: space-between; gap: 1rem; padding: 1.4rem 0 0.7rem; }

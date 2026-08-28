@@ -27,6 +27,7 @@
     return aliases;
   }, {}));
   const shortcutCategories = Object.freeze(["Agents", "Marketing", "Developer", "Crypto"]);
+  const shortcutIcons = Object.freeze({ all: "▦", Agents: "✦", Marketing: "↗", Developer: "</>", Crypto: "₿" });
   const translations = {
     en: { navBoard: "Board", navCategories: "Categories", navAbout: "About", heroCopy: "Put your product in the spot people see first. Your listing stays at the top until someone pays more.", totalBid: "Your total bid", productUrl: "Website or social account", productUrlPlaceholder: "example.com or @yourusername", invalidWebsite: "Enter a valid website or social account, such as example.com or @yourusername.", chooseMarket: "Choose a market", challengeCategory: "Challenge category", categoryRule: "Must match the listing you’ll outrank.", reviewBid: "Review your bid", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest valid bid takes #1. Pay more to move up.", todayRanking: "Today’s top ranking", latestActivity: "Latest activity", liveUpdates: "Latest updates", howItWorks: "How ranking works", searchPlaceholder: "Search products and categories…", close: "Close", seeAll: "See all", past24: "Past 24h", livePulse: "Live updates", rank: "Rank", listing: "Listing", bid: "Bid", clicks: "Clicks", sponsored: "Sponsored", rules: "Every listing is sponsored. The highest verified bid ranks first.", position: "Position", positionCopy: "Held until a higher verified bid wins.", charge: "Charge", chargeCopy: "One payment after review.", reporting: "Reporting", reportingCopy: "Clicks shown for the selected timeframe.", readRules: "Read all rules →", rulesLink: "Rules", terms: "Terms", privacyLink: "Privacy", payments: "Payments", challengeReview: "Challenge review", confirmPosition: "Confirm your position", challengeTerms: "Challenge terms", calculatedBid: "Calculated from your final bid", oneTimePayment: "One-time payment after review", duration: "Duration", durationCopy: "Until a higher verified bid wins", clickTimeframe: "Clicks shown for this board timeframe", acknowledgement: "I reviewed the position, charge timing, and ranking rules. I agree to the", and: "and", privacyPolicy: "Privacy Policy", checkoutStatus: "Checkout status", cancel: "Cancel", confirmChallenge: "Confirm challenge" },
     zh: { navBoard: "榜单", navCategories: "分类", navAbout: "关于", heroCopy: "把产品放到最显眼的位置。只要没有更高的有效出价，你的介绍就会留在榜首。", totalBid: "你的总出价", productUrl: "网站或社交账号", productUrlPlaceholder: "example.com 或 @yourusername", invalidWebsite: "请输入有效的网站或社交账号，例如 example.com 或 @yourusername。", chooseMarket: "选择市场", challengeCategory: "挑战类别", categoryRule: "必须与您要超越的条目类别相同。", reviewBid: "确认出价", markets: "市场", liveLeaderboard: "实时榜单", boardSummary: "最高有效出价获得第 1 名。提高出价即可上升。", todayRanking: "今日热门榜", latestActivity: "最新动态", liveUpdates: "最新动态", howItWorks: "排名规则", searchPlaceholder: "搜索产品和分类…", close: "关闭", seeAll: "查看全部", past24: "近 24 小时", livePulse: "实时更新", rank: "排名", listing: "条目", bid: "出价", clicks: "点击", sponsored: "赞助", rules: "每个条目都是赞助展示。最高的已验证出价排名第一。", position: "排名位置", positionCopy: "保持到有人以更高的已验证出价胜出。", charge: "费用", chargeCopy: "审核后一次性付款。", reporting: "数据", reportingCopy: "显示所选时间范围内的点击。", readRules: "查看完整规则 →", rulesLink: "规则", terms: "条款", privacyLink: "隐私", payments: "付款", challengeReview: "出价确认", confirmPosition: "确认你的排名", challengeTerms: "出价条款", calculatedBid: "根据最终出价计算", oneTimePayment: "审核后一次性付款", duration: "有效期", durationCopy: "保持到有人以更高的已验证出价胜出", clickTimeframe: "显示此榜单时间范围内的点击", acknowledgement: "我已阅读排名、付款时间和排名规则，并同意", and: "和", privacyPolicy: "《隐私政策》", checkoutStatus: "付款状态", cancel: "取消", confirmChallenge: "确认出价" },
@@ -736,7 +737,10 @@
 
   function renderCategories() {
     if (!elements.categoryRail) return;
-    const buttons = [{ label: state.language === "zh" ? "全部" : "All", value: DEFAULT_CATEGORY }, ...shortcutCategories.map((category) => ({ label: categoryName(category), value: category }))];
+    const shortLabels = state.language === "zh"
+      ? { Agents: "AI", Marketing: "营销", Developer: "开发工具", Crypto: "加密" }
+      : { Agents: "AI", Marketing: "Marketing", Developer: "Developer", Crypto: "Crypto" };
+    const buttons = [{ label: state.language === "zh" ? "全部" : "All", value: DEFAULT_CATEGORY }, ...shortcutCategories.map((category) => ({ label: shortLabels[category], value: category }))];
     const explore = createElement("a", "category-chip category-explore", state.language === "zh" ? "探索全部 →" : "Explore →");
     explore.href = "./categories.html";
     elements.categoryRail.replaceChildren(
@@ -745,7 +749,9 @@
         button.type = "button";
         button.dataset.category = value;
         button.setAttribute("aria-pressed", String(state.category === value));
-        button.textContent = label;
+        const icon = createElement("span", "category-chip-icon", shortcutIcons[value]);
+        icon.setAttribute("aria-hidden", "true");
+        button.append(icon, createElement("span", "category-chip-label", label));
         return button;
       }),
       explore,
