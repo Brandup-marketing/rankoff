@@ -40,6 +40,8 @@ html[data-theme="light"] .brand-lockup-image { filter: invert(1) hue-rotate(180d
 *::before,
 *::after { box-sizing: border-box; }
 
+[hidden] { display: none !important; }
+
 html {
   min-width: 20rem;
   background: var(--bg);
