@@ -647,19 +647,19 @@
       const timestamp = Date.parse(raw);
       if (Number.isFinite(timestamp)) {
         const days = Math.max(0, Math.floor((Date.now() - timestamp) / 86_400_000));
-        if (state.language === "zh") return days === 0 ? "今天" : `${days} 天前`;
-        return days === 0 ? "Today" : `${days} day${days === 1 ? "" : "s"} ago`;
+        if (state.language === "zh") return days === 0 ? "今天上榜" : `${days} 天前上榜`;
+        return days === 0 ? "Claimed today" : `Claimed ${days} day${days === 1 ? "" : "s"} ago`;
       }
       const shorthand = raw.match(/^(\d+)\s*([dhm])$/i);
       if (shorthand) {
         const amount = Number(shorthand[1]);
         const unit = shorthand[2].toLowerCase();
-        if (unit === "d") return state.language === "zh" ? `${amount} 天前` : `${amount} day${amount === 1 ? "" : "s"} ago`;
-        if (unit === "h" && amount >= 24) return state.language === "zh" ? `${Math.floor(amount / 24)} 天前` : `${Math.floor(amount / 24)} day${amount >= 48 ? "s" : ""} ago`;
-        return state.language === "zh" ? "今天" : "Today";
+        if (unit === "d") return state.language === "zh" ? `${amount} 天前上榜` : `Claimed ${amount} day${amount === 1 ? "" : "s"} ago`;
+        if (unit === "h" && amount >= 24) return state.language === "zh" ? `${Math.floor(amount / 24)} 天前上榜` : `Claimed ${Math.floor(amount / 24)} day${amount >= 48 ? "s" : ""} ago`;
+        return state.language === "zh" ? "今天上榜" : "Claimed today";
       }
     }
-    return state.language === "zh" ? "最近" : "Recently";
+    return state.language === "zh" ? "最近上榜" : "Claimed recently";
   }
 
   function listingHostLabel(listing) {

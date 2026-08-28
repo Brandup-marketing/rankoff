@@ -72,16 +72,16 @@
   function initials(title) { return escapeText(title).split(/\s+/).map((part) => part[0]).join("").slice(0, 2).toUpperCase() || "RK"; }
   function ageLabel(age) {
     const value = escapeText(age);
-    if (!value) return elements.language === "zh" ? "最近" : "Recently";
-    if (value === "1d") return elements.language === "zh" ? "1 天前" : "1 day ago";
+    if (!value) return elements.language === "zh" ? "最近上榜" : "Claimed recently";
+    if (value === "1d") return elements.language === "zh" ? "1 天前上榜" : "Claimed 1 day ago";
     const match = value.match(/^(\d+)([hm])$/i);
     if (match) {
       const amount = Number(match[1]);
-      if (elements.language === "zh") return `${match[1]} ${match[2].toLowerCase() === "h" ? "小时前" : "分钟前"}`;
+      if (elements.language === "zh") return `${match[1]} ${match[2].toLowerCase() === "h" ? "小时前上榜" : "分钟前上榜"}`;
       const unit = match[2].toLowerCase() === "h" ? (amount === 1 ? "hour" : "hours") : (amount === 1 ? "minute" : "minutes");
-      return `${match[1]} ${unit} ago`;
+      return `Claimed ${match[1]} ${unit} ago`;
     }
-    return elements.language === "zh" ? `${value} 前` : `${value} ago`;
+    return elements.language === "zh" ? `${value} 前上榜` : `Claimed ${value} ago`;
   }
 
   function normalizeRows(payload, period) {
