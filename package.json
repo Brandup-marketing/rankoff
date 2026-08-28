@@ -4,10 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build": "node scripts/build-static.mjs",
     "test": "node --test tests/backend/*.test.js",
     "check": "node scripts/check.mjs",
     "cf:types": "wrangler types",
-    "cf:dev": "wrangler pages dev .",
+    "cf:dev": "pnpm run build && wrangler pages dev dist",
     "cf:dry-run": "wrangler pages functions build functions --outdir .wrangler/functions-build --project-directory . --compatibility-date 2026-08-28 --compatibility-flag nodejs_compat"
   },
   "devDependencies": {
