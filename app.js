@@ -197,6 +197,7 @@
     activityList: document.querySelector("[data-activity-list]"),
     activityNote: document.querySelector("[data-activity-note]"),
     liveDot: document.querySelector(".live-dot"),
+    panelToggles: Array.from(document.querySelectorAll("[data-panel-toggle]")),
     statVisitors: document.querySelector("[data-stat-visitors]"),
     statRevenue: document.querySelector("[data-stat-revenue]"),
     resultClicks: document.querySelector("[data-result-clicks]"),
@@ -350,6 +351,24 @@
       elements.languageToggle.setAttribute("aria-pressed", String(state.language === "zh"));
       elements.languageToggle.setAttribute("aria-label", state.language === "zh" ? "Switch to English" : "切换中文");
     }
+    updatePanelToggleLabels();
+  }
+
+  function updatePanelToggleLabels() {
+    elements.panelToggles.forEach((button) => {
+      const expanded = button.getAttribute("aria-expanded") !== "false";
+      const label = expanded
+        ? (state.language === "zh" ? "收起" : "Minimize")
+        : (state.language === "zh" ? "展开" : "Expand");
+      const labelNode = button.querySelector("[data-panel-toggle-label]");
+      if (labelNode) labelNode.textContent = label;
+      const title = state.language === "zh" ? button.dataset.panelTitleZh : button.dataset.panelTitle;
+      button.setAttribute("aria-label", `${label} ${title || "panel"}`);
+      const content = document.getElementById(button.getAttribute("aria-controls"));
+      if (content) content.hidden = !expanded;
+      const icon = button.querySelector(".panel-toggle-icon");
+      if (icon) icon.textContent = expanded ? "−" : "+";
+    });
   }
 
   function dollarsFromMinor(value, fallback = 1) {
@@ -1305,6 +1324,14 @@
     state.language = state.language === "zh" ? "en" : "zh";
     saveState();
     render();
+  });
+
+  elements.panelToggles.forEach((button) => {
+    button.addEventListener("click", () => {
+      const expanded = button.getAttribute("aria-expanded") !== "false";
+      button.setAttribute("aria-expanded", String(!expanded));
+      updatePanelToggleLabels();
+    });
   });
 
   document.addEventListener("click", (event) => {

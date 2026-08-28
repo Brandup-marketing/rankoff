@@ -114,27 +114,37 @@
           <div class="top-three top-three-hero" data-top-three aria-label="Top three sponsored listings"></div>
 
           <section class="board-interstitial" aria-label="Board pulse">
-            <section class="today-ranking-panel" aria-labelledby="today-ranking-heading">
+            <section class="today-ranking-panel pulse-panel" aria-labelledby="today-ranking-heading">
               <div class="section-heading-line section-heading-line-spread">
                 <div>
                   <p class="eyebrow">Past 24h</p>
                   <h2 id="today-ranking-heading" data-i18n="todayRanking">Today’s top ranking</h2>
                 </div>
-                <a class="text-link" data-today-see-all href="./index.html?period=today#board">See all</a>
+                <div class="panel-actions">
+                  <a class="text-link" data-today-see-all href="./index.html?period=today#board">See all</a>
+                  <button class="panel-toggle" type="button" data-panel-toggle aria-expanded="true" aria-controls="today-ranking-content" data-panel-title="Today’s top ranking" data-panel-title-zh="今日热门排名"><span data-panel-toggle-label>Minimize</span><span class="panel-toggle-icon" aria-hidden="true">−</span></button>
+                </div>
               </div>
-              <ol class="today-ranking-list" data-today-ranking-list aria-live="polite"></ol>
+              <div id="today-ranking-content" data-panel-content>
+                <ol class="today-ranking-list" data-today-ranking-list aria-live="polite"></ol>
+              </div>
             </section>
 
-            <section class="activity-section" aria-labelledby="activity-heading">
+            <section class="activity-section pulse-panel" aria-labelledby="activity-heading">
               <div class="section-heading-line section-heading-line-spread">
                 <div>
                   <p class="eyebrow">Live pulse</p>
                   <h2 id="activity-heading" data-i18n="latestActivity">Latest activity</h2>
                 </div>
-                <span class="live-dot" aria-hidden="true"></span>
+                <div class="panel-actions">
+                  <span class="live-dot" aria-hidden="true"></span>
+                  <button class="panel-toggle" type="button" data-panel-toggle aria-expanded="true" aria-controls="latest-activity-content" data-panel-title="Latest activity" data-panel-title-zh="最新动态"><span data-panel-toggle-label>Minimize</span><span class="panel-toggle-icon" aria-hidden="true">−</span></button>
+                </div>
               </div>
-              <p class="section-note" data-activity-note>Preview market activity</p>
-              <ol class="activity-tape" data-activity-list aria-live="polite"></ol>
+              <div id="latest-activity-content" data-panel-content>
+                <p class="section-note" data-activity-note>Preview market activity</p>
+                <ol class="activity-tape" data-activity-list aria-live="polite"></ol>
+              </div>
             </section>
           </section>
         </div>
