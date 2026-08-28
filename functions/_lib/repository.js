@@ -1,4 +1,4 @@
-import { ApiError } from "./config.js";
+import { ApiError, marketCategoryMembers } from "./config.js";
 
 export async function loadBoard(db, slug) {
   const board = await db
@@ -23,8 +23,16 @@ export async function loadPublicBoard(db, board, { category, period, limit }) {
   ];
   const bindings = [board.id];
   if (category !== "all") {
-    bindings.push(category);
-    where.push(`l.category = ?${bindings.length}`);
+    const members = marketCategoryMembers(category);
+    if (!members.length) {
+      where.push("1 = 0");
+    } else {
+      const memberBindings = members.map((member) => {
+        bindings.push(member);
+        return `?${bindings.length}`;
+      });
+      where.push(`l.category IN (${memberBindings.join(", ")})`);
+    }
   }
   if (period === "today") {
     where.push("b.settled_at >= datetime('now', '-24 hours')");

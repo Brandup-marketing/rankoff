@@ -5,43 +5,34 @@
   const MAX_BID = 1_000_000;
   const DEFAULT_CATEGORY = "all";
   const BOARD_API_ENDPOINT = "./api/v1/board";
-  const categories = [
-    "Agents",
-    "SEO",
-    "Marketing",
-    "Crypto",
-    "Developer",
-    "Business",
-    "Security",
-    "Health",
-    "Social",
-    "Attention",
-    "Careers",
-    "Education",
-    "Agencies",
-    "Ecommerce",
-    "Domains",
-    "Games",
-    "People",
-    "Productivity",
-    "Design",
-    "Writing",
-    "Discovery",
-    "AIMedia",
-    "Audio",
-    "Sales",
-    "Travel",
-    "RealEstate",
-    "News",
-    "Hardware",
-    "Other",
-  ];
+  const categoryGroups = Object.freeze({
+    Agents: ["Agents", "AIMedia"],
+    Marketing: ["Marketing", "SEO", "Social", "Sales", "Attention", "People"],
+    Developer: ["Developer", "Security"],
+    Business: ["Business", "Agencies", "Careers"],
+    Crypto: ["Crypto"],
+    Ecommerce: ["Ecommerce", "Hardware"],
+    Design: ["Design", "Writing", "Audio", "News"],
+    Productivity: ["Productivity", "Education"],
+    Health: ["Health"],
+    Games: ["Games"],
+    Travel: ["Travel", "RealEstate"],
+    Domains: ["Domains", "Discovery"],
+    Other: ["Other"],
+  });
+  const categories = Object.freeze(Object.keys(categoryGroups));
+  const categoryAliases = Object.freeze(Object.entries(categoryGroups).reduce((aliases, [market, members]) => {
+    aliases[market.toLowerCase()] = market;
+    members.forEach((member) => { aliases[member.toLowerCase()] = market; });
+    return aliases;
+  }, {}));
+  const shortcutCategories = Object.freeze(["Agents", "Marketing", "Developer", "Crypto"]);
   const translations = {
     en: { navBoard: "Board", navCategories: "Categories", navAbout: "About", heroCopy: "Put your product in the spot people see first. Your listing stays at the top until someone pays more.", totalBid: "Your total bid", productUrl: "Website or social account", productUrlPlaceholder: "example.com or @yourusername", invalidWebsite: "Enter a valid website or social account, such as example.com or @yourusername.", chooseMarket: "Choose a market", challengeCategory: "Challenge category", categoryRule: "Must match the listing you’ll outrank.", reviewBid: "Review your bid", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest valid bid takes #1. Pay more to move up.", todayRanking: "Today’s top ranking", latestActivity: "Latest activity", liveUpdates: "Latest updates", howItWorks: "How ranking works", searchPlaceholder: "Search products and categories…", close: "Close", seeAll: "See all", past24: "Past 24h", livePulse: "Live updates", rank: "Rank", listing: "Listing", bid: "Bid", clicks: "Clicks", sponsored: "Sponsored", rules: "Every listing is sponsored. The highest verified bid ranks first.", position: "Position", positionCopy: "Held until a higher verified bid wins.", charge: "Charge", chargeCopy: "One payment after review.", reporting: "Reporting", reportingCopy: "Clicks shown for the selected timeframe.", readRules: "Read all rules →", rulesLink: "Rules", terms: "Terms", privacyLink: "Privacy", payments: "Payments", challengeReview: "Challenge review", confirmPosition: "Confirm your position", challengeTerms: "Challenge terms", calculatedBid: "Calculated from your final bid", oneTimePayment: "One-time payment after review", duration: "Duration", durationCopy: "Until a higher verified bid wins", clickTimeframe: "Clicks shown for this board timeframe", acknowledgement: "I reviewed the position, charge timing, and ranking rules. I agree to the", and: "and", privacyPolicy: "Privacy Policy", checkoutStatus: "Checkout status", cancel: "Cancel", confirmChallenge: "Confirm challenge" },
     zh: { navBoard: "榜单", navCategories: "分类", navAbout: "关于", heroCopy: "把产品放到最显眼的位置。只要没有更高的有效出价，你的介绍就会留在榜首。", totalBid: "你的总出价", productUrl: "网站或社交账号", productUrlPlaceholder: "example.com 或 @yourusername", invalidWebsite: "请输入有效的网站或社交账号，例如 example.com 或 @yourusername。", chooseMarket: "选择市场", challengeCategory: "挑战类别", categoryRule: "必须与您要超越的条目类别相同。", reviewBid: "确认出价", markets: "市场", liveLeaderboard: "实时榜单", boardSummary: "最高有效出价获得第 1 名。提高出价即可上升。", todayRanking: "今日热门榜", latestActivity: "最新动态", liveUpdates: "最新动态", howItWorks: "排名规则", searchPlaceholder: "搜索产品和分类…", close: "关闭", seeAll: "查看全部", past24: "近 24 小时", livePulse: "实时更新", rank: "排名", listing: "条目", bid: "出价", clicks: "点击", sponsored: "赞助", rules: "每个条目都是赞助展示。最高的已验证出价排名第一。", position: "排名位置", positionCopy: "保持到有人以更高的已验证出价胜出。", charge: "费用", chargeCopy: "审核后一次性付款。", reporting: "数据", reportingCopy: "显示所选时间范围内的点击。", readRules: "查看完整规则 →", rulesLink: "规则", terms: "条款", privacyLink: "隐私", payments: "付款", challengeReview: "出价确认", confirmPosition: "确认你的排名", challengeTerms: "出价条款", calculatedBid: "根据最终出价计算", oneTimePayment: "审核后一次性付款", duration: "有效期", durationCopy: "保持到有人以更高的已验证出价胜出", clickTimeframe: "显示此榜单时间范围内的点击", acknowledgement: "我已阅读排名、付款时间和排名规则，并同意", and: "和", privacyPolicy: "《隐私政策》", checkoutStatus: "付款状态", cancel: "取消", confirmChallenge: "确认出价" },
   };
-  const categoryLabels = { Agents: "AI Agents & Infrastructure", SEO: "SEO & AI Visibility", Marketing: "Marketing & Advertising", Crypto: "Crypto, Web3 & Investing", Developer: "Developer Tools", Business: "Business, Finance & Legal", Security: "Security, Privacy & Compliance", Health: "Health, Fitness & Wellness", Social: "Social Media & Creator Tools", Attention: "Leaderboards & Attention Markets", Careers: "Hiring, Jobs & Careers", Education: "Education & Learning", Agencies: "Agencies, Studios & Services", Ecommerce: "Ecommerce & Retail", Domains: "Domains & Web Assets", Games: "Games & Entertainment", People: "People & Profiles", Productivity: "Productivity & Personal Tools", Design: "Design & Creative", Writing: "Writing & Content", Discovery: "Directories, Launch & Discovery", AIMedia: "AI Media Generation", Audio: "Audio, Voice & Podcasting", Sales: "Sales & Lead Generation", Travel: "Travel, Local & Lifestyle", RealEstate: "Real Estate & Property", News: "Media & News", Hardware: "Hardware & Devices", Other: "Other" };
-  const categoryTranslations = { Agents: "AI 智能体与基础设施", SEO: "SEO 与 AI 曝光", Marketing: "营销与广告", Crypto: "加密、Web3 与投资", Developer: "开发者工具", Business: "商业、金融与法律", Security: "安全、隐私与合规", Health: "健康、健身与生活方式", Social: "社交媒体与创作者工具", Attention: "排行榜与注意力市场", Careers: "招聘、工作与职业", Education: "教育与学习", Agencies: "代理机构、工作室与服务", Ecommerce: "电商与零售", Domains: "域名与网络资产", Games: "游戏与娱乐", People: "人物与个人资料", Productivity: "效率与个人工具", Design: "设计与创意", Writing: "写作与内容", Discovery: "目录、发布与探索", AIMedia: "AI 媒体生成", Audio: "音频、语音与播客", Sales: "销售与潜客获取", Travel: "旅行、本地与生活方式", RealEstate: "房地产与物业", News: "媒体与新闻", Hardware: "硬件与设备", Other: "其他" };
+  const categoryLabels = { Agents: "AI & Automation", Marketing: "Marketing, SEO & Social", Developer: "Developer Tools & Security", Business: "Business & Professional Services", Crypto: "Finance, Crypto & Investing", Ecommerce: "Ecommerce, Retail & Hardware", Design: "Design, Content & Media", Productivity: "Productivity & Education", Health: "Health & Wellness", Games: "Games & Entertainment", Travel: "Travel, Local & Property", Domains: "Web, Domains & Discovery", Other: "Other" };
+  const categoryTranslations = { Agents: "AI 与自动化", Marketing: "营销、SEO 与社交媒体", Developer: "开发工具与安全", Business: "商业与专业服务", Crypto: "金融、加密与投资", Ecommerce: "电商、零售与硬件", Design: "设计、内容与媒体", Productivity: "效率工具与教育", Health: "健康与生活方式", Games: "游戏与娱乐", Travel: "旅行、本地与房地产", Domains: "网站、域名与发现", Other: "其他" };
 
   const currency = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -224,7 +215,8 @@
   if (sharedView.searchParams.get("period") === "today") state.activeWindow = "today";
   if (sharedView.searchParams.get("period") === "all") state.activeWindow = "all";
   const sharedCategory = sharedView.searchParams.get("category");
-  if (sharedCategory === DEFAULT_CATEGORY || categories.includes(sharedCategory)) state.category = sharedCategory;
+  if (sharedCategory === DEFAULT_CATEGORY) state.category = DEFAULT_CATEGORY;
+  else if (canonicalCategory(sharedCategory)) state.category = canonicalCategory(sharedCategory);
   let activeBid = null;
   let pendingChallenge = null;
   let lastTrigger = null;
@@ -292,7 +284,7 @@
           url: String(listing.url || "https://rankoff.my/demo"),
           iconUrl: typeof listing.iconUrl === "string" ? listing.iconUrl : "",
           description: "A local-only challenger created in this browser.",
-          category: categories.includes(listing.category) ? listing.category : categories[0],
+          category: canonicalCategory(listing.category) || categories[0],
           age: "now",
           clicks: 0,
           todayClicks: 0,
@@ -307,7 +299,7 @@
 
       return {
         activeWindow: saved.activeWindow === "today" ? "today" : "all",
-        category: saved.category === DEFAULT_CATEGORY || categories.includes(saved.category) ? saved.category : DEFAULT_CATEGORY,
+        category: saved.category === DEFAULT_CATEGORY ? DEFAULT_CATEGORY : canonicalCategory(saved.category) || DEFAULT_CATEGORY,
         theme: saved.theme === "light" ? "light" : "dark",
         language: saved.language === "zh" ? "zh" : "en",
         listings: restored,
@@ -339,8 +331,13 @@
 
   function languageText(key) { return (translations[state.language] || translations.en)[key] || translations.en[key] || key; }
 
+  function canonicalCategory(category) {
+    return categoryAliases[String(category || "").toLowerCase()] || "";
+  }
+
   function categoryName(category, language = state.language) {
-    return language === "zh" ? (categoryTranslations[category] || category) : (categoryLabels[category] || category);
+    const market = canonicalCategory(category) || "Other";
+    return language === "zh" ? categoryTranslations[market] : categoryLabels[market];
   }
 
   function renderLanguage() {
@@ -542,7 +539,7 @@
 
   function visibleListings() {
     if (state.category === DEFAULT_CATEGORY) return [...state.listings];
-    return state.listings.filter((listing) => listing.category === state.category);
+    return state.listings.filter((listing) => canonicalCategory(listing.category) === state.category);
   }
 
   function rankedListings(listings = visibleListings(), windowName = state.activeWindow) {
@@ -739,7 +736,9 @@
 
   function renderCategories() {
     if (!elements.categoryRail) return;
-    const buttons = [{ label: state.language === "zh" ? "全部" : "All", value: DEFAULT_CATEGORY }, ...categories.map((category) => ({ label: categoryName(category), value: category }))];
+    const buttons = [{ label: state.language === "zh" ? "全部" : "All", value: DEFAULT_CATEGORY }, ...shortcutCategories.map((category) => ({ label: categoryName(category), value: category }))];
+    const explore = createElement("a", "category-chip category-explore", state.language === "zh" ? "探索全部 →" : "Explore →");
+    explore.href = "./categories.html";
     elements.categoryRail.replaceChildren(
       ...buttons.map(({ label, value }) => {
         const button = createElement("button", "category-chip");
@@ -749,6 +748,7 @@
         button.textContent = label;
         return button;
       }),
+      explore,
     );
   }
 
@@ -860,8 +860,9 @@
   function renderLeader() {
     const leader = rankedListings()[0];
     if (!leader) return;
-    if (elements.categorySelect && categories.includes(leader.category)) {
-      elements.categorySelect.value = leader.category;
+    const leaderCategory = canonicalCategory(leader.category) || "Other";
+    if (elements.categorySelect && categories.includes(leaderCategory)) {
+      elements.categorySelect.value = leaderCategory;
     }
     if (elements.categoryRule) {
       elements.categoryRule.textContent = state.language === "zh"
@@ -1005,7 +1006,7 @@
       elements.categorySelect.value = "";
       return;
     }
-    elements.categorySelect.value = categories.includes(state.category) ? state.category : selected;
+    elements.categorySelect.value = categories.includes(state.category) ? state.category : canonicalCategory(selected);
   }
 
   function renderTheme() {
@@ -1293,7 +1294,8 @@
   elements.categoryRail?.addEventListener("click", (event) => {
     const trigger = event.target instanceof Element ? event.target.closest("[data-category]") : null;
     if (!(trigger instanceof HTMLElement)) return;
-    state.category = trigger.dataset.category || DEFAULT_CATEGORY;
+    const selected = trigger.dataset.category || DEFAULT_CATEGORY;
+    state.category = selected === DEFAULT_CATEGORY ? DEFAULT_CATEGORY : canonicalCategory(selected) || DEFAULT_CATEGORY;
     saveState();
     render();
     void refreshBoardFromApi();
@@ -1301,7 +1303,7 @@
 
   elements.categorySelect?.addEventListener("change", (event) => {
     const value = event.currentTarget instanceof HTMLSelectElement ? event.currentTarget.value : categories[0];
-    state.category = value === "" ? DEFAULT_CATEGORY : categories.includes(value) ? value : DEFAULT_CATEGORY;
+    state.category = value === "" ? DEFAULT_CATEGORY : canonicalCategory(value) || DEFAULT_CATEGORY;
     saveState();
     render();
     void refreshBoardFromApi();
@@ -1426,8 +1428,8 @@
     }
 
     const outranked = rankedListings()[0];
-    const requiredCategory = outranked && categories.includes(outranked.category)
-      ? outranked.category
+    const requiredCategory = outranked && canonicalCategory(outranked.category)
+      ? canonicalCategory(outranked.category)
       : state.category !== DEFAULT_CATEGORY && categories.includes(state.category) ? state.category : "";
     const category = String(formData.get("productCategory") || "");
     if (!requiredCategory || category !== requiredCategory) {
@@ -1435,7 +1437,7 @@
       showToast(
         state.language === "zh"
           ? `挑战分类必须与${outranked?.name || "目标条目"}相同。`
-          : `Choose ${requiredCategory || "the target listing’s"} to match the listing you’ll outrank.`,
+          : `Choose ${requiredCategory ? categoryName(requiredCategory) : "the target listing’s category"} to match the listing you’ll outrank.`,
         "error",
       );
       return;

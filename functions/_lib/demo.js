@@ -1,3 +1,5 @@
+import { marketCategoryMembers } from "./config.js";
+
 const DEMO_LISTINGS = Object.freeze([
   {
     id: "model-harbor",
@@ -62,8 +64,9 @@ const DEMO_LISTINGS = Object.freeze([
 ]);
 
 export function demoBoard({ category = "all", period = "all", limit = 50 } = {}) {
+  const members = marketCategoryMembers(category);
   const rows = DEMO_LISTINGS.filter(
-    (listing) => category === "all" || listing.category.toLowerCase() === category.toLowerCase(),
+    (listing) => String(category).toLowerCase() === "all" || members.includes(listing.category),
   ).slice(0, limit);
   const rankings = rows.map((listing, index) => ({
     rank: index + 1,

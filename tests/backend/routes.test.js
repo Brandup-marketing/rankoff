@@ -16,6 +16,16 @@ test("preview board is a stable safe API response", async () => {
   assert.ok(payload.next_bid_minor > payload.rankings[0].bid.amount_minor);
 });
 
+test("legacy category filters resolve to their broader launch market", async () => {
+  const response = await getBoard({
+    request: new Request("https://rankoff.my/api/v1/board?category=SEO&period=all&limit=50"),
+    env: { RANKOFF_MODE: "demo" },
+  });
+  const payload = await response.json();
+  assert.equal(response.status, 200);
+  assert.deepEqual(payload.rankings.map((entry) => entry.listing.id), ["trackline"]);
+});
+
 test("preview bid endpoint never creates a charge", async () => {
   await assert.rejects(
     createBid({ request: new Request("https://rankoff.my/api/v1/bids", { method: "POST" }), env: { RANKOFF_MODE: "demo" } }),

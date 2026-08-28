@@ -1,4 +1,4 @@
-import { ApiError, CATEGORIES } from "./config.js";
+import { ApiError, CATEGORIES, VISIBLE_CATEGORIES, marketCategory } from "./config.js";
 
 const BLOCKED_HOST_SUFFIXES = [
   ".internal",
@@ -34,10 +34,10 @@ export function normalizeCategory(value) {
   const matched = CATEGORIES.find((item) => item.toLowerCase() === category.toLowerCase());
   if (!matched) {
     throw new ApiError(422, "invalid_category", "Choose a supported category.", {
-      allowed: CATEGORIES,
+      allowed: VISIBLE_CATEGORIES,
     });
   }
-  return matched;
+  return marketCategory(matched);
 }
 
 export function normalizeDestinationUrl(value) {

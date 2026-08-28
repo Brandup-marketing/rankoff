@@ -5,36 +5,25 @@
   const compact = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
   const currency = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
   const categoryConfig = [
-    { id: "Agents", name: "AI Agents & Infrastructure", zh: "AI 智能体与基础设施", icon: "✦" },
-    { id: "SEO", name: "SEO & AI Visibility", zh: "SEO 与 AI 曝光", icon: "⌕" },
-    { id: "Marketing", name: "Marketing & Advertising", zh: "营销与广告", icon: "◒" },
-    { id: "Crypto", name: "Crypto, Web3 & Investing", zh: "加密、Web3 与投资", icon: "₿" },
-    { id: "Developer", name: "Developer Tools", zh: "开发者工具", icon: "⌘" },
-    { id: "Business", name: "Business, Finance & Legal", zh: "商业、金融与法律", icon: "◌" },
-    { id: "Security", name: "Security, Privacy & Compliance", zh: "安全、隐私与合规", icon: "◇" },
-    { id: "Health", name: "Health, Fitness & Wellness", zh: "健康、健身与生活方式", icon: "♡" },
-    { id: "Social", name: "Social Media & Creator Tools", zh: "社交媒体与创作者工具", icon: "⌯" },
-    { id: "Attention", name: "Leaderboards & Attention Markets", zh: "排行榜与注意力市场", icon: "♜" },
-    { id: "Careers", name: "Hiring, Jobs & Careers", zh: "招聘、工作与职业", icon: "▣" },
-    { id: "Education", name: "Education & Learning", zh: "教育与学习", icon: "⌂" },
-    { id: "Agencies", name: "Agencies, Studios & Services", zh: "代理机构、工作室与服务", icon: "◎" },
-    { id: "Ecommerce", name: "Ecommerce & Retail", zh: "电商与零售", icon: "□" },
-    { id: "Domains", name: "Domains & Web Assets", zh: "域名与网络资产", icon: "◉" },
-    { id: "Games", name: "Games & Entertainment", zh: "游戏与娱乐", icon: "⌁" },
-    { id: "People", name: "People & Profiles", zh: "人物与个人资料", icon: "♙" },
-    { id: "Productivity", name: "Productivity & Personal Tools", zh: "效率与个人工具", icon: "＋" },
-    { id: "Design", name: "Design & Creative", zh: "设计与创意", icon: "◇" },
-    { id: "Writing", name: "Writing & Content", zh: "写作与内容", icon: "╱" },
-    { id: "Discovery", name: "Directories, Launch & Discovery", zh: "目录、发布与探索", icon: "◈" },
-    { id: "AIMedia", name: "AI Media Generation", zh: "AI 媒体生成", icon: "✧" },
-    { id: "Audio", name: "Audio, Voice & Podcasting", zh: "音频、语音与播客", icon: "◖" },
-    { id: "Sales", name: "Sales & Lead Generation", zh: "销售与潜客获取", icon: "◎" },
-    { id: "Travel", name: "Travel, Local & Lifestyle", zh: "旅行、本地与生活方式", icon: "⌖" },
-    { id: "RealEstate", name: "Real Estate & Property", zh: "房地产与物业", icon: "⌂" },
-    { id: "News", name: "Media & News", zh: "媒体与新闻", icon: "▤" },
-    { id: "Hardware", name: "Hardware & Devices", zh: "硬件与设备", icon: "▰" },
-    { id: "Other", name: "Other", zh: "其他", icon: "•" },
+    { id: "Agents", name: "AI & Automation", zh: "AI 与自动化", icon: "✦", members: ["Agents", "AIMedia"] },
+    { id: "Marketing", name: "Marketing, SEO & Social", zh: "营销、SEO 与社交媒体", icon: "◒", members: ["Marketing", "SEO", "Social", "Sales", "Attention", "People"] },
+    { id: "Developer", name: "Developer Tools & Security", zh: "开发工具与安全", icon: "⌘", members: ["Developer", "Security"] },
+    { id: "Business", name: "Business & Professional Services", zh: "商业与专业服务", icon: "◌", members: ["Business", "Agencies", "Careers"] },
+    { id: "Crypto", name: "Finance, Crypto & Investing", zh: "金融、加密与投资", icon: "₿", members: ["Crypto"] },
+    { id: "Ecommerce", name: "Ecommerce, Retail & Hardware", zh: "电商、零售与硬件", icon: "□", members: ["Ecommerce", "Hardware"] },
+    { id: "Design", name: "Design, Content & Media", zh: "设计、内容与媒体", icon: "◇", members: ["Design", "Writing", "Audio", "News"] },
+    { id: "Productivity", name: "Productivity & Education", zh: "效率工具与教育", icon: "＋", members: ["Productivity", "Education"] },
+    { id: "Health", name: "Health & Wellness", zh: "健康与生活方式", icon: "♡", members: ["Health"] },
+    { id: "Games", name: "Games & Entertainment", zh: "游戏与娱乐", icon: "⌁", members: ["Games"] },
+    { id: "Travel", name: "Travel, Local & Property", zh: "旅行、本地与房地产", icon: "⌖", members: ["Travel", "RealEstate"] },
+    { id: "Domains", name: "Web, Domains & Discovery", zh: "网站、域名与发现", icon: "◉", members: ["Domains", "Discovery"] },
+    { id: "Other", name: "Other", zh: "其他", icon: "•", members: ["Other"] },
   ];
+  const categoryAliases = Object.freeze(categoryConfig.reduce((aliases, config) => {
+    aliases[config.id.toLowerCase()] = config.id;
+    config.members.forEach((member) => { aliases[member.toLowerCase()] = config.id; });
+    return aliases;
+  }, {}));
   const fallbackListings = [
     { id: "model-harbor", title: "Model Harbor", description: "A release desk for production AI models, approvals, and customer notices.", url: "https://modelharbor.example", category: "Agents", bid: 2480, todayBid: 620, clicks: 2840, age: "18h" },
     { id: "trackline", title: "Trackline", description: "Campaign reporting for teams that need a clean answer to what moved.", url: "https://trackline.example", category: "Marketing", bid: 2160, todayBid: 810, clicks: 1910, age: "7h" },
@@ -78,6 +67,7 @@
   }
 
   function label(config) { return elements.language === "zh" ? config.zh : config.name; }
+  function canonicalCategory(category) { return categoryAliases[String(category || "").toLowerCase()] || "Other"; }
   function escapeText(value) { return String(value || ""); }
   function initials(title) { return escapeText(title).split(/\s+/).map((part) => part[0]).join("").slice(0, 2).toUpperCase() || "RK"; }
   function ageLabel(age) {
@@ -122,7 +112,7 @@
   }
 
   function categoryRows(id) {
-    return selectedRows().filter((row) => row.category === id).sort((a, b) => b.bid - a.bid || a.title.localeCompare(b.title));
+    return selectedRows().filter((row) => canonicalCategory(row.category) === id).sort((a, b) => b.bid - a.bid || a.title.localeCompare(b.title));
   }
 
   function hrefFor(id) { return `./index.html?category=${encodeURIComponent(id)}#board`; }

@@ -185,6 +185,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .category-chip { flex: 0 0 auto; min-width: 2.75rem; min-height: 2.75rem; padding: 0.35rem 0.7rem; border: 0; border-radius: 0.25rem; background: transparent; color: var(--muted); font-size: 0.78rem; font-weight: 720; white-space: nowrap; }
 .category-chip:hover { background: var(--surface-subtle); color: var(--ink); }
 .category-chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.category-explore { display: inline-flex; align-items: center; justify-content: center; margin-left: auto; color: var(--ink); text-decoration: none; }
+.category-explore:hover { color: var(--accent-strong); text-decoration: none; }
 
 .board-toolbar { display: flex; align-items: end; justify-content: space-between; gap: 1rem; padding: 1.4rem 0 0.7rem; }
 .board-toolbar h2 { margin: 0; color: var(--ink); font-size: 1.15rem; font-weight: 850; }

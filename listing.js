@@ -2,8 +2,14 @@
   "use strict";
 
   const STORE_KEY = "rankoff-mvp-demo-v3";
-  const categoryLabels = { Agents: "AI Agents & Infrastructure", SEO: "SEO & AI Visibility", Marketing: "Marketing & Advertising", Crypto: "Crypto, Web3 & Investing", Developer: "Developer Tools", Business: "Business, Finance & Legal", Security: "Security, Privacy & Compliance", Health: "Health, Fitness & Wellness", Social: "Social Media & Creator Tools", Attention: "Leaderboards & Attention Markets", Careers: "Hiring, Jobs & Careers", Education: "Education & Learning", Agencies: "Agencies, Studios & Services", Ecommerce: "Ecommerce & Retail", Domains: "Domains & Web Assets", Games: "Games & Entertainment", People: "People & Profiles", Productivity: "Productivity & Personal Tools", Design: "Design & Creative", Writing: "Writing & Content", Discovery: "Directories, Launch & Discovery", AIMedia: "AI Media Generation", Audio: "Audio, Voice & Podcasting", Sales: "Sales & Lead Generation", Travel: "Travel, Local & Lifestyle", RealEstate: "Real Estate & Property", News: "Media & News", Hardware: "Hardware & Devices", Other: "Other" };
-  const categoryTranslations = { Agents: "AI 智能体与基础设施", SEO: "SEO 与 AI 曝光", Marketing: "营销与广告", Crypto: "加密、Web3 与投资", Developer: "开发者工具", Business: "商业、金融与法律", Security: "安全、隐私与合规", Health: "健康、健身与生活方式", Social: "社交媒体与创作者工具", Attention: "排行榜与注意力市场", Careers: "招聘、工作与职业", Education: "教育与学习", Agencies: "代理机构、工作室与服务", Ecommerce: "电商与零售", Domains: "域名与网络资产", Games: "游戏与娱乐", People: "人物与个人资料", Productivity: "效率与个人工具", Design: "设计与创意", Writing: "写作与内容", Discovery: "目录、发布与探索", AIMedia: "AI 媒体生成", Audio: "音频、语音与播客", Sales: "销售与潜客获取", Travel: "旅行、本地与生活方式", RealEstate: "房地产与物业", News: "媒体与新闻", Hardware: "硬件与设备", Other: "其他" };
+  const categoryGroups = Object.freeze({ Agents: ["Agents", "AIMedia"], Marketing: ["Marketing", "SEO", "Social", "Sales", "Attention", "People"], Developer: ["Developer", "Security"], Business: ["Business", "Agencies", "Careers"], Crypto: ["Crypto"], Ecommerce: ["Ecommerce", "Hardware"], Design: ["Design", "Writing", "Audio", "News"], Productivity: ["Productivity", "Education"], Health: ["Health"], Games: ["Games"], Travel: ["Travel", "RealEstate"], Domains: ["Domains", "Discovery"], Other: ["Other"] });
+  const categoryAliases = Object.freeze(Object.entries(categoryGroups).reduce((aliases, [market, members]) => {
+    aliases[market.toLowerCase()] = market;
+    members.forEach((member) => { aliases[member.toLowerCase()] = market; });
+    return aliases;
+  }, {}));
+  const categoryLabels = { Agents: "AI & Automation", Marketing: "Marketing, SEO & Social", Developer: "Developer Tools & Security", Business: "Business & Professional Services", Crypto: "Finance, Crypto & Investing", Ecommerce: "Ecommerce, Retail & Hardware", Design: "Design, Content & Media", Productivity: "Productivity & Education", Health: "Health & Wellness", Games: "Games & Entertainment", Travel: "Travel, Local & Property", Domains: "Web, Domains & Discovery", Other: "Other" };
+  const categoryTranslations = { Agents: "AI 与自动化", Marketing: "营销、SEO 与社交媒体", Developer: "开发工具与安全", Business: "商业与专业服务", Crypto: "金融、加密与投资", Ecommerce: "电商、零售与硬件", Design: "设计、内容与媒体", Productivity: "效率工具与教育", Health: "健康与生活方式", Games: "游戏与娱乐", Travel: "旅行、本地与房地产", Domains: "网站、域名与发现", Other: "其他" };
   const previewListings = [
     ["model-harbor", "Model Harbor", "A release desk for production AI models, approvals, and customer notices.", "https://modelharbor.example/", "Agents", 2480, 2840],
     ["trackline", "Trackline", "Campaign reporting for teams that need a clean answer to what moved.", "https://trackline.example/", "Marketing", 2160, 1910],
@@ -82,7 +88,10 @@
   }
 
   function text(key) { return copy[preferences.language][key] || copy.en[key] || key; }
-  function categoryName(category) { return preferences.language === "zh" ? (categoryTranslations[category] || category) : (categoryLabels[category] || category); }
+  function categoryName(category) {
+    const market = categoryAliases[String(category || "").toLowerCase()] || "Other";
+    return preferences.language === "zh" ? categoryTranslations[market] : categoryLabels[market];
+  }
 
   function applyPreferences() {
     elements.root.dataset.theme = preferences.theme;

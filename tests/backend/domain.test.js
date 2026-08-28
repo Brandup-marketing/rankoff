@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { minimumWinningBid, paymentTransition, rankEligibleBids } from "../../functions/_lib/domain.js";
-import { normalizeDestinationUrl, parsePositiveMinorUnits } from "../../functions/_lib/validation.js";
+import { normalizeCategory, normalizeDestinationUrl, parsePositiveMinorUnits } from "../../functions/_lib/validation.js";
 
 test("ranking uses amount, settlement time, then immutable id", () => {
   const listings = [{ id: "a", status: "approved" }, { id: "b", status: "approved" }];
@@ -26,4 +26,10 @@ test("URL and money validation reject unsafe inputs", () => {
   assert.throws(() => normalizeDestinationUrl("http://localhost:8788"), /HTTPS/);
   assert.equal(parsePositiveMinorUnits(500, "amount_minor", 1000), 500);
   assert.throws(() => parsePositiveMinorUnits(1.5, "amount_minor", 1000), /integer/);
+});
+
+test("legacy category tags normalize to visible launch markets", () => {
+  assert.equal(normalizeCategory("Hardware"), "Ecommerce");
+  assert.equal(normalizeCategory("SEO"), "Marketing");
+  assert.equal(normalizeCategory("AIMedia"), "Agents");
 });

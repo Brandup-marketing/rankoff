@@ -1,34 +1,35 @@
-export const CATEGORIES = Object.freeze([
-  "Agents",
-  "SEO",
-  "Marketing",
-  "Crypto",
-  "Developer",
-  "Business",
-  "Security",
-  "Health",
-  "Social",
-  "Attention",
-  "Careers",
-  "Education",
-  "Agencies",
-  "Ecommerce",
-  "Domains",
-  "Games",
-  "People",
-  "Productivity",
-  "Design",
-  "Writing",
-  "Discovery",
-  "AIMedia",
-  "Audio",
-  "Sales",
-  "Travel",
-  "RealEstate",
-  "News",
-  "Hardware",
-  "Other",
-]);
+export const MARKET_GROUPS = Object.freeze({
+  Agents: Object.freeze(["Agents", "AIMedia"]),
+  Marketing: Object.freeze(["Marketing", "SEO", "Social", "Sales", "Attention", "People"]),
+  Developer: Object.freeze(["Developer", "Security"]),
+  Business: Object.freeze(["Business", "Agencies", "Careers"]),
+  Crypto: Object.freeze(["Crypto"]),
+  Ecommerce: Object.freeze(["Ecommerce", "Hardware"]),
+  Design: Object.freeze(["Design", "Writing", "Audio", "News"]),
+  Productivity: Object.freeze(["Productivity", "Education"]),
+  Health: Object.freeze(["Health"]),
+  Games: Object.freeze(["Games"]),
+  Travel: Object.freeze(["Travel", "RealEstate"]),
+  Domains: Object.freeze(["Domains", "Discovery"]),
+  Other: Object.freeze(["Other"]),
+});
+
+export const VISIBLE_CATEGORIES = Object.freeze(Object.keys(MARKET_GROUPS));
+export const CATEGORIES = Object.freeze([...new Set(Object.values(MARKET_GROUPS).flat())]);
+
+export function marketCategory(value) {
+  const category = String(value || "").toLowerCase();
+  for (const [market, members] of Object.entries(MARKET_GROUPS)) {
+    if (market.toLowerCase() === category || members.some((member) => member.toLowerCase() === category)) return market;
+  }
+  return "";
+}
+
+export function marketCategoryMembers(value) {
+  if (String(value || "").toLowerCase() === "all") return CATEGORIES;
+  const market = marketCategory(value);
+  return market ? MARKET_GROUPS[market] : [];
+}
 
 export function isProduction(env) {
   return env.RANKOFF_MODE === "production";
