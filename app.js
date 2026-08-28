@@ -17,6 +17,11 @@
     "SEO",
     "Other",
   ];
+  const translations = {
+    en: { navBoard: "Board", navAbout: "About", heroCopy: "Put your product where people look first. Your listing stays at the top until someone pays more.", totalBid: "Your total bid", productUrl: "Your product URL or @handle", chooseMarket: "Choose a market", reviewBid: "Review your bid", demoOnly: "Preview board · no payment is collected", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest valid bid takes #1. Pay more to move up.", latestActivity: "Latest activity", liveUpdates: "Live bid updates", howItWorks: "How ranking works" },
+    zh: { navBoard: "榜单", navAbout: "关于", heroCopy: "把你的产品放到大家最先看到的位置。只要没有更高出价，你的介绍就会保持在榜首。", totalBid: "你的总出价", productUrl: "产品网址或 @账号", chooseMarket: "选择市场", reviewBid: "确认出价", demoOnly: "预览榜单 · 不会收取费用", markets: "市场分类", liveLeaderboard: "实时榜单", boardSummary: "最高有效出价获得第 1 名。提高出价即可上升。", latestActivity: "最新动态", liveUpdates: "实时竞价更新", howItWorks: "排名规则" },
+  };
+  const categoryTranslations = { Agents: "智能代理", Marketing: "营销", Developer: "开发者", Business: "商业", Agencies: "代理机构", Ecommerce: "电商", Productivity: "效率工具", Design: "设计", SEO: "SEO", Other: "其他" };
 
   const currency = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -151,6 +156,7 @@
     categorySelect: document.querySelector("[data-category-select]"),
     windowButtons: Array.from(document.querySelectorAll("[data-board-window]")),
     themeToggle: document.querySelector("[data-theme-toggle]"),
+    languageToggle: document.querySelector("[data-language-toggle]"),
     inlineChallenge: document.querySelector("[data-inline-challenge]"),
     inlineBid: document.querySelector("[data-inline-bid]"),
     inlineUrl: document.querySelector("[data-inline-url]"),
@@ -208,6 +214,7 @@
       activeWindow: "all",
       category: DEFAULT_CATEGORY,
       theme: "dark",
+      language: "en",
       listings: seedListings.map(cloneListing),
       activity: [...seedActivity],
     };
@@ -265,7 +272,8 @@
       return {
         activeWindow: saved.activeWindow === "today" ? "today" : "all",
         category: saved.category === DEFAULT_CATEGORY || categories.includes(saved.category) ? saved.category : DEFAULT_CATEGORY,
-        theme: "dark",
+        theme: saved.theme === "light" ? "light" : "dark",
+        language: saved.language === "zh" ? "zh" : "en",
         listings: restored,
         activity: Array.isArray(saved.activity) ? saved.activity.slice(0, 6) : [...seedActivity],
       };
@@ -283,12 +291,25 @@
           activeWindow: state.activeWindow,
           category: state.category,
           theme: state.theme,
+          language: state.language,
           listings: state.listings,
           activity: state.activity.slice(0, 6),
         }),
       );
     } catch {
       showToast("This browser could not save demo changes for later.", "error");
+    }
+  }
+
+  function languageText(key) { return (translations[state.language] || translations.en)[key] || translations.en[key] || key; }
+
+  function renderLanguage() {
+    document.documentElement.lang = state.language === "zh" ? "zh-CN" : "en";
+    document.querySelectorAll("[data-i18n]").forEach((node) => { node.textContent = languageText(node.dataset.i18n); });
+    if (elements.languageToggle) {
+      elements.languageToggle.textContent = state.language === "zh" ? "EN" : "中文";
+      elements.languageToggle.setAttribute("aria-pressed", String(state.language === "zh"));
+      elements.languageToggle.setAttribute("aria-label", state.language === "zh" ? "Switch to English" : "切换中文");
     }
   }
 
@@ -566,7 +587,7 @@
 
   function renderCategories() {
     if (!elements.categoryRail) return;
-    const buttons = [{ label: "All", value: DEFAULT_CATEGORY }, ...categories.map((category) => ({ label: category, value: category }))];
+    const buttons = [{ label: state.language === "zh" ? "全部" : "All", value: DEFAULT_CATEGORY }, ...categories.map((category) => ({ label: state.language === "zh" ? (categoryTranslations[category] || category) : category, value: category }))];
     elements.categoryRail.replaceChildren(
       ...buttons.map(({ label, value }) => {
         const button = createElement("button", "category-chip");
@@ -727,8 +748,8 @@
     if (!elements.categorySelect) return;
     if (elements.categorySelect.options.length !== categories.length + 1) {
       elements.categorySelect.replaceChildren(
-        new Option("Choose a market", ""),
-        ...categories.map((category) => new Option(category, category)),
+        new Option(languageText("chooseMarket"), ""),
+        ...categories.map((category) => new Option(state.language === "zh" ? (categoryTranslations[category] || category) : category, category)),
       );
     }
     if (state.category === DEFAULT_CATEGORY) {
@@ -748,6 +769,7 @@
   }
 
   function render() {
+    renderLanguage();
     renderTheme();
     updateWindowButtons();
     updateCategorySelect();
@@ -1009,6 +1031,12 @@
     state.theme = state.theme === "dark" ? "light" : "dark";
     saveState();
     renderTheme();
+  });
+
+  elements.languageToggle?.addEventListener("click", () => {
+    state.language = state.language === "zh" ? "en" : "zh";
+    saveState();
+    render();
   });
 
   document.addEventListener("click", (event) => {

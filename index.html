@@ -58,21 +58,22 @@
           <button type="button" data-board-window="today" aria-pressed="false">Today</button>
         </nav>
         <span class="demo-state" data-board-state><i aria-hidden="true"></i> Preview board</span>
-        <nav class="site-nav" aria-label="Main navigation"><a href="./index.html">Board</a><a href="./about.html">About</a></nav>
+        <nav class="site-nav" aria-label="Main navigation"><a href="./index.html" data-i18n="navBoard">Board</a><a href="./about.html" data-i18n="navAbout">About</a></nav>
+        <button class="language-toggle" type="button" data-language-toggle aria-pressed="false">中文</button>
         <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch colour theme" aria-pressed="true">Light</button>
       </header>
 
       <section class="claim-stage" aria-labelledby="page-title">
         <div class="claim-panel">
           <h1 id="page-title">Claim <span>#1</span> for <strong data-hero-next-price>$0</strong></h1>
-          <p class="claim-copy" data-hero-context>Put your product where people look first. Your listing stays at the top until someone pays more.</p>
+          <p class="claim-copy" data-hero-context data-i18n="heroCopy">Put your product where people look first. Your listing stays at the top until someone pays more.</p>
 
           <div class="market-entry">
             <form class="bid-console" data-inline-challenge aria-label="Challenge the leaderboard">
               <div class="amount-control">
                 <button type="button" data-inline-adjust="-10" aria-label="Decrease bid by ten dollars">−</button>
                 <label>
-                  <span>Your total bid</span>
+                  <span data-i18n="totalBid">Your total bid</span>
                   <span class="money-field">
                     <b aria-hidden="true">$</b>
                     <input name="challengeAmount" type="number" inputmode="numeric" min="1" max="1000000" step="1" required data-inline-bid />
@@ -82,19 +83,19 @@
               </div>
 
               <label class="field field-wide">
-                <span>Your product URL or @handle</span>
+                <span data-i18n="productUrl">Your product URL or @handle</span>
                 <input name="productUrl" type="text" placeholder="yourproduct.com or @handle" autocomplete="url" required data-inline-url />
               </label>
 
               <label class="field">
                 <span>Market</span>
                 <select name="productCategory" required data-category-select>
-                  <option value="">Choose a market</option>
+                  <option value="" data-i18n="chooseMarket">Choose a market</option>
                 </select>
               </label>
 
-              <button class="primary-action" type="submit" data-inline-submit>Review your bid</button>
-              <p class="demo-note" data-demo-note>Preview board · no payment is collected</p>
+              <button class="primary-action" type="submit" data-inline-submit data-i18n="reviewBid">Review your bid</button>
+              <p class="demo-note" data-demo-note data-i18n="demoOnly">Preview board · no payment is collected</p>
             </form>
 
           </div>
@@ -104,17 +105,17 @@
       </section>
 
       <section class="category-market" aria-labelledby="category-heading">
-        <h2 id="category-heading">Markets</h2>
+        <h2 id="category-heading" data-i18n="markets">Markets</h2>
         <div class="category-rail" data-category-rail aria-label="Filter by category"></div>
       </section>
 
       <section class="board-section" id="board" aria-labelledby="board-heading">
         <div class="board-toolbar">
           <div>
-            <h2 id="board-heading">Live leaderboard</h2>
+            <h2 id="board-heading" data-i18n="liveLeaderboard">Live leaderboard</h2>
           </div>
           <div class="board-context">
-            <p data-board-summary>Highest valid bid takes #1. Pay more to move up.</p>
+            <p data-board-summary data-i18n="boardSummary">Highest valid bid takes #1. Pay more to move up.</p>
             <details class="measurement-note">
               <summary>How clicks are measured</summary>
               <p>Verified clicks represent first-party redirect events for the selected timeframe. Demo estimates are clearly labelled and exclude no known bot traffic.</p>
@@ -132,13 +133,13 @@
       </section>
 
       <section class="activity-section" aria-labelledby="activity-heading">
-        <div class="section-heading-line"><h2 id="activity-heading">Latest activity</h2><span class="live-dot" aria-hidden="true"></span><span class="section-note">Live bid updates</span></div>
+        <div class="section-heading-line"><h2 id="activity-heading" data-i18n="latestActivity">Latest activity</h2><span class="live-dot" aria-hidden="true"></span><span class="section-note" data-i18n="liveUpdates">Live bid updates</span></div>
         <div class="activity-tape" data-activity-list aria-live="polite"></div>
       </section>
 
       <section class="ranking-rules" aria-labelledby="ranking-rules-heading">
         <div>
-          <h2 id="ranking-rules-heading">How ranking works</h2>
+          <h2 id="ranking-rules-heading" data-i18n="howItWorks">How ranking works</h2>
           <p>Every listing is sponsored. The highest verified bid ranks first.</p>
         </div>
         <dl>

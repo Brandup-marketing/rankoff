@@ -82,6 +82,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .site-nav a:hover { color: var(--ink); }
 .theme-toggle { min-height: 2.75rem; padding: 0.42rem 0.7rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--muted); font-size: 0.75rem; font-weight: 800; }
 .theme-toggle:hover { border-color: var(--line-strong); color: var(--ink); }
+.language-toggle { min-height: 2.75rem; padding: 0.42rem 0.7rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--muted); font-size: 0.75rem; font-weight: 800; }
+.language-toggle:hover { border-color: var(--line-strong); color: var(--ink); }
 .demo-state i, .market-status i { width: 0.45rem; height: 0.45rem; border-radius: 50%; background: var(--up); }
 
 .claim-stage { padding: 0.9rem 0 0.55rem; }
@@ -285,6 +287,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .demo-state { display: none; }
   .site-nav { display: none; }
   .theme-toggle { justify-self: end; }
+  .language-toggle { justify-self: end; }
   .claim-stage { padding: 0.9rem 0 0.8rem; }
   .claim-panel h1 { font-size: 2.2rem; }
   .claim-copy { margin-top: 0.45rem; font-size: 0.82rem; }
