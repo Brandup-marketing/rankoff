@@ -15,13 +15,16 @@
     "Productivity",
     "Design",
     "SEO",
+    "Crypto",
+    "Security",
     "Other",
   ];
   const translations = {
     en: { navBoard: "Board", navAbout: "About", heroCopy: "Put your product where people look first. Your listing stays at the top until someone pays more.", totalBid: "Your total bid", productUrl: "Your product URL or @handle", chooseMarket: "Choose a market", challengeCategory: "Challenge category", categoryRule: "Must match the listing you’ll outrank.", reviewBid: "Review your bid", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest valid bid takes #1. Pay more to move up.", todayRanking: "Today’s top ranking", latestActivity: "Latest activity", liveUpdates: "Live bid updates", howItWorks: "How ranking works" },
     zh: { navBoard: "榜单", navAbout: "关于", heroCopy: "把你的产品放到大家最先看到的位置。只要没有更高出价，你的介绍就会保持在榜首。", totalBid: "你的总出价", productUrl: "产品网址或 @账号", chooseMarket: "选择市场", challengeCategory: "挑战分类", categoryRule: "必须与您要超越的条目相同。", reviewBid: "确认出价", markets: "市场分类", liveLeaderboard: "实时榜单", boardSummary: "最高有效出价获得第 1 名。提高出价即可上升。", todayRanking: "今日热门排名", latestActivity: "最新动态", liveUpdates: "实时竞价更新", howItWorks: "排名规则" },
   };
-  const categoryTranslations = { Agents: "智能代理", Marketing: "营销", Developer: "开发者", Business: "商业", Agencies: "代理机构", Ecommerce: "电商", Productivity: "效率工具", Design: "设计", SEO: "SEO", Other: "其他" };
+  const categoryLabels = { Agents: "AI Agents & Infrastructure", Marketing: "Marketing & Advertising", Developer: "Developer Tools & Infrastructure", Business: "Business & Finance", Agencies: "Agencies & Services", Ecommerce: "Ecommerce & Retail", Productivity: "Productivity & Collaboration", Design: "Design & Creative", SEO: "SEO & AI Visibility", Crypto: "Crypto, Web3 & Investing", Security: "Security, Privacy & Compliance", Other: "Other" };
+  const categoryTranslations = { Agents: "AI 代理与基础设施", Marketing: "营销与广告", Developer: "开发者工具与基础设施", Business: "商业与金融", Agencies: "代理机构与服务", Ecommerce: "电商与零售", Productivity: "效率与协作", Design: "设计与创意", SEO: "SEO 与 AI 可见性", Crypto: "加密、Web3 与投资", Security: "安全、隐私与合规", Other: "其他" };
 
   const currency = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -317,6 +320,10 @@
   }
 
   function languageText(key) { return (translations[state.language] || translations.en)[key] || translations.en[key] || key; }
+
+  function categoryName(category, language = state.language) {
+    return language === "zh" ? (categoryTranslations[category] || category) : (categoryLabels[category] || category);
+  }
 
   function renderLanguage() {
     document.documentElement.lang = state.language === "zh" ? "zh-CN" : "en";
@@ -640,7 +647,7 @@
       : (chinese ? "示例点击" : "Sample clicks");
     meta.append(
       createElement("span", "sponsored-chip", chinese ? "赞助" : "Sponsored"),
-      createElement("span", "meta-item", listing.category),
+      createElement("span", "meta-item", categoryName(listing.category)),
       createElement("span", "meta-item", ageLabel),
       createElement("span", "meta-item", listingHostLabel(listing)),
       createElement("span", "meta-item listing-clicks", `${compact.format(getClicks(listing))} ${chinese ? "次点击" : "clicks"}`),
@@ -694,7 +701,7 @@
 
   function renderCategories() {
     if (!elements.categoryRail) return;
-    const buttons = [{ label: state.language === "zh" ? "全部" : "All", value: DEFAULT_CATEGORY }, ...categories.map((category) => ({ label: state.language === "zh" ? (categoryTranslations[category] || category) : category, value: category }))];
+    const buttons = [{ label: state.language === "zh" ? "全部" : "All", value: DEFAULT_CATEGORY }, ...categories.map((category) => ({ label: categoryName(category), value: category }))];
     elements.categoryRail.replaceChildren(
       ...buttons.map(({ label, value }) => {
         const button = createElement("button", "category-chip");
@@ -820,20 +827,20 @@
     }
     if (elements.categoryRule) {
       elements.categoryRule.textContent = state.language === "zh"
-        ? `必须与 ${leader.name} 的${categoryTranslations[leader.category] || leader.category}分类相同。`
-        : `Must match ${leader.name}’s ${leader.category} category.`;
+        ? `必须与 ${leader.name} 的${categoryName(leader.category)}分类相同。`
+        : `Must match ${leader.name}’s ${categoryName(leader.category)} category.`;
     }
     const nextPrice = boardSource === "local" || !remoteNextBid ? getBid(leader) + 1 : remoteNextBid;
 
     if (elements.heroPrice) elements.heroPrice.textContent = money(nextPrice);
     if (elements.heroContext) {
       elements.heroContext.textContent = state.language === "zh"
-        ? `${money(nextPrice)} 即可登上${state.category === DEFAULT_CATEGORY ? (state.activeWindow === "today" ? "近 24 小时" : "全部时间") : state.category}榜第 1 名。有人出价更高前，你的产品介绍会持续展示。`
-        : `${money(nextPrice)} takes #1 on the ${state.category === DEFAULT_CATEGORY ? windowLabel().toLowerCase() : state.category} board. Your product story stays visible until someone pays more.`;
+        ? `${money(nextPrice)} 即可登上${state.category === DEFAULT_CATEGORY ? (state.activeWindow === "today" ? "近 24 小时" : "全部时间") : categoryName(state.category, "zh")}榜第 1 名。有人出价更高前，你的产品介绍会持续展示。`
+        : `${money(nextPrice)} takes #1 on the ${state.category === DEFAULT_CATEGORY ? windowLabel().toLowerCase() : categoryName(state.category)} board. Your product story stays visible until someone pays more.`;
     }
     if (elements.leaderBid) elements.leaderBid.textContent = money(getBid(leader));
     if (elements.leaderClicks) elements.leaderClicks.textContent = compact.format(getClicks(leader));
-    if (elements.leaderCategory) elements.leaderCategory.textContent = leader.category;
+    if (elements.leaderCategory) elements.leaderCategory.textContent = categoryName(leader.category);
     if (elements.currentLeader) elements.currentLeader.replaceChildren(productIdentity(leader));
     if (elements.inlineBid) {
       elements.inlineBid.min = String(nextPrice);
@@ -868,8 +875,8 @@
     }
     if (item.type === "category-leader") {
       return chinese
-        ? `${listingName} 成为${categoryTranslations[item.category] || item.category}分类第 1 名。`
-        : `${listingName} became #1 in ${item.category}.`;
+        ? `${listingName} 成为${categoryName(item.category, "zh")}分类第 1 名。`
+        : `${listingName} became #1 in ${categoryName(item.category, "en")}.`;
     }
     if (item.type === "clicks") {
       return chinese
@@ -954,7 +961,7 @@
     const selected = elements.categorySelect.value;
     elements.categorySelect.replaceChildren(
       new Option(languageText("chooseMarket"), ""),
-      ...categories.map((category) => new Option(state.language === "zh" ? (categoryTranslations[category] || category) : category, category)),
+      ...categories.map((category) => new Option(categoryName(category), category)),
     );
     if (state.category === DEFAULT_CATEGORY) {
       elements.categorySelect.value = "";

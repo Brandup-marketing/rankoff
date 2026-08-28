@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Explore Rankoff categories and see which products lead each sponsored market." />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://rankoff.my/categories.html" />
+    <meta property="og:site_name" content="RANKOFF" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="RANKOFF | Categories" />
+    <meta property="og:description" content="Every category has its own public sponsored leaderboard." />
+    <meta property="og:url" content="https://rankoff.my/categories.html" />
+    <meta property="og:image" content="https://rankoff.my/assets/rankoff-brand-lockup.png" />
+    <meta name="theme-color" content="#090a0c" />
+    <title>RANKOFF | Categories</title>
+    <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
+    <link rel="stylesheet" href="./styles.css?v=11" />
+    <link rel="stylesheet" href="./categories.css?v=1" />
+  </head>
+  <body>
+    <a class="skip-link" href="#categories">Skip to categories</a>
+
+    <main class="categories-shell">
+      <header class="topbar categories-topbar" aria-label="RANKOFF">
+        <a class="brand" href="./index.html" aria-label="RANKOFF home">
+          <img class="brand-lockup-image" src="./assets/rankoff-header-lockup.png?v=1" alt="RANKOFF — Bid your way to number one" width="420" height="120" />
+        </a>
+
+        <nav class="time-tabs" aria-label="Category timeframe">
+          <button type="button" data-category-window="all" aria-pressed="true">All-time</button>
+          <button type="button" data-category-window="today" aria-pressed="false">Today</button>
+        </nav>
+
+        <nav class="site-nav categories-nav" aria-label="Main navigation">
+          <a href="./index.html">Board</a>
+          <a href="./categories.html" aria-current="page">Categories</a>
+          <a href="./about.html">About</a>
+        </nav>
+        <div class="category-actions">
+          <button class="language-toggle" type="button" data-language-toggle aria-pressed="false">中文</button>
+          <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch colour theme" aria-pressed="true">Light</button>
+        </div>
+      </header>
+
+      <section class="category-status" aria-label="Board status">
+        <span class="status-indicator" aria-hidden="true"></span>
+        <strong data-category-status>Preview board</strong>
+        <span>·</span>
+        <span data-category-count>8 listings</span>
+        <span>·</span>
+        <a href="./index.html">See board <span aria-hidden="true">→</span></a>
+      </section>
+
+      <section class="category-hero" aria-labelledby="categories-title">
+        <p class="section-kicker">Browse the markets</p>
+        <h1 id="categories-title">Categories</h1>
+        <p>Every category has its own ranking. Pick one to see who is leading.</p>
+      </section>
+
+      <section class="active-section" aria-labelledby="active-heading">
+        <div class="section-heading">
+          <span class="section-dot" aria-hidden="true"></span>
+          <h2 id="active-heading">Most active categories</h2>
+        </div>
+        <div class="active-category-list" data-active-categories></div>
+      </section>
+
+      <section class="all-categories-section" id="categories" aria-labelledby="all-categories-heading">
+        <div class="section-heading section-heading-spread">
+          <div>
+            <span class="section-dot" aria-hidden="true"></span>
+            <h2 id="all-categories-heading">All categories</h2>
+          </div>
+          <p>Choose a market to view its live board.</p>
+        </div>
+        <div class="category-grid" data-category-grid></div>
+      </section>
+
+      <footer class="footer categories-footer">
+        <span class="footer-brand">RANKOFF</span>
+        <span class="footer-links"><a href="./index.html">Board</a><a href="./about.html">About</a><a href="./legal.html#rules">Rules</a><a href="./legal.html#privacy">Privacy</a></span>
+      </footer>
+    </main>
+
+    <script src="./categories.js?v=1" defer></script>
+  </body>
+</html>
