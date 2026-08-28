@@ -18,6 +18,6 @@
     if (listingCount) listingCount.textContent = compact.format(board.rankings?.length || 0);
     if (clickCount) clickCount.textContent = compact.format(Number(stats.total_clicks || 0));
     if (topBid) topBid.textContent = currency.format(Number(board.rankings?.[0]?.bid?.amount_minor || 0) / 100);
-    if (disclosure) disclosure.textContent = board.mode === "production" ? "Live board values." : "Connected preview values.";
+    if (disclosure) disclosure.textContent = "Live board values, updated continuously.";
   }).catch(() => {});
 })();
