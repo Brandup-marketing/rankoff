@@ -436,19 +436,18 @@
         ? (production ? " 实时榜单" : boardSource === "local" ? " 预览榜单" : " 已连接预览")
         : (production ? " Live board" : boardSource === "local" ? " Preview board" : " Connected preview");
     }
-    if (elements.boardHeading) elements.boardHeading.textContent = chinese
-      ? (production ? "实时赞助榜单" : "预览赞助榜单")
-      : (production ? "Live sponsored leaderboard" : "Preview sponsored leaderboard");
+    if (elements.boardHeading) elements.boardHeading.textContent = chinese ? "实时赞助榜单" : "Live sponsored leaderboard";
     if (elements.activityNote) elements.activityNote.textContent = chinese
       ? "实时动态 · 关注下一步变化"
       : "Live activity · Watch the next move";
     if (elements.liveDot) elements.liveDot.hidden = !production;
-    if (elements.measurementSummary) elements.measurementSummary.textContent = chinese
-      ? (production ? "点击如何统计" : "预览点击说明")
-      : (production ? "How clicks are measured" : "About preview clicks");
+    if (elements.measurementSummary) {
+      elements.measurementSummary.textContent = chinese ? "点击如何统计" : "How clicks are measured";
+      elements.measurementSummary.parentElement.hidden = !production;
+    }
     if (elements.measurementCopy) elements.measurementCopy.textContent = chinese
-      ? (production ? "已验证点击来自所选时间范围内的第一方跳转记录。" : "预览点击数仅作演示；开启实时追踪后才会显示已验证点击。")
-      : (production ? "Verified clicks represent first-party redirect events for the selected timeframe." : "Preview click totals are illustrative. Verified click reporting begins only after live tracking is enabled.");
+      ? "已验证点击来自所选时间范围内的第一方跳转记录。"
+      : "Verified clicks represent first-party redirect events for the selected timeframe.";
   }
 
   async function refreshBoardFromApi() {
@@ -728,9 +727,11 @@
       createElement("span", "meta-item category-meta", categoryName(listing.category)),
       createElement("span", "meta-item", ageLabel),
       createElement("span", "meta-item", listingHostLabel(listing)),
-      createElement("span", "meta-item listing-clicks", `${compact.format(getClicks(listing))} ${chinese ? "次点击" : "clicks"}`),
     );
-    meta.append(createElement("span", production && listing.verified ? "verified-chip" : "estimated-chip", clickLabel));
+    if (production) {
+      meta.append(createElement("span", "meta-item listing-clicks", `${compact.format(getClicks(listing))} ${chinese ? "次点击" : "clicks"}`));
+      meta.append(createElement("span", listing.verified ? "verified-chip" : "estimated-chip", clickLabel));
+    }
     const details = createElement("a", "listing-details", chinese ? "查看详情" : "See details");
     details.href = listingDetailsHref(listing);
     details.setAttribute("aria-label", chinese ? `查看 ${listing.name} 的详细信息` : `See details for ${listing.name}`);
@@ -941,12 +942,7 @@
     bid.append(createElement("strong", "", money(getBid(listing))));
     const bidStack = createElement("div", "featured-bid-stack");
     bidStack.append(bid, createShareControl(listing, position));
-    const clicks = createElement("div", "featured-metric");
-    const clickLabel = boardSource === "production"
-      ? (listing.verified ? (state.language === "zh" ? "已验证点击" : "Verified clicks") : (state.language === "zh" ? "估算点击" : "Estimated clicks"))
-      : (state.language === "zh" ? "示例点击" : "Sample clicks");
-    clicks.append(createElement("span", "", clickLabel), createElement("strong", "", compact.format(getClicks(listing))));
-    evidence.append(bidStack, clicks);
+    evidence.append(bidStack);
 
     card.id = `listing-${listing.id}`;
     card.append(rank, productIdentity(listing, "p"), evidence, createClaimControl(minimum));
