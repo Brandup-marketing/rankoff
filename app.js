@@ -1410,11 +1410,15 @@
     const rank = rankedListings().findIndex((item) => item.id === listing.id) + 1;
     if (rank < 1) return;
     const nextPrice = rankedListings().length ? getBid(rankedListings()[0]) + 1 : 1;
-    const preview = boardSource === "production" ? "" : (state.language === "zh" ? "预览：" : "Preview: ");
     const text = state.language === "zh"
-      ? `${preview}${listing.name} 以 ${money(getBid(listing))} 的赞助出价位居 RANKOFF ${windowLabel()}榜第 ${rank} 名。你能超越它吗？${money(nextPrice)} 起认领第 1 名。`
-      : `${preview}${listing.name} holds #${rank} on RANKOFF's ${windowLabel().toLowerCase()} board with a ${money(getBid(listing))} sponsored bid. Think you can outrank it? Claim #1 from ${money(nextPrice)}.`;
+      ? `${listing.name} 以 ${money(getBid(listing))} 的赞助出价位居 RANKOFF ${windowLabel()}榜第 ${rank} 名。你能超越它吗？${money(nextPrice)} 起认领第 1 名。`
+      : `${listing.name} holds #${rank} on RANKOFF's ${windowLabel().toLowerCase()} board with a ${money(getBid(listing))} sponsored bid. Think you can outrank it? Claim #1 from ${money(nextPrice)}.`;
     const url = new URL(window.location.href);
+    if (["localhost", "127.0.0.1", "0.0.0.0"].includes(url.hostname)) {
+      url.protocol = "https:";
+      url.host = "rankoff.my";
+      url.pathname = "/";
+    }
     url.searchParams.delete("checkout");
     url.searchParams.delete("reset");
     url.searchParams.set("period", state.activeWindow);

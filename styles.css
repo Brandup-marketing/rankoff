@@ -76,17 +76,18 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 }
 
 .brand { display: flex; width: 13rem; height: 3.7rem; align-items: center; overflow: hidden; border-radius: 0.5rem; background: #050505; line-height: 0; text-decoration: none; }
+.brand-final-logo { display: block; width: 100%; height: 100%; object-fit: contain; }
 .brand-horizontal { display: flex; width: 100%; height: 100%; align-items: center; gap: 0.55rem; padding: 0.28rem 0.5rem; }
 .brand-emblem-crop { display: block; width: 2.75rem; height: 2.75rem; flex: 0 0 2.75rem; overflow: hidden; border-radius: 0.35rem; background: #050505; }
 .brand-emblem-image { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; image-rendering: auto; }
-.brand-wordmark-crop { display: block; min-width: 0; height: 2.1rem; flex: 1 1 auto; overflow: hidden; background: #050505; transform: translateY(0.14rem); }
+.brand-wordmark-crop { display: block; min-width: 0; height: 2.1rem; flex: 1 1 auto; overflow: hidden; background: #050505; }
 .brand-wordmark-image { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; image-rendering: auto; }
 
 .time-tabs { display: inline-flex; justify-self: center; padding: 0.18rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
 .time-tabs button { min-height: 2.75rem; padding: 0.42rem 0.8rem; border: 0; border-radius: 999px; background: transparent; color: var(--muted); font-size: 0.8rem; font-weight: 750; }
 .time-tabs button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
 
-.demo-state { display: inline-flex; align-items: center; gap: 0.4rem; justify-self: end; color: var(--muted); font-size: 0.78rem; font-weight: 700; }
+.demo-state { display: inline-flex; min-width: 0; align-items: center; gap: 0.4rem; justify-self: start; color: var(--muted); font-size: 0.78rem; font-weight: 700; white-space: nowrap; }
 .site-nav { display: inline-flex; justify-self: end; gap: 1rem; margin-right: 0.25rem; color: var(--muted); font-size: 0.8rem; font-weight: 750; }
 .site-nav a { display: inline-flex; min-height: 2.75rem; align-items: center; text-decoration: none; }
 .site-nav a:hover { color: var(--ink); }
@@ -229,7 +230,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .featured-listing .product-mark { width: 3.25rem; height: 3.25rem; flex-basis: 3.25rem; }
 .featured-listing .product-name { font-size: 1rem; }
 .featured-1 .product-name { font-size: 1.1rem; }
-.featured-listing .listing-description { -webkit-line-clamp: 2; }
+.featured-listing .listing-description { -webkit-line-clamp: 1; }
 .featured-evidence { grid-area: evidence; display: flex; min-width: 0; align-items: center; justify-content: flex-end; gap: 1rem; }
 .featured-bid-stack { display: grid; justify-items: end; gap: .18rem; }
 .featured-metric { display: grid; gap: 0.15rem; min-width: 5rem; }
@@ -358,15 +359,16 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .ranking-rules dd { margin: .15rem 0 0; color: var(--muted); font-size: .7rem; line-height: 1.35; }
 .ranking-rules > a { color: var(--blue); font-size: .72rem; font-weight: 750; white-space: nowrap; }
 
-.footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem 1.25rem; padding: 1.25rem 0 0; color: var(--muted); font-size: 0.75rem; }
-.footer-identity { display: inline-flex; align-items: center; gap: .65rem; min-width: 0; }
-.footer-brand { display: inline-flex; width: 3.5rem; height: 3.5rem; overflow: hidden; border-radius: 0.4rem; background: #050505; line-height: 0; }
+.footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 1.5rem; margin-top: 1.5rem; padding: 1.25rem 0 0.5rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.75rem; }
+.footer-identity { display: inline-flex; align-items: center; gap: .8rem; min-width: 0; }
+.footer-brand { display: inline-flex; width: 4.25rem; height: 4.25rem; overflow: hidden; border: 1px solid var(--line); border-radius: 0.55rem; background: #050505; line-height: 0; }
 .footer-logo-image { display: block; width: 100%; height: 100%; object-fit: contain; }
 .footer-credit { display: grid; gap: .12rem; }
-.footer-credit strong { color: var(--ink); font-size: .78rem; }
+.footer-credit strong { color: var(--ink); font-size: .9rem; }
 .footer-credit span { color: var(--muted); }
-.footer-links { display: inline-flex; flex-wrap: wrap; gap: 0.8rem; }
-.footer-links a { color: var(--muted); font-weight: 700; }
+.footer-links { display: inline-flex; flex-wrap: wrap; justify-content: flex-end; gap: .4rem; }
+.footer-links a { padding: .38rem .55rem; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-weight: 700; text-decoration: none; }
+.footer-links a:hover { border-color: var(--accent); color: var(--ink); }
 
 .dialog { width: min(calc(100% - 1.5rem), 33rem); max-height: calc(100dvh - 1.5rem); overflow: auto; margin: auto; padding: 0; border: 1px solid var(--line); border-radius: 0.65rem; background: var(--surface); color: var(--ink); }
 .dialog:not([open]) { display: none; }
@@ -457,6 +459,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .featured-evidence { justify-content: flex-start; }
 }
 
+@media (max-width: 75rem) and (min-width: 46.01rem) {
+  .topbar { grid-template-columns: auto auto minmax(0, 1fr) auto auto auto auto; gap: 0.45rem; }
+  .brand { width: 11rem; }
+  .demo-state { display: none; }
+  .site-nav { gap: 0.65rem; margin-right: 0; }
+}
+
 @media (max-width: 46rem) {
   .activity-tape, .board-interstitial .today-ranking-list { grid-template-columns: 1fr; }
   .category-market { grid-template-columns: minmax(0, 1fr); gap: .45rem; }
@@ -532,6 +541,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .share-link-control input, .share-link-control .primary-action { border: 1px solid var(--line); border-radius: var(--radius); }
   .share-link-control .primary-action { margin-top: .45rem; }
   .ranking-rules dl { grid-template-columns: 1fr; }
+  .footer { align-items: flex-start; }
+  .footer-links { justify-content: flex-start; width: 100%; }
   .amount-control > button, .dialog-stepper > button, .category-chip, .bid-button, .share-button { min-height: 2.75rem; }
   .product-meta, .listing-description, .demo-note { font-size: 0.75rem; }
 }
@@ -549,6 +560,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .theme-toggle, .language-toggle { width: 2.6rem; min-width: 2.6rem; min-height: 2.45rem; padding-inline: 0; font-size: 0; }
   .language-toggle { font-size: .66rem; }
   .search-toggle { width: 2.45rem; height: 2.45rem; }
+  .topbar { min-width: 0; }
+  .brand, .time-tabs, .search-toggle, .language-toggle, .theme-toggle { flex-shrink: 1; }
+  .brand { max-width: 7.2rem; }
+  .time-tabs { min-width: 0; }
+  .time-tabs button { white-space: nowrap; }
   .site-search-field { min-height: 3.15rem; padding-left: 0.8rem; }
   .site-search-field input { font-size: 0.85rem; }
   .search-close { font-size: 0; }
