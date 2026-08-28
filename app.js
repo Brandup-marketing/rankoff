@@ -680,7 +680,7 @@
 
     if (elements.heroPrice) elements.heroPrice.textContent = money(nextPrice);
     if (elements.heroContext) {
-      elements.heroContext.textContent = `${money(nextPrice)} takes #1 on the ${state.category === DEFAULT_CATEGORY ? windowLabel().toLowerCase() : state.category} board until a higher verified bid wins.`;
+      elements.heroContext.textContent = `${money(nextPrice)} takes #1 on the ${state.category === DEFAULT_CATEGORY ? windowLabel().toLowerCase() : state.category} board. Your product story stays visible until a higher verified bid wins.`;
     }
     if (elements.leaderBid) elements.leaderBid.textContent = money(getBid(leader));
     if (elements.leaderClicks) elements.leaderClicks.textContent = compact.format(getClicks(leader));
