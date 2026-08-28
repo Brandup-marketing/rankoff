@@ -1349,7 +1349,7 @@
           }
         });
     if (!candidate) {
-      throw new Error("This website must be approved before it can bid. Contact hello@rankoff.my for listing review.");
+      throw new Error("This website must be approved before it can bid.");
     }
 
     const idempotencyKey = crypto.randomUUID();
