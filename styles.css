@@ -200,7 +200,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .board-toolbar { display: flex; align-items: end; justify-content: space-between; gap: 1rem; padding: 1.4rem 0 0.7rem; }
 .board-toolbar h2 { margin: 0; color: var(--ink); font-size: 1.15rem; font-weight: 850; }
 .board-toolbar p { margin: 0; color: var(--muted); font-size: 0.76rem; text-align: right; }
-.board-context { display: grid; justify-items: end; gap: 0.2rem; }
+.board-context { display: grid; justify-items: end; gap: 0.35rem; }
+.refresh-button { min-height: 2rem; padding: .3rem .6rem; border: 1px solid var(--line); border-radius: .3rem; background: transparent; color: var(--muted); font-size: .68rem; font-weight: 800; }
+.refresh-button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent-strong); }
+.refresh-button:active:not(:disabled) { transform: translateY(1px); }
+.refresh-button:disabled { opacity: .45; }
 .measurement-note { position: relative; color: var(--muted); font-size: 0.7rem; text-align: right; }
 .measurement-note summary { color: var(--blue); font-weight: 750; cursor: pointer; }
 .measurement-note p { position: absolute; right: 0; z-index: 2; width: 21rem; margin-top: 0.4rem; padding: 0.65rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); color: var(--ink); line-height: 1.45; text-align: left; }
@@ -245,6 +249,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .pagination-button:disabled { opacity: .35; }
 .pagination-status { display: flex; align-items: baseline; gap: .35rem; margin: 0; color: var(--muted); font-size: .72rem; font-variant-numeric: tabular-nums; }
 .pagination-status strong { color: var(--ink); font-size: .9rem; }
+.pagination-center { display: grid; justify-items: center; gap: .3rem; }
+.pagination-links { display: flex; align-items: center; justify-content: center; gap: .2rem; }
+.pagination-page { display: grid; min-width: 2rem; min-height: 2rem; place-items: center; padding: .25rem .4rem; border: 1px solid transparent; border-radius: .3rem; background: transparent; color: var(--accent-strong); font-size: .76rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+.pagination-page:hover { border-color: var(--line); background: var(--surface); }
+.pagination-page.is-current { border-color: var(--accent); background: var(--accent); color: white; }
+.pagination-ellipsis { display: grid; min-width: 1.4rem; min-height: 2rem; place-items: center; color: var(--muted); font-size: .76rem; }
 
 .product-cell { display: flex; align-items: center; gap: 0.7rem; min-width: 0; max-width: 100%; }
 .product-mark { position: relative; display: grid; place-items: center; width: 2.75rem; height: 2.75rem; flex: 0 0 2.75rem; overflow: hidden; border: 1px solid var(--line); border-radius: 0.4rem; background: var(--surface-subtle); color: var(--ink); font-size: 0.78rem; font-weight: 850; }
@@ -501,7 +511,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .featured-actions .share-button { min-width: 4.25rem; }
   .product-cell { grid-area: product; }
   .board-pagination { grid-template-columns: 1fr 1fr; }
-  .pagination-status { grid-column: 1 / -1; grid-row: 1; justify-self: center; }
+  .pagination-center { grid-column: 1 / -1; grid-row: 1; }
   .pagination-button { grid-row: 2; width: 100%; }
   .dialog-actions { flex-direction: column-reverse; }
   .dialog-actions button { width: 100%; }

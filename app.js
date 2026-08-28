@@ -29,8 +29,8 @@
   }, {}));
   const categoryIcons = Object.freeze({ all: "▦", Agents: "✦", Marketing: "↗", Developer: "</>", Business: "◆", Crypto: "₿", Ecommerce: "◇", Design: "✎", Productivity: "✓", Health: "+", Games: "◈", Travel: "⌖", Domains: "◎", Other: "•••" });
   const translations = {
-    en: { navBoard: "Board", navCategories: "Categories", navAbout: "About", heroCopy: "Put your product in the spot people see first. Your listing stays at the top until someone pays more.", totalBid: "Your total bid", productUrl: "Website or social account", productUrlPlaceholder: "example.com or @yourusername", invalidWebsite: "Enter a valid website or social account, such as example.com or @yourusername.", chooseMarket: "Choose a market", challengeCategory: "Challenge category", categoryRule: "Must match the listing you’ll outrank.", reviewBid: "Review your bid", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest valid bid takes #1. Pay more to move up.", todayRanking: "Today’s top ranking", latestActivity: "Latest activity", liveUpdates: "Latest updates", howItWorks: "How ranking works", searchPlaceholder: "Search products and categories…", close: "Close", seeAll: "See all", past24: "Past 24h", livePulse: "Live bids", rank: "Rank", listing: "Listing", bid: "Bid", clicks: "Clicks", sponsored: "Sponsored", rules: "Every listing is sponsored. The highest verified bid ranks first.", position: "Position", positionCopy: "Held until a higher verified bid wins.", charge: "Charge", chargeCopy: "One payment after review.", reporting: "Reporting", reportingCopy: "Clicks shown for the selected timeframe.", readRules: "Read all rules →", rulesLink: "Rules", terms: "Terms", termsOfService: "Terms of Service", privacyLink: "Privacy", payments: "Payments", footerCredit: "A Brandup Marketing product", confirmRank: "Confirm this rank", confirmRankIntro: "Check the rank and price, then agree to the Terms of Service to continue.", rankLabel: "Rank", priceLabel: "Price", dueNow: "Due now", confirmationCopy: "Your listing goes live at this rank after payment confirms. Someone else can still claim a higher rank.", agreeTermsPrefix: "I have read and agree to the ", agreeTermsSuffix: ".", cancel: "Cancel", continueCheckout: "Continue to checkout" },
-    zh: { navBoard: "榜单", navCategories: "分类", navAbout: "关于", heroCopy: "把产品放到最显眼的位置。只要没有更高的有效出价，你的介绍就会留在榜首。", totalBid: "你的总出价", productUrl: "网站或社交账号", productUrlPlaceholder: "example.com 或 @yourusername", invalidWebsite: "请输入有效的网站或社交账号，例如 example.com 或 @yourusername。", chooseMarket: "选择市场", challengeCategory: "挑战类别", categoryRule: "必须与您要超越的条目类别相同。", reviewBid: "确认出价", markets: "市场", liveLeaderboard: "实时榜单", boardSummary: "最高有效出价获得第 1 名。提高出价即可上升。", todayRanking: "今日热门榜", latestActivity: "最新动态", liveUpdates: "最新动态", howItWorks: "排名规则", searchPlaceholder: "搜索产品和分类…", close: "关闭", seeAll: "查看全部", past24: "近 24 小时", livePulse: "实时竞价", rank: "排名", listing: "条目", bid: "出价", clicks: "点击", sponsored: "赞助", rules: "每个条目都是赞助展示。最高的已验证出价排名第一。", position: "排名位置", positionCopy: "保持到有人以更高的已验证出价胜出。", charge: "费用", chargeCopy: "审核后一次性付款。", reporting: "数据", reportingCopy: "显示所选时间范围内的点击。", readRules: "查看完整规则 →", rulesLink: "规则", terms: "条款", termsOfService: "服务条款", privacyLink: "隐私", payments: "付款", footerCredit: "Brandup Marketing 出品", confirmRank: "确认此排名", confirmRankIntro: "核对排名与价格，同意《服务条款》后继续。", rankLabel: "排名", priceLabel: "价格", dueNow: "现在支付", confirmationCopy: "付款确认后，你的条目会以此排名上线。其他人仍可出价取得更高排名。", agreeTermsPrefix: "我已阅读并同意《", agreeTermsSuffix: "》。", cancel: "取消", continueCheckout: "继续付款" },
+    en: { navBoard: "Board", navCategories: "Categories", navAbout: "About", heroCopy: "Put your product in the spot people see first. Your listing stays at the top until someone pays more.", totalBid: "Your total bid", productUrl: "Website or social account", productUrlPlaceholder: "example.com or @yourusername", invalidWebsite: "Enter a valid website or social account, such as example.com or @yourusername.", chooseMarket: "Choose a market", challengeCategory: "Challenge category", categoryRule: "Must match the listing you’ll outrank.", reviewBid: "Review your bid", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest valid bid takes #1. Pay more to move up.", todayRanking: "Today’s top ranking", latestActivity: "Latest activity", liveUpdates: "Latest updates", howItWorks: "How ranking works", searchPlaceholder: "Search products and categories…", close: "Close", seeAll: "See all", past24: "Past 24h", livePulse: "Live bids", refresh: "Refresh", rank: "Rank", listing: "Listing", bid: "Bid", clicks: "Clicks", sponsored: "Sponsored", rules: "Every listing is sponsored. The highest verified bid ranks first.", position: "Position", positionCopy: "Held until a higher verified bid wins.", charge: "Charge", chargeCopy: "One payment after review.", reporting: "Reporting", reportingCopy: "Clicks shown for the selected timeframe.", readRules: "Read all rules →", rulesLink: "Rules", terms: "Terms", termsOfService: "Terms of Service", privacyLink: "Privacy", payments: "Payments", footerCredit: "A Brandup Marketing product", confirmRank: "Confirm this rank", confirmRankIntro: "Check the rank and price, then agree to the Terms of Service to continue.", rankLabel: "Rank", priceLabel: "Price", dueNow: "Due now", confirmationCopy: "Your listing goes live at this rank after payment confirms. Someone else can still claim a higher rank.", agreeTermsPrefix: "I have read and agree to the ", agreeTermsSuffix: ".", cancel: "Cancel", continueCheckout: "Continue to checkout" },
+    zh: { navBoard: "榜单", navCategories: "分类", navAbout: "关于", heroCopy: "把产品放到最显眼的位置。只要没有更高的有效出价，你的介绍就会留在榜首。", totalBid: "你的总出价", productUrl: "网站或社交账号", productUrlPlaceholder: "example.com 或 @yourusername", invalidWebsite: "请输入有效的网站或社交账号，例如 example.com 或 @yourusername。", chooseMarket: "选择市场", challengeCategory: "挑战类别", categoryRule: "必须与您要超越的条目类别相同。", reviewBid: "确认出价", markets: "市场", liveLeaderboard: "实时榜单", boardSummary: "最高有效出价获得第 1 名。提高出价即可上升。", todayRanking: "今日热门榜", latestActivity: "最新动态", liveUpdates: "最新动态", howItWorks: "排名规则", searchPlaceholder: "搜索产品和分类…", close: "关闭", seeAll: "查看全部", past24: "近 24 小时", livePulse: "实时竞价", refresh: "刷新", rank: "排名", listing: "条目", bid: "出价", clicks: "点击", sponsored: "赞助", rules: "每个条目都是赞助展示。最高的已验证出价排名第一。", position: "排名位置", positionCopy: "保持到有人以更高的已验证出价胜出。", charge: "费用", chargeCopy: "审核后一次性付款。", reporting: "数据", reportingCopy: "显示所选时间范围内的点击。", readRules: "查看完整规则 →", rulesLink: "规则", terms: "条款", termsOfService: "服务条款", privacyLink: "隐私", payments: "付款", footerCredit: "Brandup Marketing 出品", confirmRank: "确认此排名", confirmRankIntro: "核对排名与价格，同意《服务条款》后继续。", rankLabel: "排名", priceLabel: "价格", dueNow: "现在支付", confirmationCopy: "付款确认后，你的条目会以此排名上线。其他人仍可出价取得更高排名。", agreeTermsPrefix: "我已阅读并同意《", agreeTermsSuffix: "》。", cancel: "取消", continueCheckout: "继续付款" },
   };
   const categoryLabels = { Agents: "AI & Automation", Marketing: "Marketing, SEO & Social", Developer: "Developer Tools & Security", Business: "Business & Professional Services", Crypto: "Finance, Crypto & Investing", Ecommerce: "Ecommerce, Retail & Hardware", Design: "Design, Content & Media", Productivity: "Productivity & Education", Health: "Health & Wellness", Games: "Games & Entertainment", Travel: "Travel, Local & Property", Domains: "Web, Domains & Discovery", Other: "Other" };
   const categoryTranslations = { Agents: "AI 与自动化", Marketing: "营销、SEO 与社交媒体", Developer: "开发工具与安全", Business: "商业与专业服务", Crypto: "金融、加密与投资", Ecommerce: "电商、零售与硬件", Design: "设计、内容与媒体", Productivity: "效率工具与教育", Health: "健康与生活方式", Games: "游戏与娱乐", Travel: "旅行、本地与房地产", Domains: "网站、域名与发现", Other: "其他" };
@@ -167,6 +167,8 @@
     topThree: document.querySelector("[data-top-three]"),
     boardPagination: document.querySelector("[data-board-pagination]"),
     boardPageButtons: Array.from(document.querySelectorAll("[data-board-page]")),
+    pageLinks: document.querySelector("[data-page-links]"),
+    boardRefresh: document.querySelector("[data-board-refresh]"),
     pageRange: document.querySelector("[data-page-range]"),
     pageTotal: document.querySelector("[data-page-total]"),
     boardSummary: document.querySelector("[data-board-summary]"),
@@ -850,6 +852,29 @@
     const end = total === 0 ? 0 : Math.min(total, start + Math.max(0, visibleCount) - 1);
     if (elements.pageRange) elements.pageRange.textContent = `${start}–${end}`;
     if (elements.pageTotal) elements.pageTotal.textContent = state.language === "zh" ? `共 ${total} 项` : `of ${total}`;
+    if (elements.pageLinks) {
+      const pages = [];
+      const addPage = (page) => pages.push({ type: "page", page });
+      const addEllipsis = () => pages.push({ type: "ellipsis" });
+      if (totalPages <= 5) {
+        for (let page = 1; page <= totalPages; page += 1) addPage(page);
+      } else if (boardPage <= 3) {
+        addPage(1); addPage(2); addPage(3); addEllipsis(); addPage(totalPages);
+      } else if (boardPage >= totalPages - 2) {
+        addPage(1); addEllipsis(); addPage(totalPages - 2); addPage(totalPages - 1); addPage(totalPages);
+      } else {
+        addPage(1); addEllipsis(); addPage(boardPage); addEllipsis(); addPage(totalPages);
+      }
+      elements.pageLinks.replaceChildren(...pages.map((item) => {
+        if (item.type === "ellipsis") return createElement("span", "pagination-ellipsis", "…");
+        const button = createElement("button", `pagination-page${item.page === boardPage ? " is-current" : ""}`, String(item.page));
+        button.type = "button";
+        button.dataset.boardPageNumber = String(item.page);
+        button.setAttribute("aria-label", state.language === "zh" ? `第 ${item.page} 页` : `Page ${item.page}`);
+        button.setAttribute("aria-current", String(item.page === boardPage));
+        return button;
+      }));
+    }
     elements.boardPageButtons.forEach((button) => {
       const previous = button.dataset.boardPage === "previous";
       button.textContent = state.language === "zh" ? (previous ? "← 上一页" : "下一页 →") : (previous ? "← Previous" : "Next →");
@@ -1482,33 +1507,50 @@
     });
   });
 
-  elements.boardPageButtons.forEach((button) => {
-    button.addEventListener("click", async () => {
-      const direction = button.dataset.boardPage === "previous" ? -1 : 1;
-      const total = boardSource !== "local" && remotePagination ? remotePagination.total : rankedListings().length;
-      const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
-      const nextPage = Math.min(totalPages, Math.max(1, boardPage + direction));
-      if (nextPage === boardPage) return;
+  async function navigateToBoardPage(nextPage) {
+    const total = boardSource !== "local" && remotePagination ? remotePagination.total : rankedListings().length;
+    const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    const targetPage = Math.min(totalPages, Math.max(1, nextPage));
+    if (targetPage === boardPage) return;
 
-      const previousPage = boardPage;
-      boardPage = nextPage;
-      elements.boardPagination?.setAttribute("aria-busy", "true");
-      elements.boardPageButtons.forEach((pageButton) => { pageButton.disabled = true; });
+    const previousPage = boardPage;
+    boardPage = targetPage;
+    elements.boardPagination?.setAttribute("aria-busy", "true");
+    elements.boardPageButtons.forEach((pageButton) => { pageButton.disabled = true; });
 
-      if (boardSource === "local") {
-        render();
-      } else {
-        const refreshed = await refreshBoardFromApi();
-        if (!refreshed) {
-          boardPage = previousPage;
-          renderPagination(total, state.listings.length);
-          showToast(state.language === "zh" ? "暂时无法载入下一页。" : "The next page could not be loaded yet.", "error");
-        }
+    if (boardSource === "local") {
+      render();
+    } else {
+      const refreshed = await refreshBoardFromApi();
+      if (!refreshed) {
+        boardPage = previousPage;
+        renderPagination(total, state.listings.length);
+        showToast(state.language === "zh" ? "暂时无法载入下一页。" : "The next page could not be loaded yet.", "error");
       }
+    }
 
-      elements.boardPagination?.removeAttribute("aria-busy");
-      document.querySelector("#board")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    elements.boardPagination?.removeAttribute("aria-busy");
+    document.querySelector("#board")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  elements.boardPageButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const direction = button.dataset.boardPage === "previous" ? -1 : 1;
+      void navigateToBoardPage(boardPage + direction);
     });
+  });
+
+  elements.pageLinks?.addEventListener("click", (event) => {
+    const target = event.target instanceof Element ? event.target.closest("[data-board-page-number]") : null;
+    if (!(target instanceof HTMLElement)) return;
+    void navigateToBoardPage(Number(target.dataset.boardPageNumber));
+  });
+
+  elements.boardRefresh?.addEventListener("click", async () => {
+    elements.boardRefresh.disabled = true;
+    const refreshed = await refreshBoardFromApi();
+    elements.boardRefresh.disabled = false;
+    if (!refreshed) showToast(state.language === "zh" ? "暂时无法刷新榜单。" : "The board could not be refreshed yet.", "error");
   });
 
   elements.themeToggle?.addEventListener("click", () => {
