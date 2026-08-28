@@ -37,6 +37,7 @@ export async function loadPublicBoard(db, board, { category, period, limit }) {
   if (period === "today") {
     where.push("b.settled_at >= datetime('now', '-24 hours')");
   }
+  const filterBindings = [...bindings];
   bindings.push(limit);
   const limitBinding = `?${bindings.length}`;
 
@@ -80,8 +81,40 @@ export async function loadPublicBoard(db, board, { category, period, limit }) {
      ORDER BY public_rank ASC
      LIMIT ${limitBinding}`,
   );
+  const activityStatement = db.prepare(
+    `WITH recent AS (
+       SELECT
+         b.id AS bid_id,
+         b.listing_id,
+         b.amount_minor,
+         b.settled_at,
+         l.title,
+         l.destination_url,
+         l.favicon_url,
+         (SELECT MAX(previous.amount_minor)
+          FROM bids previous
+          WHERE previous.board_id = b.board_id
+            AND previous.listing_id = b.listing_id
+            AND previous.status = 'settled'
+            AND (
+              previous.settled_at < b.settled_at
+              OR (previous.settled_at = b.settled_at AND previous.id < b.id)
+            )) AS previous_amount_minor,
+         ROW_NUMBER() OVER (
+           PARTITION BY b.listing_id
+           ORDER BY b.settled_at DESC, b.id DESC
+         ) AS activity_order
+       FROM bids b
+       INNER JOIN listings l ON l.id = b.listing_id
+       WHERE ${where.join(" AND ")}
+     )
+     SELECT * FROM recent
+     WHERE activity_order = 1
+     ORDER BY settled_at DESC, bid_id DESC
+     LIMIT 20`,
+  );
 
-  const [rankingResult, snapshot] = await Promise.all([
+  const [rankingResult, snapshot, activityResult] = await Promise.all([
     statement.bind(...bindings).all(),
     db
       .prepare(
@@ -93,6 +126,7 @@ export async function loadPublicBoard(db, board, { category, period, limit }) {
       )
       .bind(board.id)
       .first(),
+    activityStatement.bind(...filterBindings).all(),
   ]);
 
   const rankings = rankingResult.results.map((row) => ({
@@ -115,6 +149,25 @@ export async function loadPublicBoard(db, board, { category, period, limit }) {
     clicks: Number(row.clicks || 0),
   }));
   const topAmount = rankings[0]?.bid.amount_minor || 0;
+  const rankByListing = new Map(rankings.map((entry) => [entry.listing.id, entry.rank]));
+  const activity = activityResult.results
+    .filter((row) => rankByListing.has(row.listing_id))
+    .map((row) => {
+      const previousAmount = Number(row.previous_amount_minor || 0);
+      const amount = Number(row.amount_minor || 0);
+      return {
+        id: row.bid_id,
+        type: previousAmount > 0 ? "topped_up" : "joined",
+        listing_id: row.listing_id,
+        listing_name: row.title,
+        listing_url: row.destination_url,
+        icon_url: row.favicon_url,
+        amount_minor: amount,
+        delta_minor: Math.max(0, amount - previousAmount),
+        rank: rankByListing.get(row.listing_id),
+        created_at: row.settled_at,
+      };
+    });
 
   return {
     mode: "production",
@@ -122,6 +175,7 @@ export async function loadPublicBoard(db, board, { category, period, limit }) {
     snapshot_id: snapshot?.id || null,
     generated_at: new Date().toISOString(),
     rankings,
+    activity,
     next_bid_minor: topAmount + Number(board.min_increment_minor),
   };
 }

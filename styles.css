@@ -159,7 +159,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 .top-three-hero { margin-top: 0.65rem; margin-bottom: 0; }
 
-.board-interstitial { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 1rem; margin: 1.1rem 0 0; padding: 1rem; border: 1px solid var(--line); border-radius: .65rem; background: var(--surface-subtle); }
+.board-interstitial { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; margin: 1.1rem 0 0; padding: 1rem; border: 1px solid var(--line); border-radius: .65rem; background: var(--surface-subtle); }
 .today-ranking-panel, .board-interstitial .activity-section { min-width: 0; padding: 0; }
 .section-heading-line-spread { align-items: flex-start; justify-content: space-between; margin-bottom: .7rem; }
 .section-heading-line-spread h2 { margin-top: .08rem; }
@@ -167,8 +167,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .text-link { position: relative; z-index: 3; color: var(--blue); font-size: .72rem; font-weight: 800; text-decoration: none; white-space: nowrap; }
 .text-link:hover { color: var(--ink); text-decoration: underline; text-underline-offset: .18em; }
 .today-ranking-list { display: grid; gap: 0; margin: 0; padding: 0; }
+.board-interstitial .today-ranking-list { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .65rem; }
 .today-ranking-item { display: grid; grid-template-columns: 2rem minmax(0, 1fr) auto; align-items: center; gap: .45rem; min-width: 0; padding: .55rem 0; border-top: 1px solid var(--line); list-style: none; }
+.board-interstitial .today-ranking-item { padding: .6rem; border: 1px solid var(--line); border-radius: .45rem; background: var(--surface); }
 .today-ranking-item:first-child { border-top: 0; }
+.board-interstitial .today-ranking-item:first-child { border-top: 1px solid var(--line); }
 .today-ranking-position { color: var(--muted); font-size: .7rem; font-weight: 850; font-variant-numeric: tabular-nums; }
 .today-ranking-item .product-cell { gap: .5rem; }
 .today-ranking-item .product-mark { width: 2rem; height: 2rem; flex-basis: 2rem; border-radius: .35rem; font-size: .62rem; }
@@ -281,20 +284,35 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .section-heading-line h2 { margin: 0; font-size: 1.05rem; font-weight: 850; }
 .section-note { color: var(--muted); font-size: .72rem; }
 .live-dot { width: .45rem; height: .45rem; border-radius: 50%; background: var(--accent); animation: live-pulse 1.8s ease-out infinite; }
-.activity-tape { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .55rem; margin: 0; padding: 0; }
-.board-interstitial .activity-tape { grid-template-columns: 1fr; }
-.activity-item { min-height: 4.2rem; padding: .7rem; border: 1px solid var(--line); background: var(--surface-subtle); }
-.activity-item strong { display: block; margin-bottom: .2rem; color: var(--ink); font-size: .75rem; line-height: 1.25; }
-.activity-item span { color: var(--muted); font-size: .68rem; }
-.activity-tape li { min-height: 4.2rem; margin: 0; padding: .7rem; list-style: none; border: 1px solid var(--line); background: var(--surface-subtle); }
-.activity-tape li time { display: block; margin-bottom: .2rem; color: var(--accent-strong); font-size: .68rem; font-weight: 800; }
-.activity-tape li span { color: var(--ink); font-size: .73rem; line-height: 1.3; }
-.activity-tape li.is-latest { animation: activity-in 420ms ease-out both; }
+.activity-tape { display: grid; grid-template-columns: minmax(0, 1fr); gap: .45rem; margin: 0; padding: 0; }
+.activity-tape li { margin: 0; list-style: none; }
+.activity-event { display: grid; grid-template-columns: 2.5rem minmax(12rem, 1fr) auto minmax(6rem, auto) 4.5rem 4.2rem; align-items: center; gap: .7rem; min-width: 0; min-height: 4.25rem; padding: .55rem .7rem; border: 1px solid var(--line); border-radius: .5rem; background: var(--surface); }
+.activity-event.is-latest { border-color: color-mix(in srgb, var(--accent) 58%, var(--line)); background: var(--accent-soft); animation: activity-in 220ms var(--ease) both; }
+.activity-mark { position: relative; display: grid; width: 2.35rem; height: 2.35rem; place-items: center; overflow: hidden; border: 1px solid var(--line); border-radius: .42rem; background: var(--surface-subtle); color: var(--ink); font-size: .65rem; font-weight: 850; }
+.activity-mark img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: var(--surface); }
+.activity-mark.has-icon .activity-initials { visibility: hidden; }
+.activity-identity { display: grid; min-width: 0; gap: .08rem; }
+.activity-name { overflow: hidden; color: var(--ink); font-size: .8rem; font-weight: 820; line-height: 1.25; text-decoration: none; text-overflow: ellipsis; white-space: nowrap; }
+.activity-name:hover { color: var(--blue); }
+.activity-context { overflow: hidden; color: var(--muted); font-size: .68rem; line-height: 1.25; text-overflow: ellipsis; white-space: nowrap; }
+.activity-action { justify-self: start; padding: .2rem .42rem; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--ink); font-size: .62rem; font-weight: 850; white-space: nowrap; }
+.activity-action-won { border-color: color-mix(in srgb, var(--accent) 68%, var(--line)); color: var(--accent-strong); }
+.activity-action-topup { border-color: color-mix(in srgb, var(--blue) 58%, var(--line)); color: var(--blue); }
+.activity-action-joined { border-color: color-mix(in srgb, var(--up) 58%, var(--line)); color: var(--up); }
+.activity-action-outbid { color: var(--muted); }
+.activity-metric, .activity-rank { display: grid; min-width: 0; gap: .05rem; }
+.activity-metric strong, .activity-rank strong { overflow: hidden; color: var(--ink); font-size: .78rem; font-weight: 850; font-variant-numeric: tabular-nums; line-height: 1.2; text-overflow: ellipsis; white-space: nowrap; }
+.activity-metric span, .activity-rank span { color: var(--muted); font-size: .6rem; white-space: nowrap; }
+.activity-rank { justify-items: end; }
+.activity-rank strong { color: var(--accent-strong); }
+.activity-time { justify-self: end; color: var(--muted); font-size: .64rem; font-weight: 750; white-space: nowrap; }
+.activity-more { display: block; min-height: 2.5rem; margin: .55rem auto 0; padding: .35rem .7rem; border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--muted); font-size: .68rem; font-weight: 800; }
+.activity-more:hover { border-color: var(--line-strong); background: var(--surface); color: var(--ink); }
 .activity-tape li.activity-empty { grid-column: 1 / -1; min-height: 4.6rem; }
 .activity-tape li.activity-empty strong { display: block; margin-bottom: .18rem; color: var(--ink); font-size: .76rem; }
 .activity-tape li.activity-empty span { color: var(--muted); }
 @keyframes live-pulse { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 38%, transparent); } 55% { box-shadow: 0 0 0 .35rem transparent; } }
-@keyframes activity-in { from { opacity: .35; transform: translateY(-.35rem); } to { opacity: 1; transform: translateY(0); } }
+@keyframes activity-in { from { opacity: .45; transform: translateX(-.5rem); } to { opacity: 1; transform: translateX(0); } }
 @media (prefers-reduced-motion: reduce) { .live-dot, .activity-tape li.is-latest { animation: none; } }
 .ranking-rules { display: grid; grid-template-columns: minmax(13rem, 1fr) minmax(0, 2fr) auto; align-items: center; gap: 1.25rem; margin-top: 2rem; padding: 1.25rem 0; border-block: 1px solid var(--line); }
 .ranking-rules h2 { margin: 0; font-size: 1rem; }
@@ -363,7 +381,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 }
 
 @media (max-width: 46rem) {
-  .activity-tape { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .activity-tape, .board-interstitial .today-ranking-list { grid-template-columns: 1fr; }
   .app-shell { width: min(calc(100% - 1rem), var(--content)); }
   .topbar { grid-template-columns: minmax(0, 1fr) auto auto auto auto; gap: 0.35rem; }
   .brand { width: 8.5rem; height: 3.2rem; }
@@ -413,6 +431,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .featured-evidence .featured-metric strong { font-size: 0.86rem; text-align: right; }
   .panel-toggle { min-width: 2.25rem; justify-content: center; padding-inline: 0.35rem; font-size: 0; }
   .panel-toggle-icon { font-size: 1.1rem; }
+  .activity-event { grid-template-areas: "mark identity action action" "mark metric rank time"; grid-template-columns: 2.35rem minmax(0, 1fr) auto auto; gap: .25rem .55rem; padding: .6rem; }
+  .activity-mark { grid-area: mark; }
+  .activity-identity { grid-area: identity; }
+  .activity-action { grid-area: action; justify-self: end; }
+  .activity-metric { grid-area: metric; }
+  .activity-rank { grid-area: rank; justify-items: start; }
+  .activity-time { grid-area: time; }
   .featured-actions { justify-content: stretch; }
   .featured-actions .bid-button { flex: 1 1 auto; }
   .featured-actions .share-button { min-width: 4.25rem; }

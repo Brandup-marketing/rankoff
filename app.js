@@ -153,10 +153,12 @@
   ];
 
   const seedActivity = [
-    { id: "a1", type: "challenge", timeEn: "2m ago", timeZh: "2 分钟前", listingName: "Switchboard", amount: 735, rank: 2, board: "today" },
-    { id: "a2", type: "category-leader", timeEn: "11m ago", timeZh: "11 分钟前", listingName: "Trackline", category: "Marketing" },
-    { id: "a3", type: "clicks", timeEn: "24m ago", timeZh: "24 分钟前", listingName: "Patchnote", clicks: 381, board: "today" },
-    { id: "a4", type: "defended", timeEn: "43m ago", timeZh: "43 分钟前", listingName: "Model Harbor", amount: 2480, board: "all" },
+    { id: "a1", type: "topup", timeEn: "2m ago", timeZh: "2 分钟前", listingId: "model-harbor", listingName: "Model Harbor", delta: 120, amount: 2480, rank: 1 },
+    { id: "a2", type: "won", timeEn: "8m ago", timeZh: "8 分钟前", listingId: "trackline", listingName: "Trackline", delta: 260, amount: 2160, rank: 2, displacedName: "Patchnote" },
+    { id: "a3", type: "outbid", timeEn: "14m ago", timeZh: "14 分钟前", listingId: "canvas-relay", listingName: "Canvas Relay", rank: 4, displacedBy: "Patchnote" },
+    { id: "a4", type: "joined", timeEn: "20m ago", timeZh: "20 分钟前", listingId: "palette-runner", listingName: "Palette Runner", amount: 520, rank: 8 },
+    { id: "a5", type: "won", timeEn: "31m ago", timeZh: "31 分钟前", listingId: "switchboard", listingName: "Switchboard", delta: 95, amount: 940, rank: 5, displacedName: "Focus Coda" },
+    { id: "a6", type: "topup", timeEn: "43m ago", timeZh: "43 分钟前", listingId: "patchnote", listingName: "Patchnote", delta: 180, amount: 1930, rank: 3 },
   ];
 
   const elements = {
@@ -188,6 +190,7 @@
     todaySeeAll: document.querySelector("[data-today-see-all]"),
     activityList: document.querySelector("[data-activity-list]"),
     activityNote: document.querySelector("[data-activity-note]"),
+    activityMore: document.querySelector("[data-activity-more]"),
     liveDot: document.querySelector(".live-dot"),
     panelToggles: Array.from(document.querySelectorAll("[data-panel-toggle]")),
     statVisitors: document.querySelector("[data-stat-visitors]"),
@@ -223,6 +226,9 @@
   let lastTrigger = null;
   let toastTimer = null;
   let changedListingId = null;
+  let activityExpanded = false;
+  let pendingActivityAnimationId = "";
+  let lastRemoteActivityContext = "";
   let remoteNextBid = null;
   let remoteSnapshotId = null;
   let remoteCurrency = "USD";
@@ -298,13 +304,18 @@
         });
       }
 
+      const savedActivity = Array.isArray(saved.activity) ? saved.activity : [];
+      const restoredActivity = savedActivity.some((item) => item?.listingId || item?.listing_id)
+        ? savedActivity.slice(0, 20)
+        : [...seedActivity];
+
       return {
         activeWindow: saved.activeWindow === "today" ? "today" : "all",
         category: saved.category === DEFAULT_CATEGORY ? DEFAULT_CATEGORY : canonicalCategory(saved.category) || DEFAULT_CATEGORY,
         theme: saved.theme === "light" ? "light" : "dark",
         language: saved.language === "zh" ? "zh" : "en",
         listings: restored,
-        activity: Array.isArray(saved.activity) ? saved.activity.slice(0, 6) : [...seedActivity],
+        activity: restoredActivity,
       };
     } catch {
       return fallback;
@@ -322,7 +333,7 @@
           theme: state.theme,
           language: state.language,
           listings: state.listings,
-          activity: state.activity.slice(0, 6),
+          activity: state.activity.slice(0, 20),
         }),
       );
     } catch {
@@ -453,6 +464,7 @@
     endpoint.searchParams.set("category", state.category);
     endpoint.searchParams.set("period", state.activeWindow);
     endpoint.searchParams.set("limit", "50");
+    const activityContext = `${state.activeWindow}:${state.category}`;
 
     try {
       const response = await fetch(endpoint, { headers: { Accept: "application/json" }, cache: "no-store" });
@@ -460,12 +472,18 @@
       const payload = await response.json();
       if (requestId !== remoteRequestId || !Array.isArray(payload?.rankings)) return;
       const period = state.activeWindow;
+      const previousActivityId = String(state.activity[0]?.id || "");
       state.listings = payload.rankings.map((entry, index) => normalizeApiRanking(entry, index, period));
       boardSource = payload.mode === "production" ? "production" : "api";
       if (boardSource === "production") {
         state.activity = Array.isArray(payload.activity)
-          ? payload.activity.filter((item) => item && typeof item === "object").slice(0, 6)
+          ? payload.activity.filter((item) => item && typeof item === "object").slice(0, 20)
           : [];
+        const nextActivityId = String(state.activity[0]?.id || "");
+        if (lastRemoteActivityContext === activityContext && previousActivityId && nextActivityId !== previousActivityId) {
+          pendingActivityAnimationId = nextActivityId;
+        }
+        lastRemoteActivityContext = activityContext;
       }
       remoteNextBid = dollarsFromMinor(payload.next_bid_minor, null);
       remoteSnapshotId = payload.snapshot_id || null;
@@ -894,46 +912,109 @@
   }
 
   function activityTime(item) {
-    if (state.language === "zh") return item.timeZh || (item.time === "just now" ? "刚刚" : item.time) || "刚刚";
-    return item.timeEn || item.time || "Just now";
+    if (state.language === "zh" && item.timeZh) return item.timeZh;
+    if (state.language !== "zh" && item.timeEn) return item.timeEn;
+    const timestamp = Date.parse(item.created_at || item.createdAt || "");
+    if (Number.isFinite(timestamp)) {
+      const minutes = Math.max(0, Math.floor((Date.now() - timestamp) / 60_000));
+      if (state.language === "zh") {
+        if (minutes < 1) return "刚刚";
+        if (minutes < 60) return `${minutes} 分钟前`;
+        if (minutes < 1440) return `${Math.floor(minutes / 60)} 小时前`;
+        return `${Math.floor(minutes / 1440)} 天前`;
+      }
+      if (minutes < 1) return "Just now";
+      if (minutes < 60) return `${minutes}m ago`;
+      if (minutes < 1440) return `${Math.floor(minutes / 60)}h ago`;
+      return `${Math.floor(minutes / 1440)}d ago`;
+    }
+    if (state.language === "zh") return item.time === "just now" ? "刚刚" : item.time || "刚刚";
+    return item.time || "Just now";
   }
 
-  function activityText(item) {
-    const chinese = state.language === "zh";
-    const board = item.board === "today"
-      ? (chinese ? "近 24 小时榜" : "past 24h board")
-      : (chinese ? "全部时间榜" : "all-time board");
-    const listingName = String(item.listingName || item.listing_name || "A listing");
-    const displacedName = String(item.displacedName || item.displaced_name || "the previous leader");
-    const amount = Number(item.amount ?? item.amount_minor / 100);
-    const rank = Number(item.rank);
+  function activityListing(item) {
+    const id = String(item.listingId || item.listing_id || "");
+    const name = String(item.listingName || item.listing_name || "A listing");
+    const existing = state.listings.find((listing) => listing.id === id || listing.name === name);
+    if (existing) return existing;
+    return {
+      id,
+      name,
+      mark: name.split(/\s+/).map((part) => part[0]).join("").slice(0, 3).toUpperCase() || "RK",
+      url: String(item.listingUrl || item.listing_url || ""),
+      iconUrl: String(item.iconUrl || item.icon_url || ""),
+    };
+  }
 
-    if (item.type === "outbid") {
-      return chinese
-        ? `${listingName} 以 ${money(amount)} 超越 ${displacedName}，拿下${board}第 1 名。`
-        : `${listingName} outbid ${displacedName} at ${money(amount)} and claimed #1 on the ${board}.`;
+  function activityMark(listing) {
+    const mark = createElement("span", "activity-mark");
+    mark.setAttribute("aria-hidden", "true");
+    mark.append(createElement("span", "activity-initials", listing.mark));
+    const sources = faviconCandidates(listing);
+    if (!sources.length) return mark;
+    const icon = document.createElement("img");
+    icon.alt = "";
+    icon.decoding = "async";
+    icon.referrerPolicy = "no-referrer";
+    let sourceIndex = 0;
+    const tryNextSource = () => {
+      if (sourceIndex >= sources.length) return icon.remove();
+      icon.src = sources[sourceIndex++];
+    };
+    icon.addEventListener("load", () => mark.classList.add("has-icon"), { once: true });
+    icon.addEventListener("error", tryNextSource);
+    tryNextSource();
+    mark.append(icon);
+    return mark;
+  }
+
+  function activityPresentation(item) {
+    const chinese = state.language === "zh";
+    const displacedName = String(item.displacedName || item.displaced_name || "");
+    const displacedBy = String(item.displacedBy || item.displaced_by || "");
+    const amountValue = Number(item.amount ?? item.amount_minor / 100);
+    const deltaValue = Number(item.delta ?? item.delta_minor / 100);
+    const amount = Number.isFinite(amountValue) ? amountValue : 0;
+    const delta = Number.isFinite(deltaValue) ? deltaValue : 0;
+    const rank = Number(item.rank);
+    const type = String(item.type || "joined").replace("topped_up", "topup");
+
+    if (type === "topup" || type === "defended") {
+      return { type: "topup", action: chinese ? "加码" : "Topped up", context: chinese ? `总出价 ${money(amount)}` : `Total bid ${money(amount)}`, metric: delta > 0 ? `+${money(delta)}` : money(amount), metricLabel: chinese ? "增加金额" : "Added", rank };
     }
-    if (item.type === "challenge") {
-      return chinese
-        ? `${listingName} 以 ${money(amount)} 发起挑战，升至${board}第 ${rank} 名。`
-        : `${listingName} challenged at ${money(amount)} and moved to #${rank} on the ${board}.`;
+    if (type === "won" || type === "outbid" || type === "challenge") {
+      const isDisplaced = type === "outbid" && displacedBy;
+      return {
+        type: isDisplaced ? "outbid" : "won",
+        action: isDisplaced ? (chinese ? "被超越" : "Outbid") : (chinese ? "胜出" : "Won"),
+        context: isDisplaced ? (chinese ? `被 ${displacedBy} 超越` : `Passed by ${displacedBy}`) : displacedName ? (chinese ? `超越 ${displacedName}` : `Passed ${displacedName}`) : (chinese ? "排名上升" : "Moved up"),
+        metric: isDisplaced ? displacedBy : delta > 0 ? `+${money(delta)}` : money(amount),
+        metricLabel: isDisplaced ? (chinese ? "胜出者" : "Passed by") : (chinese ? "增加金额" : "Added"),
+        rank,
+      };
     }
-    if (item.type === "category-leader") {
-      return chinese
-        ? `${listingName} 成为${categoryName(item.category, "zh")}分类第 1 名。`
-        : `${listingName} became #1 in ${categoryName(item.category, "en")}.`;
-    }
-    if (item.type === "clicks") {
-      return chinese
-        ? `${listingName} 在近 24 小时获得 ${compact.format(Number(item.clicks) || 0)} 次点击。`
-        : `${listingName} recorded ${compact.format(Number(item.clicks) || 0)} clicks in the past 24h.`;
-    }
-    if (item.type === "defended") {
-      return chinese
-        ? `${listingName} 以 ${money(amount)} 守住${board}第 1 名。`
-        : `${listingName} held #1 on the ${board} at ${money(amount)}.`;
-    }
-    return String(item.text || (chinese ? "排名动态已更新。" : "The ranking changed."));
+    return { type: "joined", action: chinese ? "新加入" : "Joined", context: chinese ? `以 ${money(amount)} 首次上榜` : `Opened with ${money(amount)}`, metric: money(amount), metricLabel: chinese ? "首次出价" : "Opening bid", rank };
+  }
+
+  function activityRow(item, index) {
+    const listing = activityListing(item);
+    const presentation = activityPresentation(item);
+    const shouldAnimate = index === 0 && String(item.id || "") === pendingActivityAnimationId;
+    const row = createElement("li", `activity-event activity-${presentation.type}${shouldAnimate ? " is-latest" : ""}`);
+    row.dataset.eventId = String(item.id || "");
+    const identity = createElement("div", "activity-identity");
+    const name = listing.id ? createElement("a", "activity-name", listing.name) : createElement("strong", "activity-name", listing.name);
+    if (name instanceof HTMLAnchorElement) name.href = listingDetailsHref(listing);
+    identity.append(name, createElement("span", "activity-context", presentation.context));
+    const action = createElement("span", `activity-action activity-action-${presentation.type}`, presentation.action);
+    const metric = createElement("div", "activity-metric");
+    metric.append(createElement("strong", "", presentation.metric), createElement("span", "", presentation.metricLabel));
+    const rank = createElement("div", "activity-rank");
+    rank.append(createElement("strong", "", Number.isFinite(presentation.rank) && presentation.rank > 0 ? `#${presentation.rank}` : "—"), createElement("span", "", state.language === "zh" ? "当前排名" : "New rank"));
+    const time = createElement("time", "activity-time", activityTime(item));
+    if (item.created_at || item.createdAt) time.dateTime = item.created_at || item.createdAt;
+    row.append(activityMark(listing), identity, action, metric, rank, time);
+    return row;
   }
 
   function todayRankingRow(listing, position) {
@@ -961,7 +1042,7 @@
     }
 
     if (elements.activityList) {
-      const activity = state.activity.slice(0, 5);
+      const activity = activityExpanded ? state.activity : state.activity.slice(0, 5);
       if (!activity.length) {
         const empty = createElement("li", "activity-empty");
         empty.append(
@@ -970,16 +1051,23 @@
         );
         elements.activityList.replaceChildren(empty);
       } else {
-        elements.activityList.replaceChildren(
-          ...activity.map((item, index) => {
-            const li = createElement("li", index === 0 ? "is-latest" : "");
-            const time = createElement("time", "", activityTime(item));
-            if (item.created_at) time.dateTime = item.created_at;
-            li.append(time, createElement("span", "", activityText(item)));
-            return li;
-          }),
-        );
+        elements.activityList.replaceChildren(...activity.map(activityRow));
       }
+      if (elements.activityMore) {
+        elements.activityMore.hidden = state.activity.length <= 5;
+        elements.activityMore.textContent = activityExpanded
+          ? (state.language === "zh" ? "收起" : "Show less")
+          : (state.language === "zh" ? "查看更多" : "Show more");
+        const hiddenCount = Math.max(0, state.activity.length - 5);
+        elements.activityMore.setAttribute(
+          "aria-label",
+          activityExpanded
+            ? (state.language === "zh" ? "收起最新动态" : "Show fewer activity events")
+            : (state.language === "zh" ? `查看更多动态，共 ${hiddenCount} 条` : `Show ${hiddenCount} more activity events`),
+        );
+        elements.activityMore.setAttribute("aria-expanded", String(activityExpanded));
+      }
+      pendingActivityAnimationId = "";
     }
   }
 
@@ -1141,6 +1229,17 @@
   function applyBid(amount) {
     const before = rankedListings();
     const previousLeader = before[0] || null;
+    let previousListing = activeBid?.type === "listing"
+      ? state.listings.find((item) => item.id === activeBid.listingId)
+      : null;
+    if (!previousListing && pendingChallenge) {
+      previousListing = state.listings.find((item) => {
+        try { return new URL(item.url).hostname === pendingChallenge.url.hostname; }
+        catch { return false; }
+      });
+    }
+    const previousRank = previousListing ? before.findIndex((item) => item.id === previousListing.id) + 1 : 0;
+    const previousAmount = previousListing ? getBid(previousListing) : 0;
     let listing;
     if (activeBid?.type === "new") {
       if (!pendingChallenge) return null;
@@ -1152,31 +1251,39 @@
     }
 
     changedListingId = listing.id;
-    const rank = rankedListings().findIndex((item) => item.id === listing.id) + 1;
+    const after = rankedListings();
+    const rank = after.findIndex((item) => item.id === listing.id) + 1;
     const displaced = rank === 1 && previousLeader && previousLeader.id !== listing.id ? previousLeader : null;
-    state.activity.unshift(displaced
-      ? {
-          id: `local-${Date.now()}`,
-          type: "outbid",
-          timeEn: "Just now",
-          timeZh: "刚刚",
-          listingName: listing.name,
-          displacedName: displaced.name,
-          amount,
-          rank,
-          board: state.activeWindow,
-        }
-      : {
-          id: `local-${Date.now()}`,
-          type: "challenge",
-          timeEn: "Just now",
-          timeZh: "刚刚",
-          listingName: listing.name,
-          amount,
-          rank,
-          board: state.activeWindow,
-        });
-    state.activity = state.activity.slice(0, 6);
+    const eventTime = Date.now();
+    const events = [{
+      id: `local-${eventTime}`,
+      type: previousRank === 0 ? "joined" : rank < previousRank ? "won" : "topup",
+      timeEn: "Just now",
+      timeZh: "刚刚",
+      listingId: listing.id,
+      listingName: listing.name,
+      displacedName: displaced?.name || "",
+      delta: Math.max(0, amount - previousAmount),
+      amount,
+      rank,
+      board: state.activeWindow,
+    }];
+    if (displaced) {
+      events.push({
+        id: `local-${eventTime}-outbid`,
+        type: "outbid",
+        timeEn: "Just now",
+        timeZh: "刚刚",
+        listingId: displaced.id,
+        listingName: displaced.name,
+        displacedBy: listing.name,
+        rank: after.findIndex((item) => item.id === displaced.id) + 1,
+        board: state.activeWindow,
+      });
+    }
+    state.activity.unshift(...events);
+    state.activity = state.activity.slice(0, 20);
+    pendingActivityAnimationId = events[0].id;
     saveState();
     render();
 
@@ -1344,6 +1451,11 @@
       button.setAttribute("aria-expanded", String(!expanded));
       updatePanelToggleLabels();
     });
+  });
+
+  elements.activityMore?.addEventListener("click", () => {
+    activityExpanded = !activityExpanded;
+    renderSidebar();
   });
 
   document.addEventListener("click", (event) => {
