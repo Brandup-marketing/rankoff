@@ -646,17 +646,29 @@
     if (raw) {
       const timestamp = Date.parse(raw);
       if (Number.isFinite(timestamp)) {
-        const days = Math.max(0, Math.floor((Date.now() - timestamp) / 86_400_000));
-        if (state.language === "zh") return days === 0 ? "今天上榜" : `${days} 天前上榜`;
-        return days === 0 ? "Claimed today" : `Claimed ${days} day${days === 1 ? "" : "s"} ago`;
+        const minutes = Math.max(0, Math.floor((Date.now() - timestamp) / 60_000));
+        if (state.language === "zh") {
+          if (minutes < 1) return "刚刚上榜";
+          if (minutes < 60) return `${minutes} 分钟前上榜`;
+          if (minutes < 1_440) return `${Math.floor(minutes / 60)} 小时前上榜`;
+          const days = Math.floor(minutes / 1_440);
+          return `${days} 天前上榜`;
+        }
+        if (minutes < 1) return "Claimed just now";
+        if (minutes < 60) return `Claimed ${minutes}m ago`;
+        if (minutes < 1_440) return `Claimed ${Math.floor(minutes / 60)}h ago`;
+        const days = Math.floor(minutes / 1_440);
+        return `Claimed ${days} day${days === 1 ? "" : "s"} ago`;
       }
       const shorthand = raw.match(/^(\d+)\s*([dhm])$/i);
       if (shorthand) {
         const amount = Number(shorthand[1]);
         const unit = shorthand[2].toLowerCase();
         if (unit === "d") return state.language === "zh" ? `${amount} 天前上榜` : `Claimed ${amount} day${amount === 1 ? "" : "s"} ago`;
-        if (unit === "h" && amount >= 24) return state.language === "zh" ? `${Math.floor(amount / 24)} 天前上榜` : `Claimed ${Math.floor(amount / 24)} day${amount >= 48 ? "s" : ""} ago`;
-        return state.language === "zh" ? "今天上榜" : "Claimed today";
+        if (unit === "h") return amount >= 24
+          ? (state.language === "zh" ? `${Math.floor(amount / 24)} 天前上榜` : `Claimed ${Math.floor(amount / 24)} day${amount >= 48 ? "s" : ""} ago`)
+          : (state.language === "zh" ? `${amount} 小时前上榜` : `Claimed ${amount}h ago`);
+        return state.language === "zh" ? `${amount} 分钟前上榜` : `Claimed ${amount}m ago`;
       }
     }
     return state.language === "zh" ? "最近上榜" : "Claimed recently";

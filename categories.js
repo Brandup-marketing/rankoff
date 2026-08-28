@@ -73,6 +73,21 @@
   function ageLabel(age) {
     const value = escapeText(age);
     if (!value) return elements.language === "zh" ? "最近上榜" : "Claimed recently";
+    const timestamp = Date.parse(value);
+    if (Number.isFinite(timestamp)) {
+      const minutes = Math.max(0, Math.floor((Date.now() - timestamp) / 60_000));
+      if (elements.language === "zh") {
+        if (minutes < 1) return "刚刚上榜";
+        if (minutes < 60) return `${minutes} 分钟前上榜`;
+        if (minutes < 1_440) return `${Math.floor(minutes / 60)} 小时前上榜`;
+        return `${Math.floor(minutes / 1_440)} 天前上榜`;
+      }
+      if (minutes < 1) return "Claimed just now";
+      if (minutes < 60) return `Claimed ${minutes}m ago`;
+      if (minutes < 1_440) return `Claimed ${Math.floor(minutes / 60)}h ago`;
+      const days = Math.floor(minutes / 1_440);
+      return `Claimed ${days} day${days === 1 ? "" : "s"} ago`;
+    }
     if (value === "1d") return elements.language === "zh" ? "1 天前上榜" : "Claimed 1 day ago";
     const match = value.match(/^(\d+)([hm])$/i);
     if (match) {

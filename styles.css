@@ -481,7 +481,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .activity-event { grid-template-columns: 2.2rem minmax(8rem, 1fr) auto auto auto auto; width: 29rem; gap: .45rem; padding: .55rem; }
   .activity-context, .activity-metric span, .activity-rank span { display: none; }
   .activity-action { font-size: .58rem; }
-  .activity-time { display: none; }
+  .activity-time { justify-self: start; font-size: .58rem; }
   .activity-bid-now { font-size: .62rem; }
   .featured-actions { justify-content: stretch; }
   .featured-actions .bid-button { flex: 1 1 auto; }
