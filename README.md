@@ -46,3 +46,4 @@ The checkout API uses Dodo's documented dynamic `amount` field in integer minor 
 - `tests/backend/` - ranking, validation, route-safety, and webhook-signature tests
 - `PRODUCT.md` and `DESIGN.md` - product and visual decisions
 - `PRODUCTION_HANDOFF.md` - real payment and operating controls needed before launch
+- `LAUNCH_RUNBOOK.md` - controlled enablement order, moderation API, and credential gates

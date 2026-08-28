@@ -19,6 +19,16 @@ export function paymentsEnabled(env) {
   return isProduction(env) && env.PAYMENTS_ENABLED === "true";
 }
 
+export function paymentConfigurationReady(env) {
+  return Boolean(
+    paymentsEnabled(env)
+      && env.DODO_ENVIRONMENT === "live_mode"
+      && env.DODO_PRODUCT_ID
+      && env.DODO_PAYMENTS_API_KEY
+      && env.DODO_PAYMENTS_WEBHOOK_KEY,
+  );
+}
+
 export function requireDatabase(env) {
   if (!env.DB || typeof env.DB.prepare !== "function") {
     throw new ServiceUnavailableError(

@@ -4,6 +4,10 @@
   "pages_build_output_dir": "./dist",
   "compatibility_date": "2026-08-28",
   "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
   "vars": {
     "RANKOFF_MODE": "demo",
     "PAYMENTS_ENABLED": "false",

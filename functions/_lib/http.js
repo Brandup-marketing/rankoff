@@ -1,6 +1,7 @@
 import { ApiError, ServiceUnavailableError } from "./config.js";
 
 const MAX_JSON_BYTES = 16 * 1024;
+export const MAX_WEBHOOK_BYTES = 128 * 1024;
 
 export function json(data, init = {}) {
   const headers = new Headers(init.headers);
@@ -10,15 +11,7 @@ export function json(data, init = {}) {
 }
 
 export async function readJson(request) {
-  const declaredLength = Number(request.headers.get("content-length") || 0);
-  if (Number.isFinite(declaredLength) && declaredLength > MAX_JSON_BYTES) {
-    throw new ApiError(413, "payload_too_large", "The request body is too large.");
-  }
-
-  const raw = await request.text();
-  if (new TextEncoder().encode(raw).byteLength > MAX_JSON_BYTES) {
-    throw new ApiError(413, "payload_too_large", "The request body is too large.");
-  }
+  const raw = await readText(request, { maxBytes: MAX_JSON_BYTES });
 
   try {
     const parsed = JSON.parse(raw);
@@ -28,6 +21,36 @@ export async function readJson(request) {
     return parsed;
   } catch {
     throw new ApiError(400, "invalid_json", "Send a valid JSON object.");
+  }
+}
+
+export async function readText(message, { maxBytes, errorCode = "payload_too_large" }) {
+  const declaredLength = Number(message.headers.get("content-length") || 0);
+  if (Number.isFinite(declaredLength) && declaredLength > maxBytes) {
+    throw new ApiError(413, errorCode, "The request body is too large.");
+  }
+
+  if (!message.body) return "";
+  const reader = message.body.getReader();
+  const decoder = new TextDecoder();
+  let totalBytes = 0;
+  let raw = "";
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      totalBytes += value.byteLength;
+      if (totalBytes > maxBytes) {
+        await reader.cancel("payload_too_large");
+        throw new ApiError(413, errorCode, "The request body is too large.");
+      }
+      raw += decoder.decode(value, { stream: true });
+    }
+    raw += decoder.decode();
+    return raw;
+  } finally {
+    reader.releaseLock();
   }
 }
 
@@ -61,7 +84,7 @@ export function errorResponse(error, requestId) {
       },
       request_id: requestId,
     },
-    { status },
+    { status, headers: status === 503 ? { "Retry-After": "30" } : undefined },
   );
 }
 

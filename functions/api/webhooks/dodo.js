@@ -1,12 +1,15 @@
 import { ApiError, isProduction, requireDatabase } from "../../_lib/config.js";
 import { paymentTransition } from "../../_lib/domain.js";
-import { getRequestId, json, methodNotAllowed } from "../../_lib/http.js";
+import { getRequestId, json, MAX_WEBHOOK_BYTES, methodNotAllowed, readText } from "../../_lib/http.js";
 import { applyProviderEvent, loadBidForWebhook } from "../../_lib/repository.js";
 import { verifyStandardWebhook } from "../../_lib/security.js";
 
 export async function onRequestPost(context) {
   if (!isProduction(context.env)) throw new ApiError(503, "production_only", "Webhooks are disabled on the preview board.");
-  const rawBody = await context.request.text();
+  const rawBody = await readText(context.request, {
+    maxBytes: MAX_WEBHOOK_BYTES,
+    errorCode: "webhook_too_large",
+  });
   const providerEventId = await verifyStandardWebhook(rawBody, context.request.headers, context.env.DODO_PAYMENTS_WEBHOOK_KEY);
   let payload;
   try {
@@ -29,6 +32,9 @@ export async function onRequestPost(context) {
   const checkoutId = data.checkout_session_id ? String(data.checkout_session_id) : null;
   if (checkoutId && bid.provider_checkout_id && checkoutId !== bid.provider_checkout_id) {
     throw new ApiError(422, "checkout_mismatch", "Webhook checkout reference does not match the bid.");
+  }
+  if (paymentId && bid.provider_payment_id && paymentId !== bid.provider_payment_id) {
+    throw new ApiError(422, "payment_reference_mismatch", "Webhook payment reference does not match the bid.");
   }
   if (nextStatus === "settled") {
     if (Number(data.total_amount) !== Number(bid.amount_minor) || String(data.currency || "").toUpperCase() !== bid.currency) {

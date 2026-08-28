@@ -1,3 +1,25 @@
+import { ApiError } from "./config.js";
+
+const MODERATION_TRANSITIONS = Object.freeze({
+  pending_review: new Set(["approved", "suspended", "removed"]),
+  approved: new Set(["suspended", "removed"]),
+  suspended: new Set(["approved", "removed"]),
+  removed: new Set(),
+});
+
+export function validateModerationTransition(currentStatus, nextStatus, reason = "") {
+  if (!Object.hasOwn(MODERATION_TRANSITIONS, currentStatus)) {
+    throw new ApiError(409, "invalid_listing_state", "The listing has an unknown moderation state.");
+  }
+  if (!MODERATION_TRANSITIONS[currentStatus].has(nextStatus)) {
+    throw new ApiError(409, "invalid_moderation_transition", `A ${currentStatus} listing cannot become ${nextStatus}.`);
+  }
+  if (["suspended", "removed"].includes(nextStatus) && !String(reason).trim()) {
+    throw new ApiError(422, "moderation_reason_required", "A reason is required to suspend or remove a listing.");
+  }
+  return nextStatus;
+}
+
 export function rankEligibleBids(listings, bids) {
   const approved = new Set(
     listings.filter((listing) => listing.status === "approved").map((listing) => listing.id),

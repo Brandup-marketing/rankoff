@@ -1,4 +1,4 @@
-import { ApiError, defaultCurrency, isProduction, maxBidMinor, paymentsEnabled, requireDatabase } from "../../../_lib/config.js";
+import { ApiError, defaultCurrency, isProduction, maxBidMinor, paymentConfigurationReady, requireDatabase } from "../../../_lib/config.js";
 import { getRequestId, json, methodNotAllowed, readJson } from "../../../_lib/http.js";
 import { createDodoCheckout } from "../../../_lib/payment.js";
 import { createPendingBid, findIdempotentBid, loadListingForBid, loadMinimumBid, markBidSetupFailed, publicBid, updateBidCheckout } from "../../../_lib/repository.js";
@@ -6,7 +6,7 @@ import { sha256Hex } from "../../../_lib/security.js";
 import { normalizeCurrency, parsePositiveMinorUnits, requireString } from "../../../_lib/validation.js";
 
 export async function onRequestPost(context) {
-  if (!isProduction(context.env) || !paymentsEnabled(context.env)) {
+  if (!isProduction(context.env) || !paymentConfigurationReady(context.env)) {
     throw new ApiError(503, "checkout_disabled", "Live checkout is not enabled. No charge was made.");
   }
   const input = await readJson(context.request);

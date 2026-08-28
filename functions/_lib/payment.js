@@ -1,10 +1,17 @@
-import { ApiError, ServiceUnavailableError } from "./config.js";
+import { ApiError, ServiceUnavailableError, isProduction } from "./config.js";
+import { readText } from "./http.js";
 
 export async function createDodoCheckout(env, bid) {
   if (!env.DODO_PAYMENTS_API_KEY || !env.DODO_PRODUCT_ID) {
     throw new ServiceUnavailableError(
       "payment_configuration_missing",
       "Hosted checkout is not configured yet.",
+    );
+  }
+  if (isProduction(env) && env.DODO_ENVIRONMENT !== "live_mode") {
+    throw new ServiceUnavailableError(
+      "payment_environment_mismatch",
+      "Live checkout requires the live payment environment.",
     );
   }
 
@@ -33,7 +40,13 @@ export async function createDodoCheckout(env, bid) {
   if (!response.ok) {
     throw new ApiError(502, "checkout_provider_error", "Hosted checkout could not be created.");
   }
-  const payload = await response.json();
+  let payload;
+  try {
+    payload = JSON.parse(await readText(response, { maxBytes: 64 * 1024 }));
+  } catch (error) {
+    if (error instanceof ApiError) throw error;
+    throw new ApiError(502, "checkout_provider_error", "Hosted checkout returned an invalid response.");
+  }
   if (!payload?.session_id || !payload?.checkout_url) {
     throw new ApiError(502, "checkout_provider_error", "Hosted checkout returned an invalid response.");
   }

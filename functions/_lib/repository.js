@@ -176,8 +176,9 @@ export async function loadMinimumBid(db, listing) {
   const row = await db
     .prepare(
       `SELECT COALESCE(MAX(amount_minor), 0) AS top_amount_minor
-       FROM bids
-       WHERE board_id = ?1 AND status = 'settled'`,
+       FROM bids b
+       INNER JOIN listings l ON l.id = b.listing_id
+       WHERE b.board_id = ?1 AND b.status = 'settled' AND l.status = 'approved'`,
     )
     .bind(listing.board_id)
     .first();
@@ -278,6 +279,40 @@ export async function createListing(db, listing) {
       listing.createdAt,
     )
     .run();
+}
+
+export async function loadListingReview(db, listingId) {
+  return db
+    .prepare(
+      `SELECT id, title, destination_url, category, status, created_at, updated_at
+       FROM listings WHERE id = ?1`,
+    )
+    .bind(listingId)
+    .first();
+}
+
+export async function moderateListing(db, listing, decision) {
+  await db.batch([
+    db.prepare(
+      `UPDATE listings
+       SET status = ?2, moderation_reason = ?3, updated_at = ?4
+       WHERE id = ?1 AND status = ?5`,
+    ).bind(listing.id, decision.status, decision.reason || null, decision.createdAt, listing.status),
+    db.prepare(
+      `INSERT INTO audit_events (
+         id, actor_type, action, target_type, target_id, request_id,
+         before_json, after_json, created_at
+       ) VALUES (?1, 'admin', 'listing.moderated', 'listing', ?2, ?3, ?4, ?5, ?6)`,
+    ).bind(
+      crypto.randomUUID(),
+      listing.id,
+      decision.requestId,
+      JSON.stringify({ status: listing.status }),
+      JSON.stringify({ status: decision.status, reason: decision.reason || null }),
+      decision.createdAt,
+    ),
+  ]);
+  return loadListingReview(db, listing.id);
 }
 
 export async function loadApprovedDestination(db, listingId) {

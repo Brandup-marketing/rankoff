@@ -27,7 +27,21 @@ export async function onRequestPost(context) {
     createdAt,
   };
   await createListing(db, listing);
-  return json({ listing: { id: listing.id, status: "pending_review", title: listing.title, url: listing.destinationUrl, category: listing.category } }, { status: 201 });
+  return json({
+    listing: {
+      id: listing.id,
+      status: "pending_review",
+      title: listing.title,
+      url: listing.destinationUrl,
+      category: listing.category,
+    },
+    review: {
+      required: true,
+      checkout_available: false,
+      message: "Submitted for review. Approval is required before bidding can begin.",
+      status_url: `/api/v1/listings/${listing.id}`,
+    },
+  }, { status: 201 });
 }
 
 export function onRequest() {
