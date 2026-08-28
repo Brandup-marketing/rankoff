@@ -1,0 +1,16 @@
+{
+  "name": "rankoff",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/backend/*.test.js",
+    "check": "node scripts/check.mjs",
+    "cf:types": "wrangler types",
+    "cf:dev": "wrangler pages dev .",
+    "cf:dry-run": "wrangler pages functions build functions --outdir .wrangler/functions-build --project-directory . --compatibility-date 2026-08-28 --compatibility-flag nodejs_compat"
+  },
+  "devDependencies": {
+    "wrangler": "^4.40.2"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "rankoff-git",
+  "pages_build_output_dir": ".",
+  "compatibility_date": "2026-08-28",
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "RANKOFF_MODE": "demo",
+    "PAYMENTS_ENABLED": "false",
+    "BOARD_SLUG": "global",
+    "DEFAULT_CURRENCY": "USD",
+    "DODO_ENVIRONMENT": "test_mode"
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 0.1
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "rankoff-production",
+      "database_id": "52a25d82-10ae-4c04-9781-55682c453ccd",
+      "migrations_dir": "migrations"
+    }
+  ]
+}

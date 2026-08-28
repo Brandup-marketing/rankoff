@@ -1,0 +1,49 @@
+export function rankEligibleBids(listings, bids) {
+  const approved = new Set(
+    listings.filter((listing) => listing.status === "approved").map((listing) => listing.id),
+  );
+  const bestByListing = new Map();
+
+  for (const bid of bids) {
+    if (bid.status !== "settled" || !approved.has(bid.listing_id) || !bid.settled_at) continue;
+    const current = bestByListing.get(bid.listing_id);
+    if (!current || compareBids(bid, current) < 0) bestByListing.set(bid.listing_id, bid);
+  }
+
+  return [...bestByListing.values()].sort(compareBids).map((bid, index) => ({
+    rank: index + 1,
+    bid,
+  }));
+}
+
+export function compareBids(left, right) {
+  if (left.amount_minor !== right.amount_minor) return right.amount_minor - left.amount_minor;
+  const settledComparison = String(left.settled_at).localeCompare(String(right.settled_at));
+  if (settledComparison !== 0) return settledComparison;
+  return String(left.id).localeCompare(String(right.id));
+}
+
+export function paymentTransition(eventType, currentStatus) {
+  if (eventType === "payment.succeeded") {
+    return ["pending_payment", "checkout_created", "payment_failed"].includes(currentStatus)
+      ? "settled"
+      : null;
+  }
+  if (eventType === "payment.failed") {
+    return ["pending_payment", "checkout_created"].includes(currentStatus)
+      ? "payment_failed"
+      : null;
+  }
+  if (
+    ["payment.refunded", "refund.succeeded", "dispute.opened", "dispute.created"].includes(
+      eventType,
+    )
+  ) {
+    return currentStatus === "settled" ? "reversed" : null;
+  }
+  return null;
+}
+
+export function minimumWinningBid(currentTopMinor, incrementMinor) {
+  return Math.max(0, currentTopMinor) + Math.max(1, incrementMinor);
+}

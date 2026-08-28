@@ -10,8 +10,7 @@
     <meta name="theme-color" content="#090a0c" />
     <title>RANKOFF | Sponsored Leaderboard</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=9" />
-    <script defer data-website-id="dfid_pq3rgtr30XTFoq5raZRvX" data-domain="rankoff.my" src="https://datafa.st/js/script.js"></script>
+    <link rel="stylesheet" href="./styles.css?v=11" />
   </head>
   <body>
     <a class="skip-link" href="#board">Skip to leaderboard</a>
@@ -26,17 +25,14 @@
           <button type="button" data-board-window="all" aria-pressed="true">All-time</button>
           <button type="button" data-board-window="today" aria-pressed="false">Today</button>
         </nav>
-        <span class="demo-state"><i aria-hidden="true"></i> Demo market</span>
+        <span class="demo-state" data-board-state><i aria-hidden="true"></i> Preview board</span>
         <nav class="site-nav" aria-label="Main navigation"><a href="./index.html">Board</a><a href="./about.html">About</a></nav>
       </header>
 
       <section class="claim-stage" aria-labelledby="page-title">
         <div class="claim-panel">
-          <p class="market-status"><span><i aria-hidden="true"></i> <b data-online-count>—</b> online</span><span><b data-visitor-count>—</b> visitors</span><span data-analytics-state>Demo telemetry</span><a href="./legal.html#privacy">See analytics →</a></p>
-          <h1 id="page-title">Take the lead for <span data-hero-next-price>$0</span></h1>
-          <p class="claim-copy" data-hero-context>
-            The highest bid takes the highest sponsored position.
-          </p>
+          <h1 id="page-title">Claim <span>#1</span> for <strong data-hero-next-price>$0</strong></h1>
+          <p class="claim-copy" data-hero-context>The highest verified bid holds the top sponsored rank.</p>
 
           <div class="market-entry">
             <form class="bid-console" data-inline-challenge aria-label="Challenge the leaderboard">
@@ -64,20 +60,13 @@
                 </select>
               </label>
 
-              <button class="primary-action" type="submit">Review challenge</button>
-              <p class="demo-note">Demo market · no payment collected</p>
+              <button class="primary-action" type="submit" data-inline-submit>Review challenge</button>
+              <p class="demo-note" data-demo-note>Preview only · no payment is collected</p>
             </form>
 
-            <aside class="bid-terms" aria-labelledby="bid-terms-heading">
-              <h2 id="bid-terms-heading">What your bid buys</h2>
-              <dl>
-                <div><dt>Position</dt><dd>Held until a higher verified bid wins.</dd></div>
-                <div><dt>Charge</dt><dd>One payment after review—never automatic.</dd></div>
-                <div><dt>Reporting</dt><dd>Clicks shown for the selected timeframe.</dd></div>
-              </dl>
-              <a href="./legal.html#rules">Read the ranking rules</a>
-            </aside>
           </div>
+
+          <div class="top-three top-three-hero" data-top-three aria-label="Top three sponsored listings"></div>
         </div>
       </section>
 
@@ -100,8 +89,6 @@
           </div>
         </div>
 
-        <div class="top-three" data-top-three aria-label="Top three sponsored listings"></div>
-
         <div class="board-header" aria-hidden="true">
           <span>Rank</span>
           <span>Listing</span>
@@ -110,6 +97,24 @@
           <span>Action</span>
         </div>
         <div class="board-list" data-board-list aria-live="polite" aria-label="Sponsored listings ranked fourth and below"></div>
+      </section>
+
+      <section class="activity-section" aria-labelledby="activity-heading">
+        <div class="section-heading-line"><h2 id="activity-heading">Latest activity</h2><span class="live-dot" aria-hidden="true"></span><span class="section-note">Live market updates</span></div>
+        <div class="activity-tape" data-activity-list aria-live="polite"></div>
+      </section>
+
+      <section class="ranking-rules" aria-labelledby="ranking-rules-heading">
+        <div>
+          <h2 id="ranking-rules-heading">How ranking works</h2>
+          <p>Every listing is sponsored. Higher verified bids rank above lower bids.</p>
+        </div>
+        <dl>
+          <div><dt>Position</dt><dd>Held until a higher verified bid wins.</dd></div>
+          <div><dt>Charge</dt><dd>One payment after review.</dd></div>
+          <div><dt>Reporting</dt><dd>Clicks shown for the selected timeframe.</dd></div>
+        </dl>
+        <a href="./legal.html#rules">Read all rules →</a>
       </section>
 
       <footer class="footer">
@@ -125,7 +130,7 @@
             <p class="section-label">Challenge review</p>
             <h2 id="bid-dialog-title">Confirm your position</h2>
           </div>
-          <button class="icon-button" type="button" data-close-bid aria-label="Close dialog">x</button>
+          <button class="icon-button" type="button" data-close-bid aria-label="Close dialog">×</button>
         </div>
 
         <div class="bid-target" data-bid-target></div>
@@ -173,6 +178,6 @@
     </dialog>
 
     <div class="toast" data-toast role="status" aria-live="polite" aria-atomic="true"></div>
-    <script src="./app.js?v=9" defer></script>
+    <script src="./app.js?v=10" defer></script>
   </body>
 </html>

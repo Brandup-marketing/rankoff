@@ -4,6 +4,7 @@
   const STORE_KEY = "rankoff-mvp-demo-v3";
   const MAX_BID = 1_000_000;
   const DEFAULT_CATEGORY = "all";
+  const BOARD_API_ENDPOINT = "./api/v1/board";
   const categories = [
     "Agents",
     "Marketing",
@@ -155,9 +156,9 @@
     inlineUrl: document.querySelector("[data-inline-url]"),
     heroPrice: document.querySelector("[data-hero-next-price]"),
     heroContext: document.querySelector("[data-hero-context]"),
-    onlineCount: document.querySelector("[data-online-count]"),
-    visitorCount: document.querySelector("[data-visitor-count]"),
-    analyticsState: document.querySelector("[data-analytics-state]"),
+    boardState: document.querySelector("[data-board-state]"),
+    demoNote: document.querySelector("[data-demo-note]"),
+    inlineSubmit: document.querySelector("[data-inline-submit]"),
     currentLeader: document.querySelector("[data-current-leader]"),
     leaderBid: document.querySelector("[data-leader-bid]"),
     leaderClicks: document.querySelector("[data-leader-clicks]"),
@@ -179,12 +180,18 @@
 
   if (!elements.boardList) return;
 
+  let boardSource = "local";
+  let remoteRequestId = 0;
   let state = loadState();
   let activeBid = null;
   let pendingChallenge = null;
   let lastTrigger = null;
   let toastTimer = null;
   let changedListingId = null;
+  let remoteNextBid = null;
+  let remoteSnapshotId = null;
+  let remoteCurrency = "USD";
+  let boardViewSent = false;
 
   function cloneListing(listing) {
     return { ...listing, bids: { ...listing.bids } };
@@ -239,7 +246,7 @@
           id: String(listing.id),
           name: String(listing.name || "Your demo listing").slice(0, 64),
           mark: String(listing.mark || "YOU").slice(0, 4).toUpperCase(),
-          url: String(listing.url || "https://rankoff.io/demo"),
+          url: String(listing.url || "https://rankoff.my/demo"),
           iconUrl: typeof listing.iconUrl === "string" ? listing.iconUrl : "",
           description: "A local-only challenger created in this browser.",
           category: categories.includes(listing.category) ? listing.category : categories[0],
@@ -268,6 +275,7 @@
   }
 
   function saveState() {
+    if (boardSource !== "local") return;
     try {
       window.localStorage.setItem(
         STORE_KEY,
@@ -282,6 +290,104 @@
     } catch {
       showToast("This browser could not save demo changes for later.", "error");
     }
+  }
+
+  function dollarsFromMinor(value, fallback = 1) {
+    const minor = Number(value);
+    if (!Number.isSafeInteger(minor) || minor < 0) return fallback;
+    return Math.max(1, Math.ceil(minor / 100));
+  }
+
+  function normalizedClickCount(value) {
+    if (Number.isFinite(Number(value))) return Math.max(0, Math.round(Number(value)));
+    if (value && typeof value === "object") {
+      const candidate = value.count ?? value.total ?? value.verified ?? 0;
+      return Number.isFinite(Number(candidate)) ? Math.max(0, Math.round(Number(candidate))) : 0;
+    }
+    return 0;
+  }
+
+  function normalizeApiRanking(entry, index, period) {
+    const listing = entry?.listing || {};
+    const url = String(listing.url || "https://rankoff.my");
+    const previous = state.listings.find((item) => item.id === String(listing.id || ""));
+    const amount = dollarsFromMinor(entry?.bid?.amount_minor, previous ? getBid(previous, period) : 1);
+    const clicks = normalizedClickCount(entry?.clicks);
+    const bids = previous ? { ...previous.bids } : { all: amount, today: amount };
+    bids[period] = amount;
+
+    return {
+      id: String(listing.id || `remote-${index + 1}`),
+      serverRank: Number.isFinite(Number(entry?.rank)) ? Number(entry.rank) : index + 1,
+      name: String(listing.title || listing.hostname || `Listing ${index + 1}`).slice(0, 96),
+      mark: initialsFromUrl(url),
+      url,
+      iconUrl: typeof listing.favicon_url === "string" ? listing.favicon_url : "",
+      description: String(listing.description || "Sponsored listing on Rankoff.").slice(0, 240),
+      category: String(listing.category || "Other"),
+      age: entry?.bid?.settled_at ? "settled" : "live",
+      clicks: period === "all" ? clicks : previous?.clicks || clicks,
+      todayClicks: period === "today" ? clicks : previous?.todayClicks || 0,
+      verified: true,
+      bids,
+    };
+  }
+
+  function updateBoardSourceLabels() {
+    const production = boardSource === "production";
+    if (elements.boardState) {
+      elements.boardState.lastChild.textContent = production ? " Live board" : boardSource === "local" ? " Preview board" : " Connected preview";
+    }
+    if (elements.demoNote) {
+      elements.demoNote.textContent = production
+        ? "Live ranking data · payment is only confirmed after hosted checkout"
+        : "Preview only · no payment is collected";
+    }
+  }
+
+  async function refreshBoardFromApi() {
+    if (!/^https?:$/.test(window.location.protocol)) return;
+    const requestId = ++remoteRequestId;
+    const endpoint = new URL(BOARD_API_ENDPOINT, window.location.href);
+    endpoint.searchParams.set("board", "global");
+    endpoint.searchParams.set("category", state.category);
+    endpoint.searchParams.set("period", state.activeWindow);
+    endpoint.searchParams.set("limit", "50");
+
+    try {
+      const response = await fetch(endpoint, { headers: { Accept: "application/json" }, cache: "no-store" });
+      if (!response.ok) return;
+      const payload = await response.json();
+      if (requestId !== remoteRequestId || !Array.isArray(payload?.rankings)) return;
+      const period = state.activeWindow;
+      state.listings = payload.rankings.map((entry, index) => normalizeApiRanking(entry, index, period));
+      boardSource = payload.mode === "production" ? "production" : "api";
+      remoteNextBid = dollarsFromMinor(payload.next_bid_minor, null);
+      remoteSnapshotId = payload.snapshot_id || null;
+      remoteCurrency = String(payload.board?.currency || "USD").toUpperCase();
+      render();
+      if (boardSource === "production" && !boardViewSent) {
+        boardViewSent = true;
+        void recordBoardView();
+      }
+    } catch {
+      /* Static preview and offline use intentionally fall back to the local board. */
+    }
+  }
+
+  async function recordBoardView() {
+    let sessionId;
+    try {
+      sessionId = window.sessionStorage.getItem("rankoff-session-id") || crypto.randomUUID();
+      window.sessionStorage.setItem("rankoff-session-id", sessionId);
+    } catch {
+      sessionId = crypto.randomUUID();
+    }
+    await fetch("./api/v1/events", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ type: "board_viewed", board_id: "global", snapshot_id: remoteSnapshotId, session_id: sessionId }),
+    }).catch(() => {});
   }
 
   function money(value) {
@@ -308,7 +414,8 @@
   function rankedListings(listings = visibleListings(), windowName = state.activeWindow) {
     return [...listings].sort((first, second) => {
       const difference = second.bids[windowName] - first.bids[windowName];
-      return difference || first.name.localeCompare(second.name);
+      const serverOrder = (first.serverRank || Number.MAX_SAFE_INTEGER) - (second.serverRank || Number.MAX_SAFE_INTEGER);
+      return difference || serverOrder || first.name.localeCompare(second.name);
     });
   }
 
@@ -343,9 +450,38 @@
     return host.split(".")[0].replace(/[-_]+/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
   }
 
+  function parseProductUrl(value) {
+    const raw = String(value || "").trim();
+    if (!raw) throw new TypeError("A product URL is required.");
+    const parsed = raw.startsWith("@")
+      ? new URL(`https://x.com/${encodeURIComponent(raw.slice(1))}`)
+      : new URL(/^[a-z][a-z\d+.-]*:\/\//i.test(raw) ? raw : `https://${raw}`);
+    if (!/^https?:$/.test(parsed.protocol) || !parsed.hostname) throw new TypeError("Only web URLs are supported.");
+    return parsed;
+  }
+
+  function faviconCandidates(listing) {
+    try {
+      const url = new URL(listing.url);
+      if (url.hostname.endsWith(".example") && !listing.iconUrl) return [];
+      const direct = `${url.origin}/favicon.ico`;
+      const fallback = `https://icons.duckduckgo.com/ip3/${encodeURIComponent(url.hostname)}.ico`;
+      return [...new Set([listing.iconUrl, direct, fallback].filter(Boolean))];
+    } catch {
+      return listing.iconUrl ? [listing.iconUrl] : [];
+    }
+  }
+
   function listingLink(listing) {
     const link = createElement("a", "product-name", listing.name);
-    link.href = listing.url;
+    if (boardSource === "production") {
+      const tracked = new URL(`./go/${encodeURIComponent(listing.id)}`, window.location.href);
+      if (remoteSnapshotId) tracked.searchParams.set("snapshot", remoteSnapshotId);
+      if (listing.serverRank) tracked.searchParams.set("rank", String(listing.serverRank));
+      link.href = tracked.toString();
+    } else {
+      link.href = listing.url;
+    }
     link.target = "_blank";
     link.rel = "sponsored nofollow noopener noreferrer";
     link.setAttribute("aria-label", `Visit ${listing.name} in a new tab`);
@@ -358,13 +494,24 @@
     mark.setAttribute("aria-hidden", "true");
     const initials = createElement("span", "product-initials", listing.mark);
     mark.append(initials);
-    if (listing.iconUrl) {
+    const iconSources = faviconCandidates(listing);
+    if (iconSources.length) {
       const icon = document.createElement("img");
-      icon.src = listing.iconUrl;
       icon.alt = "";
-      icon.loading = "lazy";
+      icon.decoding = "async";
+      icon.referrerPolicy = "no-referrer";
+      let sourceIndex = 0;
+      const tryNextSource = () => {
+        if (sourceIndex >= iconSources.length) {
+          icon.remove();
+          return;
+        }
+        icon.src = iconSources[sourceIndex];
+        sourceIndex += 1;
+      };
       icon.addEventListener("load", () => mark.classList.add("has-icon"), { once: true });
-      icon.addEventListener("error", () => icon.remove(), { once: true });
+      icon.addEventListener("error", tryNextSource);
+      tryNextSource();
       mark.append(icon);
     }
 
@@ -464,7 +611,7 @@
     card.dataset.listingId = listing.id;
     if (listing.id === changedListingId) card.classList.add("is-updated");
 
-    const rank = createElement("div", "featured-rank", position === 1 ? "CHAMPION · #1" : `#${position}`);
+    const rank = createElement("div", "featured-rank", `#${position}`);
     const evidence = createElement("div", "featured-evidence");
     const bid = createElement("div", "featured-metric");
     bid.append(createElement("span", "", `${windowLabel()} bid`), createElement("strong", "", money(getBid(listing))));
@@ -528,7 +675,7 @@
   function renderLeader() {
     const leader = rankedListings()[0];
     if (!leader) return;
-    const nextPrice = getBid(leader) + 1;
+    const nextPrice = boardSource === "local" || !remoteNextBid ? getBid(leader) + 1 : remoteNextBid;
 
     if (elements.heroPrice) elements.heroPrice.textContent = money(nextPrice);
     if (elements.heroContext) {
@@ -615,6 +762,7 @@
     renderLeader();
     renderSidebar();
     renderTotals();
+    updateBoardSourceLabels();
   }
 
   function setBidTarget() {
@@ -746,6 +894,43 @@
     return { listing, rank };
   }
 
+  async function startLiveCheckout(amount) {
+    const candidate = activeBid?.type === "listing"
+      ? state.listings.find((item) => item.id === activeBid.listingId)
+      : state.listings.find((item) => {
+          if (!pendingChallenge) return false;
+          try {
+            return new URL(item.url).hostname === pendingChallenge.url.hostname;
+          } catch {
+            return false;
+          }
+        });
+    if (!candidate) {
+      throw new Error("This website must be approved before it can bid. Contact hello@rankoff.my for listing review.");
+    }
+
+    const idempotencyKey = crypto.randomUUID();
+    const response = await fetch("./api/v1/bids", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Idempotency-Key": idempotencyKey,
+      },
+      body: JSON.stringify({
+        listing_id: candidate.id,
+        amount_minor: amount * 100,
+        currency: remoteCurrency,
+        snapshot_id: remoteSnapshotId,
+      }),
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || !payload.checkout_url) {
+      throw new Error(payload?.error?.message || "Hosted checkout is temporarily unavailable. No payment was made.");
+    }
+    window.location.assign(payload.checkout_url);
+  }
+
   function showToast(message, type = "info") {
     if (!elements.toast) return;
     window.clearTimeout(toastTimer);
@@ -804,13 +989,15 @@
     state.category = trigger.dataset.category || DEFAULT_CATEGORY;
     saveState();
     render();
+    void refreshBoardFromApi();
   });
 
   elements.categorySelect?.addEventListener("change", (event) => {
     const value = event.currentTarget instanceof HTMLSelectElement ? event.currentTarget.value : categories[0];
-    if (categories.includes(value)) state.category = value;
+    state.category = value === "" ? DEFAULT_CATEGORY : categories.includes(value) ? value : DEFAULT_CATEGORY;
     saveState();
     render();
+    void refreshBoardFromApi();
   });
 
   elements.windowButtons.forEach((button) => {
@@ -820,6 +1007,7 @@
       state.activeWindow = nextWindow;
       saveState();
       render();
+      void refreshBoardFromApi();
     });
   });
 
@@ -881,14 +1069,11 @@
     if (!elements.inlineChallenge.reportValidity()) return;
 
     const formData = new FormData(elements.inlineChallenge);
-    const rawUrl = String(formData.get("productUrl") || "").trim();
     let parsedUrl;
     try {
-      parsedUrl = rawUrl.startsWith("@")
-        ? new URL(`https://x.com/${encodeURIComponent(rawUrl.slice(1))}`)
-        : new URL(rawUrl);
+      parsedUrl = parseProductUrl(formData.get("productUrl"));
     } catch {
-      showToast("Enter a complete URL or an @handle.", "error");
+      showToast("Enter a valid website, such as yourproduct.com, or an @handle.", "error");
       return;
     }
 
@@ -912,7 +1097,7 @@
 
   elements.bidAmount?.addEventListener("input", updateBidPreview);
 
-  elements.bidForm?.addEventListener("submit", (event) => {
+  elements.bidForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
     if (!elements.bidForm || !elements.bidAmount || !activeBid) return;
     updateBidPreview();
@@ -924,6 +1109,29 @@
     const amount = Number(elements.bidAmount.value);
     if (amount < minimumForActiveBid()) {
       showToast(`Bid at least ${money(minimumForActiveBid())}.`, "error");
+      return;
+    }
+
+    if (boardSource === "api") {
+      showToast("Live checkout is not connected for this submission yet. No payment was made.", "error");
+      return;
+    }
+
+    if (boardSource === "production") {
+      const submitButton = elements.bidForm.querySelector('button[type="submit"]');
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = "Opening secure checkout…";
+      }
+      try {
+        await startLiveCheckout(amount);
+      } catch (error) {
+        showToast(error?.message || "Hosted checkout is unavailable. No payment was made.", "error");
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.textContent = "Confirm challenge";
+        }
+      }
       return;
     }
 
@@ -942,25 +1150,9 @@
     activeBid = null;
   });
 
-  async function loadPublicAnalytics() {
-    const endpoint = window.RANKOFF_ANALYTICS_ENDPOINT || "./api/public-analytics";
-    try {
-      const response = await fetch(endpoint, { headers: { Accept: "application/json" }, cache: "no-store" });
-      if (!response.ok) throw new Error("Analytics endpoint unavailable");
-      const payload = await response.json();
-      const online = Number(payload.online);
-      const visitors = Number(payload.visitors);
-      if (!Number.isFinite(online) || !Number.isFinite(visitors)) throw new Error("Analytics payload invalid");
-      if (elements.onlineCount) elements.onlineCount.textContent = compact.format(online);
-      if (elements.visitorCount) elements.visitorCount.textContent = compact.format(visitors);
-      if (elements.analyticsState) elements.analyticsState.textContent = "Live analytics";
-    } catch {
-      if (elements.onlineCount) elements.onlineCount.textContent = "—";
-      if (elements.visitorCount) elements.visitorCount.textContent = "—";
-      if (elements.analyticsState) elements.analyticsState.textContent = "Demo telemetry · connect DataFast";
-    }
-  }
-
   render();
-  loadPublicAnalytics();
+  void refreshBoardFromApi();
+  if (new URL(window.location.href).searchParams.has("checkout")) {
+    showToast("Checkout returned. Rank changes only after verified payment settlement.");
+  }
 })();
