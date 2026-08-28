@@ -640,7 +640,10 @@
     const row = createElement("article", "rank-row");
     row.dataset.rank = String(position);
     row.dataset.listingId = listing.id;
+    row.dataset.claimLabel = `Claim this rank for ${money(getBid(ranked[0]) + 1)}`;
     row.setAttribute("role", "listitem");
+    row.setAttribute("tabindex", "0");
+    row.setAttribute("aria-label", `Rank ${position}: ${listing.name}. Claim this rank for ${money(getBid(ranked[0]) + 1)}.`);
     if (listing.id === changedListingId) row.classList.add("is-updated");
 
     const rank = createElement("div", "rank-position", `#${position}`);
@@ -655,21 +658,7 @@
       createElement("span", "", listing.verified ? "verified clicks" : "estimated clicks"),
     );
 
-    const actions = createElement("div", "row-actions");
-    const min = getBid(ranked[0]) + 1;
-    const bidButton = createElement("button", "bid-button", "Challenge board");
-    bidButton.type = "button";
-    bidButton.dataset.prepareChallenge = String(min);
-    bidButton.dataset.listingId = listing.id;
-    bidButton.setAttribute("aria-label", `Prepare a new challenge for the lead at ${money(min)}`);
-
-    const shareButton = createElement("button", "share-button", "Share");
-    shareButton.type = "button";
-    shareButton.dataset.share = "";
-    shareButton.dataset.listingId = listing.id;
-    actions.append(bidButton, shareButton);
-
-    row.append(rank, productIdentity(listing), bid, clicks, actions);
+    row.append(rank, productIdentity(listing), bid, clicks);
     return row;
   }
 
@@ -1025,6 +1014,17 @@
     const featured = target.closest(".featured-listing");
     if (featured instanceof HTMLElement && !(target.closest("a, button, input, select"))) {
       featured.querySelector("[data-prepare-challenge]")?.click();
+      return;
+    }
+
+    const rankRow = target.closest(".rank-row");
+    if (rankRow instanceof HTMLElement && !(target.closest("a, button, input, select"))) {
+      elements.inlineBid?.setAttribute("data-from-row", rankRow.dataset.listingId || "");
+      const minimum = Number(elements.inlineBid?.min) || minimumForActiveBid();
+      if (elements.inlineBid) elements.inlineBid.value = String(minimum);
+      elements.inlineChallenge?.scrollIntoView({ behavior: "smooth", block: "center" });
+      window.setTimeout(() => elements.inlineUrl?.focus(), 220);
+      showToast(`Challenge prepared at ${money(minimum)}. Add your product to continue.`);
       return;
     }
 
