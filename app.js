@@ -609,6 +609,7 @@
     const card = createElement("article", `featured-listing featured-${position}`);
     card.dataset.rank = String(position);
     card.dataset.listingId = listing.id;
+    card.dataset.claimLabel = `Claim this rank for ${money(getBid(ranked[0]) + 1)}`;
     if (listing.id === changedListingId) card.classList.add("is-updated");
 
     const rank = createElement("div", "featured-rank", `#${position}`);
@@ -1020,6 +1021,12 @@
   document.addEventListener("click", (event) => {
     const target = event.target instanceof Element ? event.target : null;
     if (!target) return;
+
+    const featured = target.closest(".featured-listing");
+    if (featured instanceof HTMLElement && !(target.closest("a, button, input, select"))) {
+      featured.querySelector("[data-prepare-challenge]")?.click();
+      return;
+    }
 
     const inlineAdjust = target.closest("[data-inline-adjust]");
     if (inlineAdjust instanceof HTMLButtonElement && elements.inlineBid) {
