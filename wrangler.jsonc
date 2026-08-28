@@ -11,10 +11,6 @@
     "DEFAULT_CURRENCY": "USD",
     "DODO_ENVIRONMENT": "test_mode"
   },
-  "observability": {
-    "enabled": true,
-    "head_sampling_rate": 0.1
-  },
   "d1_databases": [
     {
       "binding": "DB",
