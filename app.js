@@ -349,7 +349,7 @@
     document.querySelectorAll("[data-i18n-placeholder]").forEach((node) => { node.setAttribute("placeholder", languageText(node.dataset.i18nPlaceholder)); });
     document.querySelectorAll("[data-i18n-aria-label]").forEach((node) => { node.setAttribute("aria-label", languageText(node.dataset.i18nAriaLabel)); });
     if (elements.languageToggle) {
-      elements.languageToggle.textContent = state.language === "zh" ? "EN" : "中文";
+      elements.languageToggle.textContent = state.language === "zh" ? "CN" : "EN";
       elements.languageToggle.setAttribute("aria-pressed", String(state.language === "zh"));
       elements.languageToggle.setAttribute("aria-label", state.language === "zh" ? "Switch to English" : "切换中文");
     }

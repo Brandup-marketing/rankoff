@@ -89,7 +89,7 @@
     elements.root.lang = preferences.language === "zh" ? "zh-CN" : "en";
     document.querySelector('meta[name="theme-color"]')?.setAttribute("content", preferences.theme === "light" ? "#faf7f5" : "#090a0c");
     document.querySelectorAll("[data-copy]").forEach((node) => { node.textContent = text(node.dataset.copy); });
-    elements.language.textContent = preferences.language === "zh" ? "EN" : "中文";
+    elements.language.textContent = preferences.language === "zh" ? "CN" : "EN";
     elements.language.setAttribute("aria-pressed", String(preferences.language === "zh"));
     elements.theme.textContent = preferences.theme === "dark" ? "Light" : "Dark";
     elements.theme.setAttribute("aria-pressed", String(preferences.theme === "dark"));

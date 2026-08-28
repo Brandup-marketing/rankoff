@@ -113,7 +113,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .theme-toggle, .language-toggle { display: inline-flex; min-width: 4.6rem; min-height: 2.75rem; align-items: center; justify-content: center; gap: 0.35rem; padding: 0.42rem 0.68rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-subtle); color: var(--muted); font-size: 0.72rem; font-weight: 800; white-space: nowrap; transition: border-color 160ms var(--ease), background 160ms var(--ease), color 160ms var(--ease), transform 160ms var(--ease); }
 .theme-toggle::before, .language-toggle::before { display: inline-grid; place-items: center; width: 1.15rem; height: 1.15rem; border: 1px solid var(--line-strong); border-radius: 50%; color: var(--accent-strong); font-size: 0.68rem; line-height: 1; }
 .theme-toggle::before { content: "◐"; }
-.language-toggle::before { content: "文"; }
+.language-toggle::before { display: none; }
 .theme-toggle:hover, .language-toggle:hover { border-color: var(--accent); background: var(--surface); color: var(--ink); }
 .theme-toggle:active, .language-toggle:active { transform: translateY(1px); }
 .demo-state i, .market-status i { width: 0.45rem; height: 0.45rem; border-radius: 50%; background: var(--up); }
@@ -435,6 +435,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .time-tabs { padding: 0.14rem; }
   .time-tabs button { min-height: 2.45rem; padding-inline: 0.28rem; font-size: 0.68rem; }
   .theme-toggle, .language-toggle { width: 2.6rem; min-width: 2.6rem; min-height: 2.45rem; padding-inline: 0; font-size: 0; }
+  .language-toggle { font-size: .66rem; }
   .search-toggle { width: 2.45rem; height: 2.45rem; }
   .site-search-field { min-height: 3.15rem; padding-left: 0.8rem; }
   .site-search-field input { font-size: 0.85rem; }

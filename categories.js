@@ -255,7 +255,7 @@
       button.textContent = elements.language === "zh" ? (button.dataset.categoryWindow === "today" ? "今日" : "全部时间") : (button.dataset.categoryWindow === "today" ? "Today" : "All-time");
     });
     if (elements.languageToggle) {
-      elements.languageToggle.textContent = elements.language === "zh" ? "EN" : "中文";
+      elements.languageToggle.textContent = elements.language === "zh" ? "CN" : "EN";
       elements.languageToggle.setAttribute("aria-label", elements.language === "zh" ? "Switch to English" : "切换中文");
       elements.languageToggle.setAttribute("aria-pressed", String(elements.language === "zh"));
     }
