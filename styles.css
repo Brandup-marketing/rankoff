@@ -127,6 +127,26 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 .top-three-hero { margin-top: 0.65rem; margin-bottom: 0; }
 
+.board-interstitial { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 1rem; margin: 1.1rem 0 0; padding: 1rem; border: 1px solid var(--line); border-radius: .65rem; background: var(--surface-subtle); }
+.today-ranking-panel, .board-interstitial .activity-section { min-width: 0; padding: 0; }
+.section-heading-line-spread { align-items: flex-start; justify-content: space-between; margin-bottom: .7rem; }
+.section-heading-line-spread h2 { margin-top: .08rem; }
+.eyebrow { margin: 0; color: var(--accent-strong); font-size: .63rem; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+.text-link { position: relative; z-index: 3; color: var(--blue); font-size: .72rem; font-weight: 800; text-decoration: none; white-space: nowrap; }
+.text-link:hover { color: var(--ink); text-decoration: underline; text-underline-offset: .18em; }
+.today-ranking-list { display: grid; gap: 0; margin: 0; padding: 0; }
+.today-ranking-item { display: grid; grid-template-columns: 2rem minmax(0, 1fr) auto; align-items: center; gap: .45rem; min-width: 0; padding: .55rem 0; border-top: 1px solid var(--line); list-style: none; }
+.today-ranking-item:first-child { border-top: 0; }
+.today-ranking-position { color: var(--muted); font-size: .7rem; font-weight: 850; font-variant-numeric: tabular-nums; }
+.today-ranking-item .product-cell { gap: .5rem; }
+.today-ranking-item .product-mark { width: 2rem; height: 2rem; flex-basis: 2rem; border-radius: .35rem; font-size: .62rem; }
+.today-ranking-item .product-meta, .today-ranking-item .listing-description { display: none; }
+.today-ranking-item .product-name { padding: 0; font-size: .78rem; }
+.today-ranking-proof { display: grid; justify-items: end; gap: .1rem; }
+.today-ranking-bid { color: var(--accent-strong); font-size: .78rem; font-variant-numeric: tabular-nums; }
+.today-ranking-clicks { color: var(--muted); font-size: .64rem; white-space: nowrap; }
+.today-ranking-empty { padding: .9rem 0; color: var(--muted); font-size: .75rem; list-style: none; }
+
 .category-market { display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem 0; border-block: 1px solid var(--line); }
 .category-market h2 { flex: 0 0 auto; margin: 0; color: var(--muted); font-size: 0.72rem; font-weight: 850; letter-spacing: 0.04em; text-transform: uppercase; }
 .category-rail { display: flex; min-width: 0; max-width: 100%; flex: 1 1 auto; gap: 0.25rem; overflow-x: auto; padding-bottom: 0.1rem; overscroll-behavior-inline: contain; scrollbar-width: thin; }
@@ -161,6 +181,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .board-header { min-height: 2.2rem; padding: 0 0.65rem; border: 1px solid var(--line); border-bottom: 0; background: var(--surface-subtle); color: var(--muted); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.035em; text-transform: uppercase; }
 .board-header span:nth-child(3), .board-header span:nth-child(4) { text-align: right; }
 .board-list { border: 1px solid var(--line); background: var(--surface); }
+.rank-milestone { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: .7rem; min-height: 3.2rem; padding: .25rem .8rem; background: var(--bg); }
+.milestone-line { height: 1px; background: var(--line-strong); }
+.milestone-label { padding: .35rem .7rem; border: 1px solid color-mix(in srgb, var(--accent) 42%, var(--line)); border-radius: 999px; color: var(--accent-strong); font-size: .66rem; font-weight: 850; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
 .rank-row { position: relative; min-height: 5.15rem; padding: 0.75rem 0.65rem; border-bottom: 1px solid var(--line); transition: background 160ms var(--ease); }
 .rank-row::after { content: attr(data-claim-label); position: absolute; left: 50%; bottom: -0.55rem; z-index: 2; transform: translate(-50%, .25rem); padding: .24rem .6rem; border-radius: 999px; background: var(--accent); color: #fff; font-size: .65rem; font-weight: 850; opacity: 0; pointer-events: none; transition: opacity 160ms var(--ease), transform 160ms var(--ease); white-space: nowrap; }
 .rank-row:hover::after, .rank-row:focus-within::after { opacity: 1; transform: translate(-50%, 0); }
@@ -179,6 +202,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .product-copy { min-width: 0; max-width: 100%; }
 .product-name { position: relative; z-index: 2; display: block; overflow: hidden; padding-block: 0.2rem; color: var(--ink); font-size: 0.9rem; font-weight: 800; line-height: 1.2; text-overflow: ellipsis; text-decoration: none; white-space: nowrap; }
 .product-name:hover { color: var(--blue); }
+.listing-details { position: relative; z-index: 3; color: var(--blue); font-weight: 800; text-decoration: none; white-space: nowrap; }
+.listing-details:hover { color: var(--ink); text-decoration: underline; text-underline-offset: .16em; }
 .claim-rank-control { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; margin: 0; padding: 0; border: 0; border-radius: inherit; background: transparent; color: transparent; cursor: pointer; }
 .claim-rank-control:focus-visible { outline: 0; }
 .product-meta { display: flex; flex-wrap: wrap; gap: 0.28rem 0.48rem; margin-top: 0.2rem; color: var(--muted); font-size: 0.69rem; font-weight: 650; }
@@ -209,6 +234,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .section-note { color: var(--muted); font-size: .72rem; }
 .live-dot { width: .45rem; height: .45rem; border-radius: 50%; background: var(--accent); animation: live-pulse 1.8s ease-out infinite; }
 .activity-tape { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .55rem; margin: 0; padding: 0; }
+.board-interstitial .activity-tape { grid-template-columns: 1fr; }
 .activity-item { min-height: 4.2rem; padding: .7rem; border: 1px solid var(--line); background: var(--surface-subtle); }
 .activity-item strong { display: block; margin-bottom: .2rem; color: var(--ink); font-size: .75rem; line-height: 1.25; }
 .activity-item span { color: var(--muted); font-size: .68rem; }
@@ -275,6 +301,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 @media (max-width: 62rem) {
   .market-entry { grid-template-columns: 1fr; }
   .ranking-rules { grid-template-columns: 1fr; }
+  .board-interstitial { grid-template-columns: 1fr; }
   .bid-console { grid-template-columns: minmax(12rem, 1fr) minmax(10rem, 0.7fr); }
   .field-wide { grid-column: 1; }
   .field:not(.field-wide) { grid-column: 2; }
@@ -323,7 +350,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .featured-listing { grid-template-areas: "rank product evidence"; grid-template-columns: 2.65rem minmax(0, 1fr) auto; gap: 0.4rem 0.55rem; padding: 0.55rem 0.6rem; }
   .featured-rank { width: 2.45rem; height: 2.45rem; font-size: 0.78rem; }
   .featured-listing .product-mark { width: 2.45rem; height: 2.45rem; flex-basis: 2.45rem; }
-  .featured-listing .product-meta { display: none; }
+  .featured-listing .product-meta { display: flex; gap: .2rem .38rem; margin-top: .14rem; font-size: .62rem; line-height: 1.2; }
+  .featured-listing .product-meta .sponsored-chip, .featured-listing .product-meta .verified-chip, .featured-listing .product-meta .estimated-chip { font-size: .56rem; }
   .featured-listing .listing-description { display: -webkit-box; margin-top: 0.12rem; font-size: 0.67rem; line-height: 1.3; -webkit-line-clamp: 1; }
   .featured-listing .product-name { font-size: 0.86rem; }
   .featured-evidence { display: block; justify-self: end; }
@@ -349,6 +377,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 @media (max-width: 34rem) {
   .activity-tape { grid-template-columns: 1fr; }
+  .board-interstitial { grid-template-columns: 1fr; gap: .8rem; padding: .8rem; }
   .topbar { gap: 0.18rem; }
   .brand { width: 7.6rem; height: 2.75rem; }
   .brand-lockup-image { width: 8rem; height: 2.75rem; }

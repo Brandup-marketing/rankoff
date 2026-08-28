@@ -102,6 +102,31 @@
           </div>
 
           <div class="top-three top-three-hero" data-top-three aria-label="Top three sponsored listings"></div>
+
+          <section class="board-interstitial" aria-label="Board pulse">
+            <section class="today-ranking-panel" aria-labelledby="today-ranking-heading">
+              <div class="section-heading-line section-heading-line-spread">
+                <div>
+                  <p class="eyebrow">Past 24h</p>
+                  <h2 id="today-ranking-heading" data-i18n="todayRanking">Today’s top ranking</h2>
+                </div>
+                <a class="text-link" data-today-see-all href="./index.html?period=today#board">See all</a>
+              </div>
+              <ol class="today-ranking-list" data-today-ranking-list aria-live="polite"></ol>
+            </section>
+
+            <section class="activity-section" aria-labelledby="activity-heading">
+              <div class="section-heading-line section-heading-line-spread">
+                <div>
+                  <p class="eyebrow">Live pulse</p>
+                  <h2 id="activity-heading" data-i18n="latestActivity">Latest activity</h2>
+                </div>
+                <span class="live-dot" aria-hidden="true"></span>
+              </div>
+              <p class="section-note" data-activity-note>Preview market activity</p>
+              <ol class="activity-tape" data-activity-list aria-live="polite"></ol>
+            </section>
+          </section>
         </div>
       </section>
 
@@ -131,11 +156,6 @@
           <span>Clicks</span>
         </div>
         <div class="board-list" data-board-list aria-live="polite" aria-label="Sponsored listings ranked fourth and below"></div>
-      </section>
-
-      <section class="activity-section" aria-labelledby="activity-heading">
-        <div class="section-heading-line"><h2 id="activity-heading" data-i18n="latestActivity">Latest activity</h2><span class="live-dot" aria-hidden="true"></span><span class="section-note" data-activity-note>Preview market activity</span></div>
-        <ol class="activity-tape" data-activity-list aria-live="polite"></ol>
       </section>
 
       <section class="ranking-rules" aria-labelledby="ranking-rules-heading">
