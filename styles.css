@@ -62,7 +62,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 .topbar {
   display: grid;
-  grid-template-columns: auto auto 1fr auto auto;
+  grid-template-columns: auto auto minmax(0, 1fr) auto auto auto;
   align-items: center;
   gap: 0.8rem;
   min-height: 4rem;
@@ -279,15 +279,16 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 @media (max-width: 46rem) {
   .activity-tape { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .app-shell { width: min(calc(100% - 1rem), var(--content)); }
-  .topbar { grid-template-columns: 1fr auto auto; }
-  .brand { width: 10.4rem; height: 3.2rem; }
-  .brand-lockup-image { width: 11rem; height: 3.2rem; }
+  .topbar { grid-template-columns: minmax(0, 1fr) auto auto auto; gap: 0.35rem; }
+  .brand { width: 8.45rem; height: 3rem; }
+  .brand-lockup-image { width: 8.9rem; height: 3rem; }
   .time-tabs { justify-self: end; }
-  .time-tabs button { min-height: 2.75rem; padding-inline: 0.58rem; }
+  .time-tabs button { min-height: 2.6rem; padding-inline: 0.45rem; font-size: 0.72rem; }
   .demo-state { display: none; }
   .site-nav { display: none; }
-  .theme-toggle { justify-self: end; }
-  .language-toggle { justify-self: end; }
+  .theme-toggle, .language-toggle { width: 2.6rem; min-height: 2.6rem; padding-inline: 0; font-size: 0; }
+  .theme-toggle::before { content: "☼"; font-size: 1rem; }
+  .language-toggle::before { content: "中"; font-size: 0.8rem; }
   .claim-stage { padding: 0.9rem 0 0.8rem; }
   .claim-panel h1 { font-size: 2.2rem; }
   .claim-copy { margin-top: 0.45rem; font-size: 0.82rem; }
@@ -312,7 +313,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .featured-listing { grid-template-areas: "rank product evidence"; grid-template-columns: 2.65rem minmax(0, 1fr) auto; gap: 0.4rem 0.55rem; padding: 0.55rem 0.6rem; }
   .featured-rank { width: 2.45rem; height: 2.45rem; font-size: 0.78rem; }
   .featured-listing .product-mark { width: 2.45rem; height: 2.45rem; flex-basis: 2.45rem; }
-  .featured-listing .product-meta, .featured-listing .listing-description { display: none; }
+  .featured-listing .product-meta { display: none; }
+  .featured-listing .listing-description { display: -webkit-box; margin-top: 0.12rem; font-size: 0.67rem; line-height: 1.3; -webkit-line-clamp: 1; }
   .featured-listing .product-name { font-size: 0.86rem; }
   .featured-evidence { display: block; justify-self: end; }
   .featured-evidence .featured-metric { min-width: 0; }
@@ -337,12 +339,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 @media (max-width: 34rem) {
   .activity-tape { grid-template-columns: 1fr; }
-  .topbar { gap: 0.35rem; }
-  .brand { width: 9.5rem; }
-  .brand-lockup-image { width: 10rem; }
-  .time-tabs button { padding-inline: 0.46rem; font-size: 0.74rem; }
-  .theme-toggle { width: 2.75rem; padding-inline: 0; font-size: 0; }
-  .theme-toggle::before { content: "☼"; font-size: 1rem; }
+  .topbar { gap: 0.18rem; }
+  .brand { width: 7.6rem; height: 2.75rem; }
+  .brand-lockup-image { width: 8rem; height: 2.75rem; }
+  .time-tabs { padding: 0.14rem; }
+  .time-tabs button { min-height: 2.45rem; padding-inline: 0.28rem; font-size: 0.68rem; }
+  .theme-toggle, .language-toggle { width: 2.45rem; min-height: 2.45rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
