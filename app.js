@@ -141,10 +141,10 @@
   ];
 
   const seedActivity = [
-    { id: "a1", time: "2m ago", text: "Switchboard challenged the past 24h board for $735." },
-    { id: "a2", time: "11m ago", text: "Trackline became the Marketing category leader." },
-    { id: "a3", time: "24m ago", text: "Patchnote recorded 381 clicks in the past 24h." },
-    { id: "a4", time: "43m ago", text: "Model Harbor defended the all-time lead at $2,480." },
+    { id: "a1", type: "challenge", timeEn: "2m ago", timeZh: "2 分钟前", listingName: "Switchboard", amount: 735, rank: 2, board: "today" },
+    { id: "a2", type: "category-leader", timeEn: "11m ago", timeZh: "11 分钟前", listingName: "Trackline", category: "Marketing" },
+    { id: "a3", type: "clicks", timeEn: "24m ago", timeZh: "24 分钟前", listingName: "Patchnote", clicks: 381, board: "today" },
+    { id: "a4", type: "defended", timeEn: "43m ago", timeZh: "43 分钟前", listingName: "Model Harbor", amount: 2480, board: "all" },
   ];
 
   const elements = {
@@ -175,6 +175,7 @@
     todayCard: document.querySelector("[data-today-card]"),
     activityList: document.querySelector("[data-activity-list]"),
     activityNote: document.querySelector("[data-activity-note]"),
+    liveDot: document.querySelector(".live-dot"),
     statVisitors: document.querySelector("[data-stat-visitors]"),
     statRevenue: document.querySelector("[data-stat-revenue]"),
     resultClicks: document.querySelector("[data-result-clicks]"),
@@ -197,6 +198,11 @@
   let boardSource = "local";
   let remoteRequestId = 0;
   let state = loadState();
+  const sharedView = new URL(window.location.href);
+  if (sharedView.searchParams.get("period") === "today") state.activeWindow = "today";
+  if (sharedView.searchParams.get("period") === "all") state.activeWindow = "all";
+  const sharedCategory = sharedView.searchParams.get("category");
+  if (sharedCategory === DEFAULT_CATEGORY || categories.includes(sharedCategory)) state.category = sharedCategory;
   let activeBid = null;
   let pendingChallenge = null;
   let lastTrigger = null;
@@ -379,8 +385,9 @@
         : languageText("demoOnly");
     }
     if (elements.activityNote) elements.activityNote.textContent = chinese
-      ? (production ? "实时竞价更新" : "预览市场动态")
-      : (production ? "Live bid updates" : "Preview market activity");
+      ? (production ? "已验证竞价动态" : "预览市场动态")
+      : (production ? "Verified market events" : "Preview market activity");
+    if (elements.liveDot) elements.liveDot.hidden = !production;
     if (elements.measurementSummary) elements.measurementSummary.textContent = chinese
       ? (production ? "点击如何统计" : "预览点击说明")
       : (production ? "How clicks are measured" : "About preview clicks");
@@ -416,6 +423,11 @@
       const period = state.activeWindow;
       state.listings = payload.rankings.map((entry, index) => normalizeApiRanking(entry, index, period));
       boardSource = payload.mode === "production" ? "production" : "api";
+      if (boardSource === "production") {
+        state.activity = Array.isArray(payload.activity)
+          ? payload.activity.filter((item) => item && typeof item === "object").slice(0, 6)
+          : [];
+      }
       remoteNextBid = dollarsFromMinor(payload.next_bid_minor, null);
       remoteSnapshotId = payload.snapshot_id || null;
       remoteCurrency = String(payload.board?.currency || "USD").toUpperCase();
@@ -472,6 +484,18 @@
     control.type = "button";
     control.dataset.prepareChallenge = String(amount);
     control.setAttribute("aria-label", claimLabel(amount));
+    return control;
+  }
+
+  function createShareControl(listing, position) {
+    const control = createElement("button", "rank-share-control");
+    control.type = "button";
+    control.dataset.share = "";
+    control.dataset.listingId = listing.id;
+    control.dataset.position = String(position);
+    const label = state.language === "zh" ? "分享排名" : "Share rank";
+    control.setAttribute("aria-label", state.language === "zh" ? `分享 ${listing.name} 的第 ${position} 名` : `Share ${listing.name}'s #${position} rank`);
+    control.append(createElement("span", "rank-share-icon", "↗"), createElement("span", "rank-share-label", label));
     return control;
   }
 
@@ -543,21 +567,14 @@
 
   function listingLink(listing) {
     const link = createElement("a", "product-name", listing.name);
-    if (boardSource === "production") {
-      const tracked = new URL(`./go/${encodeURIComponent(listing.id)}`, window.location.href);
-      if (remoteSnapshotId) tracked.searchParams.set("snapshot", remoteSnapshotId);
-      if (listing.serverRank) tracked.searchParams.set("rank", String(listing.serverRank));
-      link.href = tracked.toString();
-    } else {
-      link.href = listing.url;
-    }
-    link.target = "_blank";
-    link.rel = "sponsored nofollow noopener noreferrer";
-    link.setAttribute("aria-label", state.language === "zh" ? `在新窗口访问 ${listing.name}` : `Visit ${listing.name} in a new tab`);
+    const detail = new URL("./listing.html", window.location.href);
+    detail.searchParams.set("id", listing.id);
+    link.href = detail.toString();
+    link.setAttribute("aria-label", state.language === "zh" ? `查看 ${listing.name} 的榜单详情` : `View ${listing.name} ranking details`);
     return link;
   }
 
-  function productIdentity(listing, descriptionTag = "p") {
+  function productIdentity(listing, descriptionTag = "p", position = null) {
     const wrapper = createElement("div", "product-cell");
     const mark = createElement("span", "product-mark");
     mark.setAttribute("aria-hidden", "true");
@@ -601,6 +618,7 @@
     );
     meta.append(createElement("span", production && listing.verified ? "verified-chip" : "estimated-chip", clickLabel));
     if (listing.isDemo) meta.append(createElement("span", "local-chip", "Local"));
+    if (Number.isSafeInteger(position) && position > 0) meta.append(createShareControl(listing, position));
 
     const description = createElement(descriptionTag, "listing-description", listing.description);
     copy.append(listingLink(listing), meta, description);
@@ -703,7 +721,8 @@
     clicks.append(createElement("span", "", clickLabel), createElement("strong", "", compact.format(getClicks(listing))));
     evidence.append(bid, clicks);
 
-    card.append(rank, productIdentity(listing, "p"), evidence, createClaimControl(minimum));
+    card.id = `listing-${listing.id}`;
+    card.append(rank, productIdentity(listing, "p", position), evidence, createClaimControl(minimum));
     return card;
   }
 
@@ -731,7 +750,8 @@
       createElement("span", "", clickLabel),
     );
 
-    row.append(rank, productIdentity(listing), bid, clicks, createClaimControl(minimum));
+    row.id = `listing-${listing.id}`;
+    row.append(rank, productIdentity(listing, "p", position), bid, clicks, createClaimControl(minimum));
     return row;
   }
 
@@ -756,6 +776,49 @@
     }
   }
 
+  function activityTime(item) {
+    if (state.language === "zh") return item.timeZh || (item.time === "just now" ? "刚刚" : item.time) || "刚刚";
+    return item.timeEn || item.time || "Just now";
+  }
+
+  function activityText(item) {
+    const chinese = state.language === "zh";
+    const board = item.board === "today"
+      ? (chinese ? "近 24 小时榜" : "past 24h board")
+      : (chinese ? "全部时间榜" : "all-time board");
+    const listingName = String(item.listingName || item.listing_name || "A listing");
+    const displacedName = String(item.displacedName || item.displaced_name || "the previous leader");
+    const amount = Number(item.amount ?? item.amount_minor / 100);
+    const rank = Number(item.rank);
+
+    if (item.type === "outbid") {
+      return chinese
+        ? `${listingName} 以 ${money(amount)} 超越 ${displacedName}，抢下${board}第 1 名。`
+        : `${listingName} outbid ${displacedName} at ${money(amount)} and claimed #1 on the ${board}.`;
+    }
+    if (item.type === "challenge") {
+      return chinese
+        ? `${listingName} 以 ${money(amount)} 发起挑战，升至${board}第 ${rank} 名。`
+        : `${listingName} challenged at ${money(amount)} and moved to #${rank} on the ${board}.`;
+    }
+    if (item.type === "category-leader") {
+      return chinese
+        ? `${listingName} 成为${categoryTranslations[item.category] || item.category}分类第 1 名。`
+        : `${listingName} became #1 in ${item.category}.`;
+    }
+    if (item.type === "clicks") {
+      return chinese
+        ? `${listingName} 在近 24 小时获得 ${compact.format(Number(item.clicks) || 0)} 次点击。`
+        : `${listingName} recorded ${compact.format(Number(item.clicks) || 0)} clicks in the past 24h.`;
+    }
+    if (item.type === "defended") {
+      return chinese
+        ? `${listingName} 以 ${money(amount)} 守住${board}第 1 名。`
+        : `${listingName} held #1 on the ${board} at ${money(amount)}.`;
+    }
+    return String(item.text || (chinese ? "排名动态已更新。" : "The ranking changed."));
+  }
+
   function renderSidebar() {
     const todayLeader = allRanked("today")[0];
     if (elements.todayCard && todayLeader) {
@@ -767,15 +830,25 @@
     }
 
     if (elements.activityList) {
-      elements.activityList.replaceChildren(
-        ...state.activity.slice(0, 5).map((item, index) => {
-          const li = createElement("li", index === 0 ? "is-latest" : "");
-          const time = createElement("time", "", item.time);
-          time.dateTime = "PT0M";
-          li.append(time, createElement("span", "", item.text));
-          return li;
-        }),
-      );
+      const activity = state.activity.slice(0, 5);
+      if (!activity.length) {
+        const empty = createElement("li", "activity-empty");
+        empty.append(
+          createElement("strong", "", state.language === "zh" ? "等待首个已验证挑战" : "Waiting for the first verified challenge"),
+          createElement("span", "", state.language === "zh" ? "付款确认后的排名变化会显示在这里。" : "Settled rank changes will appear here."),
+        );
+        elements.activityList.replaceChildren(empty);
+      } else {
+        elements.activityList.replaceChildren(
+          ...activity.map((item, index) => {
+            const li = createElement("li", index === 0 ? "is-latest" : "");
+            const time = createElement("time", "", activityTime(item));
+            if (item.created_at) time.dateTime = item.created_at;
+            li.append(time, createElement("span", "", activityText(item)));
+            return li;
+          }),
+        );
+      }
     }
   }
 
@@ -932,6 +1005,8 @@
   }
 
   function applyBid(amount) {
+    const before = rankedListings();
+    const previousLeader = before[0] || null;
     let listing;
     if (activeBid?.type === "new") {
       if (!pendingChallenge) return null;
@@ -944,11 +1019,29 @@
 
     changedListingId = listing.id;
     const rank = rankedListings().findIndex((item) => item.id === listing.id) + 1;
-    state.activity.unshift({
-      id: `local-${Date.now()}`,
-      time: "just now",
-      text: `${listing.name} challenged ${windowLabel()} rank #${rank} for ${money(amount)}.`,
-    });
+    const displaced = rank === 1 && previousLeader && previousLeader.id !== listing.id ? previousLeader : null;
+    state.activity.unshift(displaced
+      ? {
+          id: `local-${Date.now()}`,
+          type: "outbid",
+          timeEn: "Just now",
+          timeZh: "刚刚",
+          listingName: listing.name,
+          displacedName: displaced.name,
+          amount,
+          rank,
+          board: state.activeWindow,
+        }
+      : {
+          id: `local-${Date.now()}`,
+          type: "challenge",
+          timeEn: "Just now",
+          timeZh: "刚刚",
+          listingName: listing.name,
+          amount,
+          rank,
+          board: state.activeWindow,
+        });
     state.activity = state.activity.slice(0, 6);
     saveState();
     render();
@@ -1030,14 +1123,27 @@
     const listing = state.listings.find((item) => item.id === listingId);
     if (!listing) return;
     const rank = rankedListings().findIndex((item) => item.id === listing.id) + 1;
-    const text = `${listing.name} is #${rank} on RANKOFF with a ${money(getBid(listing))} sponsored bid.`;
+    if (rank < 1) return;
+    const nextPrice = rankedListings().length ? getBid(rankedListings()[0]) + 1 : 1;
+    const preview = boardSource === "production" ? "" : (state.language === "zh" ? "预览：" : "Preview: ");
+    const text = state.language === "zh"
+      ? `${preview}${listing.name} 以 ${money(getBid(listing))} 的赞助出价位居 RANKOFF ${windowLabel()}榜第 ${rank} 名。你能超越它吗？${money(nextPrice)} 起认领第 1 名。`
+      : `${preview}${listing.name} holds #${rank} on RANKOFF's ${windowLabel().toLowerCase()} board with a ${money(getBid(listing))} sponsored bid. Think you can outrank it? Claim #1 from ${money(nextPrice)}.`;
     const url = new URL(window.location.href);
+    url.searchParams.delete("checkout");
+    url.searchParams.delete("reset");
+    url.searchParams.set("period", state.activeWindow);
+    if (state.category === DEFAULT_CATEGORY) url.searchParams.delete("category");
+    else url.searchParams.set("category", state.category);
     url.hash = `listing-${listing.id}`;
 
-    if (navigator.share) {
+    const shareData = { title: state.language === "zh" ? `${listing.name} 的 RANKOFF 排名` : `${listing.name} on RANKOFF`, text, url: url.toString() };
+    const canUseShareSheet = typeof navigator.share === "function"
+      && (typeof navigator.canShare !== "function" || navigator.canShare(shareData));
+    if (canUseShareSheet) {
       try {
-        await navigator.share({ title: "RANKOFF", text, url: url.toString() });
-        showToast("Share sheet opened.", "success");
+        await navigator.share(shareData);
+        showToast(state.language === "zh" ? "已打开分享菜单。" : "Share sheet opened.", "success");
         return;
       } catch (error) {
         if (error?.name === "AbortError") return;
@@ -1046,9 +1152,14 @@
 
     try {
       const copied = await copyText(`${text} ${url.toString()}`);
-      showToast(copied ? "Rank link copied." : "Unable to copy the link.", copied ? "success" : "error");
+      showToast(
+        copied
+          ? (state.language === "zh" ? "排名战报与链接已复制。" : "Rank result and link copied.")
+          : (state.language === "zh" ? "无法复制链接。" : "Unable to copy the link."),
+        copied ? "success" : "error",
+      );
     } catch {
-      showToast("Unable to copy the link.", "error");
+      showToast(state.language === "zh" ? "无法复制链接。" : "Unable to copy the link.", "error");
     }
   }
 

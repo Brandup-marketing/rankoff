@@ -7,9 +7,9 @@ await rm(dist, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });
 
 const files = [
-  'index.html', 'about.html', 'legal.html',
-  'styles.css', 'about.css', 'legal.css',
-  'app.js', 'about.js', '_headers', '_routes.json',
+  'index.html', 'about.html', 'legal.html', 'listing.html',
+  'styles.css', 'about.css', 'legal.css', 'listing.css',
+  'app.js', 'about.js', 'listing.js', '_headers', '_routes.json',
   'robots.txt', 'sitemap.xml', 'llms.txt'
 ];
 for (const file of files) await cp(new URL(`../${file}`, import.meta.url), new URL(`../dist/${file}`, import.meta.url));
