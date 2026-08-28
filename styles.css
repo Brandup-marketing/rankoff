@@ -289,7 +289,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .section-heading-line h2 { margin: 0; font-size: 1.05rem; font-weight: 850; }
 .section-note { color: var(--muted); font-size: .72rem; }
 .live-dot { width: .45rem; height: .45rem; border-radius: 50%; background: var(--accent); animation: live-pulse 1.8s ease-out infinite; }
-.activity-ticker-viewport { overflow: hidden; padding-block: .15rem; }
+.activity-ticker-viewport { overflow-x: auto; overflow-y: hidden; padding-block: .15rem; overscroll-behavior-inline: contain; scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; cursor: grab; }
+.activity-ticker-viewport:active { cursor: grabbing; }
 .activity-tape { display: flex; width: max-content; gap: .55rem; margin: 0; padding: 0; animation: market-ticker var(--ticker-duration, 36s) linear infinite; will-change: transform; }
 .activity-tape.is-empty { width: 100%; animation: none; }
 .activity-ticker-viewport:hover .activity-tape, .activity-ticker-viewport:focus-within .activity-tape { animation-play-state: paused; }
