@@ -22,7 +22,7 @@
     <meta name="theme-color" content="#090a0c" />
     <title>RANKOFF | Bid Your Way to #1</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=13" />
+    <link rel="stylesheet" href="./styles.css?v=14" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -252,8 +252,36 @@
       </form>
     </dialog>
 
+    <dialog class="dialog share-dialog" data-share-dialog aria-labelledby="share-dialog-title">
+      <div class="dialog-panel share-panel">
+        <div class="dialog-heading">
+          <div>
+            <h2 id="share-dialog-title" data-share-heading>Share this rank</h2>
+            <p class="share-intro" data-share-intro>Send the exact position, board, and category.</p>
+          </div>
+          <button class="icon-button" type="button" data-share-close aria-label="Close share options">×</button>
+        </div>
+        <div class="share-preview">
+          <strong data-share-title>RANKOFF</strong>
+          <p data-share-text></p>
+        </div>
+        <label class="share-link-field">
+          <span data-share-link-label>Rank link</span>
+          <span class="share-link-control">
+            <input type="text" data-share-url readonly />
+            <button class="primary-action" type="button" data-share-copy>Copy link</button>
+          </span>
+        </label>
+        <div class="share-options" aria-label="Share options">
+          <button class="share-option" type="button" data-share-whatsapp><span data-share-whatsapp-label>WhatsApp</span><small data-share-whatsapp-note>Send to a contact</small></button>
+          <button class="share-option" type="button" data-share-native><span data-share-native-label>Share…</span><small data-share-native-note>Messenger and more apps</small></button>
+        </div>
+      </div>
+    </dialog>
+
     <div class="toast" data-toast role="status" aria-live="polite" aria-atomic="true"></div>
     <script src="./search.js?v=1" defer></script>
-    <script src="./app.js?v=13" defer></script>
+    <script src="./share.js?v=1" defer></script>
+    <script src="./app.js?v=14" defer></script>
   </body>
 </html>

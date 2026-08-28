@@ -1379,6 +1379,10 @@
     url.hash = `listing-${listing.id}`;
 
     const shareData = { title: state.language === "zh" ? `${listing.name} 的 RANKOFF 排名` : `${listing.name} on RANKOFF`, text, url: url.toString() };
+    if (window.RankoffShare?.open) {
+      window.RankoffShare.open({ ...shareData, language: state.language, onStatus: showToast });
+      return;
+    }
     const canUseShareSheet = typeof navigator.share === "function"
       && (typeof navigator.canShare !== "function" || navigator.canShare(shareData));
     if (canUseShareSheet) {

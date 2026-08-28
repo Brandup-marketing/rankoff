@@ -251,6 +251,10 @@
   elements.language.addEventListener("click", () => { preferences.language = preferences.language === "zh" ? "en" : "zh"; savePreferences(); applyPreferences(); });
   elements.share.addEventListener("click", async () => {
     const share = { title: `${model.title} — RANKOFF`, text: `${model.title} ${text("shareText")} #${model.rank} on RANKOFF.`, url: location.href };
+    if (window.RankoffShare?.open) {
+      window.RankoffShare.open({ ...share, language: preferences.language, onStatus: showToast });
+      return;
+    }
     try {
       if (navigator.share) return await navigator.share(share);
       await navigator.clipboard.writeText(`${share.text} ${share.url}`);

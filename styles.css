@@ -359,6 +359,25 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .dialog-actions { display: flex; justify-content: flex-end; gap: 0.6rem; padding-top: 0.75rem; border-top: 1px solid var(--line); }
 .secondary-action { min-height: 3rem; padding: 0.65rem 0.9rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); color: var(--muted); font-weight: 750; }
 
+.share-dialog { width: min(calc(100% - 1.5rem), 31rem); }
+.share-panel { gap: 1rem; }
+.share-intro { max-width: 34rem; margin: .3rem 0 0; color: var(--muted); font-size: .76rem; line-height: 1.4; }
+.share-preview { display: grid; gap: .3rem; padding-block: .15rem; }
+.share-preview strong { color: var(--ink); font-size: 1rem; }
+.share-preview p { margin: 0; color: var(--muted); font-size: .78rem; line-height: 1.45; text-wrap: pretty; }
+.share-link-field { display: grid; gap: .4rem; color: var(--muted); font-size: .7rem; font-weight: 800; }
+.share-link-control { display: grid; grid-template-columns: minmax(0, 1fr) auto; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface-subtle); }
+.share-link-control input { min-width: 0; min-height: 3rem; padding: .65rem .75rem; border: 0; background: transparent; color: var(--ink); font: inherit; font-size: .72rem; text-overflow: ellipsis; }
+.share-link-control .primary-action { min-height: 3rem; border-radius: 0; }
+.share-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; }
+.share-options.is-single { grid-template-columns: 1fr; }
+.share-option { display: grid; min-height: 3.75rem; align-content: center; gap: .12rem; padding: .55rem .7rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); color: var(--ink); font-size: .78rem; font-weight: 820; text-align: left; }
+.share-option:hover { border-color: var(--line-strong); background: var(--surface-subtle); }
+.share-option:active { transform: translateY(1px); }
+.share-option small { color: var(--muted); font-size: .62rem; font-weight: 700; }
+.share-option[data-share-whatsapp] { border-color: color-mix(in srgb, #25d366 46%, var(--line)); }
+.share-option[data-share-whatsapp]:hover { background: color-mix(in srgb, #25d366 8%, var(--surface)); }
+
 .toast { position: fixed; right: 1rem; bottom: 1rem; z-index: var(--z-toast); width: min(calc(100% - 2rem), 25rem); padding: 0.8rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--ink); color: var(--bg); font-size: 0.8rem; opacity: 0; pointer-events: none; transform: translateY(0.5rem); transition: opacity 160ms var(--ease), transform 160ms var(--ease); }
 .toast.is-visible { opacity: 1; transform: translateY(0); }
 .toast[data-state="error"] { background: var(--accent-strong); }
@@ -449,6 +468,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .click-cell { display: none; }
   .dialog-actions { flex-direction: column-reverse; }
   .dialog-actions button { width: 100%; }
+  .share-link-control, .share-options { grid-template-columns: 1fr; }
+  .share-link-control { overflow: visible; border: 0; background: transparent; }
+  .share-link-control input, .share-link-control .primary-action { border: 1px solid var(--line); border-radius: var(--radius); }
+  .share-link-control .primary-action { margin-top: .45rem; }
   .ranking-rules dl { grid-template-columns: 1fr; }
   .amount-control > button, .dialog-stepper > button, .category-chip, .bid-button, .share-button { min-height: 2.75rem; }
   .product-meta, .listing-description, .money-cell, .click-cell, .demo-note { font-size: 0.75rem; }

@@ -5,7 +5,7 @@ import { join } from "node:path";
 const roots = ["functions", "tests/backend"];
 const files = [];
 for (const root of roots) collect(root);
-files.push("app.js", "about.js");
+files.push("app.js", "about.js", "listing.js", "share.js");
 for (const file of files.sort()) execFileSync(process.execPath, ["--check", file], { stdio: "inherit" });
 
 function collect(directory) {
