@@ -357,12 +357,14 @@
   function updateBoardSourceLabels() {
     const production = boardSource === "production";
     if (elements.boardState) {
-      elements.boardState.lastChild.textContent = production ? " Live board" : boardSource === "local" ? " Preview board" : " Connected preview";
+      elements.boardState.lastChild.textContent = state.language === "zh"
+        ? (production ? " 实时榜单" : boardSource === "local" ? " 预览榜单" : " 已连接预览")
+        : (production ? " Live board" : boardSource === "local" ? " Preview board" : " Connected preview");
     }
     if (elements.demoNote) {
       elements.demoNote.textContent = production
-        ? "Live ranking data · payment is only confirmed after hosted checkout"
-        : "Preview only · no payment is collected";
+        ? (state.language === "zh" ? "实时排名 · 付款仅在托管结账后确认" : "Live ranking data · payment is only confirmed after hosted checkout")
+        : languageText("demoOnly");
     }
   }
 
@@ -622,7 +624,9 @@
     }
 
     if (elements.boardSummary) {
-      elements.boardSummary.textContent = `${windowLabel()} board: ${listings.length} sponsored listings. Highest valid bid takes #1.`;
+      elements.boardSummary.textContent = state.language === "zh"
+        ? `${state.activeWindow === "today" ? "今日" : "全部时间"}榜单：${listings.length} 个赞助产品。最高有效出价获得第 1 名。`
+        : `${windowLabel()} board: ${listings.length} sponsored listings. Highest valid bid takes #1.`;
     }
   }
 
@@ -693,7 +697,9 @@
 
     if (elements.heroPrice) elements.heroPrice.textContent = money(nextPrice);
     if (elements.heroContext) {
-      elements.heroContext.textContent = `${money(nextPrice)} takes #1 on the ${state.category === DEFAULT_CATEGORY ? windowLabel().toLowerCase() : state.category} board. Your product story stays visible until someone pays more.`;
+      elements.heroContext.textContent = state.language === "zh"
+        ? `${money(nextPrice)} 即可登上${state.category === DEFAULT_CATEGORY ? (state.activeWindow === "today" ? "今日" : "全部时间") : state.category}榜第 1 名。有人出价更高前，你的产品介绍会持续展示。`
+        : `${money(nextPrice)} takes #1 on the ${state.category === DEFAULT_CATEGORY ? windowLabel().toLowerCase() : state.category} board. Your product story stays visible until someone pays more.`;
     }
     if (elements.leaderBid) elements.leaderBid.textContent = money(getBid(leader));
     if (elements.leaderClicks) elements.leaderClicks.textContent = compact.format(getClicks(leader));
