@@ -152,6 +152,9 @@
     boardList: document.querySelector("[data-board-list]"),
     topThree: document.querySelector("[data-top-three]"),
     boardSummary: document.querySelector("[data-board-summary]"),
+    boardHeading: document.querySelector("[data-board-heading]"),
+    measurementSummary: document.querySelector("[data-measurement-summary]"),
+    measurementCopy: document.querySelector("[data-measurement-copy]"),
     categoryRail: document.querySelector("[data-category-rail]"),
     categorySelect: document.querySelector("[data-category-select]"),
     windowButtons: Array.from(document.querySelectorAll("[data-board-window]")),
@@ -171,6 +174,7 @@
     leaderCategory: document.querySelector("[data-leader-category]"),
     todayCard: document.querySelector("[data-today-card]"),
     activityList: document.querySelector("[data-activity-list]"),
+    activityNote: document.querySelector("[data-activity-note]"),
     statVisitors: document.querySelector("[data-stat-visitors]"),
     statRevenue: document.querySelector("[data-stat-revenue]"),
     resultClicks: document.querySelector("[data-result-clicks]"),
@@ -181,6 +185,10 @@
     bidTarget: document.querySelector("[data-bid-target]"),
     bidHint: document.querySelector("[data-bid-hint]"),
     orderPosition: document.querySelector("[data-order-position]"),
+    checkoutTitle: document.querySelector("[data-checkout-title]"),
+    checkoutProvider: document.querySelector("[data-checkout-provider]"),
+    checkoutStatus: document.querySelector("[data-checkout-status]"),
+    checkoutCopy: document.querySelector("[data-checkout-copy]"),
     toast: document.querySelector("[data-toast]"),
   };
 
@@ -356,16 +364,39 @@
 
   function updateBoardSourceLabels() {
     const production = boardSource === "production";
+    const chinese = state.language === "zh";
     if (elements.boardState) {
-      elements.boardState.lastChild.textContent = state.language === "zh"
+      elements.boardState.lastChild.textContent = chinese
         ? (production ? " 实时榜单" : boardSource === "local" ? " 预览榜单" : " 已连接预览")
         : (production ? " Live board" : boardSource === "local" ? " Preview board" : " Connected preview");
     }
+    if (elements.boardHeading) elements.boardHeading.textContent = chinese
+      ? (production ? "实时赞助榜单" : "预览赞助榜单")
+      : (production ? "Live sponsored leaderboard" : "Preview sponsored leaderboard");
     if (elements.demoNote) {
       elements.demoNote.textContent = production
-        ? (state.language === "zh" ? "实时排名 · 付款仅在托管结账后确认" : "Live ranking data · payment is only confirmed after hosted checkout")
+        ? (chinese ? "实时排名 · 付款仅在托管结账后确认" : "Live ranking data · payment is only confirmed after hosted checkout")
         : languageText("demoOnly");
     }
+    if (elements.activityNote) elements.activityNote.textContent = chinese
+      ? (production ? "实时竞价更新" : "预览市场动态")
+      : (production ? "Live bid updates" : "Preview market activity");
+    if (elements.measurementSummary) elements.measurementSummary.textContent = chinese
+      ? (production ? "点击如何统计" : "预览点击说明")
+      : (production ? "How clicks are measured" : "About preview clicks");
+    if (elements.measurementCopy) elements.measurementCopy.textContent = chinese
+      ? (production ? "已验证点击来自所选时间范围内的第一方跳转记录。" : "预览点击数仅作演示；开启实时追踪后才会显示已验证点击。")
+      : (production ? "Verified clicks represent first-party redirect events for the selected timeframe." : "Preview click totals are illustrative. Verified click reporting begins only after live tracking is enabled.");
+    if (elements.checkoutTitle) elements.checkoutTitle.textContent = chinese ? "结账状态" : "Checkout status";
+    if (elements.checkoutProvider) elements.checkoutProvider.textContent = chinese
+      ? (production ? "由 Dodo Payments 提供的托管结账" : "仅供预览 · 尚未连接付款方式")
+      : (production ? "Hosted checkout by Dodo Payments" : "Preview only — no payment method connected");
+    if (elements.checkoutStatus) elements.checkoutStatus.textContent = chinese
+      ? (production ? "安全结账" : "仅供预览")
+      : (production ? "Secure checkout" : "Preview only");
+    if (elements.checkoutCopy) elements.checkoutCopy.textContent = chinese
+      ? (production ? "付款资料只在支付服务商的托管结账页面输入。排名仅在付款确认后发布。" : "此预览不会发送或保存任何付款资料；仅当 Rankoff 启用付款后才会出现托管结账。")
+      : (production ? "Payment details are entered only on the provider-hosted checkout. A rank is published only after payment settlement." : "This preview never sends or stores payment data. A hosted checkout appears only after Rankoff enables payments.");
   }
 
   async function refreshBoardFromApi() {
@@ -426,6 +457,7 @@
   }
 
   function windowLabel() {
+    if (state.language === "zh") return state.activeWindow === "today" ? "今日" : "全部时间";
     return state.activeWindow === "today" ? "Today" : "All-time";
   }
 
@@ -507,7 +539,7 @@
     }
     link.target = "_blank";
     link.rel = "sponsored nofollow noopener noreferrer";
-    link.setAttribute("aria-label", `Visit ${listing.name} in a new tab`);
+    link.setAttribute("aria-label", state.language === "zh" ? `在新窗口访问 ${listing.name}` : `Visit ${listing.name} in a new tab`);
     return link;
   }
 
@@ -540,12 +572,20 @@
 
     const copy = createElement("div", "product-copy");
     const meta = createElement("div", "product-meta");
+    const production = boardSource === "production";
+    const chinese = state.language === "zh";
+    const ageLabel = production
+      ? (listing.age === "settled" ? (chinese ? "已确认展示" : "Verified placement") : `${listing.age} ${chinese ? "上线" : "live"}`)
+      : (chinese ? "预览条目" : "Preview listing");
+    const clickLabel = production
+      ? (listing.verified ? (chinese ? "已验证点击" : "Verified clicks") : (chinese ? "估算点击" : "Estimated clicks"))
+      : (chinese ? "示例点击" : "Sample clicks");
     meta.append(
-      createElement("span", "sponsored-chip", "Sponsored"),
+      createElement("span", "sponsored-chip", chinese ? "赞助" : "Sponsored"),
       createElement("span", "", listing.category),
-      createElement("span", "", `${listing.age} live`),
+      createElement("span", "", ageLabel),
     );
-    meta.append(createElement("span", listing.verified ? "verified-chip" : "estimated-chip", listing.verified ? "Verified clicks" : "Estimated clicks"));
+    meta.append(createElement("span", production && listing.verified ? "verified-chip" : "estimated-chip", clickLabel));
     if (listing.isDemo) meta.append(createElement("span", "local-chip", "Local"));
 
     const description = createElement(descriptionTag, "listing-description", listing.description);
@@ -645,7 +685,10 @@
     const bid = createElement("div", "featured-metric");
     bid.append(createElement("span", "", `${windowLabel()} bid`), createElement("strong", "", money(getBid(listing))));
     const clicks = createElement("div", "featured-metric");
-    clicks.append(createElement("span", "", listing.verified ? "Verified clicks" : "Estimated clicks"), createElement("strong", "", compact.format(getClicks(listing))));
+    const clickLabel = boardSource === "production"
+      ? (listing.verified ? (state.language === "zh" ? "已验证点击" : "Verified clicks") : (state.language === "zh" ? "估算点击" : "Estimated clicks"))
+      : (state.language === "zh" ? "示例点击" : "Sample clicks");
+    clicks.append(createElement("span", "", clickLabel), createElement("strong", "", compact.format(getClicks(listing))));
     evidence.append(bid, clicks);
 
     const actions = createElement("div", "featured-actions");
@@ -681,9 +724,12 @@
     bid.append(createElement("strong", "", money(getBid(listing))), createElement("span", "", `${windowLabel()} bid`));
 
     const clicks = createElement("div", "click-cell");
+    const clickLabel = boardSource === "production"
+      ? (listing.verified ? (state.language === "zh" ? "已验证点击" : "verified clicks") : (state.language === "zh" ? "估算点击" : "estimated clicks"))
+      : (state.language === "zh" ? "示例点击" : "sample clicks");
     clicks.append(
       createElement("strong", "", compact.format(getClicks(listing))),
-      createElement("span", "", listing.verified ? "verified clicks" : "estimated clicks"),
+      createElement("span", "", clickLabel),
     );
 
     row.append(rank, productIdentity(listing), bid, clicks);
@@ -747,6 +793,8 @@
     elements.windowButtons.forEach((button) => {
       const active = button.dataset.boardWindow === state.activeWindow;
       button.setAttribute("aria-pressed", String(active));
+      const today = button.dataset.boardWindow === "today";
+      button.textContent = state.language === "zh" ? (today ? "今日" : "全部时间") : (today ? "Today" : "All-time");
     });
   }
 

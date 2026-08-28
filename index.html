@@ -112,13 +112,13 @@
       <section class="board-section" id="board" aria-labelledby="board-heading">
         <div class="board-toolbar">
           <div>
-            <h2 id="board-heading" data-i18n="liveLeaderboard">Live leaderboard</h2>
+            <h2 id="board-heading" data-board-heading>Preview leaderboard</h2>
           </div>
           <div class="board-context">
             <p data-board-summary data-i18n="boardSummary">Highest valid bid takes #1. Pay more to move up.</p>
             <details class="measurement-note">
-              <summary>How clicks are measured</summary>
-              <p>Verified clicks represent first-party redirect events for the selected timeframe. Demo estimates are clearly labelled and exclude no known bot traffic.</p>
+              <summary data-measurement-summary>How clicks are measured</summary>
+              <p data-measurement-copy>Preview click totals are illustrative. Verified click reporting begins only after live tracking is enabled.</p>
             </details>
           </div>
         </div>
@@ -133,7 +133,7 @@
       </section>
 
       <section class="activity-section" aria-labelledby="activity-heading">
-        <div class="section-heading-line"><h2 id="activity-heading" data-i18n="latestActivity">Latest activity</h2><span class="live-dot" aria-hidden="true"></span><span class="section-note" data-i18n="liveUpdates">Live bid updates</span></div>
+        <div class="section-heading-line"><h2 id="activity-heading" data-i18n="latestActivity">Latest activity</h2><span class="live-dot" aria-hidden="true"></span><span class="section-note" data-activity-note>Preview market activity</span></div>
         <div class="activity-tape" data-activity-list aria-live="polite"></div>
       </section>
 
@@ -196,11 +196,11 @@
 
         <section class="payment-preview" aria-label="Payment method preview">
           <div>
-            <span class="section-label">Payment method</span>
-            <strong>Hosted checkout by Dodo Payments</strong>
+            <span class="section-label" data-checkout-title>Checkout status</span>
+            <strong data-checkout-provider>Preview only — no payment method connected</strong>
           </div>
-          <span class="payment-status">Demo preview</span>
-          <p>In production, card details and billing identity would be entered on the provider-hosted checkout. This demo never sends or stores payment data.</p>
+          <span class="payment-status" data-checkout-status>Preview only</span>
+          <p data-checkout-copy>This preview never sends or stores payment data. A hosted checkout appears only after Rankoff enables payments.</p>
         </section>
 
         <div class="dialog-actions">
