@@ -986,6 +986,7 @@
       mark: name.split(/\s+/).map((part) => part[0]).join("").slice(0, 3).toUpperCase() || "RK",
       url: String(item.listingUrl || item.listing_url || ""),
       iconUrl: String(item.iconUrl || item.icon_url || ""),
+      description: String(item.description || item.listingDescription || item.listing_description || ""),
     };
   }
 
@@ -1023,7 +1024,7 @@
     const type = String(item.type || "joined").replace("topped_up", "topup");
 
     if (type === "topup" || type === "defended") {
-      return { type: "topup", action: chinese ? "加价" : "Raised bid", context: chinese ? `最新总价 ${money(amount)}` : `Now at ${money(amount)}`, metric: delta > 0 ? `+${money(delta)}` : money(amount), metricLabel: chinese ? "增加金额" : "Added", rank };
+      return { type: "topup", action: chinese ? "加价" : "Raised bid", context: chinese ? `最新总价 ${money(amount)}` : `Now at ${money(amount)}`, metric: delta > 0 ? `+${money(delta)}` : money(amount), metricLabel: chinese ? `当前总价 ${money(amount)}` : `Current ${money(amount)}`, rank };
     }
     if (type === "won" || type === "outbid" || type === "challenge") {
       const isDisplaced = type === "outbid" && displacedBy;
@@ -1033,8 +1034,8 @@
           ? (chinese ? "排名下滑" : "Lost rank")
           : (chinese ? (rank === 1 ? "抢下第 1" : "升榜") : (rank === 1 ? "Took #1" : "Moved up")),
         context: isDisplaced ? (chinese ? `被 ${displacedBy} 超越` : `Passed by ${displacedBy}`) : displacedName ? (chinese ? `超越 ${displacedName}` : `Passed ${displacedName}`) : (chinese ? "排名上升" : "Moved up"),
-        metric: isDisplaced ? displacedBy : delta > 0 ? `+${money(delta)}` : money(amount),
-        metricLabel: isDisplaced ? (chinese ? "胜出者" : "Passed by") : (chinese ? "增加金额" : "Added"),
+        metric: isDisplaced ? money(amount) : delta > 0 ? `+${money(delta)}` : money(amount),
+        metricLabel: isDisplaced ? (chinese ? "当前出价" : "Current bid") : (chinese ? `当前总价 ${money(amount)}` : `Current ${money(amount)}`),
         rank,
       };
     }
@@ -1057,7 +1058,9 @@
       name.href = listingDetailsHref(listing);
       if (duplicate) name.tabIndex = -1;
     }
-    identity.append(name, createElement("span", "activity-context", presentation.context));
+    identity.append(name);
+    if (listing.description) identity.append(createElement("span", "activity-description", listing.description));
+    identity.append(createElement("span", "activity-context", presentation.context));
     const action = createElement("span", `activity-action activity-action-${presentation.type}`, presentation.action);
     const metric = createElement("div", "activity-metric");
     metric.append(createElement("strong", "", presentation.metric), createElement("span", "", presentation.metricLabel));
@@ -1065,10 +1068,7 @@
     rank.append(createElement("strong", "", Number.isFinite(presentation.rank) && presentation.rank > 0 ? `#${presentation.rank}` : "—"), createElement("span", "", state.language === "zh" ? "当前排名" : "New rank"));
     const time = createElement("time", "activity-time", activityTime(item));
     if (item.created_at || item.createdAt) time.dateTime = item.created_at || item.createdAt;
-    const bidNow = createElement("a", "activity-bid-now", state.language === "zh" ? "立即出价 →" : "Bid now →");
-    bidNow.href = "#claim";
-    if (duplicate) bidNow.tabIndex = -1;
-    row.append(activityMark(listing), identity, action, metric, rank, time, bidNow);
+    row.append(activityMark(listing), identity, action, metric, rank, time);
     return row;
   }
 
