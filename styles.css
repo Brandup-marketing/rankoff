@@ -20,6 +20,19 @@
   --z-toast: 40;
 }
 
+html[data-theme="light"] {
+  color-scheme: light;
+  --bg: oklch(98% 0.006 25);
+  --surface: oklch(100% 0 0);
+  --surface-subtle: oklch(95.5% 0.012 25);
+  --ink: oklch(22% 0.012 25);
+  --muted: oklch(48% 0.015 25);
+  --line: oklch(87% 0.012 25);
+  --line-strong: oklch(76% 0.018 25);
+  --accent-soft: oklch(94% 0.045 28);
+  --up-soft: oklch(94% 0.035 160);
+}
+
 *,
 *::before,
 *::after { box-sizing: border-box; }
@@ -49,7 +62,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 .topbar {
   display: grid;
-  grid-template-columns: auto auto 1fr auto;
+  grid-template-columns: auto auto 1fr auto auto;
   align-items: center;
   gap: 0.8rem;
   min-height: 4rem;
@@ -67,6 +80,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .site-nav { display: inline-flex; justify-self: end; gap: 1rem; margin-right: 0.25rem; color: var(--muted); font-size: 0.8rem; font-weight: 750; }
 .site-nav a { display: inline-flex; min-height: 2.75rem; align-items: center; text-decoration: none; }
 .site-nav a:hover { color: var(--ink); }
+.theme-toggle { min-height: 2.75rem; padding: 0.42rem 0.7rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--muted); font-size: 0.75rem; font-weight: 800; }
+.theme-toggle:hover { border-color: var(--line-strong); color: var(--ink); }
 .demo-state i, .market-status i { width: 0.45rem; height: 0.45rem; border-radius: 50%; background: var(--up); }
 
 .claim-stage { padding: 0.9rem 0 0.55rem; }
@@ -125,6 +140,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .measurement-note p { position: absolute; right: 0; z-index: 2; width: 21rem; margin-top: 0.4rem; padding: 0.65rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); color: var(--ink); line-height: 1.45; text-align: left; }
 .top-three { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
 .featured-listing { position: relative; display: grid; grid-template-areas: "rank product evidence"; grid-template-columns: 3rem minmax(0, 1fr) auto; align-items: center; gap: 0.75rem; min-width: 0; max-width: 100%; padding: 0.7rem 0.8rem; border: 1px solid var(--line); border-radius: 0.65rem; background: var(--surface); cursor: pointer; }
+.featured-listing:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 .featured-listing::after { content: attr(data-claim-label); position: absolute; left: 50%; bottom: -0.65rem; z-index: 2; transform: translate(-50%, 0.35rem); padding: 0.28rem 0.65rem; border-radius: 999px; background: var(--accent); color: white; font-size: 0.68rem; font-weight: 850; opacity: 0; pointer-events: none; transition: opacity 160ms var(--ease), transform 160ms var(--ease); white-space: nowrap; }
 .featured-listing:hover::after, .featured-listing:focus-within::after { opacity: 1; transform: translate(-50%, 0); }
 .featured-1 { border-color: oklch(48% 0.11 28); background: var(--accent-soft); }
@@ -253,7 +269,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .amount-control { grid-column: 1; grid-row: 2; }
   .bid-console > .primary-action { grid-column: 2; grid-row: 2; }
   .board-header, .rank-row { grid-template-columns: 3rem minmax(13rem, 1fr) minmax(6rem, 7rem) minmax(8.5rem, 9.5rem); }
-  .featured-listing { grid-template-areas: "rank product actions" "rank evidence actions"; grid-template-columns: 3rem minmax(0, 1fr) auto; }
+  .featured-listing { grid-template-areas: "rank product evidence"; grid-template-columns: 3rem minmax(0, 1fr) auto; }
   .featured-evidence { justify-content: flex-start; }
   .board-header span:nth-child(4), .click-cell { display: none; }
 }
@@ -261,13 +277,14 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 @media (max-width: 46rem) {
   .activity-tape { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .app-shell { width: min(calc(100% - 1rem), var(--content)); }
-  .topbar { grid-template-columns: 1fr auto; }
+  .topbar { grid-template-columns: 1fr auto auto; }
   .brand { width: 10.4rem; height: 3.2rem; }
   .brand-lockup-image { width: 11rem; height: 3.2rem; }
   .time-tabs { justify-self: end; }
   .time-tabs button { min-height: 2.75rem; padding-inline: 0.58rem; }
   .demo-state { display: none; }
   .site-nav { display: none; }
+  .theme-toggle { justify-self: end; }
   .claim-stage { padding: 0.9rem 0 0.8rem; }
   .claim-panel h1 { font-size: 2.2rem; }
   .claim-copy { margin-top: 0.45rem; font-size: 0.82rem; }
@@ -289,7 +306,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .measurement-note p { right: auto; left: 0; width: min(21rem, calc(100vw - 2rem)); }
   .board-header { display: none; }
   .top-three { grid-template-columns: minmax(0, 1fr); gap: 0.4rem; }
-  .featured-listing { grid-template-areas: "rank product evidence" "rank actions actions"; grid-template-columns: 2.65rem minmax(0, 1fr) auto; gap: 0.4rem 0.55rem; padding: 0.55rem 0.6rem; }
+  .featured-listing { grid-template-areas: "rank product evidence"; grid-template-columns: 2.65rem minmax(0, 1fr) auto; gap: 0.4rem 0.55rem; padding: 0.55rem 0.6rem; }
   .featured-rank { width: 2.45rem; height: 2.45rem; font-size: 0.78rem; }
   .featured-listing .product-mark { width: 2.45rem; height: 2.45rem; flex-basis: 2.45rem; }
   .featured-listing .product-meta, .featured-listing .listing-description { display: none; }
