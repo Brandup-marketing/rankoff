@@ -1087,7 +1087,10 @@
     rank.append(createElement("strong", "", Number.isFinite(presentation.rank) && presentation.rank > 0 ? `#${presentation.rank}` : "—"));
     const time = createElement("time", "activity-time", activityTime(item));
     if (item.created_at || item.createdAt) time.dateTime = item.created_at || item.createdAt;
-    row.append(activityMark(listing), identity, action, metric, rank, time);
+    const details = createElement("div", "activity-details");
+    details.append(action, metric, rank, time);
+    identity.append(details);
+    row.append(activityMark(listing), identity);
     return row;
   }
 

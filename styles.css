@@ -309,7 +309,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .activity-tape.is-empty { width: 100%; animation: none; }
 .activity-ticker-viewport:hover .activity-tape, .activity-ticker-viewport:focus-within .activity-tape { animation-play-state: paused; }
 .activity-tape li { margin: 0; list-style: none; }
-.activity-event { display: grid; grid-template-columns: 2.35rem minmax(9rem, 1fr) auto auto auto auto; align-items: center; gap: .55rem; width: 32rem; min-height: 3.6rem; padding: .4rem .55rem; border: 1px solid var(--line); border-radius: .45rem; background: var(--surface); }
+.activity-event { display: grid; grid-template-columns: 2.35rem minmax(0, 1fr); align-items: center; gap: .55rem; width: 32rem; min-height: 3.6rem; padding: .4rem .55rem; border: 1px solid var(--line); border-radius: .45rem; background: var(--surface); }
 .activity-event.is-latest { border-color: color-mix(in srgb, var(--accent) 58%, var(--line)); background: var(--accent-soft); animation: activity-in 220ms var(--ease) both; }
 .activity-mark { position: relative; display: grid; width: 2.35rem; height: 2.35rem; place-items: center; overflow: hidden; border: 1px solid var(--line); border-radius: .42rem; background: var(--surface-subtle); color: var(--ink); font-size: .65rem; font-weight: 850; }
 .activity-mark img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: var(--surface); }
@@ -318,6 +318,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .activity-name { overflow: hidden; color: var(--ink); font-size: .8rem; font-weight: 820; line-height: 1.25; text-decoration: none; text-overflow: ellipsis; white-space: nowrap; }
 .activity-name:hover { color: var(--blue); }
 .activity-description { overflow: hidden; color: var(--muted); font-size: .66rem; line-height: 1.25; text-overflow: ellipsis; white-space: nowrap; }
+.activity-details { display: flex; align-items: center; min-width: 0; gap: .55rem; margin-top: .1rem; }
 .activity-context { overflow: hidden; color: var(--muted); font-size: .68rem; line-height: 1.25; text-overflow: ellipsis; white-space: nowrap; }
 .activity-action { justify-self: start; padding: .2rem .42rem; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--ink); font-size: .62rem; font-weight: 850; white-space: nowrap; }
 .activity-action-won { border-color: color-mix(in srgb, var(--accent) 68%, var(--line)); color: var(--accent-strong); }
@@ -329,7 +330,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .activity-metric span, .activity-rank span { color: var(--muted); font-size: .6rem; white-space: nowrap; }
 .activity-rank { justify-items: end; }
 .activity-rank strong { color: var(--accent-strong); }
-.activity-time { justify-self: end; color: var(--muted); font-size: .64rem; font-weight: 750; white-space: nowrap; }
+.activity-time { margin-left: auto; color: var(--muted); font-size: .64rem; font-weight: 750; white-space: nowrap; }
 .activity-tape li.activity-empty { grid-column: 1 / -1; min-height: 4.6rem; }
 .activity-tape li.activity-empty strong { display: block; margin-bottom: .18rem; color: var(--ink); font-size: .76rem; }
 .activity-tape li.activity-empty span { color: var(--muted); }
@@ -502,7 +503,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .featured-bid-stack .rank-share-control { visibility: visible; opacity: 1; }
   .panel-toggle { min-width: 2.25rem; justify-content: center; padding-inline: 0.35rem; font-size: 0; }
   .panel-toggle-icon { font-size: 1.1rem; }
-  .activity-event { grid-template-columns: 2.2rem minmax(7rem, 1fr) auto auto auto auto; width: 27rem; min-height: 3.3rem; gap: .4rem; padding: .35rem .45rem; }
+  .activity-event { grid-template-columns: 2.2rem minmax(0, 1fr); width: 27rem; min-height: 3.3rem; gap: .4rem; padding: .35rem .45rem; }
   .activity-context, .activity-metric span, .activity-rank span { display: none; }
   .activity-description { font-size: .58rem; }
   .activity-action { font-size: .58rem; }
