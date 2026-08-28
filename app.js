@@ -437,9 +437,7 @@
         : (production ? " Live board" : boardSource === "local" ? " Preview board" : " Connected preview");
     }
     if (elements.boardHeading) elements.boardHeading.textContent = chinese ? "实时赞助榜单" : "Live sponsored leaderboard";
-    if (elements.activityNote) elements.activityNote.textContent = chinese
-      ? "实时动态 · 关注下一步变化"
-      : "Live activity · Watch the next move";
+    if (elements.activityNote) elements.activityNote.textContent = chinese ? "实时变化" : "Live moves";
     if (elements.liveDot) elements.liveDot.hidden = !production;
     if (elements.measurementSummary) {
       elements.measurementSummary.textContent = chinese ? "点击如何统计" : "How clicks are measured";
@@ -1037,14 +1035,13 @@
     const displacedName = String(item.displacedName || item.displaced_name || "");
     const displacedBy = String(item.displacedBy || item.displaced_by || "");
     const amountValue = Number(item.amount ?? item.amount_minor / 100);
-    const deltaValue = Number(item.delta ?? item.delta_minor / 100);
     const amount = Number.isFinite(amountValue) ? amountValue : 0;
-    const delta = Number.isFinite(deltaValue) ? deltaValue : 0;
+    const amountLabel = amount > 0 ? money(amount) : "—";
     const rank = Number(item.rank);
     const type = String(item.type || "joined").replace("topped_up", "topup");
 
     if (type === "topup" || type === "defended") {
-      return { type: "topup", action: chinese ? "加价" : "Raised bid", context: chinese ? `最新总价 ${money(amount)}` : `Now at ${money(amount)}`, metric: delta > 0 ? `+${money(delta)}` : money(amount), metricLabel: chinese ? `当前总价 ${money(amount)}` : `Current ${money(amount)}`, rank };
+      return { type: "topup", action: chinese ? "加价" : "Raised", context: chinese ? `总价 ${amountLabel}` : `Total ${amountLabel}`, metric: amountLabel, metricLabel: "", rank };
     }
     if (type === "won" || type === "outbid" || type === "challenge") {
       const isDisplaced = type === "outbid" && displacedBy;
@@ -1054,8 +1051,8 @@
           ? (chinese ? "排名下滑" : "Lost rank")
           : (chinese ? (rank === 1 ? "抢下第 1" : "升榜") : (rank === 1 ? "Took #1" : "Moved up")),
         context: isDisplaced ? (chinese ? `被 ${displacedBy} 超越` : `Passed by ${displacedBy}`) : displacedName ? (chinese ? `超越 ${displacedName}` : `Passed ${displacedName}`) : (chinese ? "排名上升" : "Moved up"),
-        metric: isDisplaced ? money(amount) : delta > 0 ? `+${money(delta)}` : money(amount),
-        metricLabel: isDisplaced ? (chinese ? "当前出价" : "Current bid") : (chinese ? `当前总价 ${money(amount)}` : `Current ${money(amount)}`),
+        metric: amountLabel,
+        metricLabel: "",
         rank,
       };
     }
@@ -1086,9 +1083,9 @@
     identity.append(createElement("span", "activity-context", presentation.context));
     const action = createElement("span", `activity-action activity-action-${presentation.type}`, presentation.action);
     const metric = createElement("div", "activity-metric");
-    metric.append(createElement("strong", "", presentation.metric), createElement("span", "", presentation.metricLabel));
+    metric.append(createElement("strong", "", presentation.metric));
     const rank = createElement("div", "activity-rank");
-    rank.append(createElement("strong", "", Number.isFinite(presentation.rank) && presentation.rank > 0 ? `#${presentation.rank}` : "—"), createElement("span", "", state.language === "zh" ? "当前排名" : "New rank"));
+    rank.append(createElement("strong", "", Number.isFinite(presentation.rank) && presentation.rank > 0 ? `#${presentation.rank}` : "—"));
     const time = createElement("time", "activity-time", activityTime(item));
     if (item.created_at || item.createdAt) time.dateTime = item.created_at || item.createdAt;
     row.append(activityMark(listing), identity, action, metric, rank, time);
