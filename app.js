@@ -3,25 +3,37 @@
 
   const STORE_KEY = "rankoff-mvp-demo-v3";
   const MAX_BID = 1_000_000;
+  const PAGE_SIZE = 50;
   const DEFAULT_CATEGORY = "all";
   const BOARD_API_ENDPOINT = "./api/v1/board";
-  const categories = [
-    "Agents",
-    "Marketing",
-    "Developer",
-    "Business",
-    "Agencies",
-    "Ecommerce",
-    "Productivity",
-    "Design",
-    "SEO",
-    "Other",
-  ];
+  const categoryGroups = Object.freeze({
+    Agents: ["Agents", "AIMedia"],
+    Marketing: ["Marketing", "SEO", "Social", "Sales", "Attention", "People"],
+    Developer: ["Developer", "Security"],
+    Business: ["Business", "Agencies", "Careers"],
+    Crypto: ["Crypto"],
+    Ecommerce: ["Ecommerce", "Hardware"],
+    Design: ["Design", "Writing", "Audio", "News"],
+    Productivity: ["Productivity", "Education"],
+    Health: ["Health"],
+    Games: ["Games"],
+    Travel: ["Travel", "RealEstate"],
+    Domains: ["Domains", "Discovery"],
+    Other: ["Other"],
+  });
+  const categories = Object.freeze(Object.keys(categoryGroups));
+  const categoryAliases = Object.freeze(Object.entries(categoryGroups).reduce((aliases, [market, members]) => {
+    aliases[market.toLowerCase()] = market;
+    members.forEach((member) => { aliases[member.toLowerCase()] = market; });
+    return aliases;
+  }, {}));
+  const categoryIcons = Object.freeze({ all: "▦", Agents: "✦", Marketing: "↗", Developer: "</>", Business: "◆", Crypto: "₿", Ecommerce: "◇", Design: "✎", Productivity: "✓", Health: "+", Games: "◈", Travel: "⌖", Domains: "◎", Other: "•••" });
   const translations = {
-    en: { navBoard: "Board", navAbout: "About", heroCopy: "Put your product where people look first. Your listing stays at the top until someone pays more.", totalBid: "Your total bid", productUrl: "Your product URL or @handle", chooseMarket: "Choose a market", challengeCategory: "Challenge category", categoryRule: "Must match the listing you’ll outrank.", reviewBid: "Review your bid", demoOnly: "Preview board · no payment is collected", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest valid bid takes #1. Pay more to move up.", latestActivity: "Latest activity", liveUpdates: "Live bid updates", howItWorks: "How ranking works" },
-    zh: { navBoard: "榜单", navAbout: "关于", heroCopy: "把你的产品放到大家最先看到的位置。只要没有更高出价，你的介绍就会保持在榜首。", totalBid: "你的总出价", productUrl: "产品网址或 @账号", chooseMarket: "选择市场", challengeCategory: "挑战分类", categoryRule: "必须与您要超越的条目相同。", reviewBid: "确认出价", demoOnly: "预览榜单 · 不会收取费用", markets: "市场分类", liveLeaderboard: "实时榜单", boardSummary: "最高有效出价获得第 1 名。提高出价即可上升。", latestActivity: "最新动态", liveUpdates: "实时竞价更新", howItWorks: "排名规则" },
+    en: { navBoard: "Board", navCategories: "Categories", navAbout: "About", heroCopy: "Put your product in the spot people see first. Your listing stays at the top until someone pays more.", totalBid: "Your total bid", productUrl: "Website or social account", productUrlPlaceholder: "example.com or @yourusername", invalidWebsite: "Enter a valid website or social account, such as example.com or @yourusername.", chooseMarket: "Choose a market", challengeCategory: "Challenge category", categoryRule: "Must match the listing you’ll outrank.", reviewBid: "Review your bid", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest valid bid takes #1. Pay more to move up.", todayRanking: "Today’s leaders", latestActivity: "Latest activity", liveUpdates: "Latest updates", howItWorks: "How ranking works", searchPlaceholder: "Search products and categories…", close: "Close", seeAll: "See all", past24: "Past 24h", livePulse: "Live bids", refresh: "Refresh", rank: "Rank", listing: "Listing", bid: "Bid", clicks: "Clicks", sponsored: "Sponsored", rules: "Every listing is sponsored. The highest verified bid ranks first.", position: "Position", positionCopy: "Held until a higher verified bid wins.", charge: "Charge", chargeCopy: "One payment after review.", reporting: "Reporting", reportingCopy: "Clicks shown for the selected timeframe.", readRules: "Read all rules →", rulesLink: "Rules", terms: "Terms", termsOfService: "Terms of Service", privacyLink: "Privacy", payments: "Payments", footerCredit: "A Brandup Marketing product", confirmRank: "Confirm this rank", confirmRankIntro: "Check the rank and price, then agree to the Terms of Service to continue.", rankLabel: "Rank", priceLabel: "Price", dueNow: "Due now", confirmationCopy: "Your listing goes live at this rank after payment confirms. Someone else can still claim a higher rank.", agreeTermsPrefix: "I have read and agree to the ", agreeTermsSuffix: ".", cancel: "Cancel", continueCheckout: "Continue to checkout" },
+    zh: { navBoard: "榜单", navCategories: "分类", navAbout: "关于", heroCopy: "把产品放到最显眼的位置。只要没有更高的有效出价，你的介绍就会留在榜首。", totalBid: "你的总出价", productUrl: "网站或社交账号", productUrlPlaceholder: "example.com 或 @yourusername", invalidWebsite: "请输入有效的网站或社交账号，例如 example.com 或 @yourusername。", chooseMarket: "选择市场", challengeCategory: "挑战类别", categoryRule: "必须与您要超越的条目类别相同。", reviewBid: "确认出价", markets: "市场", liveLeaderboard: "实时榜单", boardSummary: "最高有效出价获得第 1 名。提高出价即可上升。", todayRanking: "今日领先", latestActivity: "最新动态", liveUpdates: "最新动态", howItWorks: "排名规则", searchPlaceholder: "搜索产品和分类…", close: "关闭", seeAll: "查看全部", past24: "近 24 小时", livePulse: "实时竞价", refresh: "刷新", rank: "排名", listing: "条目", bid: "出价", clicks: "点击", sponsored: "赞助", rules: "每个条目都是赞助展示。最高的已验证出价排名第一。", position: "排名位置", positionCopy: "保持到有人以更高的已验证出价胜出。", charge: "费用", chargeCopy: "审核后一次性付款。", reporting: "数据", reportingCopy: "显示所选时间范围内的点击。", readRules: "查看完整规则 →", rulesLink: "规则", terms: "条款", termsOfService: "服务条款", privacyLink: "隐私", payments: "付款", footerCredit: "Brandup Marketing 出品", confirmRank: "确认此排名", confirmRankIntro: "核对排名与价格，同意《服务条款》后继续。", rankLabel: "排名", priceLabel: "价格", dueNow: "现在支付", confirmationCopy: "付款确认后，你的条目会以此排名上线。其他人仍可出价取得更高排名。", agreeTermsPrefix: "我已阅读并同意《", agreeTermsSuffix: "》。", cancel: "取消", continueCheckout: "继续付款" },
   };
-  const categoryTranslations = { Agents: "智能代理", Marketing: "营销", Developer: "开发者", Business: "商业", Agencies: "代理机构", Ecommerce: "电商", Productivity: "效率工具", Design: "设计", SEO: "SEO", Other: "其他" };
+  const categoryLabels = { Agents: "AI & Automation", Marketing: "Marketing, SEO & Social", Developer: "Developer Tools & Security", Business: "Business & Professional Services", Crypto: "Finance, Crypto & Investing", Ecommerce: "Ecommerce, Retail & Hardware", Design: "Design, Content & Media", Productivity: "Productivity & Education", Health: "Health & Wellness", Games: "Games & Entertainment", Travel: "Travel, Local & Property", Domains: "Web, Domains & Discovery", Other: "Other" };
+  const categoryTranslations = { Agents: "AI 与自动化", Marketing: "营销、SEO 与社交媒体", Developer: "开发工具与安全", Business: "商业与专业服务", Crypto: "金融、加密与投资", Ecommerce: "电商、零售与硬件", Design: "设计、内容与媒体", Productivity: "效率工具与教育", Health: "健康与生活方式", Games: "游戏与娱乐", Travel: "旅行、本地与房地产", Domains: "网站、域名与发现", Other: "其他" };
 
   const currency = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -141,21 +153,30 @@
   ];
 
   const seedActivity = [
-    { id: "a1", type: "challenge", timeEn: "2m ago", timeZh: "2 分钟前", listingName: "Switchboard", amount: 735, rank: 2, board: "today" },
-    { id: "a2", type: "category-leader", timeEn: "11m ago", timeZh: "11 分钟前", listingName: "Trackline", category: "Marketing" },
-    { id: "a3", type: "clicks", timeEn: "24m ago", timeZh: "24 分钟前", listingName: "Patchnote", clicks: 381, board: "today" },
-    { id: "a4", type: "defended", timeEn: "43m ago", timeZh: "43 分钟前", listingName: "Model Harbor", amount: 2480, board: "all" },
+    { id: "a1", type: "topup", timeEn: "2m ago", timeZh: "2 分钟前", listingId: "model-harbor", listingName: "Model Harbor", delta: 120, amount: 2480, rank: 1 },
+    { id: "a2", type: "won", timeEn: "8m ago", timeZh: "8 分钟前", listingId: "trackline", listingName: "Trackline", delta: 260, amount: 2160, rank: 2, displacedName: "Patchnote" },
+    { id: "a3", type: "outbid", timeEn: "14m ago", timeZh: "14 分钟前", listingId: "canvas-relay", listingName: "Canvas Relay", rank: 4, displacedBy: "Patchnote" },
+    { id: "a4", type: "joined", timeEn: "20m ago", timeZh: "20 分钟前", listingId: "palette-runner", listingName: "Palette Runner", amount: 520, rank: 8 },
+    { id: "a5", type: "won", timeEn: "31m ago", timeZh: "31 分钟前", listingId: "switchboard", listingName: "Switchboard", delta: 95, amount: 940, rank: 5, displacedName: "Focus Coda" },
+    { id: "a6", type: "topup", timeEn: "43m ago", timeZh: "43 分钟前", listingId: "patchnote", listingName: "Patchnote", delta: 180, amount: 1930, rank: 3 },
   ];
 
   const elements = {
     root: document.documentElement,
     boardList: document.querySelector("[data-board-list]"),
     topThree: document.querySelector("[data-top-three]"),
+    boardPagination: document.querySelector("[data-board-pagination]"),
+    boardPageButtons: Array.from(document.querySelectorAll("[data-board-page]")),
+    pageLinks: document.querySelector("[data-page-links]"),
+    boardRefresh: document.querySelector("[data-board-refresh]"),
+    pageRange: document.querySelector("[data-page-range]"),
+    pageTotal: document.querySelector("[data-page-total]"),
     boardSummary: document.querySelector("[data-board-summary]"),
     boardHeading: document.querySelector("[data-board-heading]"),
     measurementSummary: document.querySelector("[data-measurement-summary]"),
     measurementCopy: document.querySelector("[data-measurement-copy]"),
     categoryRail: document.querySelector("[data-category-rail]"),
+    categoryScrollButtons: Array.from(document.querySelectorAll("[data-category-scroll]")),
     categorySelect: document.querySelector("[data-category-select]"),
     windowButtons: Array.from(document.querySelectorAll("[data-board-window]")),
     themeToggle: document.querySelector("[data-theme-toggle]"),
@@ -163,20 +184,19 @@
     inlineChallenge: document.querySelector("[data-inline-challenge]"),
     inlineBid: document.querySelector("[data-inline-bid]"),
     inlineUrl: document.querySelector("[data-inline-url]"),
-    categoryRule: document.querySelector("[data-category-rule]"),
     heroPrice: document.querySelector("[data-hero-next-price]"),
     heroContext: document.querySelector("[data-hero-context]"),
     boardState: document.querySelector("[data-board-state]"),
-    demoNote: document.querySelector("[data-demo-note]"),
     inlineSubmit: document.querySelector("[data-inline-submit]"),
     currentLeader: document.querySelector("[data-current-leader]"),
     leaderBid: document.querySelector("[data-leader-bid]"),
     leaderClicks: document.querySelector("[data-leader-clicks]"),
     leaderCategory: document.querySelector("[data-leader-category]"),
-    todayCard: document.querySelector("[data-today-card]"),
+    todayRankingList: document.querySelector("[data-today-ranking-list]"),
+    todaySeeAll: document.querySelector("[data-today-see-all]"),
     activityList: document.querySelector("[data-activity-list]"),
-    activityNote: document.querySelector("[data-activity-note]"),
     liveDot: document.querySelector(".live-dot"),
+    panelToggles: Array.from(document.querySelectorAll("[data-panel-toggle]")),
     statVisitors: document.querySelector("[data-stat-visitors]"),
     statRevenue: document.querySelector("[data-stat-revenue]"),
     resultClicks: document.querySelector("[data-result-clicks]"),
@@ -184,31 +204,35 @@
     dialog: document.querySelector("[data-bid-dialog]"),
     bidForm: document.querySelector("[data-bid-form]"),
     bidAmount: document.querySelector("#bid-amount"),
-    bidTarget: document.querySelector("[data-bid-target]"),
-    bidHint: document.querySelector("[data-bid-hint]"),
-    orderPosition: document.querySelector("[data-order-position]"),
-    checkoutTitle: document.querySelector("[data-checkout-title]"),
-    checkoutProvider: document.querySelector("[data-checkout-provider]"),
-    checkoutStatus: document.querySelector("[data-checkout-status]"),
-    checkoutCopy: document.querySelector("[data-checkout-copy]"),
+    bidAgree: document.querySelector("[data-bid-agree]"),
+    dialogRank: document.querySelector("[data-dialog-rank]"),
+    dialogPrice: document.querySelector("[data-dialog-price]"),
+    dialogContext: document.querySelector("[data-dialog-context]"),
+    dialogExplanation: document.querySelector("[data-dialog-explanation]"),
     toast: document.querySelector("[data-toast]"),
   };
 
   if (!elements.boardList) return;
 
   let boardSource = "local";
+  let boardPage = 1;
+  let remotePagination = null;
+  let remoteLeader = null;
   let remoteRequestId = 0;
   let state = loadState();
   const sharedView = new URL(window.location.href);
   if (sharedView.searchParams.get("period") === "today") state.activeWindow = "today";
   if (sharedView.searchParams.get("period") === "all") state.activeWindow = "all";
   const sharedCategory = sharedView.searchParams.get("category");
-  if (sharedCategory === DEFAULT_CATEGORY || categories.includes(sharedCategory)) state.category = sharedCategory;
+  if (sharedCategory === DEFAULT_CATEGORY) state.category = DEFAULT_CATEGORY;
+  else if (canonicalCategory(sharedCategory)) state.category = canonicalCategory(sharedCategory);
   let activeBid = null;
   let pendingChallenge = null;
   let lastTrigger = null;
   let toastTimer = null;
   let changedListingId = null;
+  let pendingActivityAnimationId = "";
+  let lastRemoteActivityContext = "";
   let remoteNextBid = null;
   let remoteSnapshotId = null;
   let remoteCurrency = "USD";
@@ -271,7 +295,7 @@
           url: String(listing.url || "https://rankoff.my/demo"),
           iconUrl: typeof listing.iconUrl === "string" ? listing.iconUrl : "",
           description: "A local-only challenger created in this browser.",
-          category: categories.includes(listing.category) ? listing.category : categories[0],
+          category: canonicalCategory(listing.category) || categories[0],
           age: "now",
           clicks: 0,
           todayClicks: 0,
@@ -284,13 +308,18 @@
         });
       }
 
+      const savedActivity = Array.isArray(saved.activity) ? saved.activity : [];
+      const restoredActivity = savedActivity.some((item) => item?.listingId || item?.listing_id)
+        ? savedActivity.slice(0, 20)
+        : [...seedActivity];
+
       return {
         activeWindow: saved.activeWindow === "today" ? "today" : "all",
-        category: saved.category === DEFAULT_CATEGORY || categories.includes(saved.category) ? saved.category : DEFAULT_CATEGORY,
+        category: saved.category === DEFAULT_CATEGORY ? DEFAULT_CATEGORY : canonicalCategory(saved.category) || DEFAULT_CATEGORY,
         theme: saved.theme === "light" ? "light" : "dark",
         language: saved.language === "zh" ? "zh" : "en",
         listings: restored,
-        activity: Array.isArray(saved.activity) ? saved.activity.slice(0, 6) : [...seedActivity],
+        activity: restoredActivity,
       };
     } catch {
       return fallback;
@@ -308,7 +337,7 @@
           theme: state.theme,
           language: state.language,
           listings: state.listings,
-          activity: state.activity.slice(0, 6),
+          activity: state.activity.slice(0, 20),
         }),
       );
     } catch {
@@ -318,14 +347,43 @@
 
   function languageText(key) { return (translations[state.language] || translations.en)[key] || translations.en[key] || key; }
 
+  function canonicalCategory(category) {
+    return categoryAliases[String(category || "").toLowerCase()] || "";
+  }
+
+  function categoryName(category, language = state.language) {
+    const market = canonicalCategory(category) || "Other";
+    return language === "zh" ? categoryTranslations[market] : categoryLabels[market];
+  }
+
   function renderLanguage() {
     document.documentElement.lang = state.language === "zh" ? "zh-CN" : "en";
     document.querySelectorAll("[data-i18n]").forEach((node) => { node.textContent = languageText(node.dataset.i18n); });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach((node) => { node.setAttribute("placeholder", languageText(node.dataset.i18nPlaceholder)); });
+    document.querySelectorAll("[data-i18n-aria-label]").forEach((node) => { node.setAttribute("aria-label", languageText(node.dataset.i18nAriaLabel)); });
     if (elements.languageToggle) {
-      elements.languageToggle.textContent = state.language === "zh" ? "EN" : "中文";
+      elements.languageToggle.textContent = state.language === "zh" ? "CN" : "EN";
       elements.languageToggle.setAttribute("aria-pressed", String(state.language === "zh"));
       elements.languageToggle.setAttribute("aria-label", state.language === "zh" ? "Switch to English" : "切换中文");
     }
+    updatePanelToggleLabels();
+  }
+
+  function updatePanelToggleLabels() {
+    elements.panelToggles.forEach((button) => {
+      const expanded = button.getAttribute("aria-expanded") !== "false";
+      const label = expanded
+        ? (state.language === "zh" ? "收起" : "Minimize")
+        : (state.language === "zh" ? "展开" : "Expand");
+      const labelNode = button.querySelector("[data-panel-toggle-label]");
+      if (labelNode) labelNode.textContent = label;
+      const title = state.language === "zh" ? button.dataset.panelTitleZh : button.dataset.panelTitle;
+      button.setAttribute("aria-label", `${label} ${title || "panel"}`);
+      const content = document.getElementById(button.getAttribute("aria-controls"));
+      if (content) content.hidden = !expanded;
+      const icon = button.querySelector(".panel-toggle-icon");
+      if (icon) icon.textContent = expanded ? "−" : "+";
+    });
   }
 
   function dollarsFromMinor(value, fallback = 1) {
@@ -361,7 +419,7 @@
       iconUrl: typeof listing.favicon_url === "string" ? listing.favicon_url : "",
       description: String(listing.description || "Sponsored listing on Rankoff.").slice(0, 240),
       category: String(listing.category || "Other"),
-      age: entry?.bid?.settled_at ? "settled" : "live",
+      age: entry?.bid?.settled_at || previous?.age || "",
       clicks: period === "all" ? clicks : previous?.clicks || clicks,
       todayClicks: period === "today" ? clicks : previous?.todayClicks || 0,
       verified: true,
@@ -377,57 +435,55 @@
         ? (production ? " 实时榜单" : boardSource === "local" ? " 预览榜单" : " 已连接预览")
         : (production ? " Live board" : boardSource === "local" ? " Preview board" : " Connected preview");
     }
-    if (elements.boardHeading) elements.boardHeading.textContent = chinese
-      ? (production ? "实时赞助榜单" : "预览赞助榜单")
-      : (production ? "Live sponsored leaderboard" : "Preview sponsored leaderboard");
-    if (elements.demoNote) {
-      elements.demoNote.textContent = production
-        ? (chinese ? "实时排名 · 付款仅在托管结账后确认" : "Live ranking data · payment is only confirmed after hosted checkout")
-        : languageText("demoOnly");
-    }
-    if (elements.activityNote) elements.activityNote.textContent = chinese
-      ? (production ? "已验证竞价动态" : "预览市场动态")
-      : (production ? "Verified market events" : "Preview market activity");
+    if (elements.boardHeading) elements.boardHeading.textContent = chinese ? "实时赞助榜单" : "Live sponsored leaderboard";
     if (elements.liveDot) elements.liveDot.hidden = !production;
-    if (elements.measurementSummary) elements.measurementSummary.textContent = chinese
-      ? (production ? "点击如何统计" : "预览点击说明")
-      : (production ? "How clicks are measured" : "About preview clicks");
+    if (elements.measurementSummary) {
+      elements.measurementSummary.textContent = chinese ? "点击如何统计" : "How clicks are measured";
+      elements.measurementSummary.parentElement.hidden = !production;
+    }
     if (elements.measurementCopy) elements.measurementCopy.textContent = chinese
-      ? (production ? "已验证点击来自所选时间范围内的第一方跳转记录。" : "预览点击数仅作演示；开启实时追踪后才会显示已验证点击。")
-      : (production ? "Verified clicks represent first-party redirect events for the selected timeframe." : "Preview click totals are illustrative. Verified click reporting begins only after live tracking is enabled.");
-    if (elements.checkoutTitle) elements.checkoutTitle.textContent = chinese ? "结账状态" : "Checkout status";
-    if (elements.checkoutProvider) elements.checkoutProvider.textContent = chinese
-      ? (production ? "由 Dodo Payments 提供的托管结账" : "仅供预览 · 尚未连接付款方式")
-      : (production ? "Hosted checkout by Dodo Payments" : "Preview only — no payment method connected");
-    if (elements.checkoutStatus) elements.checkoutStatus.textContent = chinese
-      ? (production ? "安全结账" : "仅供预览")
-      : (production ? "Secure checkout" : "Preview only");
-    if (elements.checkoutCopy) elements.checkoutCopy.textContent = chinese
-      ? (production ? "付款资料只在支付服务商的托管结账页面输入。排名仅在付款确认后发布。" : "此预览不会发送或保存任何付款资料；仅当 Rankoff 启用付款后才会出现托管结账。")
-      : (production ? "Payment details are entered only on the provider-hosted checkout. A rank is published only after payment settlement." : "This preview never sends or stores payment data. A hosted checkout appears only after Rankoff enables payments.");
+      ? "已验证点击来自所选时间范围内的第一方跳转记录。"
+      : "Verified clicks represent first-party redirect events for the selected timeframe.";
   }
 
   async function refreshBoardFromApi() {
-    if (!/^https?:$/.test(window.location.protocol)) return;
+    if (!/^https?:$/.test(window.location.protocol)) return false;
     const requestId = ++remoteRequestId;
     const endpoint = new URL(BOARD_API_ENDPOINT, window.location.href);
     endpoint.searchParams.set("board", "global");
     endpoint.searchParams.set("category", state.category);
     endpoint.searchParams.set("period", state.activeWindow);
-    endpoint.searchParams.set("limit", "50");
+    endpoint.searchParams.set("limit", String(PAGE_SIZE));
+    endpoint.searchParams.set("page", String(boardPage));
+    const activityContext = `${state.activeWindow}:${state.category}`;
 
     try {
       const response = await fetch(endpoint, { headers: { Accept: "application/json" }, cache: "no-store" });
-      if (!response.ok) return;
+      if (!response.ok) return false;
       const payload = await response.json();
-      if (requestId !== remoteRequestId || !Array.isArray(payload?.rankings)) return;
+      if (requestId !== remoteRequestId || !Array.isArray(payload?.rankings)) return false;
       const period = state.activeWindow;
+      const previousActivityId = String(state.activity[0]?.id || "");
       state.listings = payload.rankings.map((entry, index) => normalizeApiRanking(entry, index, period));
+      remotePagination = payload.pagination && typeof payload.pagination === "object"
+        ? {
+            page: Math.max(1, Number(payload.pagination.page) || boardPage),
+            pageSize: Math.max(1, Number(payload.pagination.page_size) || PAGE_SIZE),
+            total: Math.max(0, Number(payload.pagination.total) || 0),
+            totalPages: Math.max(1, Number(payload.pagination.total_pages) || 1),
+          }
+        : null;
+      if (boardPage === 1 && state.listings[0]) remoteLeader = cloneListing(state.listings[0]);
       boardSource = payload.mode === "production" ? "production" : "api";
       if (boardSource === "production") {
         state.activity = Array.isArray(payload.activity)
-          ? payload.activity.filter((item) => item && typeof item === "object").slice(0, 6)
+          ? payload.activity.filter((item) => item && typeof item === "object").slice(0, 20)
           : [];
+        const nextActivityId = String(state.activity[0]?.id || "");
+        if (lastRemoteActivityContext === activityContext && previousActivityId && nextActivityId !== previousActivityId) {
+          pendingActivityAnimationId = nextActivityId;
+        }
+        lastRemoteActivityContext = activityContext;
       }
       remoteNextBid = dollarsFromMinor(payload.next_bid_minor, null);
       remoteSnapshotId = payload.snapshot_id || null;
@@ -437,8 +493,10 @@
         boardViewSent = true;
         void recordBoardView();
       }
+      return true;
     } catch {
       /* Static preview and offline use intentionally fall back to the local board. */
+      return false;
     }
   }
 
@@ -474,9 +532,14 @@
     return state.activeWindow === "today" ? "Past 24h" : "All-time";
   }
 
+  function checkoutBoardLabel() {
+    if (state.language === "zh") return state.activeWindow === "today" ? "今日榜单" : "全部时间榜单";
+    return state.activeWindow === "today" ? "Today’s board" : "All-time board";
+  }
+
   function claimLabel(amount) {
     return state.language === "zh"
-      ? `以 ${money(amount)} 认领此排名`
+      ? `出价 ${money(amount)} 争夺此排名`
       : `Claim this rank for ${money(amount)}`;
   }
 
@@ -502,7 +565,7 @@
 
   function visibleListings() {
     if (state.category === DEFAULT_CATEGORY) return [...state.listings];
-    return state.listings.filter((listing) => listing.category === state.category);
+    return state.listings.filter((listing) => canonicalCategory(listing.category) === state.category);
   }
 
   function rankedListings(listings = visibleListings(), windowName = state.activeWindow) {
@@ -568,11 +631,56 @@
 
   function listingLink(listing) {
     const link = createElement("a", "product-name", listing.name);
-    const detail = new URL("./listing.html", window.location.href);
-    detail.searchParams.set("id", listing.id);
-    link.href = detail.toString();
+    link.href = listingDetailsHref(listing);
     link.setAttribute("aria-label", state.language === "zh" ? `查看 ${listing.name} 的榜单详情` : `View ${listing.name} ranking details`);
     return link;
+  }
+
+  function listingDetailsHref(listing) {
+    const detail = new URL("./listing.html", window.location.href);
+    detail.searchParams.set("id", listing.id);
+    return detail.toString();
+  }
+
+  function listingAgeLabel(listing) {
+    const raw = String(listing.age || "").trim();
+    if (raw) {
+      const timestamp = Date.parse(raw);
+      if (Number.isFinite(timestamp)) {
+        const minutes = Math.max(0, Math.floor((Date.now() - timestamp) / 60_000));
+        if (state.language === "zh") {
+          if (minutes < 1) return "刚刚上榜";
+          if (minutes < 60) return `${minutes} 分钟前上榜`;
+          if (minutes < 1_440) return `${Math.floor(minutes / 60)} 小时前上榜`;
+          const days = Math.floor(minutes / 1_440);
+          return `${days} 天前上榜`;
+        }
+        if (minutes < 1) return "Claimed just now";
+        if (minutes < 60) return `Claimed ${minutes}m ago`;
+        if (minutes < 1_440) return `Claimed ${Math.floor(minutes / 60)}h ago`;
+        const days = Math.floor(minutes / 1_440);
+        return `Claimed ${days} day${days === 1 ? "" : "s"} ago`;
+      }
+      const shorthand = raw.match(/^(\d+)\s*([dhm])$/i);
+      if (shorthand) {
+        const amount = Number(shorthand[1]);
+        const unit = shorthand[2].toLowerCase();
+        if (unit === "d") return state.language === "zh" ? `${amount} 天前上榜` : `Claimed ${amount} day${amount === 1 ? "" : "s"} ago`;
+        if (unit === "h") return amount >= 24
+          ? (state.language === "zh" ? `${Math.floor(amount / 24)} 天前上榜` : `Claimed ${Math.floor(amount / 24)} day${amount >= 48 ? "s" : ""} ago`)
+          : (state.language === "zh" ? `${amount} 小时前上榜` : `Claimed ${amount}h ago`);
+        return state.language === "zh" ? `${amount} 分钟前上榜` : `Claimed ${amount}m ago`;
+      }
+    }
+    return state.language === "zh" ? "最近上榜" : "Claimed recently";
+  }
+
+  function listingHostLabel(listing) {
+    try {
+      return new URL(listing.url).hostname.replace(/^www\./, "");
+    } catch {
+      return "rankoff.my";
+    }
   }
 
   function productIdentity(listing, descriptionTag = "p", position = null) {
@@ -606,23 +714,29 @@
     const meta = createElement("div", "product-meta");
     const production = boardSource === "production";
     const chinese = state.language === "zh";
-    const ageLabel = production
-      ? (listing.age === "settled" ? (chinese ? "已确认展示" : "Verified placement") : `${listing.age} ${chinese ? "上线" : "live"}`)
-      : (chinese ? "预览条目" : "Preview listing");
+    const ageLabel = listingAgeLabel(listing);
     const clickLabel = production
       ? (listing.verified ? (chinese ? "已验证点击" : "Verified clicks") : (chinese ? "估算点击" : "Estimated clicks"))
       : (chinese ? "示例点击" : "Sample clicks");
     meta.append(
       createElement("span", "sponsored-chip", chinese ? "赞助" : "Sponsored"),
-      createElement("span", "", listing.category),
-      createElement("span", "", ageLabel),
+      createElement("span", "meta-item category-meta", categoryName(listing.category)),
+      createElement("span", "meta-item", ageLabel),
+      createElement("span", "meta-item", listingHostLabel(listing)),
     );
-    meta.append(createElement("span", production && listing.verified ? "verified-chip" : "estimated-chip", clickLabel));
+    if (production) {
+      meta.append(createElement("span", "meta-item listing-clicks", `${compact.format(getClicks(listing))} ${chinese ? "次点击" : "clicks"}`));
+      meta.append(createElement("span", listing.verified ? "verified-chip" : "estimated-chip", clickLabel));
+    }
+    const details = createElement("a", "listing-details", chinese ? "查看详情" : "See details");
+    details.href = listingDetailsHref(listing);
+    details.setAttribute("aria-label", chinese ? `查看 ${listing.name} 的详细信息` : `See details for ${listing.name}`);
+    meta.append(details);
     if (listing.isDemo) meta.append(createElement("span", "local-chip", "Local"));
     if (Number.isSafeInteger(position) && position > 0) meta.append(createShareControl(listing, position));
 
     const description = createElement(descriptionTag, "listing-description", listing.description);
-    copy.append(listingLink(listing), meta, description);
+    copy.append(listingLink(listing), description, meta);
     wrapper.append(mark, copy);
     return wrapper;
   }
@@ -662,122 +776,193 @@
 
   function renderCategories() {
     if (!elements.categoryRail) return;
-    const buttons = [{ label: state.language === "zh" ? "全部" : "All", value: DEFAULT_CATEGORY }, ...categories.map((category) => ({ label: state.language === "zh" ? (categoryTranslations[category] || category) : category, value: category }))];
+    elements.categoryScrollButtons.forEach((button) => {
+      const previous = Number(button.dataset.categoryScroll) < 0;
+      button.setAttribute("aria-label", state.language === "zh" ? (previous ? "向左滚动市场" : "向右滚动市场") : (previous ? "Scroll markets left" : "Scroll markets right"));
+    });
+    const shortLabels = state.language === "zh"
+      ? { Agents: "AI", Marketing: "营销与 SEO", Developer: "开发工具", Business: "商业服务", Crypto: "金融与加密", Ecommerce: "电商与硬件", Design: "设计与媒体", Productivity: "效率与教育", Health: "健康", Games: "游戏", Travel: "旅行与房产", Domains: "网站与域名", Other: "其他" }
+      : { Agents: "AI", Marketing: "Marketing & SEO", Developer: "Developer", Business: "Business", Crypto: "Finance & Crypto", Ecommerce: "Ecommerce & Hardware", Design: "Design & Media", Productivity: "Productivity & Education", Health: "Health", Games: "Games", Travel: "Travel & Property", Domains: "Web & Domains", Other: "Other" };
+    const buttons = [{ label: state.language === "zh" ? "全部" : "All", value: DEFAULT_CATEGORY }, ...categories.map((category) => ({ label: shortLabels[category], value: category }))];
     elements.categoryRail.replaceChildren(
       ...buttons.map(({ label, value }) => {
         const button = createElement("button", "category-chip");
         button.type = "button";
         button.dataset.category = value;
         button.setAttribute("aria-pressed", String(state.category === value));
-        button.textContent = label;
+        const icon = createElement("span", "category-chip-icon", categoryIcons[value]);
+        icon.setAttribute("aria-hidden", "true");
+        button.append(icon, createElement("span", "category-chip-label", label));
         return button;
       }),
     );
+    window.requestAnimationFrame(() => {
+      const selected = elements.categoryRail.querySelector('[aria-pressed="true"]');
+      if (selected instanceof HTMLElement) {
+        const left = selected.offsetLeft - (elements.categoryRail.clientWidth - selected.offsetWidth) / 2;
+        elements.categoryRail.scrollTo({ left: Math.max(0, left), behavior: "auto" });
+      }
+      updateCategoryScrollControls();
+    });
+  }
+
+  function updateCategoryScrollControls() {
+    if (!elements.categoryRail) return;
+    const maxScroll = Math.max(0, elements.categoryRail.scrollWidth - elements.categoryRail.clientWidth);
+    elements.categoryScrollButtons.forEach((button) => {
+      const direction = Number(button.dataset.categoryScroll) || 1;
+      button.disabled = direction < 0 ? elements.categoryRail.scrollLeft <= 1 : elements.categoryRail.scrollLeft >= maxScroll - 1;
+    });
+  }
+
+  function rankMilestone(position) {
+    const marker = createElement("div", "rank-milestone");
+    marker.setAttribute("role", "separator");
+    marker.setAttribute("aria-label", state.language === "zh" ? `前 ${position} 名` : `Top ${position}`);
+    marker.append(
+      createElement("span", "milestone-line"),
+      createElement("span", "milestone-label", state.language === "zh" ? `前 ${position} 名` : `Top ${position}`),
+      createElement("span", "milestone-line"),
+    );
+    return marker;
+  }
+
+  function boardRowsWithMilestones(listings, ranked, firstPosition = 4) {
+    const nodes = [];
+    listings.forEach((listing, index) => {
+      const position = Number.isSafeInteger(listing.serverRank) ? listing.serverRank : firstPosition + index;
+      nodes.push(featuredListingCard(listing, position, ranked, true));
+      if ([10, 20, 50].includes(position) && position <= ranked.length) {
+        nodes.push(rankMilestone(position));
+      }
+    });
+    return nodes;
+  }
+
+  function renderPagination(total, visibleCount) {
+    if (!elements.boardPagination) return;
+    const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    if (boardPage > totalPages) boardPage = totalPages;
+    elements.boardPagination.hidden = total <= PAGE_SIZE;
+    elements.boardPagination.setAttribute("aria-label", state.language === "zh" ? "榜单分页" : "Leaderboard pages");
+    const start = total === 0 ? 0 : (boardPage - 1) * PAGE_SIZE + 1;
+    const end = total === 0 ? 0 : Math.min(total, start + Math.max(0, visibleCount) - 1);
+    if (elements.pageRange) elements.pageRange.textContent = `${start}–${end}`;
+    if (elements.pageTotal) elements.pageTotal.textContent = state.language === "zh" ? `共 ${total} 项` : `of ${total}`;
+    if (elements.pageLinks) {
+      const pages = [];
+      const addPage = (page) => pages.push({ type: "page", page });
+      const addEllipsis = () => pages.push({ type: "ellipsis" });
+      if (totalPages <= 5) {
+        for (let page = 1; page <= totalPages; page += 1) addPage(page);
+      } else if (boardPage <= 3) {
+        addPage(1); addPage(2); addPage(3); addEllipsis(); addPage(totalPages);
+      } else if (boardPage >= totalPages - 2) {
+        addPage(1); addEllipsis(); addPage(totalPages - 2); addPage(totalPages - 1); addPage(totalPages);
+      } else {
+        addPage(1); addEllipsis(); addPage(boardPage); addEllipsis(); addPage(totalPages);
+      }
+      elements.pageLinks.replaceChildren(...pages.map((item) => {
+        if (item.type === "ellipsis") return createElement("span", "pagination-ellipsis", "…");
+        const button = createElement("button", `pagination-page${item.page === boardPage ? " is-current" : ""}`, String(item.page));
+        button.type = "button";
+        button.dataset.boardPageNumber = String(item.page);
+        button.setAttribute("aria-label", state.language === "zh" ? `第 ${item.page} 页` : `Page ${item.page}`);
+        button.setAttribute("aria-current", String(item.page === boardPage));
+        return button;
+      }));
+    }
+    elements.boardPageButtons.forEach((button) => {
+      const previous = button.dataset.boardPage === "previous";
+      button.textContent = state.language === "zh" ? (previous ? "← 上一页" : "下一页 →") : (previous ? "← Previous" : "Next →");
+      button.disabled = previous ? boardPage <= 1 : boardPage >= totalPages;
+    });
   }
 
   function renderBoard() {
-    const listings = rankedListings();
+    const allListings = rankedListings();
+    const remote = boardSource !== "local" && remotePagination;
+    const total = remote ? remotePagination.total : allListings.length;
+    const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    if (boardPage > totalPages) boardPage = totalPages;
+    const listings = remote
+      ? allListings
+      : allListings.slice((boardPage - 1) * PAGE_SIZE, boardPage * PAGE_SIZE);
     elements.boardList.setAttribute("role", "list");
+    const pageStart = total === 0 ? 0 : (boardPage - 1) * PAGE_SIZE + 1;
+    const pageEnd = total === 0 ? 0 : Math.min(total, pageStart + listings.length - 1);
+    elements.boardList.setAttribute("aria-label", state.language === "zh" ? `赞助榜单第 ${pageStart} 至 ${pageEnd} 名` : `Sponsored listings ranked ${pageStart} through ${pageEnd}`);
     elements.boardList.hidden = false;
-    document.querySelector(".board-header")?.toggleAttribute("hidden", listings.length <= 3 && listings.length > 0);
 
     if (elements.topThree) {
-      elements.topThree.replaceChildren(...listings.slice(0, 3).map((listing, index) => featuredListingCard(listing, index + 1, listings)));
+      elements.topThree.setAttribute("role", "list");
+      const leaders = boardPage === 1
+        ? listings.filter((listing, index) => (Number.isSafeInteger(listing.serverRank) ? listing.serverRank : index + 1) <= 3)
+        : [];
+      elements.topThree.replaceChildren(...leaders.map((listing, index) => featuredListingCard(listing, listing.serverRank || index + 1, allListings)));
+      elements.topThree.hidden = leaders.length === 0;
     }
 
     if (!listings.length) {
-      const empty = createElement("p", "empty-state", "No sponsored listings match this board yet.");
+      const empty = createElement("p", "empty-state", state.language === "zh" ? "此榜单暂时没有符合条件的赞助条目。" : "No sponsored listings match this board yet.");
       empty.setAttribute("role", "status");
       elements.boardList.replaceChildren(empty);
     } else {
-      const remaining = listings.slice(3);
-      elements.boardList.replaceChildren(...remaining.map((listing, index) => rankRow(listing, index + 4, listings)));
+      const remaining = listings.filter((listing, index) => (Number.isSafeInteger(listing.serverRank) ? listing.serverRank : (boardPage - 1) * PAGE_SIZE + index + 1) > 3);
+      const firstPosition = boardPage === 1 ? 4 : (boardPage - 1) * PAGE_SIZE + 1;
+      elements.boardList.replaceChildren(...boardRowsWithMilestones(remaining, allListings, firstPosition));
       elements.boardList.hidden = remaining.length === 0;
-      document.querySelector(".board-header")?.toggleAttribute("hidden", remaining.length === 0);
     }
+
+    renderPagination(total, listings.length);
 
     if (elements.boardSummary) {
       elements.boardSummary.textContent = state.language === "zh"
-        ? `${state.activeWindow === "today" ? "近 24 小时" : "全部时间"}榜单：${listings.length} 个赞助产品。最高有效出价获得第 1 名。`
-        : `${windowLabel()} board: ${listings.length} sponsored listings. Highest valid bid takes #1.`;
+        ? `${total} 个条目 · 实时更新`
+        : `${total} listings · Updated live`;
     }
   }
 
-  function featuredListingCard(listing, position, ranked) {
-    const card = createElement("article", `featured-listing featured-${position}`);
+  function featuredListingCard(listing, position, ranked, standard = false) {
+    const card = createElement("article", `featured-listing${position <= 3 ? ` featured-${position}` : ""}${standard ? " standard-listing" : ""}`);
     card.dataset.rank = String(position);
     card.dataset.listingId = listing.id;
-    const minimum = getBid(ranked[0]) + 1;
+    card.setAttribute("role", "listitem");
+    const minimum = boardSource !== "local" && remoteNextBid ? remoteNextBid : getBid((remoteLeader || ranked[0])) + 1;
     card.dataset.claimLabel = claimLabel(minimum);
     if (listing.id === changedListingId) card.classList.add("is-updated");
 
     const rank = createElement("div", "featured-rank", `#${position}`);
     const evidence = createElement("div", "featured-evidence");
-    const bid = createElement("div", "featured-metric");
-    bid.append(createElement("span", "", `${windowLabel()} bid`), createElement("strong", "", money(getBid(listing))));
-    const clicks = createElement("div", "featured-metric");
-    const clickLabel = boardSource === "production"
-      ? (listing.verified ? (state.language === "zh" ? "已验证点击" : "Verified clicks") : (state.language === "zh" ? "估算点击" : "Estimated clicks"))
-      : (state.language === "zh" ? "示例点击" : "Sample clicks");
-    clicks.append(createElement("span", "", clickLabel), createElement("strong", "", compact.format(getClicks(listing))));
-    evidence.append(bid, clicks);
+    const bid = createElement("div", "featured-metric featured-price");
+    bid.append(createElement("strong", "", money(getBid(listing))));
+    const bidStack = createElement("div", "featured-bid-stack");
+    bidStack.append(bid, createShareControl(listing, position));
+    evidence.append(bidStack);
 
     card.id = `listing-${listing.id}`;
-    card.append(rank, productIdentity(listing, "p", position), evidence, createClaimControl(minimum));
+    card.append(rank, productIdentity(listing, "p"), evidence, createClaimControl(minimum));
     return card;
   }
 
-  function rankRow(listing, position, ranked) {
-    const row = createElement("article", "rank-row");
-    row.dataset.rank = String(position);
-    row.dataset.listingId = listing.id;
-    const minimum = getBid(ranked[0]) + 1;
-    row.dataset.claimLabel = claimLabel(minimum);
-    row.setAttribute("role", "listitem");
-    if (listing.id === changedListingId) row.classList.add("is-updated");
-
-    const rank = createElement("div", "rank-position", `#${position}`);
-    rank.setAttribute("aria-label", `Rank ${position}`);
-
-    const bid = createElement("div", "money-cell");
-    bid.append(createElement("strong", "", money(getBid(listing))), createElement("span", "", `${windowLabel()} bid`));
-
-    const clicks = createElement("div", "click-cell");
-    const clickLabel = boardSource === "production"
-      ? (listing.verified ? (state.language === "zh" ? "已验证点击" : "verified clicks") : (state.language === "zh" ? "估算点击" : "estimated clicks"))
-      : (state.language === "zh" ? "示例点击" : "sample clicks");
-    clicks.append(
-      createElement("strong", "", compact.format(getClicks(listing))),
-      createElement("span", "", clickLabel),
-    );
-
-    row.id = `listing-${listing.id}`;
-    row.append(rank, productIdentity(listing, "p", position), bid, clicks, createClaimControl(minimum));
-    return row;
-  }
-
   function renderLeader() {
-    const leader = rankedListings()[0];
+    const leader = boardSource !== "local" && remoteLeader ? remoteLeader : rankedListings()[0];
     if (!leader) return;
-    if (elements.categorySelect && categories.includes(leader.category)) {
-      elements.categorySelect.value = leader.category;
-    }
-    if (elements.categoryRule) {
-      elements.categoryRule.textContent = state.language === "zh"
-        ? `必须与 ${leader.name} 的${categoryTranslations[leader.category] || leader.category}分类相同。`
-        : `Must match ${leader.name}’s ${leader.category} category.`;
+    const leaderCategory = canonicalCategory(leader.category) || "Other";
+    if (elements.categorySelect && categories.includes(leaderCategory)) {
+      elements.categorySelect.value = leaderCategory;
     }
     const nextPrice = boardSource === "local" || !remoteNextBid ? getBid(leader) + 1 : remoteNextBid;
 
     if (elements.heroPrice) elements.heroPrice.textContent = money(nextPrice);
     if (elements.heroContext) {
       elements.heroContext.textContent = state.language === "zh"
-        ? `${money(nextPrice)} 即可登上${state.category === DEFAULT_CATEGORY ? (state.activeWindow === "today" ? "近 24 小时" : "全部时间") : state.category}榜第 1 名。有人出价更高前，你的产品介绍会持续展示。`
-        : `${money(nextPrice)} takes #1 on the ${state.category === DEFAULT_CATEGORY ? windowLabel().toLowerCase() : state.category} board. Your product story stays visible until someone pays more.`;
+        ? `${money(nextPrice)} 即可登上${state.category === DEFAULT_CATEGORY ? (state.activeWindow === "today" ? "近 24 小时" : "全部时间") : categoryName(state.category, "zh")}榜第 1 名。有人出价更高前，你的产品介绍会持续展示。`
+        : `${money(nextPrice)} takes #1 on the ${state.category === DEFAULT_CATEGORY ? windowLabel().toLowerCase() : categoryName(state.category)} board. Your product story stays visible until someone pays more.`;
     }
     if (elements.leaderBid) elements.leaderBid.textContent = money(getBid(leader));
     if (elements.leaderClicks) elements.leaderClicks.textContent = compact.format(getClicks(leader));
-    if (elements.leaderCategory) elements.leaderCategory.textContent = leader.category;
+    if (elements.leaderCategory) elements.leaderCategory.textContent = categoryName(leader.category);
     if (elements.currentLeader) elements.currentLeader.replaceChildren(productIdentity(leader));
     if (elements.inlineBid) {
       elements.inlineBid.min = String(nextPrice);
@@ -786,78 +971,168 @@
   }
 
   function activityTime(item) {
-    if (state.language === "zh") return item.timeZh || (item.time === "just now" ? "刚刚" : item.time) || "刚刚";
-    return item.timeEn || item.time || "Just now";
+    if (state.language === "zh" && item.timeZh) return item.timeZh;
+    if (state.language !== "zh" && item.timeEn) return item.timeEn;
+    const timestamp = Date.parse(item.created_at || item.createdAt || "");
+    if (Number.isFinite(timestamp)) {
+      const minutes = Math.max(0, Math.floor((Date.now() - timestamp) / 60_000));
+      if (state.language === "zh") {
+        if (minutes < 1) return "刚刚";
+        if (minutes < 60) return `${minutes} 分钟前`;
+        if (minutes < 1440) return `${Math.floor(minutes / 60)} 小时前`;
+        return `${Math.floor(minutes / 1440)} 天前`;
+      }
+      if (minutes < 1) return "Just now";
+      if (minutes < 60) return `${minutes}m ago`;
+      if (minutes < 1440) return `${Math.floor(minutes / 60)}h ago`;
+      return `${Math.floor(minutes / 1440)}d ago`;
+    }
+    if (state.language === "zh") return item.time === "just now" ? "刚刚" : item.time || "刚刚";
+    return item.time || "Just now";
   }
 
-  function activityText(item) {
-    const chinese = state.language === "zh";
-    const board = item.board === "today"
-      ? (chinese ? "近 24 小时榜" : "past 24h board")
-      : (chinese ? "全部时间榜" : "all-time board");
-    const listingName = String(item.listingName || item.listing_name || "A listing");
-    const displacedName = String(item.displacedName || item.displaced_name || "the previous leader");
-    const amount = Number(item.amount ?? item.amount_minor / 100);
-    const rank = Number(item.rank);
+  function activityListing(item) {
+    const id = String(item.listingId || item.listing_id || "");
+    const name = String(item.listingName || item.listing_name || "A listing");
+    const existing = state.listings.find((listing) => listing.id === id || listing.name === name);
+    if (existing) return existing;
+    return {
+      id,
+      name,
+      mark: name.split(/\s+/).map((part) => part[0]).join("").slice(0, 3).toUpperCase() || "RK",
+      url: String(item.listingUrl || item.listing_url || ""),
+      iconUrl: String(item.iconUrl || item.icon_url || ""),
+      description: String(item.description || item.listingDescription || item.listing_description || ""),
+    };
+  }
 
-    if (item.type === "outbid") {
-      return chinese
-        ? `${listingName} 以 ${money(amount)} 超越 ${displacedName}，抢下${board}第 1 名。`
-        : `${listingName} outbid ${displacedName} at ${money(amount)} and claimed #1 on the ${board}.`;
+  function activityMark(listing) {
+    const mark = createElement("span", "activity-mark");
+    mark.setAttribute("aria-hidden", "true");
+    mark.append(createElement("span", "activity-initials", listing.mark));
+    const sources = faviconCandidates(listing);
+    if (!sources.length) return mark;
+    const icon = document.createElement("img");
+    icon.alt = "";
+    icon.decoding = "async";
+    icon.referrerPolicy = "no-referrer";
+    let sourceIndex = 0;
+    const tryNextSource = () => {
+      if (sourceIndex >= sources.length) return icon.remove();
+      icon.src = sources[sourceIndex++];
+    };
+    icon.addEventListener("load", () => mark.classList.add("has-icon"), { once: true });
+    icon.addEventListener("error", tryNextSource);
+    tryNextSource();
+    mark.append(icon);
+    return mark;
+  }
+
+  function activityPresentation(item) {
+    const chinese = state.language === "zh";
+    const displacedName = String(item.displacedName || item.displaced_name || "");
+    const displacedBy = String(item.displacedBy || item.displaced_by || "");
+    const amountValue = Number(item.amount ?? item.amount_minor / 100);
+    const amount = Number.isFinite(amountValue) ? amountValue : 0;
+    const amountLabel = amount > 0 ? money(amount) : "—";
+    const rank = Number(item.rank);
+    const type = String(item.type || "joined").replace("topped_up", "topup");
+
+    if (type === "topup" || type === "defended") {
+      return { type: "topup", action: chinese ? "加价" : "Raised", context: chinese ? `总价 ${amountLabel}` : `Total ${amountLabel}`, metric: amountLabel, metricLabel: "", rank };
     }
-    if (item.type === "challenge") {
-      return chinese
-        ? `${listingName} 以 ${money(amount)} 发起挑战，升至${board}第 ${rank} 名。`
-        : `${listingName} challenged at ${money(amount)} and moved to #${rank} on the ${board}.`;
+    if (type === "won" || type === "outbid" || type === "challenge") {
+      const isDisplaced = type === "outbid" && displacedBy;
+      return {
+        type: isDisplaced ? "outbid" : "won",
+        action: isDisplaced
+          ? (chinese ? "排名下滑" : "Lost rank")
+          : (chinese ? (rank === 1 ? "抢下第 1" : "升榜") : (rank === 1 ? "Took #1" : "Moved up")),
+        context: isDisplaced ? (chinese ? `被 ${displacedBy} 超越` : `Passed by ${displacedBy}`) : displacedName ? (chinese ? `超越 ${displacedName}` : `Passed ${displacedName}`) : (chinese ? "排名上升" : "Moved up"),
+        metric: amountLabel,
+        metricLabel: "",
+        rank,
+      };
     }
-    if (item.type === "category-leader") {
-      return chinese
-        ? `${listingName} 成为${categoryTranslations[item.category] || item.category}分类第 1 名。`
-        : `${listingName} became #1 in ${item.category}.`;
+    return { type: "joined", action: chinese ? "进场" : "Entered", context: chinese ? `以 ${money(amount)} 首次上榜` : `Opened at ${money(amount)}`, metric: money(amount), metricLabel: chinese ? "首次出价" : "Opening bid", rank };
+  }
+
+  function activityRow(item, index, duplicate = false) {
+    const listing = activityListing(item);
+    const presentation = activityPresentation(item);
+    const shouldAnimate = !duplicate && index === 0 && String(item.id || "") === pendingActivityAnimationId;
+    const row = createElement("li", `activity-event activity-${presentation.type}${shouldAnimate ? " is-latest" : ""}`);
+    row.dataset.eventId = String(item.id || "");
+    if (duplicate) {
+      row.classList.add("is-duplicate");
+      row.setAttribute("aria-hidden", "true");
     }
-    if (item.type === "clicks") {
-      return chinese
-        ? `${listingName} 在近 24 小时获得 ${compact.format(Number(item.clicks) || 0)} 次点击。`
-        : `${listingName} recorded ${compact.format(Number(item.clicks) || 0)} clicks in the past 24h.`;
+    const identity = createElement("div", "activity-identity");
+    const name = listing.id ? createElement("a", "activity-name", listing.name) : createElement("strong", "activity-name", listing.name);
+    if (name instanceof HTMLAnchorElement) {
+      name.href = listingDetailsHref(listing);
+      if (duplicate) name.tabIndex = -1;
     }
-    if (item.type === "defended") {
-      return chinese
-        ? `${listingName} 以 ${money(amount)} 守住${board}第 1 名。`
-        : `${listingName} held #1 on the ${board} at ${money(amount)}.`;
+    identity.append(name);
+    if (listing.description) {
+      const description = listing.description.length > 48 ? `${listing.description.slice(0, 45).trimEnd()}…` : listing.description;
+      identity.append(createElement("span", "activity-description", description));
     }
-    return String(item.text || (chinese ? "排名动态已更新。" : "The ranking changed."));
+    const action = createElement("span", `activity-action activity-action-${presentation.type}`, presentation.action);
+    const metric = createElement("div", "activity-metric");
+    metric.append(createElement("strong", "", presentation.metric));
+    const rank = createElement("div", "activity-rank");
+    rank.append(createElement("strong", "", Number.isFinite(presentation.rank) && presentation.rank > 0 ? `#${presentation.rank}` : "—"));
+    const time = createElement("time", "activity-time", activityTime(item));
+    if (item.created_at || item.createdAt) time.dateTime = item.created_at || item.createdAt;
+    const details = createElement("div", "activity-details");
+    details.append(action, metric, rank, time);
+    identity.append(details);
+    row.append(activityMark(listing), identity);
+    return row;
+  }
+
+  function todayRankingRow(listing, position) {
+    const item = createElement("li", "today-ranking-item");
+    const rank = createElement("span", "today-ranking-position", `#${position}`);
+    rank.setAttribute("aria-label", `Today rank ${position}`);
+    const identity = productIdentity(listing);
+    const bid = createElement("strong", "today-ranking-bid", money(getBid(listing, "today")));
+    const clicks = createElement("span", "today-ranking-clicks", `${compact.format(getClicks(listing, "today"))} ${state.language === "zh" ? "次点击" : "clicks"}`);
+    const proof = createElement("div", "today-ranking-proof");
+    proof.append(bid, clicks);
+    item.append(rank, identity, proof);
+    return item;
   }
 
   function renderSidebar() {
-    const todayLeader = allRanked("today")[0];
-    if (elements.todayCard && todayLeader) {
-      elements.todayCard.replaceChildren(
-        productIdentity(todayLeader),
-        createElement("strong", "", `${money(todayLeader.bids.today)} ${state.language === "zh" ? "近 24 小时" : "past 24h"}`),
-        createElement("p", "", state.language === "zh" ? `${compact.format(todayLeader.todayClicks)} 次点击（近 24 小时）。` : `${compact.format(todayLeader.todayClicks)} clicks in the past 24h.`),
-      );
+    const todayListings = rankedListings(visibleListings(), "today").slice(0, 3);
+    if (elements.todayRankingList) {
+      if (!todayListings.length) {
+        const empty = createElement("li", "today-ranking-empty", state.language === "zh" ? "暂无今日排名。" : "No activity has ranked today yet.");
+        elements.todayRankingList.replaceChildren(empty);
+      } else {
+        elements.todayRankingList.replaceChildren(...todayListings.map((listing, index) => todayRankingRow(listing, index + 1)));
+      }
     }
 
     if (elements.activityList) {
-      const activity = state.activity.slice(0, 5);
+      const activity = state.activity.slice(0, 10);
+      elements.activityList.classList.toggle("is-empty", activity.length === 0);
       if (!activity.length) {
         const empty = createElement("li", "activity-empty");
         empty.append(
-          createElement("strong", "", state.language === "zh" ? "等待首个已验证挑战" : "Waiting for the first verified challenge"),
+          createElement("strong", "", state.language === "zh" ? "等待首个已验证挑战" : "Waiting for the first settled challenge"),
           createElement("span", "", state.language === "zh" ? "付款确认后的排名变化会显示在这里。" : "Settled rank changes will appear here."),
         );
         elements.activityList.replaceChildren(empty);
       } else {
-        elements.activityList.replaceChildren(
-          ...activity.map((item, index) => {
-            const li = createElement("li", index === 0 ? "is-latest" : "");
-            const time = createElement("time", "", activityTime(item));
-            if (item.created_at) time.dateTime = item.created_at;
-            li.append(time, createElement("span", "", activityText(item)));
-            return li;
-          }),
-        );
+        const primary = activity.map((item, index) => activityRow(item, index));
+        const duplicate = activity.map((item, index) => activityRow(item, index, true));
+        elements.activityList.style.setProperty("--ticker-duration", `${Math.max(26, activity.length * 6)}s`);
+        elements.activityList.replaceChildren(...primary, ...duplicate);
       }
+      pendingActivityAnimationId = "";
     }
   }
 
@@ -884,13 +1159,13 @@
     const selected = elements.categorySelect.value;
     elements.categorySelect.replaceChildren(
       new Option(languageText("chooseMarket"), ""),
-      ...categories.map((category) => new Option(state.language === "zh" ? (categoryTranslations[category] || category) : category, category)),
+      ...categories.map((category) => new Option(categoryName(category), category)),
     );
     if (state.category === DEFAULT_CATEGORY) {
       elements.categorySelect.value = "";
       return;
     }
-    elements.categorySelect.value = categories.includes(state.category) ? state.category : selected;
+    elements.categorySelect.value = categories.includes(state.category) ? state.category : canonicalCategory(selected);
   }
 
   function renderTheme() {
@@ -914,41 +1189,25 @@
     renderSidebar();
     renderTotals();
     updateBoardSourceLabels();
-  }
-
-  function setBidTarget() {
-    if (!elements.bidTarget) return;
-    const targetName =
-      activeBid?.type === "new"
-        ? pendingChallenge?.name || "Your demo listing"
-        : state.listings.find((listing) => listing.id === activeBid?.listingId)?.name || "Selected listing";
-    const label = activeBid?.type === "new" ? "Challenge #1" : "Challenge this position";
-    elements.bidTarget.replaceChildren(createElement("span", "", label), createElement("strong", "", targetName));
+    window.dispatchEvent(new CustomEvent("rankoff:content-updated"));
   }
 
   function updateBidPreview() {
-    if (!elements.bidAmount || !elements.bidHint || !activeBid) return;
+    if (!elements.bidAmount || !activeBid) return;
     const amount = Number(elements.bidAmount.value);
     const minimum = minimumForActiveBid();
-    let message;
-
-    if (!Number.isSafeInteger(amount)) {
-      elements.bidAmount.setCustomValidity("Enter a whole-dollar amount.");
-      message = "Enter a whole-dollar amount.";
-    } else if (amount < minimum) {
-      elements.bidAmount.setCustomValidity(`Bid at least ${money(minimum)}.`);
-      message = `Minimum challenge is ${money(minimum)}.`;
-    } else if (amount > MAX_BID) {
-      elements.bidAmount.setCustomValidity(`Demo bids cannot exceed ${money(MAX_BID)}.`);
-      message = `Demo bids cannot exceed ${money(MAX_BID)}.`;
-    } else {
-      elements.bidAmount.setCustomValidity("");
-      const rank = projectedRank(amount);
-      message = `${money(amount)} would place this listing at #${rank} on the ${windowLabel().toLowerCase()} board.`;
-      if (elements.orderPosition) elements.orderPosition.textContent = `Projected #${rank} on the ${windowLabel().toLowerCase()} board`;
-    }
-
-    elements.bidHint.textContent = message;
+    if (!Number.isSafeInteger(amount) || amount < minimum || amount > MAX_BID) return;
+    const rank = projectedRank(amount);
+    const listing = activeBid.type === "new"
+      ? pendingChallenge
+      : state.listings.find((item) => item.id === activeBid.listingId);
+    const category = canonicalCategory(listing?.category) || state.category;
+    if (elements.dialogRank) elements.dialogRank.textContent = `#${rank}`;
+    if (elements.dialogPrice) elements.dialogPrice.textContent = money(amount);
+    if (elements.dialogContext) elements.dialogContext.textContent = `${checkoutBoardLabel()} · ${categoryName(category)}`;
+    if (elements.dialogExplanation) elements.dialogExplanation.textContent = state.language === "zh"
+      ? `付款确认后，${listing?.name || "你的条目"}将在${checkoutBoardLabel()}获得第 ${rank} 名。其他人仍可出价取得更高排名。`
+      : `After payment confirms, ${listing?.name || "your listing"} will take #${rank} on the ${checkoutBoardLabel().toLowerCase()}. Someone else can still claim a higher rank.`;
   }
 
   function openBidDialog(trigger, listingId = null) {
@@ -956,10 +1215,8 @@
     activeBid = listingId ? { type: "listing", listingId } : { type: "new" };
     lastTrigger = trigger;
     elements.bidForm.reset();
-    setBidTarget();
 
     const min = minimumForActiveBid();
-    elements.bidAmount.min = String(min);
     elements.bidAmount.value = String(Math.max(min, Number(elements.inlineBid?.value) || min));
     updateBidPreview();
 
@@ -969,7 +1226,7 @@
       elements.dialog.setAttribute("open", "");
     }
 
-    window.requestAnimationFrame(() => elements.bidAmount?.focus());
+    window.requestAnimationFrame(() => elements.bidAgree?.focus());
   }
 
   function closeBidDialog({ restoreFocus = true } = {}) {
@@ -1016,6 +1273,17 @@
   function applyBid(amount) {
     const before = rankedListings();
     const previousLeader = before[0] || null;
+    let previousListing = activeBid?.type === "listing"
+      ? state.listings.find((item) => item.id === activeBid.listingId)
+      : null;
+    if (!previousListing && pendingChallenge) {
+      previousListing = state.listings.find((item) => {
+        try { return new URL(item.url).hostname === pendingChallenge.url.hostname; }
+        catch { return false; }
+      });
+    }
+    const previousRank = previousListing ? before.findIndex((item) => item.id === previousListing.id) + 1 : 0;
+    const previousAmount = previousListing ? getBid(previousListing) : 0;
     let listing;
     if (activeBid?.type === "new") {
       if (!pendingChallenge) return null;
@@ -1027,31 +1295,39 @@
     }
 
     changedListingId = listing.id;
-    const rank = rankedListings().findIndex((item) => item.id === listing.id) + 1;
+    const after = rankedListings();
+    const rank = after.findIndex((item) => item.id === listing.id) + 1;
     const displaced = rank === 1 && previousLeader && previousLeader.id !== listing.id ? previousLeader : null;
-    state.activity.unshift(displaced
-      ? {
-          id: `local-${Date.now()}`,
-          type: "outbid",
-          timeEn: "Just now",
-          timeZh: "刚刚",
-          listingName: listing.name,
-          displacedName: displaced.name,
-          amount,
-          rank,
-          board: state.activeWindow,
-        }
-      : {
-          id: `local-${Date.now()}`,
-          type: "challenge",
-          timeEn: "Just now",
-          timeZh: "刚刚",
-          listingName: listing.name,
-          amount,
-          rank,
-          board: state.activeWindow,
-        });
-    state.activity = state.activity.slice(0, 6);
+    const eventTime = Date.now();
+    const events = [{
+      id: `local-${eventTime}`,
+      type: previousRank === 0 ? "joined" : rank < previousRank ? "won" : "topup",
+      timeEn: "Just now",
+      timeZh: "刚刚",
+      listingId: listing.id,
+      listingName: listing.name,
+      displacedName: displaced?.name || "",
+      delta: Math.max(0, amount - previousAmount),
+      amount,
+      rank,
+      board: state.activeWindow,
+    }];
+    if (displaced) {
+      events.push({
+        id: `local-${eventTime}-outbid`,
+        type: "outbid",
+        timeEn: "Just now",
+        timeZh: "刚刚",
+        listingId: displaced.id,
+        listingName: displaced.name,
+        displacedBy: listing.name,
+        rank: after.findIndex((item) => item.id === displaced.id) + 1,
+        board: state.activeWindow,
+      });
+    }
+    state.activity.unshift(...events);
+    state.activity = state.activity.slice(0, 20);
+    pendingActivityAnimationId = events[0].id;
     saveState();
     render();
 
@@ -1134,11 +1410,15 @@
     const rank = rankedListings().findIndex((item) => item.id === listing.id) + 1;
     if (rank < 1) return;
     const nextPrice = rankedListings().length ? getBid(rankedListings()[0]) + 1 : 1;
-    const preview = boardSource === "production" ? "" : (state.language === "zh" ? "预览：" : "Preview: ");
     const text = state.language === "zh"
-      ? `${preview}${listing.name} 以 ${money(getBid(listing))} 的赞助出价位居 RANKOFF ${windowLabel()}榜第 ${rank} 名。你能超越它吗？${money(nextPrice)} 起认领第 1 名。`
-      : `${preview}${listing.name} holds #${rank} on RANKOFF's ${windowLabel().toLowerCase()} board with a ${money(getBid(listing))} sponsored bid. Think you can outrank it? Claim #1 from ${money(nextPrice)}.`;
+      ? `${listing.name} 以 ${money(getBid(listing))} 的赞助出价位居 RANKOFF ${windowLabel()}榜第 ${rank} 名。你能超越它吗？${money(nextPrice)} 起认领第 1 名。`
+      : `${listing.name} holds #${rank} on RANKOFF's ${windowLabel().toLowerCase()} board with a ${money(getBid(listing))} sponsored bid. Think you can outrank it? Claim #1 from ${money(nextPrice)}.`;
     const url = new URL(window.location.href);
+    if (["localhost", "127.0.0.1", "0.0.0.0"].includes(url.hostname)) {
+      url.protocol = "https:";
+      url.host = "rankoff.my";
+      url.pathname = "/";
+    }
     url.searchParams.delete("checkout");
     url.searchParams.delete("reset");
     url.searchParams.set("period", state.activeWindow);
@@ -1147,6 +1427,10 @@
     url.hash = `listing-${listing.id}`;
 
     const shareData = { title: state.language === "zh" ? `${listing.name} 的 RANKOFF 排名` : `${listing.name} on RANKOFF`, text, url: url.toString() };
+    if (window.RankoffShare?.open) {
+      window.RankoffShare.open({ ...shareData, language: state.language, onStatus: showToast });
+      return;
+    }
     const canUseShareSheet = typeof navigator.share === "function"
       && (typeof navigator.canShare !== "function" || navigator.canShare(shareData));
     if (canUseShareSheet) {
@@ -1175,15 +1459,35 @@
   elements.categoryRail?.addEventListener("click", (event) => {
     const trigger = event.target instanceof Element ? event.target.closest("[data-category]") : null;
     if (!(trigger instanceof HTMLElement)) return;
-    state.category = trigger.dataset.category || DEFAULT_CATEGORY;
+    const selected = trigger.dataset.category || DEFAULT_CATEGORY;
+    state.category = selected === DEFAULT_CATEGORY ? DEFAULT_CATEGORY : canonicalCategory(selected) || DEFAULT_CATEGORY;
+    boardPage = 1;
+    remotePagination = null;
+    remoteLeader = null;
     saveState();
     render();
     void refreshBoardFromApi();
   });
 
+  elements.categoryRail?.addEventListener("scroll", updateCategoryScrollControls, { passive: true });
+
+  elements.categoryScrollButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      if (!elements.categoryRail) return;
+      const direction = Number(button.dataset.categoryScroll) || 1;
+      const distance = Math.max(240, elements.categoryRail.clientWidth * 0.72);
+      elements.categoryRail.scrollBy({ left: direction * distance, behavior: "smooth" });
+    });
+  });
+
+  window.addEventListener("resize", updateCategoryScrollControls, { passive: true });
+
   elements.categorySelect?.addEventListener("change", (event) => {
     const value = event.currentTarget instanceof HTMLSelectElement ? event.currentTarget.value : categories[0];
-    state.category = value === "" ? DEFAULT_CATEGORY : categories.includes(value) ? value : DEFAULT_CATEGORY;
+    state.category = value === "" ? DEFAULT_CATEGORY : canonicalCategory(value) || DEFAULT_CATEGORY;
+    boardPage = 1;
+    remotePagination = null;
+    remoteLeader = null;
     saveState();
     render();
     void refreshBoardFromApi();
@@ -1194,10 +1498,59 @@
       const nextWindow = button.dataset.boardWindow;
       if (nextWindow !== "all" && nextWindow !== "today") return;
       state.activeWindow = nextWindow;
+      boardPage = 1;
+      remotePagination = null;
+      remoteLeader = null;
       saveState();
       render();
       void refreshBoardFromApi();
     });
+  });
+
+  async function navigateToBoardPage(nextPage) {
+    const total = boardSource !== "local" && remotePagination ? remotePagination.total : rankedListings().length;
+    const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    const targetPage = Math.min(totalPages, Math.max(1, nextPage));
+    if (targetPage === boardPage) return;
+
+    const previousPage = boardPage;
+    boardPage = targetPage;
+    elements.boardPagination?.setAttribute("aria-busy", "true");
+    elements.boardPageButtons.forEach((pageButton) => { pageButton.disabled = true; });
+
+    if (boardSource === "local") {
+      render();
+    } else {
+      const refreshed = await refreshBoardFromApi();
+      if (!refreshed) {
+        boardPage = previousPage;
+        renderPagination(total, state.listings.length);
+        showToast(state.language === "zh" ? "暂时无法载入下一页。" : "The next page could not be loaded yet.", "error");
+      }
+    }
+
+    elements.boardPagination?.removeAttribute("aria-busy");
+    document.querySelector("#board")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  elements.boardPageButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const direction = button.dataset.boardPage === "previous" ? -1 : 1;
+      void navigateToBoardPage(boardPage + direction);
+    });
+  });
+
+  elements.pageLinks?.addEventListener("click", (event) => {
+    const target = event.target instanceof Element ? event.target.closest("[data-board-page-number]") : null;
+    if (!(target instanceof HTMLElement)) return;
+    void navigateToBoardPage(Number(target.dataset.boardPageNumber));
+  });
+
+  elements.boardRefresh?.addEventListener("click", async () => {
+    elements.boardRefresh.disabled = true;
+    const refreshed = await refreshBoardFromApi();
+    elements.boardRefresh.disabled = false;
+    if (!refreshed) showToast(state.language === "zh" ? "暂时无法刷新榜单。" : "The board could not be refreshed yet.", "error");
   });
 
   elements.themeToggle?.addEventListener("click", () => {
@@ -1212,6 +1565,14 @@
     render();
   });
 
+  elements.panelToggles.forEach((button) => {
+    button.addEventListener("click", () => {
+      const expanded = button.getAttribute("aria-expanded") !== "false";
+      button.setAttribute("aria-expanded", String(!expanded));
+      updatePanelToggleLabels();
+    });
+  });
+
   document.addEventListener("click", (event) => {
     const target = event.target instanceof Element ? event.target : null;
     if (!target) return;
@@ -1219,17 +1580,6 @@
     const featured = target.closest(".featured-listing");
     if (featured instanceof HTMLElement && !(target.closest("a, button, input, select"))) {
       featured.querySelector("[data-prepare-challenge]")?.click();
-      return;
-    }
-
-    const rankRow = target.closest(".rank-row");
-    if (rankRow instanceof HTMLElement && !(target.closest("a, button, input, select"))) {
-      elements.inlineBid?.setAttribute("data-from-row", rankRow.dataset.listingId || "");
-      const minimum = Number(elements.inlineBid?.min) || minimumForActiveBid();
-      if (elements.inlineBid) elements.inlineBid.value = String(minimum);
-      elements.inlineChallenge?.scrollIntoView({ behavior: "smooth", block: "center" });
-      window.setTimeout(() => elements.inlineUrl?.focus(), 220);
-      showToast(`Challenge prepared at ${money(minimum)}. Add your product to continue.`);
       return;
     }
 
@@ -1280,7 +1630,7 @@
     if (event.key !== "Enter" && event.key !== " ") return;
     const target = event.target instanceof HTMLElement ? event.target : null;
     if (!target || target.closest("a, button, input, select, textarea")) return;
-    const card = target.closest(".featured-listing, .rank-row");
+    const card = target.closest(".featured-listing");
     if (!(card instanceof HTMLElement)) return;
     event.preventDefault();
     card.click();
@@ -1295,13 +1645,13 @@
     try {
       parsedUrl = parseProductUrl(formData.get("productUrl"));
     } catch {
-      showToast("Enter a valid website, such as yourproduct.com, or an @handle.", "error");
+      showToast(languageText("invalidWebsite"), "error");
       return;
     }
 
     const outranked = rankedListings()[0];
-    const requiredCategory = outranked && categories.includes(outranked.category)
-      ? outranked.category
+    const requiredCategory = outranked && canonicalCategory(outranked.category)
+      ? canonicalCategory(outranked.category)
       : state.category !== DEFAULT_CATEGORY && categories.includes(state.category) ? state.category : "";
     const category = String(formData.get("productCategory") || "");
     if (!requiredCategory || category !== requiredCategory) {
@@ -1309,7 +1659,7 @@
       showToast(
         state.language === "zh"
           ? `挑战分类必须与${outranked?.name || "目标条目"}相同。`
-          : `Choose ${requiredCategory || "the target listing’s"} to match the listing you’ll outrank.`,
+          : `Choose ${requiredCategory ? categoryName(requiredCategory) : "the target listing’s category"} to match the listing you’ll outrank.`,
         "error",
       );
       return;
@@ -1365,7 +1715,7 @@
         showToast(error?.message || "Hosted checkout is unavailable. No payment was made.", "error");
         if (submitButton) {
           submitButton.disabled = false;
-          submitButton.textContent = "Confirm challenge";
+          submitButton.textContent = state.language === "zh" ? "继续付款" : "Continue to checkout";
         }
       }
       return;
@@ -1375,7 +1725,7 @@
     if (!result) return;
     pendingChallenge = null;
     closeBidDialog({ restoreFocus: false });
-    showToast(`${result.listing.name} is now #${result.rank}. No payment was collected.`, "success");
+    showToast(`${result.listing.name} is now #${result.rank} in this preview.`, "success");
   });
 
   elements.dialog?.addEventListener("click", (event) => {
