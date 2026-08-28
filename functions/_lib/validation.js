@@ -101,6 +101,15 @@ export function normalizeLimit(value, fallback = 50, max = 100) {
   return parsed;
 }
 
+export function normalizePage(value, fallback = 1, max = 10_000) {
+  if (value === null || value === undefined || value === "") return fallback;
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed < 1 || parsed > max) {
+    throw new ApiError(422, "invalid_page", `page must be between 1 and ${max}.`);
+  }
+  return parsed;
+}
+
 function isBlockedHostname(hostname) {
   if (hostname === "localhost") return true;
   return BLOCKED_HOST_SUFFIXES.some(

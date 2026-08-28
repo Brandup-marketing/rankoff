@@ -22,7 +22,7 @@
     <meta name="theme-color" content="#090a0c" />
     <title>RANKOFF | Bid Your Way to #1</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=16" />
+    <link rel="stylesheet" href="./styles.css?v=17" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -175,13 +175,12 @@
           </div>
         </div>
 
-        <div class="board-header" aria-hidden="true">
-          <span data-i18n="rank">Rank</span>
-          <span data-i18n="listing">Listing</span>
-          <span data-i18n="bid">Bid</span>
-          <span data-i18n="clicks">Clicks</span>
-        </div>
         <div class="board-list" data-board-list aria-live="polite" aria-label="Sponsored listings ranked fourth and below"></div>
+        <nav class="board-pagination" data-board-pagination aria-label="Leaderboard pages" hidden>
+          <button type="button" class="pagination-button" data-board-page="previous">← Previous</button>
+          <p class="pagination-status" aria-live="polite"><strong data-page-range>1–50</strong><span data-page-total>of 50</span></p>
+          <button type="button" class="pagination-button" data-board-page="next">Next →</button>
+        </nav>
       </section>
 
       <section class="ranking-rules" aria-labelledby="ranking-rules-heading">
@@ -273,6 +272,6 @@
     <div class="toast" data-toast role="status" aria-live="polite" aria-atomic="true"></div>
     <script src="./search.js?v=1" defer></script>
     <script src="./share.js?v=1" defer></script>
-    <script src="./app.js?v=16" defer></script>
+    <script src="./app.js?v=17" defer></script>
   </body>
 </html>

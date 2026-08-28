@@ -15,7 +15,7 @@ export async function loadBoard(db, slug) {
   return board;
 }
 
-export async function loadPublicBoard(db, board, { category, period, limit }) {
+export async function loadPublicBoard(db, board, { category, period, limit, page = 1 }) {
   const where = [
     "b.board_id = ?1",
     "b.status = 'settled'",
@@ -40,6 +40,8 @@ export async function loadPublicBoard(db, board, { category, period, limit }) {
   const filterBindings = [...bindings];
   bindings.push(limit);
   const limitBinding = `?${bindings.length}`;
+  bindings.push((page - 1) * limit);
+  const offsetBinding = `?${bindings.length}`;
 
   const statement = db.prepare(
     `WITH eligible AS (
@@ -79,7 +81,15 @@ export async function loadPublicBoard(db, board, { category, period, limit }) {
         ${period === "today" ? "AND c.occurred_at >= datetime('now', '-24 hours')" : ""}) AS clicks
      FROM ranked
      ORDER BY public_rank ASC
-     LIMIT ${limitBinding}`,
+     LIMIT ${limitBinding} OFFSET ${offsetBinding}`,
+  );
+  const summaryStatement = db.prepare(
+    `SELECT
+       COUNT(DISTINCT b.listing_id) AS total_count,
+       COALESCE(MAX(b.amount_minor), 0) AS top_amount_minor
+     FROM bids b
+     INNER JOIN listings l ON l.id = b.listing_id
+     WHERE ${where.join(" AND ")}`,
   );
   const activityStatement = db.prepare(
     `WITH recent AS (
@@ -114,8 +124,9 @@ export async function loadPublicBoard(db, board, { category, period, limit }) {
      LIMIT 20`,
   );
 
-  const [rankingResult, snapshot, activityResult] = await Promise.all([
+  const [rankingResult, summary, snapshot, activityResult] = await Promise.all([
     statement.bind(...bindings).all(),
+    summaryStatement.bind(...filterBindings).first(),
     db
       .prepare(
         `SELECT id, created_at
@@ -148,7 +159,8 @@ export async function loadPublicBoard(db, board, { category, period, limit }) {
     },
     clicks: Number(row.clicks || 0),
   }));
-  const topAmount = rankings[0]?.bid.amount_minor || 0;
+  const topAmount = Number(summary?.top_amount_minor || 0);
+  const total = Number(summary?.total_count || 0);
   const rankByListing = new Map(rankings.map((entry) => [entry.listing.id, entry.rank]));
   const activity = activityResult.results
     .filter((row) => rankByListing.has(row.listing_id))
@@ -176,6 +188,14 @@ export async function loadPublicBoard(db, board, { category, period, limit }) {
     generated_at: new Date().toISOString(),
     rankings,
     activity,
+    pagination: {
+      page,
+      page_size: limit,
+      total,
+      total_pages: Math.max(1, Math.ceil(total / limit)),
+      has_previous: page > 1,
+      has_next: page * limit < total,
+    },
     next_bid_minor: topAmount + Number(board.min_increment_minor),
   };
 }

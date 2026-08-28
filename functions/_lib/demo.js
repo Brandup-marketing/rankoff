@@ -63,13 +63,15 @@ const DEMO_LISTINGS = Object.freeze([
   },
 ]);
 
-export function demoBoard({ category = "all", period = "all", limit = 50 } = {}) {
+export function demoBoard({ category = "all", period = "all", limit = 50, page = 1 } = {}) {
   const members = marketCategoryMembers(category);
-  const rows = DEMO_LISTINGS.filter(
+  const matchingRows = DEMO_LISTINGS.filter(
     (listing) => String(category).toLowerCase() === "all" || members.includes(listing.category),
-  ).slice(0, limit);
+  );
+  const offset = (page - 1) * limit;
+  const rows = matchingRows.slice(offset, offset + limit);
   const rankings = rows.map((listing, index) => ({
-    rank: index + 1,
+    rank: offset + index + 1,
     listing: {
       id: listing.id,
       title: listing.title,
@@ -87,7 +89,9 @@ export function demoBoard({ category = "all", period = "all", limit = 50 } = {})
     },
     clicks: period === "today" ? Math.floor(listing.clicks / 5) : listing.clicks,
   }));
-  const topAmount = rankings[0]?.bid.amount_minor || 0;
+  const topAmount = matchingRows[0]
+    ? (period === "today" ? Math.max(100, Math.floor(matchingRows[0].amount_minor / 4)) : matchingRows[0].amount_minor)
+    : 0;
 
   return {
     mode: "demo",
@@ -101,6 +105,14 @@ export function demoBoard({ category = "all", period = "all", limit = 50 } = {})
     snapshot_id: `demo-${period}`,
     generated_at: new Date().toISOString(),
     rankings,
+    pagination: {
+      page,
+      page_size: limit,
+      total: matchingRows.length,
+      total_pages: Math.max(1, Math.ceil(matchingRows.length / limit)),
+      has_previous: page > 1,
+      has_next: offset + rows.length < matchingRows.length,
+    },
     next_bid_minor: topAmount + 100,
   };
 }

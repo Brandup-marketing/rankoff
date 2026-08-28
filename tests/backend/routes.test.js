@@ -26,6 +26,24 @@ test("legacy category filters resolve to their broader launch market", async () 
   assert.deepEqual(payload.rankings.map((entry) => entry.listing.id), ["trackline"]);
 });
 
+test("preview board paginates rankings without resetting their public rank", async () => {
+  const response = await getBoard({
+    request: new Request("https://rankoff.my/api/v1/board?period=all&limit=3&page=2"),
+    env: { RANKOFF_MODE: "demo" },
+  });
+  const payload = await response.json();
+  assert.equal(response.status, 200);
+  assert.deepEqual(payload.rankings.map((entry) => entry.rank), [4, 5]);
+  assert.deepEqual(payload.pagination, {
+    page: 2,
+    page_size: 3,
+    total: 5,
+    total_pages: 2,
+    has_previous: true,
+    has_next: false,
+  });
+});
+
 test("preview bid endpoint never creates a charge", async () => {
   await assert.rejects(
     createBid({ request: new Request("https://rankoff.my/api/v1/bids", { method: "POST" }), env: { RANKOFF_MODE: "demo" } }),

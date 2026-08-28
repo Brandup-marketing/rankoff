@@ -3,6 +3,7 @@
 
   const STORE_KEY = "rankoff-mvp-demo-v3";
   const MAX_BID = 1_000_000;
+  const PAGE_SIZE = 50;
   const DEFAULT_CATEGORY = "all";
   const BOARD_API_ENDPOINT = "./api/v1/board";
   const categoryGroups = Object.freeze({
@@ -164,6 +165,10 @@
     root: document.documentElement,
     boardList: document.querySelector("[data-board-list]"),
     topThree: document.querySelector("[data-top-three]"),
+    boardPagination: document.querySelector("[data-board-pagination]"),
+    boardPageButtons: Array.from(document.querySelectorAll("[data-board-page]")),
+    pageRange: document.querySelector("[data-page-range]"),
+    pageTotal: document.querySelector("[data-page-total]"),
     boardSummary: document.querySelector("[data-board-summary]"),
     boardHeading: document.querySelector("[data-board-heading]"),
     measurementSummary: document.querySelector("[data-measurement-summary]"),
@@ -210,6 +215,9 @@
   if (!elements.boardList) return;
 
   let boardSource = "local";
+  let boardPage = 1;
+  let remotePagination = null;
+  let remoteLeader = null;
   let remoteRequestId = 0;
   let state = loadState();
   const sharedView = new URL(window.location.href);
@@ -443,23 +451,33 @@
   }
 
   async function refreshBoardFromApi() {
-    if (!/^https?:$/.test(window.location.protocol)) return;
+    if (!/^https?:$/.test(window.location.protocol)) return false;
     const requestId = ++remoteRequestId;
     const endpoint = new URL(BOARD_API_ENDPOINT, window.location.href);
     endpoint.searchParams.set("board", "global");
     endpoint.searchParams.set("category", state.category);
     endpoint.searchParams.set("period", state.activeWindow);
-    endpoint.searchParams.set("limit", "50");
+    endpoint.searchParams.set("limit", String(PAGE_SIZE));
+    endpoint.searchParams.set("page", String(boardPage));
     const activityContext = `${state.activeWindow}:${state.category}`;
 
     try {
       const response = await fetch(endpoint, { headers: { Accept: "application/json" }, cache: "no-store" });
-      if (!response.ok) return;
+      if (!response.ok) return false;
       const payload = await response.json();
-      if (requestId !== remoteRequestId || !Array.isArray(payload?.rankings)) return;
+      if (requestId !== remoteRequestId || !Array.isArray(payload?.rankings)) return false;
       const period = state.activeWindow;
       const previousActivityId = String(state.activity[0]?.id || "");
       state.listings = payload.rankings.map((entry, index) => normalizeApiRanking(entry, index, period));
+      remotePagination = payload.pagination && typeof payload.pagination === "object"
+        ? {
+            page: Math.max(1, Number(payload.pagination.page) || boardPage),
+            pageSize: Math.max(1, Number(payload.pagination.page_size) || PAGE_SIZE),
+            total: Math.max(0, Number(payload.pagination.total) || 0),
+            totalPages: Math.max(1, Number(payload.pagination.total_pages) || 1),
+          }
+        : null;
+      if (boardPage === 1 && state.listings[0]) remoteLeader = cloneListing(state.listings[0]);
       boardSource = payload.mode === "production" ? "production" : "api";
       if (boardSource === "production") {
         state.activity = Array.isArray(payload.activity)
@@ -479,8 +497,10 @@
         boardViewSent = true;
         void recordBoardView();
       }
+      return true;
     } catch {
       /* Static preview and offline use intentionally fall back to the local board. */
+      return false;
     }
   }
 
@@ -792,11 +812,11 @@
     return marker;
   }
 
-  function boardRowsWithMilestones(listings, ranked) {
+  function boardRowsWithMilestones(listings, ranked, firstPosition = 4) {
     const nodes = [];
     listings.forEach((listing, index) => {
-      const position = index + 4;
-      nodes.push(rankRow(listing, position, ranked));
+      const position = Number.isSafeInteger(listing.serverRank) ? listing.serverRank : firstPosition + index;
+      nodes.push(featuredListingCard(listing, position, ranked, true));
       if ([10, 20, 50].includes(position) && position <= ranked.length) {
         nodes.push(rankMilestone(position));
       }
@@ -804,39 +824,73 @@
     return nodes;
   }
 
+  function renderPagination(total, visibleCount) {
+    if (!elements.boardPagination) return;
+    const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    if (boardPage > totalPages) boardPage = totalPages;
+    elements.boardPagination.hidden = total <= PAGE_SIZE;
+    elements.boardPagination.setAttribute("aria-label", state.language === "zh" ? "榜单分页" : "Leaderboard pages");
+    const start = total === 0 ? 0 : (boardPage - 1) * PAGE_SIZE + 1;
+    const end = total === 0 ? 0 : Math.min(total, start + Math.max(0, visibleCount) - 1);
+    if (elements.pageRange) elements.pageRange.textContent = `${start}–${end}`;
+    if (elements.pageTotal) elements.pageTotal.textContent = state.language === "zh" ? `共 ${total} 项` : `of ${total}`;
+    elements.boardPageButtons.forEach((button) => {
+      const previous = button.dataset.boardPage === "previous";
+      button.textContent = state.language === "zh" ? (previous ? "← 上一页" : "下一页 →") : (previous ? "← Previous" : "Next →");
+      button.disabled = previous ? boardPage <= 1 : boardPage >= totalPages;
+    });
+  }
+
   function renderBoard() {
-    const listings = rankedListings();
+    const allListings = rankedListings();
+    const remote = boardSource !== "local" && remotePagination;
+    const total = remote ? remotePagination.total : allListings.length;
+    const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    if (boardPage > totalPages) boardPage = totalPages;
+    const listings = remote
+      ? allListings
+      : allListings.slice((boardPage - 1) * PAGE_SIZE, boardPage * PAGE_SIZE);
     elements.boardList.setAttribute("role", "list");
+    const pageStart = total === 0 ? 0 : (boardPage - 1) * PAGE_SIZE + 1;
+    const pageEnd = total === 0 ? 0 : Math.min(total, pageStart + listings.length - 1);
+    elements.boardList.setAttribute("aria-label", state.language === "zh" ? `赞助榜单第 ${pageStart} 至 ${pageEnd} 名` : `Sponsored listings ranked ${pageStart} through ${pageEnd}`);
     elements.boardList.hidden = false;
-    document.querySelector(".board-header")?.toggleAttribute("hidden", listings.length <= 3 && listings.length > 0);
 
     if (elements.topThree) {
-      elements.topThree.replaceChildren(...listings.slice(0, 3).map((listing, index) => featuredListingCard(listing, index + 1, listings)));
+      elements.topThree.setAttribute("role", "list");
+      const leaders = boardPage === 1
+        ? listings.filter((listing, index) => (Number.isSafeInteger(listing.serverRank) ? listing.serverRank : index + 1) <= 3)
+        : [];
+      elements.topThree.replaceChildren(...leaders.map((listing, index) => featuredListingCard(listing, listing.serverRank || index + 1, allListings)));
+      elements.topThree.hidden = leaders.length === 0;
     }
 
     if (!listings.length) {
-      const empty = createElement("p", "empty-state", "No sponsored listings match this board yet.");
+      const empty = createElement("p", "empty-state", state.language === "zh" ? "此榜单暂时没有符合条件的赞助条目。" : "No sponsored listings match this board yet.");
       empty.setAttribute("role", "status");
       elements.boardList.replaceChildren(empty);
     } else {
-      const remaining = listings.slice(3);
-      elements.boardList.replaceChildren(...boardRowsWithMilestones(remaining, listings));
+      const remaining = listings.filter((listing, index) => (Number.isSafeInteger(listing.serverRank) ? listing.serverRank : (boardPage - 1) * PAGE_SIZE + index + 1) > 3);
+      const firstPosition = boardPage === 1 ? 4 : (boardPage - 1) * PAGE_SIZE + 1;
+      elements.boardList.replaceChildren(...boardRowsWithMilestones(remaining, allListings, firstPosition));
       elements.boardList.hidden = remaining.length === 0;
-      document.querySelector(".board-header")?.toggleAttribute("hidden", remaining.length === 0);
     }
+
+    renderPagination(total, listings.length);
 
     if (elements.boardSummary) {
       elements.boardSummary.textContent = state.language === "zh"
-        ? `${state.activeWindow === "today" ? "近 24 小时" : "全部时间"}榜单：${listings.length} 个赞助产品。最高有效出价获得第 1 名。`
-        : `${windowLabel()} board: ${listings.length} sponsored listings. Highest valid bid takes #1.`;
+        ? `${state.activeWindow === "today" ? "近 24 小时" : "全部时间"}榜单：${total} 个赞助产品。最高有效出价获得第 1 名。`
+        : `${windowLabel()} board: ${total} sponsored listings. Highest valid bid takes #1.`;
     }
   }
 
-  function featuredListingCard(listing, position, ranked) {
-    const card = createElement("article", `featured-listing featured-${position}`);
+  function featuredListingCard(listing, position, ranked, standard = false) {
+    const card = createElement("article", `featured-listing${position <= 3 ? ` featured-${position}` : ""}${standard ? " standard-listing" : ""}`);
     card.dataset.rank = String(position);
     card.dataset.listingId = listing.id;
-    const minimum = getBid(ranked[0]) + 1;
+    card.setAttribute("role", "listitem");
+    const minimum = boardSource !== "local" && remoteNextBid ? remoteNextBid : getBid((remoteLeader || ranked[0])) + 1;
     card.dataset.claimLabel = claimLabel(minimum);
     if (listing.id === changedListingId) card.classList.add("is-updated");
 
@@ -856,37 +910,8 @@
     return card;
   }
 
-  function rankRow(listing, position, ranked) {
-    const row = createElement("article", "rank-row");
-    row.dataset.rank = String(position);
-    row.dataset.listingId = listing.id;
-    const minimum = getBid(ranked[0]) + 1;
-    row.dataset.claimLabel = claimLabel(minimum);
-    row.setAttribute("role", "listitem");
-    if (listing.id === changedListingId) row.classList.add("is-updated");
-
-    const rank = createElement("div", "rank-position", `#${position}`);
-    rank.setAttribute("aria-label", `Rank ${position}`);
-
-    const bid = createElement("div", "money-cell");
-    bid.append(createElement("strong", "", money(getBid(listing))), createElement("span", "", `${windowLabel()} bid`));
-
-    const clicks = createElement("div", "click-cell");
-    const clickLabel = boardSource === "production"
-      ? (listing.verified ? (state.language === "zh" ? "已验证点击" : "verified clicks") : (state.language === "zh" ? "估算点击" : "estimated clicks"))
-      : (state.language === "zh" ? "示例点击" : "sample clicks");
-    clicks.append(
-      createElement("strong", "", compact.format(getClicks(listing))),
-      createElement("span", "", clickLabel),
-    );
-
-    row.id = `listing-${listing.id}`;
-    row.append(rank, productIdentity(listing, "p", position), bid, clicks, createClaimControl(minimum));
-    return row;
-  }
-
   function renderLeader() {
-    const leader = rankedListings()[0];
+    const leader = boardSource !== "local" && remoteLeader ? remoteLeader : rankedListings()[0];
     if (!leader) return;
     const leaderCategory = canonicalCategory(leader.category) || "Other";
     if (elements.categorySelect && categories.includes(leaderCategory)) {
@@ -1398,6 +1423,9 @@
     if (!(trigger instanceof HTMLElement)) return;
     const selected = trigger.dataset.category || DEFAULT_CATEGORY;
     state.category = selected === DEFAULT_CATEGORY ? DEFAULT_CATEGORY : canonicalCategory(selected) || DEFAULT_CATEGORY;
+    boardPage = 1;
+    remotePagination = null;
+    remoteLeader = null;
     saveState();
     render();
     void refreshBoardFromApi();
@@ -1419,6 +1447,9 @@
   elements.categorySelect?.addEventListener("change", (event) => {
     const value = event.currentTarget instanceof HTMLSelectElement ? event.currentTarget.value : categories[0];
     state.category = value === "" ? DEFAULT_CATEGORY : canonicalCategory(value) || DEFAULT_CATEGORY;
+    boardPage = 1;
+    remotePagination = null;
+    remoteLeader = null;
     saveState();
     render();
     void refreshBoardFromApi();
@@ -1429,9 +1460,41 @@
       const nextWindow = button.dataset.boardWindow;
       if (nextWindow !== "all" && nextWindow !== "today") return;
       state.activeWindow = nextWindow;
+      boardPage = 1;
+      remotePagination = null;
+      remoteLeader = null;
       saveState();
       render();
       void refreshBoardFromApi();
+    });
+  });
+
+  elements.boardPageButtons.forEach((button) => {
+    button.addEventListener("click", async () => {
+      const direction = button.dataset.boardPage === "previous" ? -1 : 1;
+      const total = boardSource !== "local" && remotePagination ? remotePagination.total : rankedListings().length;
+      const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+      const nextPage = Math.min(totalPages, Math.max(1, boardPage + direction));
+      if (nextPage === boardPage) return;
+
+      const previousPage = boardPage;
+      boardPage = nextPage;
+      elements.boardPagination?.setAttribute("aria-busy", "true");
+      elements.boardPageButtons.forEach((pageButton) => { pageButton.disabled = true; });
+
+      if (boardSource === "local") {
+        render();
+      } else {
+        const refreshed = await refreshBoardFromApi();
+        if (!refreshed) {
+          boardPage = previousPage;
+          renderPagination(total, state.listings.length);
+          showToast(state.language === "zh" ? "暂时无法载入下一页。" : "The next page could not be loaded yet.", "error");
+        }
+      }
+
+      elements.boardPagination?.removeAttribute("aria-busy");
+      document.querySelector("#board")?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   });
 
@@ -1462,17 +1525,6 @@
     const featured = target.closest(".featured-listing");
     if (featured instanceof HTMLElement && !(target.closest("a, button, input, select"))) {
       featured.querySelector("[data-prepare-challenge]")?.click();
-      return;
-    }
-
-    const rankRow = target.closest(".rank-row");
-    if (rankRow instanceof HTMLElement && !(target.closest("a, button, input, select"))) {
-      elements.inlineBid?.setAttribute("data-from-row", rankRow.dataset.listingId || "");
-      const minimum = Number(elements.inlineBid?.min) || minimumForActiveBid();
-      if (elements.inlineBid) elements.inlineBid.value = String(minimum);
-      elements.inlineChallenge?.scrollIntoView({ behavior: "smooth", block: "center" });
-      window.setTimeout(() => elements.inlineUrl?.focus(), 220);
-      showToast(`Challenge prepared at ${money(minimum)}. Add your product to continue.`);
       return;
     }
 
@@ -1523,7 +1575,7 @@
     if (event.key !== "Enter" && event.key !== " ") return;
     const target = event.target instanceof HTMLElement ? event.target : null;
     if (!target || target.closest("a, button, input, select, textarea")) return;
-    const card = target.closest(".featured-listing, .rank-row");
+    const card = target.closest(".featured-listing");
     if (!(card instanceof HTMLElement)) return;
     event.preventDefault();
     card.click();
