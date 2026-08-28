@@ -14,15 +14,15 @@
     <meta property="og:title" content="RANKOFF | Bid your way to #1" />
     <meta property="og:description" content="Pay to take #1. A transparent sponsored leaderboard for products that want visible attention." />
     <meta property="og:url" content="https://rankoff.my/" />
-    <meta property="og:image" content="https://rankoff.my/assets/rankoff-brand-lockup.png" />
+    <meta property="og:image" content="https://rankoff.my/assets/rankoff-final-logo.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="RANKOFF | Bid your way to #1" />
     <meta name="twitter:description" content="Pay to take #1 on a live public bidding board." />
-    <meta name="twitter:image" content="https://rankoff.my/assets/rankoff-brand-lockup.png" />
+    <meta name="twitter:image" content="https://rankoff.my/assets/rankoff-final-logo.png" />
     <meta name="theme-color" content="#090a0c" />
     <title>RANKOFF | Bid Your Way to #1</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=11" />
+    <link rel="stylesheet" href="./styles.css?v=27" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -34,7 +34,7 @@
           "@type": "Organization",
           "name": "RANKOFF",
           "url": "https://rankoff.my/",
-          "logo": "https://rankoff.my/assets/rankoff-brand-lockup.png"
+          "logo": "https://rankoff.my/assets/rankoff-final-logo.png"
         },
         "potentialAction": {
           "@type": "RegisterAction",
@@ -50,7 +50,7 @@
     <main class="app-shell">
       <header class="topbar" aria-label="RANKOFF">
         <a class="brand" href="./" aria-label="RANKOFF home">
-          <img class="brand-lockup-image" src="./assets/rankoff-header-lockup.png?v=1" alt="RANKOFF — Bid your way to number one" width="420" height="120" />
+          <img class="brand-final-logo" src="./assets/rankoff-header-lockup.png?v=2" alt="RANKOFF — Bid your way to number one" width="1130" height="220" />
         </a>
 
         <nav class="time-tabs" aria-label="Ranking timeframe">
@@ -58,10 +58,21 @@
           <button type="button" data-board-window="today" aria-pressed="false">Past 24h</button>
         </nav>
         <span class="demo-state" data-board-state><i aria-hidden="true"></i> Preview board</span>
-        <nav class="site-nav" aria-label="Main navigation"><a href="./index.html" data-i18n="navBoard">Board</a><a href="./about.html" data-i18n="navAbout">About</a></nav>
+        <nav class="site-nav" aria-label="Main navigation"><a href="./categories.html" data-i18n="navCategories">Categories</a><a href="./about.html" data-i18n="navAbout">About</a></nav>
+        <button class="search-toggle" type="button" data-search-toggle aria-expanded="false" aria-controls="site-search" data-i18n-aria-label="searchPlaceholder" aria-label="Search products and categories"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.6 4.6"></path></svg></button>
         <button class="language-toggle" type="button" data-language-toggle aria-pressed="false">中文</button>
         <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch colour theme" aria-pressed="true">Light</button>
       </header>
+
+      <form class="site-search" id="site-search" data-site-search role="search" hidden>
+        <div class="site-search-field">
+          <span class="site-search-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.6 4.6"></path></svg></span>
+          <label class="visually-hidden" for="site-search-input" data-i18n="searchPlaceholder">Search products and categories…</label>
+          <input id="site-search-input" data-site-search-input data-i18n-placeholder="searchPlaceholder" type="search" autocomplete="off" placeholder="Search products and categories…" />
+          <button class="search-close" type="button" data-search-close data-i18n="close">Close</button>
+        </div>
+        <div class="site-search-results" data-search-results role="listbox" aria-label="Search results" hidden></div>
+      </form>
 
       <section class="claim-stage" id="claim" aria-labelledby="page-title">
         <div class="claim-panel">
@@ -84,30 +95,67 @@
 
               <label class="field field-wide">
                 <span data-i18n="productUrl">Your product URL or @handle</span>
-                <input name="productUrl" type="text" placeholder="yourproduct.com or @handle" autocomplete="url" required data-inline-url />
+                <input name="productUrl" type="text" data-i18n-placeholder="productUrlPlaceholder" placeholder="example.com or @yourusername" autocomplete="url" required data-inline-url />
               </label>
 
               <label class="field">
                 <span data-i18n="challengeCategory">Challenge category</span>
-                <select name="productCategory" required data-category-select aria-describedby="category-rule">
+                <select name="productCategory" required data-category-select>
                   <option value="" data-i18n="chooseMarket">Choose a market</option>
                 </select>
-                <small class="field-note" id="category-rule" data-category-rule>Must match the listing you’ll outrank.</small>
               </label>
 
               <button class="primary-action" type="submit" data-inline-submit data-i18n="reviewBid">Review your bid</button>
-              <p class="demo-note" data-demo-note data-i18n="demoOnly">Preview board · no payment is collected</p>
             </form>
 
           </div>
 
-          <div class="top-three top-three-hero" data-top-three aria-label="Top three sponsored listings"></div>
-        </div>
-      </section>
+          <section class="category-market" aria-labelledby="category-heading">
+            <h2 id="category-heading" data-i18n="markets">Markets</h2>
+            <div class="category-scroll-shell">
+              <button class="category-scroll-control" type="button" data-category-scroll="-1" aria-label="Scroll markets left">‹</button>
+              <div class="category-rail" data-category-rail aria-label="Filter by category"></div>
+              <button class="category-scroll-control" type="button" data-category-scroll="1" aria-label="Scroll markets right">›</button>
+            </div>
+          </section>
 
-      <section class="category-market" aria-labelledby="category-heading">
-        <h2 id="category-heading" data-i18n="markets">Markets</h2>
-        <div class="category-rail" data-category-rail aria-label="Filter by category"></div>
+          <div class="top-three top-three-hero" data-top-three aria-label="Top three sponsored listings"></div>
+
+          <section class="board-interstitial" aria-label="Board pulse">
+            <section class="today-ranking-panel pulse-panel" aria-labelledby="today-ranking-heading">
+              <div class="section-heading-line section-heading-line-spread">
+                <div>
+                  <h2 id="today-ranking-heading" data-i18n="todayRanking">Today’s leaders</h2>
+                </div>
+                <div class="panel-actions">
+                  <a class="text-link" data-today-see-all data-i18n="seeAll" href="./index.html?period=today#board">See all</a>
+                  <button class="panel-toggle" type="button" data-panel-toggle aria-expanded="true" aria-controls="today-ranking-content" data-panel-title="Today’s top ranking" data-panel-title-zh="今日热门榜"><span data-panel-toggle-label>Minimize</span><span class="panel-toggle-icon" aria-hidden="true">−</span></button>
+                </div>
+              </div>
+              <div id="today-ranking-content" data-panel-content>
+                <ol class="today-ranking-list" data-today-ranking-list aria-live="polite"></ol>
+              </div>
+            </section>
+
+            <section class="activity-section pulse-panel" aria-labelledby="activity-heading">
+              <div class="section-heading-line section-heading-line-spread">
+                <div>
+                  <p class="eyebrow" data-i18n="livePulse">Live updates</p>
+                  <h2 id="activity-heading" data-i18n="latestActivity">Latest activity</h2>
+                </div>
+                <div class="panel-actions">
+                  <span class="live-dot" aria-hidden="true"></span>
+                  <button class="panel-toggle" type="button" data-panel-toggle aria-expanded="true" aria-controls="latest-activity-content" data-panel-title="Latest activity" data-panel-title-zh="最新动态"><span data-panel-toggle-label>Minimize</span><span class="panel-toggle-icon" aria-hidden="true">−</span></button>
+                </div>
+              </div>
+              <div id="latest-activity-content" data-panel-content>
+                <div class="activity-ticker-viewport">
+                  <ol class="activity-tape" id="latest-activity-list" data-activity-list aria-live="polite" aria-relevant="additions text"></ol>
+                </div>
+              </div>
+            </section>
+          </section>
+        </div>
       </section>
 
       <section class="board-section" id="board" aria-labelledby="board-heading">
@@ -116,6 +164,7 @@
             <h2 id="board-heading" data-board-heading>Preview leaderboard</h2>
           </div>
           <div class="board-context">
+            <button type="button" class="refresh-button" data-board-refresh data-i18n="refresh">Refresh</button>
             <p data-board-summary data-i18n="boardSummary">Highest valid bid takes #1. Pay more to move up.</p>
             <details class="measurement-note">
               <summary data-measurement-summary>How clicks are measured</summary>
@@ -124,94 +173,109 @@
           </div>
         </div>
 
-        <div class="board-header" aria-hidden="true">
-          <span>Rank</span>
-          <span>Listing</span>
-          <span>Bid</span>
-          <span>Clicks</span>
-        </div>
         <div class="board-list" data-board-list aria-live="polite" aria-label="Sponsored listings ranked fourth and below"></div>
-      </section>
-
-      <section class="activity-section" aria-labelledby="activity-heading">
-        <div class="section-heading-line"><h2 id="activity-heading" data-i18n="latestActivity">Latest activity</h2><span class="live-dot" aria-hidden="true"></span><span class="section-note" data-activity-note>Preview market activity</span></div>
-        <ol class="activity-tape" data-activity-list aria-live="polite"></ol>
+        <nav class="board-pagination" data-board-pagination aria-label="Leaderboard pages" hidden>
+          <button type="button" class="pagination-button" data-board-page="previous">← Previous</button>
+          <div class="pagination-center">
+            <div class="pagination-links" data-page-links aria-label="Page numbers"></div>
+            <p class="pagination-status" aria-live="polite"><strong data-page-range>1–50</strong><span data-page-total>of 50</span></p>
+          </div>
+          <button type="button" class="pagination-button" data-board-page="next">Next →</button>
+        </nav>
       </section>
 
       <section class="ranking-rules" aria-labelledby="ranking-rules-heading">
         <div>
           <h2 id="ranking-rules-heading" data-i18n="howItWorks">How ranking works</h2>
-          <p>Every listing is sponsored. The highest verified bid ranks first.</p>
+          <p data-i18n="rules">Every listing is sponsored. The highest verified bid ranks first.</p>
         </div>
         <dl>
-          <div><dt>Position</dt><dd>Held until a higher verified bid wins.</dd></div>
-          <div><dt>Charge</dt><dd>One payment after review.</dd></div>
-          <div><dt>Reporting</dt><dd>Clicks shown for the selected timeframe.</dd></div>
+          <div><dt data-i18n="position">Position</dt><dd data-i18n="positionCopy">Held until a higher verified bid wins.</dd></div>
+          <div><dt data-i18n="charge">Charge</dt><dd data-i18n="chargeCopy">One payment after review.</dd></div>
+          <div><dt data-i18n="reporting">Reporting</dt><dd data-i18n="reportingCopy">Clicks shown for the selected timeframe.</dd></div>
         </dl>
-        <a href="./legal.html#rules">Read all rules →</a>
+        <a href="./legal.html#rules" data-i18n="readRules">Read all rules →</a>
       </section>
 
       <footer class="footer">
-        <span class="footer-brand">RANKOFF</span>
-        <span class="footer-links"><a href="./legal.html#rules">Rules</a><a href="./legal.html#terms">Terms</a><a href="./legal.html#privacy">Privacy</a><a href="./legal.html#payments">Payments</a></span>
+        <div class="footer-identity">
+          <a class="footer-brand" href="./index.html" aria-label="RANKOFF home"><img class="footer-logo-image" src="./assets/rankoff-final-logo.png?v=2" alt="RANKOFF" width="1254" height="1254" /></a>
+          <span class="footer-credit"><strong>Rankoff</strong><span data-i18n="footerCredit">A Brandup Marketing product</span></span>
+        </div>
+        <span class="footer-links"><a href="./legal.html#rules" data-i18n="rulesLink">Rules</a><a href="./legal.html#terms" data-i18n="terms">Terms</a><a href="./legal.html#privacy" data-i18n="privacyLink">Privacy</a><a href="./legal.html#payments" data-i18n="payments">Payments</a></span>
       </footer>
     </main>
 
-    <dialog class="dialog" data-bid-dialog aria-labelledby="bid-dialog-title">
-      <form method="dialog" class="dialog-panel" data-bid-form>
+    <dialog class="dialog confirmation-dialog" data-bid-dialog aria-labelledby="bid-dialog-title">
+      <form method="dialog" class="dialog-panel confirmation-panel" data-bid-form>
         <div class="dialog-heading">
           <div>
-            <p class="section-label">Challenge review</p>
-            <h2 id="bid-dialog-title">Confirm your position</h2>
+            <h2 id="bid-dialog-title" data-i18n="confirmRank">Confirm this rank</h2>
+            <p class="confirmation-intro" data-i18n="confirmRankIntro">Check the rank and price, then accept the terms to continue.</p>
           </div>
           <button class="icon-button" type="button" data-close-bid aria-label="Close dialog">×</button>
         </div>
 
-        <div class="bid-target" data-bid-target></div>
-
-        <section class="order-summary" aria-label="Challenge terms">
-          <div><span>Position</span><strong data-order-position>Calculated from your final bid</strong></div>
-          <div><span>Charge</span><strong>One-time payment after review</strong></div>
-          <div><span>Duration</span><strong>Until a higher verified bid wins</strong></div>
-          <div><span>Reporting</span><strong>Clicks shown for this board timeframe</strong></div>
-        </section>
-
-        <label class="field" for="bid-amount">
-          <span>Your total bid</span>
-          <span class="dialog-stepper">
-            <button type="button" data-bid-adjust="-1" aria-label="Decrease bid by one dollar">-</button>
-            <span class="money-field">
-              <b aria-hidden="true">$</b>
-              <input id="bid-amount" name="bidAmount" inputmode="numeric" min="1" max="1000000" step="1" required />
-            </span>
-            <button type="button" data-bid-adjust="1" aria-label="Increase bid by one dollar">+</button>
-          </span>
-        </label>
-
-        <p class="field-hint" data-bid-hint></p>
-
-        <label class="acknowledgement">
-          <input type="checkbox" required />
-          <span>I reviewed the position, charge timing, and ranking rules. I agree to the <a href="./legal.html#terms" target="_blank" rel="noopener">Terms</a> and <a href="./legal.html#privacy" target="_blank" rel="noopener">Privacy Policy</a>.</span>
-        </label>
-
-        <section class="payment-preview" aria-label="Payment method preview">
+        <section class="rank-price-summary" aria-label="Rank and price">
           <div>
-            <span class="section-label" data-checkout-title>Checkout status</span>
-            <strong data-checkout-provider>Preview only — no payment method connected</strong>
+            <span data-i18n="rankLabel">Rank</span>
+            <strong data-dialog-rank>#1</strong>
+            <small data-dialog-context>All-time · AI &amp; Automation</small>
           </div>
-          <span class="payment-status" data-checkout-status>Preview only</span>
-          <p data-checkout-copy>This preview never sends or stores payment data. A hosted checkout appears only after Rankoff enables payments.</p>
+          <div>
+            <span data-i18n="priceLabel">Price</span>
+            <strong data-dialog-price>$0</strong>
+            <small data-i18n="dueNow">Due now</small>
+          </div>
         </section>
+
+        <input id="bid-amount" name="bidAmount" type="hidden" />
+        <p class="confirmation-copy" data-dialog-explanation data-i18n="confirmationCopy">Your listing will publish at this rank after payment settles. Someone else can take a higher position.</p>
+
+        <label class="acknowledgement confirmation-consent">
+          <input type="checkbox" data-bid-agree required />
+          <span class="confirmation-consent-copy"><span data-i18n="agreeTermsPrefix">I have read and agree to the </span><a href="./legal.html#terms" target="_blank" rel="noopener" data-i18n="termsOfService">Terms of Service</a><span data-i18n="agreeTermsSuffix">.</span></span>
+        </label>
+
+        <p class="confirmation-links"><a href="./legal.html#terms" target="_blank" rel="noopener" data-i18n="terms">Terms</a><span>·</span><a href="./legal.html#privacy" target="_blank" rel="noopener" data-i18n="privacyLink">Privacy</a><span>·</span><a href="./legal.html#rules" target="_blank" rel="noopener" data-i18n="rulesLink">Rules</a></p>
 
         <div class="dialog-actions">
-          <button class="secondary-action" type="button" data-close-bid>Cancel</button>
-          <button class="primary-action" type="submit">Confirm challenge</button>
+          <button class="secondary-action" type="button" data-close-bid data-i18n="cancel">Cancel</button>
+          <button class="primary-action" type="submit" data-i18n="continueCheckout">Continue to checkout</button>
         </div>
       </form>
     </dialog>
 
+    <dialog class="dialog share-dialog" data-share-dialog aria-labelledby="share-dialog-title">
+      <div class="dialog-panel share-panel">
+        <div class="dialog-heading">
+          <div>
+            <h2 id="share-dialog-title" data-share-heading>Share this rank</h2>
+            <p class="share-intro" data-share-intro>Send the exact position, board, and category.</p>
+          </div>
+          <button class="icon-button" type="button" data-share-close aria-label="Close share options">×</button>
+        </div>
+        <div class="share-preview">
+          <strong data-share-title>RANKOFF</strong>
+          <p data-share-text></p>
+        </div>
+        <label class="share-link-field">
+          <span data-share-link-label>Rank link</span>
+          <span class="share-link-control">
+            <input type="text" data-share-url readonly />
+            <button class="primary-action" type="button" data-share-copy>Copy link</button>
+          </span>
+        </label>
+        <div class="share-options" aria-label="Share options">
+          <button class="share-option" type="button" data-share-whatsapp><span data-share-whatsapp-label>WhatsApp</span><small data-share-whatsapp-note>Send to a contact</small></button>
+          <button class="share-option" type="button" data-share-native><span data-share-native-label>Share…</span><small data-share-native-note>Messenger and more apps</small></button>
+        </div>
+      </div>
+    </dialog>
+
     <div class="toast" data-toast role="status" aria-live="polite" aria-atomic="true"></div>
-    <script src="./app.js?v=11" defer></script>
+    <script src="./search.js?v=1" defer></script>
+    <script src="./share.js?v=1" defer></script>
+    <script src="./app.js?v=34" defer></script>
   </body>
 </html>
