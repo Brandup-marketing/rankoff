@@ -141,9 +141,9 @@
   ];
 
   const seedActivity = [
-    { id: "a1", time: "2m ago", text: "Switchboard challenged the Today board for $735." },
+    { id: "a1", time: "2m ago", text: "Switchboard challenged the past 24h board for $735." },
     { id: "a2", time: "11m ago", text: "Trackline became the Marketing category leader." },
-    { id: "a3", time: "24m ago", text: "Patchnote recorded 381 clicks today." },
+    { id: "a3", time: "24m ago", text: "Patchnote recorded 381 clicks in the past 24h." },
     { id: "a4", time: "43m ago", text: "Model Harbor defended the all-time lead at $2,480." },
   ];
 
@@ -457,8 +457,22 @@
   }
 
   function windowLabel() {
-    if (state.language === "zh") return state.activeWindow === "today" ? "今日" : "全部时间";
-    return state.activeWindow === "today" ? "Today" : "All-time";
+    if (state.language === "zh") return state.activeWindow === "today" ? "近 24 小时" : "全部时间";
+    return state.activeWindow === "today" ? "Past 24h" : "All-time";
+  }
+
+  function claimLabel(amount) {
+    return state.language === "zh"
+      ? `以 ${money(amount)} 认领此排名`
+      : `Claim this rank for ${money(amount)}`;
+  }
+
+  function createClaimControl(amount) {
+    const control = createElement("button", "claim-rank-control");
+    control.type = "button";
+    control.dataset.prepareChallenge = String(amount);
+    control.setAttribute("aria-label", claimLabel(amount));
+    return control;
   }
 
   function visibleListings() {
@@ -665,7 +679,7 @@
 
     if (elements.boardSummary) {
       elements.boardSummary.textContent = state.language === "zh"
-        ? `${state.activeWindow === "today" ? "今日" : "全部时间"}榜单：${listings.length} 个赞助产品。最高有效出价获得第 1 名。`
+        ? `${state.activeWindow === "today" ? "近 24 小时" : "全部时间"}榜单：${listings.length} 个赞助产品。最高有效出价获得第 1 名。`
         : `${windowLabel()} board: ${listings.length} sponsored listings. Highest valid bid takes #1.`;
     }
   }
@@ -674,10 +688,8 @@
     const card = createElement("article", `featured-listing featured-${position}`);
     card.dataset.rank = String(position);
     card.dataset.listingId = listing.id;
-    card.dataset.claimLabel = `Claim this rank for ${money(getBid(ranked[0]) + 1)}`;
-    card.setAttribute("role", "button");
-    card.setAttribute("tabindex", "0");
-    card.setAttribute("aria-label", `Rank ${position}: ${listing.name}. Claim this rank for ${money(getBid(ranked[0]) + 1)}.`);
+    const minimum = getBid(ranked[0]) + 1;
+    card.dataset.claimLabel = claimLabel(minimum);
     if (listing.id === changedListingId) card.classList.add("is-updated");
 
     const rank = createElement("div", "featured-rank", `#${position}`);
@@ -691,19 +703,7 @@
     clicks.append(createElement("span", "", clickLabel), createElement("strong", "", compact.format(getClicks(listing))));
     evidence.append(bid, clicks);
 
-    const actions = createElement("div", "featured-actions");
-    const minimum = getBid(ranked[0]) + 1;
-    const challenge = createElement("button", "bid-button", position === 1 ? `Take #1 for ${money(minimum)}` : "Challenge board");
-    challenge.type = "button";
-    challenge.dataset.prepareChallenge = String(minimum);
-    challenge.setAttribute("aria-label", `Prepare a new challenge for the lead at ${money(minimum)}`);
-    const share = createElement("button", "share-button", "Share");
-    share.type = "button";
-    share.dataset.share = "";
-    share.dataset.listingId = listing.id;
-    actions.append(challenge, share);
-
-    card.append(rank, productIdentity(listing, "p"), evidence, actions);
+    card.append(rank, productIdentity(listing, "p"), evidence, createClaimControl(minimum));
     return card;
   }
 
@@ -711,10 +711,9 @@
     const row = createElement("article", "rank-row");
     row.dataset.rank = String(position);
     row.dataset.listingId = listing.id;
-    row.dataset.claimLabel = `Claim this rank for ${money(getBid(ranked[0]) + 1)}`;
+    const minimum = getBid(ranked[0]) + 1;
+    row.dataset.claimLabel = claimLabel(minimum);
     row.setAttribute("role", "listitem");
-    row.setAttribute("tabindex", "0");
-    row.setAttribute("aria-label", `Rank ${position}: ${listing.name}. Claim this rank for ${money(getBid(ranked[0]) + 1)}.`);
     if (listing.id === changedListingId) row.classList.add("is-updated");
 
     const rank = createElement("div", "rank-position", `#${position}`);
@@ -732,7 +731,7 @@
       createElement("span", "", clickLabel),
     );
 
-    row.append(rank, productIdentity(listing), bid, clicks);
+    row.append(rank, productIdentity(listing), bid, clicks, createClaimControl(minimum));
     return row;
   }
 
@@ -744,7 +743,7 @@
     if (elements.heroPrice) elements.heroPrice.textContent = money(nextPrice);
     if (elements.heroContext) {
       elements.heroContext.textContent = state.language === "zh"
-        ? `${money(nextPrice)} 即可登上${state.category === DEFAULT_CATEGORY ? (state.activeWindow === "today" ? "今日" : "全部时间") : state.category}榜第 1 名。有人出价更高前，你的产品介绍会持续展示。`
+        ? `${money(nextPrice)} 即可登上${state.category === DEFAULT_CATEGORY ? (state.activeWindow === "today" ? "近 24 小时" : "全部时间") : state.category}榜第 1 名。有人出价更高前，你的产品介绍会持续展示。`
         : `${money(nextPrice)} takes #1 on the ${state.category === DEFAULT_CATEGORY ? windowLabel().toLowerCase() : state.category} board. Your product story stays visible until someone pays more.`;
     }
     if (elements.leaderBid) elements.leaderBid.textContent = money(getBid(leader));
@@ -762,8 +761,8 @@
     if (elements.todayCard && todayLeader) {
       elements.todayCard.replaceChildren(
         productIdentity(todayLeader),
-        createElement("strong", "", `${money(todayLeader.bids.today)} today`),
-        createElement("p", "", `${compact.format(todayLeader.todayClicks)} clicks since midnight.`),
+        createElement("strong", "", `${money(todayLeader.bids.today)} ${state.language === "zh" ? "近 24 小时" : "past 24h"}`),
+        createElement("p", "", state.language === "zh" ? `${compact.format(todayLeader.todayClicks)} 次点击（近 24 小时）。` : `${compact.format(todayLeader.todayClicks)} clicks in the past 24h.`),
       );
     }
 
@@ -794,27 +793,27 @@
       const active = button.dataset.boardWindow === state.activeWindow;
       button.setAttribute("aria-pressed", String(active));
       const today = button.dataset.boardWindow === "today";
-      button.textContent = state.language === "zh" ? (today ? "今日" : "全部时间") : (today ? "Today" : "All-time");
+      button.textContent = state.language === "zh" ? (today ? "近 24 小时" : "全部时间") : (today ? "Past 24h" : "All-time");
     });
   }
 
   function updateCategorySelect() {
     if (!elements.categorySelect) return;
-    if (elements.categorySelect.options.length !== categories.length + 1) {
-      elements.categorySelect.replaceChildren(
-        new Option(languageText("chooseMarket"), ""),
-        ...categories.map((category) => new Option(state.language === "zh" ? (categoryTranslations[category] || category) : category, category)),
-      );
-    }
+    const selected = elements.categorySelect.value;
+    elements.categorySelect.replaceChildren(
+      new Option(languageText("chooseMarket"), ""),
+      ...categories.map((category) => new Option(state.language === "zh" ? (categoryTranslations[category] || category) : category, category)),
+    );
     if (state.category === DEFAULT_CATEGORY) {
       elements.categorySelect.value = "";
       return;
     }
-    elements.categorySelect.value = state.category;
+    elements.categorySelect.value = categories.includes(state.category) ? state.category : selected;
   }
 
   function renderTheme() {
     elements.root.dataset.theme = state.theme === "light" ? "light" : "dark";
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", state.theme === "light" ? "#faf7f5" : "#090a0c");
     if (elements.themeToggle) {
       elements.themeToggle.textContent = state.theme === "dark" ? "Light" : "Dark";
       elements.themeToggle.setAttribute("aria-pressed", String(state.theme === "dark"));

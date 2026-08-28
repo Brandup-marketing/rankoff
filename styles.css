@@ -141,8 +141,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .measurement-note summary { color: var(--blue); font-weight: 750; cursor: pointer; }
 .measurement-note p { position: absolute; right: 0; z-index: 2; width: 21rem; margin-top: 0.4rem; padding: 0.65rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); color: var(--ink); line-height: 1.45; text-align: left; }
 .top-three { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
-.featured-listing { position: relative; display: grid; grid-template-areas: "rank product evidence"; grid-template-columns: 3rem minmax(0, 1fr) auto; align-items: center; gap: 0.75rem; min-width: 0; max-width: 100%; padding: 0.7rem 0.8rem; border: 1px solid var(--line); border-radius: 0.65rem; background: var(--surface); cursor: pointer; }
-.featured-listing:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.featured-listing { position: relative; display: grid; grid-template-areas: "rank product evidence"; grid-template-columns: 3rem minmax(0, 1fr) auto; align-items: center; gap: 0.75rem; min-width: 0; max-width: 100%; padding: 0.7rem 0.8rem; border: 1px solid var(--line); border-radius: 0.65rem; background: var(--surface); }
+.featured-listing:focus-within { outline: 2px solid var(--blue); outline-offset: 2px; }
 .featured-listing::after { content: attr(data-claim-label); position: absolute; left: 50%; bottom: -0.65rem; z-index: 2; transform: translate(-50%, 0.35rem); padding: 0.28rem 0.65rem; border-radius: 999px; background: var(--accent); color: white; font-size: 0.68rem; font-weight: 850; opacity: 0; pointer-events: none; transition: opacity 160ms var(--ease), transform 160ms var(--ease); white-space: nowrap; }
 .featured-listing:hover::after, .featured-listing:focus-within::after { opacity: 1; transform: translate(-50%, 0); }
 .featured-1 { border-color: oklch(48% 0.11 28); background: var(--accent-soft); }
@@ -160,12 +160,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .board-header { min-height: 2.2rem; padding: 0 0.65rem; border: 1px solid var(--line); border-bottom: 0; background: var(--surface-subtle); color: var(--muted); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.035em; text-transform: uppercase; }
 .board-header span:nth-child(3), .board-header span:nth-child(4) { text-align: right; }
 .board-list { border: 1px solid var(--line); background: var(--surface); }
-.rank-row { position: relative; min-height: 5.15rem; padding: 0.75rem 0.65rem; border-bottom: 1px solid var(--line); transition: background 160ms var(--ease); cursor: pointer; }
+.rank-row { position: relative; min-height: 5.15rem; padding: 0.75rem 0.65rem; border-bottom: 1px solid var(--line); transition: background 160ms var(--ease); }
 .rank-row::after { content: attr(data-claim-label); position: absolute; left: 50%; bottom: -0.55rem; z-index: 2; transform: translate(-50%, .25rem); padding: .24rem .6rem; border-radius: 999px; background: var(--accent); color: #fff; font-size: .65rem; font-weight: 850; opacity: 0; pointer-events: none; transition: opacity 160ms var(--ease), transform 160ms var(--ease); white-space: nowrap; }
-.rank-row:hover::after, .rank-row:focus-visible::after { opacity: 1; transform: translate(-50%, 0); }
-.rank-row:focus-visible { outline: 2px solid var(--blue); outline-offset: -2px; }
+.rank-row:hover::after, .rank-row:focus-within::after { opacity: 1; transform: translate(-50%, 0); }
+.rank-row:focus-within { outline: 2px solid var(--blue); outline-offset: -2px; }
 .rank-row:last-child { border-bottom: 0; }
-.rank-row:hover { background: oklch(19% 0.01 25); }
+.rank-row:hover { background: var(--surface-subtle); }
 .rank-row[data-rank="1"] { background: var(--accent-soft); }
 .rank-row.is-updated { animation: row-flash 850ms var(--ease); }
 .rank-position { color: var(--ink); font-size: 1.05rem; font-weight: 850; font-variant-numeric: tabular-nums; text-align: center; }
@@ -176,8 +176,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .product-mark img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: var(--surface-subtle); }
 .product-mark.has-icon .product-initials { visibility: hidden; }
 .product-copy { min-width: 0; max-width: 100%; }
-.product-name { display: block; overflow: hidden; padding-block: 0.2rem; color: var(--ink); font-size: 0.9rem; font-weight: 800; line-height: 1.2; text-overflow: ellipsis; text-decoration: none; white-space: nowrap; }
+.product-name { position: relative; z-index: 2; display: block; overflow: hidden; padding-block: 0.2rem; color: var(--ink); font-size: 0.9rem; font-weight: 800; line-height: 1.2; text-overflow: ellipsis; text-decoration: none; white-space: nowrap; }
 .product-name:hover { color: var(--blue); }
+.claim-rank-control { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; margin: 0; padding: 0; border: 0; border-radius: inherit; background: transparent; color: transparent; cursor: pointer; }
+.claim-rank-control:focus-visible { outline: 0; }
 .product-meta { display: flex; flex-wrap: wrap; gap: 0.28rem 0.48rem; margin-top: 0.2rem; color: var(--muted); font-size: 0.69rem; font-weight: 650; }
 .listing-description { display: -webkit-box; overflow: hidden; margin: 0.2rem 0 0; color: var(--muted); font-size: 0.76rem; line-height: 1.35; -webkit-box-orient: vertical; -webkit-line-clamp: 1; }
 .sponsored-chip, .local-chip, .verified-chip, .estimated-chip { display: inline-flex; align-items: center; padding: 0.12rem 0.3rem; border: 1px solid var(--line); border-radius: 0.2rem; font-size: 0.62rem; font-weight: 800; line-height: 1; }
