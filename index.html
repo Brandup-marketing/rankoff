@@ -22,7 +22,7 @@
     <meta name="theme-color" content="#090a0c" />
     <title>RANKOFF | Bid Your Way to #1</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=14" />
+    <link rel="stylesheet" href="./styles.css?v=15" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -148,8 +148,9 @@
               </div>
               <div id="latest-activity-content" data-panel-content>
                 <p class="section-note" data-activity-note>Preview market activity</p>
-                <ol class="activity-tape" id="latest-activity-list" data-activity-list aria-live="polite" aria-relevant="additions text"></ol>
-                <button class="activity-more" type="button" data-activity-more aria-controls="latest-activity-list" aria-expanded="false" hidden>Show more</button>
+                <div class="activity-ticker-viewport">
+                  <ol class="activity-tape" id="latest-activity-list" data-activity-list aria-live="polite" aria-relevant="additions text"></ol>
+                </div>
               </div>
             </section>
           </section>
@@ -198,56 +199,42 @@
       </footer>
     </main>
 
-    <dialog class="dialog" data-bid-dialog aria-labelledby="bid-dialog-title">
-      <form method="dialog" class="dialog-panel" data-bid-form>
+    <dialog class="dialog confirmation-dialog" data-bid-dialog aria-labelledby="bid-dialog-title">
+      <form method="dialog" class="dialog-panel confirmation-panel" data-bid-form>
         <div class="dialog-heading">
           <div>
-            <p class="section-label" data-i18n="challengeReview">Challenge review</p>
-            <h2 id="bid-dialog-title" data-i18n="confirmPosition">Confirm your position</h2>
+            <h2 id="bid-dialog-title" data-i18n="confirmRank">Confirm this rank</h2>
+            <p class="confirmation-intro" data-i18n="confirmRankIntro">Check the rank and price, then accept the terms to continue.</p>
           </div>
           <button class="icon-button" type="button" data-close-bid aria-label="Close dialog">×</button>
         </div>
 
-        <div class="bid-target" data-bid-target></div>
-
-        <section class="order-summary" aria-label="Challenge terms">
-          <div><span data-i18n="position">Position</span><strong data-order-position data-i18n="calculatedBid">Calculated from your final bid</strong></div>
-          <div><span data-i18n="charge">Charge</span><strong data-i18n="oneTimePayment">One-time payment after review</strong></div>
-          <div><span data-i18n="duration">Duration</span><strong data-i18n="durationCopy">Until a higher verified bid wins</strong></div>
-          <div><span data-i18n="reporting">Reporting</span><strong data-i18n="clickTimeframe">Clicks shown for this board timeframe</strong></div>
-        </section>
-
-        <label class="field" for="bid-amount">
-          <span data-i18n="totalBid">Your total bid</span>
-          <span class="dialog-stepper">
-            <button type="button" data-bid-adjust="-1" aria-label="Decrease bid by one dollar">-</button>
-            <span class="money-field">
-              <b aria-hidden="true">$</b>
-              <input id="bid-amount" name="bidAmount" inputmode="numeric" min="1" max="1000000" step="1" required />
-            </span>
-            <button type="button" data-bid-adjust="1" aria-label="Increase bid by one dollar">+</button>
-          </span>
-        </label>
-
-        <p class="field-hint" data-bid-hint></p>
-
-        <label class="acknowledgement">
-          <input type="checkbox" required />
-          <span><span data-i18n="acknowledgement">I reviewed the position, charge timing, and ranking rules. I agree to the</span> <a href="./legal.html#terms" target="_blank" rel="noopener" data-i18n="terms">Terms</a> <span data-i18n="and">and</span> <a href="./legal.html#privacy" target="_blank" rel="noopener" data-i18n="privacyPolicy">Privacy Policy</a>.</span>
-        </label>
-
-        <section class="payment-preview" aria-label="Payment method preview">
+        <section class="rank-price-summary" aria-label="Rank and price">
           <div>
-            <span class="section-label" data-checkout-title data-i18n="checkoutStatus">Checkout status</span>
-            <strong data-checkout-provider>Preview only — no payment method connected</strong>
+            <span data-i18n="rankLabel">Rank</span>
+            <strong data-dialog-rank>#1</strong>
+            <small data-dialog-context>All-time · AI &amp; Automation</small>
           </div>
-          <span class="payment-status" data-checkout-status>Preview only</span>
-          <p data-checkout-copy>This preview never sends or stores payment data. A hosted checkout appears only after Rankoff enables payments.</p>
+          <div>
+            <span data-i18n="priceLabel">Price</span>
+            <strong data-dialog-price>$0</strong>
+            <small data-i18n="dueNow">Due now</small>
+          </div>
         </section>
+
+        <input id="bid-amount" name="bidAmount" type="hidden" />
+        <p class="confirmation-copy" data-dialog-explanation data-i18n="confirmationCopy">Your listing will publish at this rank after payment settles. Someone else can take a higher position.</p>
+
+        <label class="acknowledgement confirmation-consent">
+          <input type="checkbox" data-bid-agree required />
+          <span data-i18n="agreeTerms">I have read and agree to the Terms of Service.</span>
+        </label>
+
+        <p class="confirmation-links"><a href="./legal.html#terms" target="_blank" rel="noopener" data-i18n="terms">Terms</a><span>·</span><a href="./legal.html#privacy" target="_blank" rel="noopener" data-i18n="privacyLink">Privacy</a><span>·</span><a href="./legal.html#rules" target="_blank" rel="noopener" data-i18n="rulesLink">Rules</a></p>
 
         <div class="dialog-actions">
           <button class="secondary-action" type="button" data-close-bid data-i18n="cancel">Cancel</button>
-          <button class="primary-action" type="submit" data-i18n="confirmChallenge">Confirm challenge</button>
+          <button class="primary-action" type="submit" data-i18n="continueCheckout">Continue to checkout</button>
         </div>
       </form>
     </dialog>
@@ -282,6 +269,6 @@
     <div class="toast" data-toast role="status" aria-live="polite" aria-atomic="true"></div>
     <script src="./search.js?v=1" defer></script>
     <script src="./share.js?v=1" defer></script>
-    <script src="./app.js?v=14" defer></script>
+    <script src="./app.js?v=15" defer></script>
   </body>
 </html>

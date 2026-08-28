@@ -29,8 +29,8 @@
   const shortcutCategories = Object.freeze(["Agents", "Marketing", "Developer", "Crypto"]);
   const shortcutIcons = Object.freeze({ all: "▦", Agents: "✦", Marketing: "↗", Developer: "</>", Crypto: "₿" });
   const translations = {
-    en: { navBoard: "Board", navCategories: "Categories", navAbout: "About", heroCopy: "Put your product in the spot people see first. Your listing stays at the top until someone pays more.", totalBid: "Your total bid", productUrl: "Website or social account", productUrlPlaceholder: "example.com or @yourusername", invalidWebsite: "Enter a valid website or social account, such as example.com or @yourusername.", chooseMarket: "Choose a market", challengeCategory: "Challenge category", categoryRule: "Must match the listing you’ll outrank.", reviewBid: "Review your bid", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest valid bid takes #1. Pay more to move up.", todayRanking: "Today’s top ranking", latestActivity: "Latest activity", liveUpdates: "Latest updates", howItWorks: "How ranking works", searchPlaceholder: "Search products and categories…", close: "Close", seeAll: "See all", past24: "Past 24h", livePulse: "Live updates", rank: "Rank", listing: "Listing", bid: "Bid", clicks: "Clicks", sponsored: "Sponsored", rules: "Every listing is sponsored. The highest verified bid ranks first.", position: "Position", positionCopy: "Held until a higher verified bid wins.", charge: "Charge", chargeCopy: "One payment after review.", reporting: "Reporting", reportingCopy: "Clicks shown for the selected timeframe.", readRules: "Read all rules →", rulesLink: "Rules", terms: "Terms", privacyLink: "Privacy", payments: "Payments", challengeReview: "Challenge review", confirmPosition: "Confirm your position", challengeTerms: "Challenge terms", calculatedBid: "Calculated from your final bid", oneTimePayment: "One-time payment after review", duration: "Duration", durationCopy: "Until a higher verified bid wins", clickTimeframe: "Clicks shown for this board timeframe", acknowledgement: "I reviewed the position, charge timing, and ranking rules. I agree to the", and: "and", privacyPolicy: "Privacy Policy", checkoutStatus: "Checkout status", cancel: "Cancel", confirmChallenge: "Confirm challenge" },
-    zh: { navBoard: "榜单", navCategories: "分类", navAbout: "关于", heroCopy: "把产品放到最显眼的位置。只要没有更高的有效出价，你的介绍就会留在榜首。", totalBid: "你的总出价", productUrl: "网站或社交账号", productUrlPlaceholder: "example.com 或 @yourusername", invalidWebsite: "请输入有效的网站或社交账号，例如 example.com 或 @yourusername。", chooseMarket: "选择市场", challengeCategory: "挑战类别", categoryRule: "必须与您要超越的条目类别相同。", reviewBid: "确认出价", markets: "市场", liveLeaderboard: "实时榜单", boardSummary: "最高有效出价获得第 1 名。提高出价即可上升。", todayRanking: "今日热门榜", latestActivity: "最新动态", liveUpdates: "最新动态", howItWorks: "排名规则", searchPlaceholder: "搜索产品和分类…", close: "关闭", seeAll: "查看全部", past24: "近 24 小时", livePulse: "实时更新", rank: "排名", listing: "条目", bid: "出价", clicks: "点击", sponsored: "赞助", rules: "每个条目都是赞助展示。最高的已验证出价排名第一。", position: "排名位置", positionCopy: "保持到有人以更高的已验证出价胜出。", charge: "费用", chargeCopy: "审核后一次性付款。", reporting: "数据", reportingCopy: "显示所选时间范围内的点击。", readRules: "查看完整规则 →", rulesLink: "规则", terms: "条款", privacyLink: "隐私", payments: "付款", challengeReview: "出价确认", confirmPosition: "确认你的排名", challengeTerms: "出价条款", calculatedBid: "根据最终出价计算", oneTimePayment: "审核后一次性付款", duration: "有效期", durationCopy: "保持到有人以更高的已验证出价胜出", clickTimeframe: "显示此榜单时间范围内的点击", acknowledgement: "我已阅读排名、付款时间和排名规则，并同意", and: "和", privacyPolicy: "《隐私政策》", checkoutStatus: "付款状态", cancel: "取消", confirmChallenge: "确认出价" },
+    en: { navBoard: "Board", navCategories: "Categories", navAbout: "About", heroCopy: "Put your product in the spot people see first. Your listing stays at the top until someone pays more.", totalBid: "Your total bid", productUrl: "Website or social account", productUrlPlaceholder: "example.com or @yourusername", invalidWebsite: "Enter a valid website or social account, such as example.com or @yourusername.", chooseMarket: "Choose a market", challengeCategory: "Challenge category", categoryRule: "Must match the listing you’ll outrank.", reviewBid: "Review your bid", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest valid bid takes #1. Pay more to move up.", todayRanking: "Today’s top ranking", latestActivity: "Latest activity", liveUpdates: "Latest updates", howItWorks: "How ranking works", searchPlaceholder: "Search products and categories…", close: "Close", seeAll: "See all", past24: "Past 24h", livePulse: "Live bids", rank: "Rank", listing: "Listing", bid: "Bid", clicks: "Clicks", sponsored: "Sponsored", rules: "Every listing is sponsored. The highest verified bid ranks first.", position: "Position", positionCopy: "Held until a higher verified bid wins.", charge: "Charge", chargeCopy: "One payment after review.", reporting: "Reporting", reportingCopy: "Clicks shown for the selected timeframe.", readRules: "Read all rules →", rulesLink: "Rules", terms: "Terms", privacyLink: "Privacy", payments: "Payments", confirmRank: "Confirm this rank", confirmRankIntro: "Check the rank and price, then accept the terms to continue.", rankLabel: "Rank", priceLabel: "Price", dueNow: "Due now", confirmationCopy: "Your listing will publish at this rank after payment settles. Someone else can take a higher position.", agreeTerms: "I have read and agree to the Terms of Service.", cancel: "Cancel", continueCheckout: "Continue to checkout" },
+    zh: { navBoard: "榜单", navCategories: "分类", navAbout: "关于", heroCopy: "把产品放到最显眼的位置。只要没有更高的有效出价，你的介绍就会留在榜首。", totalBid: "你的总出价", productUrl: "网站或社交账号", productUrlPlaceholder: "example.com 或 @yourusername", invalidWebsite: "请输入有效的网站或社交账号，例如 example.com 或 @yourusername。", chooseMarket: "选择市场", challengeCategory: "挑战类别", categoryRule: "必须与您要超越的条目类别相同。", reviewBid: "确认出价", markets: "市场", liveLeaderboard: "实时榜单", boardSummary: "最高有效出价获得第 1 名。提高出价即可上升。", todayRanking: "今日热门榜", latestActivity: "最新动态", liveUpdates: "最新动态", howItWorks: "排名规则", searchPlaceholder: "搜索产品和分类…", close: "关闭", seeAll: "查看全部", past24: "近 24 小时", livePulse: "实时竞价", rank: "排名", listing: "条目", bid: "出价", clicks: "点击", sponsored: "赞助", rules: "每个条目都是赞助展示。最高的已验证出价排名第一。", position: "排名位置", positionCopy: "保持到有人以更高的已验证出价胜出。", charge: "费用", chargeCopy: "审核后一次性付款。", reporting: "数据", reportingCopy: "显示所选时间范围内的点击。", readRules: "查看完整规则 →", rulesLink: "规则", terms: "条款", privacyLink: "隐私", payments: "付款", confirmRank: "确认此排名", confirmRankIntro: "核对排名与价格，同意条款后继续。", rankLabel: "排名", priceLabel: "价格", dueNow: "现在支付", confirmationCopy: "付款结算后，你的条目会发布在此排名。其他人仍可出价取得更高位置。", agreeTerms: "我已阅读并同意《服务条款》。", cancel: "取消", continueCheckout: "继续付款" },
   };
   const categoryLabels = { Agents: "AI & Automation", Marketing: "Marketing, SEO & Social", Developer: "Developer Tools & Security", Business: "Business & Professional Services", Crypto: "Finance, Crypto & Investing", Ecommerce: "Ecommerce, Retail & Hardware", Design: "Design, Content & Media", Productivity: "Productivity & Education", Health: "Health & Wellness", Games: "Games & Entertainment", Travel: "Travel, Local & Property", Domains: "Web, Domains & Discovery", Other: "Other" };
   const categoryTranslations = { Agents: "AI 与自动化", Marketing: "营销、SEO 与社交媒体", Developer: "开发工具与安全", Business: "商业与专业服务", Crypto: "金融、加密与投资", Ecommerce: "电商、零售与硬件", Design: "设计、内容与媒体", Productivity: "效率工具与教育", Health: "健康与生活方式", Games: "游戏与娱乐", Travel: "旅行、本地与房地产", Domains: "网站、域名与发现", Other: "其他" };
@@ -190,7 +190,6 @@
     todaySeeAll: document.querySelector("[data-today-see-all]"),
     activityList: document.querySelector("[data-activity-list]"),
     activityNote: document.querySelector("[data-activity-note]"),
-    activityMore: document.querySelector("[data-activity-more]"),
     liveDot: document.querySelector(".live-dot"),
     panelToggles: Array.from(document.querySelectorAll("[data-panel-toggle]")),
     statVisitors: document.querySelector("[data-stat-visitors]"),
@@ -200,13 +199,11 @@
     dialog: document.querySelector("[data-bid-dialog]"),
     bidForm: document.querySelector("[data-bid-form]"),
     bidAmount: document.querySelector("#bid-amount"),
-    bidTarget: document.querySelector("[data-bid-target]"),
-    bidHint: document.querySelector("[data-bid-hint]"),
-    orderPosition: document.querySelector("[data-order-position]"),
-    checkoutTitle: document.querySelector("[data-checkout-title]"),
-    checkoutProvider: document.querySelector("[data-checkout-provider]"),
-    checkoutStatus: document.querySelector("[data-checkout-status]"),
-    checkoutCopy: document.querySelector("[data-checkout-copy]"),
+    bidAgree: document.querySelector("[data-bid-agree]"),
+    dialogRank: document.querySelector("[data-dialog-rank]"),
+    dialogPrice: document.querySelector("[data-dialog-price]"),
+    dialogContext: document.querySelector("[data-dialog-context]"),
+    dialogExplanation: document.querySelector("[data-dialog-explanation]"),
     toast: document.querySelector("[data-toast]"),
   };
 
@@ -226,7 +223,6 @@
   let lastTrigger = null;
   let toastTimer = null;
   let changedListingId = null;
-  let activityExpanded = false;
   let pendingActivityAnimationId = "";
   let lastRemoteActivityContext = "";
   let remoteNextBid = null;
@@ -435,8 +431,8 @@
       ? (production ? "实时赞助榜单" : "预览赞助榜单")
       : (production ? "Live sponsored leaderboard" : "Preview sponsored leaderboard");
     if (elements.activityNote) elements.activityNote.textContent = chinese
-      ? (production ? "已验证竞价动态" : "预览动态")
-      : (production ? "Verified market events" : "Preview activity");
+      ? (production ? "实时成交滚动播报 · 立即出价抢位" : "竞价预览 · 立即出价抢位")
+      : (production ? "Live settlements · Bid before the next move" : "Market preview · Bid before the next move");
     if (elements.liveDot) elements.liveDot.hidden = !production;
     if (elements.measurementSummary) elements.measurementSummary.textContent = chinese
       ? (production ? "点击如何统计" : "预览点击说明")
@@ -444,16 +440,6 @@
     if (elements.measurementCopy) elements.measurementCopy.textContent = chinese
       ? (production ? "已验证点击来自所选时间范围内的第一方跳转记录。" : "预览点击数仅作演示；开启实时追踪后才会显示已验证点击。")
       : (production ? "Verified clicks represent first-party redirect events for the selected timeframe." : "Preview click totals are illustrative. Verified click reporting begins only after live tracking is enabled.");
-    if (elements.checkoutTitle) elements.checkoutTitle.textContent = chinese ? "付款状态" : "Checkout status";
-    if (elements.checkoutProvider) elements.checkoutProvider.textContent = chinese
-      ? (production ? "由 Dodo Payments 提供的托管付款" : "仅供预览 · 尚未连接支付方式")
-      : (production ? "Hosted checkout by Dodo Payments" : "Preview only — no payment method connected");
-    if (elements.checkoutStatus) elements.checkoutStatus.textContent = chinese
-      ? (production ? "安全付款" : "仅供预览")
-      : (production ? "Secure checkout" : "Preview only");
-    if (elements.checkoutCopy) elements.checkoutCopy.textContent = chinese
-      ? (production ? "支付信息只会在支付服务商托管的付款页面填写。付款确认后，排名才会发布。" : "此预览不会发送或保存任何支付信息。只有启用正式付款后，才会出现托管付款页面。")
-      : (production ? "Payment details are entered only on the provider-hosted checkout. A rank is published only after payment settlement." : "This preview never sends or stores payment data. A hosted checkout appears only after Rankoff enables payments.");
   }
 
   async function refreshBoardFromApi() {
@@ -980,31 +966,40 @@
     const type = String(item.type || "joined").replace("topped_up", "topup");
 
     if (type === "topup" || type === "defended") {
-      return { type: "topup", action: chinese ? "加码" : "Topped up", context: chinese ? `总出价 ${money(amount)}` : `Total bid ${money(amount)}`, metric: delta > 0 ? `+${money(delta)}` : money(amount), metricLabel: chinese ? "增加金额" : "Added", rank };
+      return { type: "topup", action: chinese ? "加价" : "Raised bid", context: chinese ? `最新总价 ${money(amount)}` : `Now at ${money(amount)}`, metric: delta > 0 ? `+${money(delta)}` : money(amount), metricLabel: chinese ? "增加金额" : "Added", rank };
     }
     if (type === "won" || type === "outbid" || type === "challenge") {
       const isDisplaced = type === "outbid" && displacedBy;
       return {
         type: isDisplaced ? "outbid" : "won",
-        action: isDisplaced ? (chinese ? "被超越" : "Outbid") : (chinese ? "胜出" : "Won"),
+        action: isDisplaced
+          ? (chinese ? "排名下滑" : "Lost rank")
+          : (chinese ? (rank === 1 ? "抢下第 1" : "升榜") : (rank === 1 ? "Took #1" : "Moved up")),
         context: isDisplaced ? (chinese ? `被 ${displacedBy} 超越` : `Passed by ${displacedBy}`) : displacedName ? (chinese ? `超越 ${displacedName}` : `Passed ${displacedName}`) : (chinese ? "排名上升" : "Moved up"),
         metric: isDisplaced ? displacedBy : delta > 0 ? `+${money(delta)}` : money(amount),
         metricLabel: isDisplaced ? (chinese ? "胜出者" : "Passed by") : (chinese ? "增加金额" : "Added"),
         rank,
       };
     }
-    return { type: "joined", action: chinese ? "新加入" : "Joined", context: chinese ? `以 ${money(amount)} 首次上榜` : `Opened with ${money(amount)}`, metric: money(amount), metricLabel: chinese ? "首次出价" : "Opening bid", rank };
+    return { type: "joined", action: chinese ? "进场" : "Entered", context: chinese ? `以 ${money(amount)} 首次上榜` : `Opened at ${money(amount)}`, metric: money(amount), metricLabel: chinese ? "首次出价" : "Opening bid", rank };
   }
 
-  function activityRow(item, index) {
+  function activityRow(item, index, duplicate = false) {
     const listing = activityListing(item);
     const presentation = activityPresentation(item);
-    const shouldAnimate = index === 0 && String(item.id || "") === pendingActivityAnimationId;
+    const shouldAnimate = !duplicate && index === 0 && String(item.id || "") === pendingActivityAnimationId;
     const row = createElement("li", `activity-event activity-${presentation.type}${shouldAnimate ? " is-latest" : ""}`);
     row.dataset.eventId = String(item.id || "");
+    if (duplicate) {
+      row.classList.add("is-duplicate");
+      row.setAttribute("aria-hidden", "true");
+    }
     const identity = createElement("div", "activity-identity");
     const name = listing.id ? createElement("a", "activity-name", listing.name) : createElement("strong", "activity-name", listing.name);
-    if (name instanceof HTMLAnchorElement) name.href = listingDetailsHref(listing);
+    if (name instanceof HTMLAnchorElement) {
+      name.href = listingDetailsHref(listing);
+      if (duplicate) name.tabIndex = -1;
+    }
     identity.append(name, createElement("span", "activity-context", presentation.context));
     const action = createElement("span", `activity-action activity-action-${presentation.type}`, presentation.action);
     const metric = createElement("div", "activity-metric");
@@ -1013,7 +1008,10 @@
     rank.append(createElement("strong", "", Number.isFinite(presentation.rank) && presentation.rank > 0 ? `#${presentation.rank}` : "—"), createElement("span", "", state.language === "zh" ? "当前排名" : "New rank"));
     const time = createElement("time", "activity-time", activityTime(item));
     if (item.created_at || item.createdAt) time.dateTime = item.created_at || item.createdAt;
-    row.append(activityMark(listing), identity, action, metric, rank, time);
+    const bidNow = createElement("a", "activity-bid-now", state.language === "zh" ? "立即出价 →" : "Bid now →");
+    bidNow.href = "#claim";
+    if (duplicate) bidNow.tabIndex = -1;
+    row.append(activityMark(listing), identity, action, metric, rank, time, bidNow);
     return row;
   }
 
@@ -1042,7 +1040,8 @@
     }
 
     if (elements.activityList) {
-      const activity = activityExpanded ? state.activity : state.activity.slice(0, 5);
+      const activity = state.activity.slice(0, 10);
+      elements.activityList.classList.toggle("is-empty", activity.length === 0);
       if (!activity.length) {
         const empty = createElement("li", "activity-empty");
         empty.append(
@@ -1051,21 +1050,10 @@
         );
         elements.activityList.replaceChildren(empty);
       } else {
-        elements.activityList.replaceChildren(...activity.map(activityRow));
-      }
-      if (elements.activityMore) {
-        elements.activityMore.hidden = state.activity.length <= 5;
-        elements.activityMore.textContent = activityExpanded
-          ? (state.language === "zh" ? "收起" : "Show less")
-          : (state.language === "zh" ? "查看更多" : "Show more");
-        const hiddenCount = Math.max(0, state.activity.length - 5);
-        elements.activityMore.setAttribute(
-          "aria-label",
-          activityExpanded
-            ? (state.language === "zh" ? "收起最新动态" : "Show fewer activity events")
-            : (state.language === "zh" ? `查看更多动态，共 ${hiddenCount} 条` : `Show ${hiddenCount} more activity events`),
-        );
-        elements.activityMore.setAttribute("aria-expanded", String(activityExpanded));
+        const primary = activity.map((item, index) => activityRow(item, index));
+        const duplicate = activity.map((item, index) => activityRow(item, index, true));
+        elements.activityList.style.setProperty("--ticker-duration", `${Math.max(26, activity.length * 6)}s`);
+        elements.activityList.replaceChildren(...primary, ...duplicate);
       }
       pendingActivityAnimationId = "";
     }
@@ -1127,41 +1115,22 @@
     window.dispatchEvent(new CustomEvent("rankoff:content-updated"));
   }
 
-  function setBidTarget() {
-    if (!elements.bidTarget) return;
-    const targetName =
-      activeBid?.type === "new"
-        ? pendingChallenge?.name || "Your demo listing"
-        : state.listings.find((listing) => listing.id === activeBid?.listingId)?.name || "Selected listing";
-    const label = state.language === "zh"
-      ? (activeBid?.type === "new" ? "挑战第 1 名" : "挑战此排名")
-      : (activeBid?.type === "new" ? "Challenge #1" : "Challenge this position");
-    elements.bidTarget.replaceChildren(createElement("span", "", label), createElement("strong", "", targetName));
-  }
-
   function updateBidPreview() {
-    if (!elements.bidAmount || !elements.bidHint || !activeBid) return;
+    if (!elements.bidAmount || !activeBid) return;
     const amount = Number(elements.bidAmount.value);
     const minimum = minimumForActiveBid();
-    let message;
-
-    if (!Number.isSafeInteger(amount)) {
-      elements.bidAmount.setCustomValidity("Enter a whole-dollar amount.");
-      message = "Enter a whole-dollar amount.";
-    } else if (amount < minimum) {
-      elements.bidAmount.setCustomValidity(`Bid at least ${money(minimum)}.`);
-      message = `Minimum challenge is ${money(minimum)}.`;
-    } else if (amount > MAX_BID) {
-      elements.bidAmount.setCustomValidity(`Demo bids cannot exceed ${money(MAX_BID)}.`);
-      message = `Demo bids cannot exceed ${money(MAX_BID)}.`;
-    } else {
-      elements.bidAmount.setCustomValidity("");
-      const rank = projectedRank(amount);
-      message = `${money(amount)} would place this listing at #${rank} on the ${windowLabel().toLowerCase()} board.`;
-      if (elements.orderPosition) elements.orderPosition.textContent = `Projected #${rank} on the ${windowLabel().toLowerCase()} board`;
-    }
-
-    elements.bidHint.textContent = message;
+    if (!Number.isSafeInteger(amount) || amount < minimum || amount > MAX_BID) return;
+    const rank = projectedRank(amount);
+    const listing = activeBid.type === "new"
+      ? pendingChallenge
+      : state.listings.find((item) => item.id === activeBid.listingId);
+    const category = canonicalCategory(listing?.category) || state.category;
+    if (elements.dialogRank) elements.dialogRank.textContent = `#${rank}`;
+    if (elements.dialogPrice) elements.dialogPrice.textContent = money(amount);
+    if (elements.dialogContext) elements.dialogContext.textContent = `${windowLabel()} · ${categoryName(category)}`;
+    if (elements.dialogExplanation) elements.dialogExplanation.textContent = state.language === "zh"
+      ? `付款结算后，${listing?.name || "你的条目"}将登上${windowLabel()}榜第 ${rank} 名。其他人仍可出价取得更高位置。`
+      : `After payment settles, ${listing?.name || "your listing"} will take #${rank} on the ${windowLabel().toLowerCase()} board. Someone else can still bid higher.`;
   }
 
   function openBidDialog(trigger, listingId = null) {
@@ -1169,10 +1138,8 @@
     activeBid = listingId ? { type: "listing", listingId } : { type: "new" };
     lastTrigger = trigger;
     elements.bidForm.reset();
-    setBidTarget();
 
     const min = minimumForActiveBid();
-    elements.bidAmount.min = String(min);
     elements.bidAmount.value = String(Math.max(min, Number(elements.inlineBid?.value) || min));
     updateBidPreview();
 
@@ -1182,7 +1149,7 @@
       elements.dialog.setAttribute("open", "");
     }
 
-    window.requestAnimationFrame(() => elements.bidAmount?.focus());
+    window.requestAnimationFrame(() => elements.bidAgree?.focus());
   }
 
   function closeBidDialog({ restoreFocus = true } = {}) {
@@ -1457,11 +1424,6 @@
     });
   });
 
-  elements.activityMore?.addEventListener("click", () => {
-    activityExpanded = !activityExpanded;
-    renderSidebar();
-  });
-
   document.addEventListener("click", (event) => {
     const target = event.target instanceof Element ? event.target : null;
     if (!target) return;
@@ -1615,7 +1577,7 @@
         showToast(error?.message || "Hosted checkout is unavailable. No payment was made.", "error");
         if (submitButton) {
           submitButton.disabled = false;
-          submitButton.textContent = "Confirm challenge";
+          submitButton.textContent = state.language === "zh" ? "继续付款" : "Continue to checkout";
         }
       }
       return;
@@ -1625,7 +1587,7 @@
     if (!result) return;
     pendingChallenge = null;
     closeBidDialog({ restoreFocus: false });
-    showToast(`${result.listing.name} is now #${result.rank}. No payment was collected.`, "success");
+    showToast(`${result.listing.name} is now #${result.rank} in this preview.`, "success");
   });
 
   elements.dialog?.addEventListener("click", (event) => {

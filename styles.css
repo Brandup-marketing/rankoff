@@ -284,9 +284,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .section-heading-line h2 { margin: 0; font-size: 1.05rem; font-weight: 850; }
 .section-note { color: var(--muted); font-size: .72rem; }
 .live-dot { width: .45rem; height: .45rem; border-radius: 50%; background: var(--accent); animation: live-pulse 1.8s ease-out infinite; }
-.activity-tape { display: grid; grid-template-columns: minmax(0, 1fr); gap: .45rem; margin: 0; padding: 0; }
+.activity-ticker-viewport { overflow: hidden; padding-block: .15rem; }
+.activity-tape { display: flex; width: max-content; gap: .55rem; margin: 0; padding: 0; animation: market-ticker var(--ticker-duration, 36s) linear infinite; will-change: transform; }
+.activity-tape.is-empty { width: 100%; animation: none; }
+.activity-ticker-viewport:hover .activity-tape, .activity-ticker-viewport:focus-within .activity-tape { animation-play-state: paused; }
 .activity-tape li { margin: 0; list-style: none; }
-.activity-event { display: grid; grid-template-columns: 2.5rem minmax(12rem, 1fr) auto minmax(6rem, auto) 4.5rem 4.2rem; align-items: center; gap: .7rem; min-width: 0; min-height: 4.25rem; padding: .55rem .7rem; border: 1px solid var(--line); border-radius: .5rem; background: var(--surface); }
+.activity-event { display: grid; grid-template-columns: 2.35rem minmax(10rem, 1fr) auto auto auto auto auto; align-items: center; gap: .6rem; width: 35rem; min-height: 4.25rem; padding: .55rem .65rem; border: 1px solid var(--line); border-radius: .45rem; background: var(--surface); }
 .activity-event.is-latest { border-color: color-mix(in srgb, var(--accent) 58%, var(--line)); background: var(--accent-soft); animation: activity-in 220ms var(--ease) both; }
 .activity-mark { position: relative; display: grid; width: 2.35rem; height: 2.35rem; place-items: center; overflow: hidden; border: 1px solid var(--line); border-radius: .42rem; background: var(--surface-subtle); color: var(--ink); font-size: .65rem; font-weight: 850; }
 .activity-mark img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: var(--surface); }
@@ -306,14 +309,19 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .activity-rank { justify-items: end; }
 .activity-rank strong { color: var(--accent-strong); }
 .activity-time { justify-self: end; color: var(--muted); font-size: .64rem; font-weight: 750; white-space: nowrap; }
-.activity-more { display: block; min-height: 2.5rem; margin: .55rem auto 0; padding: .35rem .7rem; border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--muted); font-size: .68rem; font-weight: 800; }
-.activity-more:hover { border-color: var(--line-strong); background: var(--surface); color: var(--ink); }
+.activity-bid-now { justify-self: end; color: var(--accent-strong); font-size: .65rem; font-weight: 900; text-decoration: none; white-space: nowrap; }
+.activity-bid-now:hover { color: var(--ink); text-decoration: underline; text-underline-offset: .16em; }
 .activity-tape li.activity-empty { grid-column: 1 / -1; min-height: 4.6rem; }
 .activity-tape li.activity-empty strong { display: block; margin-bottom: .18rem; color: var(--ink); font-size: .76rem; }
 .activity-tape li.activity-empty span { color: var(--muted); }
 @keyframes live-pulse { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 38%, transparent); } 55% { box-shadow: 0 0 0 .35rem transparent; } }
 @keyframes activity-in { from { opacity: .45; transform: translateX(-.5rem); } to { opacity: 1; transform: translateX(0); } }
-@media (prefers-reduced-motion: reduce) { .live-dot, .activity-tape li.is-latest { animation: none; } }
+@keyframes market-ticker { to { transform: translateX(calc(-50% - .275rem)); } }
+@media (prefers-reduced-motion: reduce) {
+  .live-dot, .activity-tape, .activity-tape li.is-latest { animation: none; }
+  .activity-ticker-viewport { overflow-x: auto; scrollbar-width: thin; }
+  .activity-tape li.is-duplicate { display: none; }
+}
 .ranking-rules { display: grid; grid-template-columns: minmax(13rem, 1fr) minmax(0, 2fr) auto; align-items: center; gap: 1.25rem; margin-top: 2rem; padding: 1.25rem 0; border-block: 1px solid var(--line); }
 .ranking-rules h2 { margin: 0; font-size: 1rem; }
 .ranking-rules p { margin: .2rem 0 0; color: var(--muted); font-size: .75rem; }
@@ -358,6 +366,25 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .payment-status { align-self: start; padding: 0.2rem 0.4rem; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 0.62rem; font-weight: 800; }
 .dialog-actions { display: flex; justify-content: flex-end; gap: 0.6rem; padding-top: 0.75rem; border-top: 1px solid var(--line); }
 .secondary-action { min-height: 3rem; padding: 0.65rem 0.9rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); color: var(--muted); font-weight: 750; }
+
+.confirmation-dialog { width: min(calc(100% - 1.5rem), 34rem); }
+.confirmation-panel { gap: 1rem; }
+.confirmation-dialog .dialog-heading h2 { margin-top: 0; }
+.confirmation-intro { max-width: 34rem; margin: .35rem 0 0; color: var(--muted); font-size: .78rem; line-height: 1.45; }
+.rank-price-summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; padding: 1rem; border-radius: .6rem; background: var(--surface-subtle); }
+.rank-price-summary > div { display: grid; min-width: 0; gap: .22rem; }
+.rank-price-summary > div:last-child { justify-items: end; text-align: right; }
+.rank-price-summary span { color: var(--muted); font-size: .66rem; font-weight: 850; letter-spacing: .04em; text-transform: uppercase; }
+.rank-price-summary strong { color: var(--ink); font-size: 2rem; font-weight: 900; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+.rank-price-summary > div:last-child strong { color: var(--accent-strong); }
+.rank-price-summary small { overflow: hidden; color: var(--muted); font-size: .72rem; line-height: 1.35; text-overflow: ellipsis; white-space: nowrap; }
+.confirmation-copy { margin: 0; color: var(--muted); font-size: .82rem; line-height: 1.55; text-wrap: pretty; }
+.confirmation-consent { padding: .85rem; background: var(--bg); color: var(--ink); }
+.confirmation-consent span { padding-top: .02rem; }
+.confirmation-links { display: flex; gap: .4rem; margin: -.2rem 0 0; color: var(--muted); font-size: .72rem; }
+.confirmation-links a { color: var(--muted); text-underline-offset: .16em; }
+.confirmation-links a:hover { color: var(--ink); }
+.confirmation-dialog .dialog-actions .primary-action { min-width: 12rem; }
 
 .share-dialog { width: min(calc(100% - 1.5rem), 31rem); }
 .share-panel { gap: 1rem; }
@@ -450,13 +477,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .featured-evidence .featured-metric strong { font-size: 0.86rem; text-align: right; }
   .panel-toggle { min-width: 2.25rem; justify-content: center; padding-inline: 0.35rem; font-size: 0; }
   .panel-toggle-icon { font-size: 1.1rem; }
-  .activity-event { grid-template-areas: "mark identity action action" "mark metric rank time"; grid-template-columns: 2.35rem minmax(0, 1fr) auto auto; gap: .25rem .55rem; padding: .6rem; }
-  .activity-mark { grid-area: mark; }
-  .activity-identity { grid-area: identity; }
-  .activity-action { grid-area: action; justify-self: end; }
-  .activity-metric { grid-area: metric; }
-  .activity-rank { grid-area: rank; justify-items: start; }
-  .activity-time { grid-area: time; }
+  .activity-event { grid-template-columns: 2.2rem minmax(8rem, 1fr) auto auto auto auto; width: 29rem; gap: .45rem; padding: .55rem; }
+  .activity-context, .activity-metric span, .activity-rank span { display: none; }
+  .activity-action { font-size: .58rem; }
+  .activity-time { display: none; }
+  .activity-bid-now { font-size: .62rem; }
   .featured-actions { justify-content: stretch; }
   .featured-actions .bid-button { flex: 1 1 auto; }
   .featured-actions .share-button { min-width: 4.25rem; }
@@ -468,6 +493,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .click-cell { display: none; }
   .dialog-actions { flex-direction: column-reverse; }
   .dialog-actions button { width: 100%; }
+  .rank-price-summary { gap: .7rem; padding: .8rem; }
+  .rank-price-summary strong { font-size: 1.7rem; }
   .share-link-control, .share-options { grid-template-columns: 1fr; }
   .share-link-control { overflow: visible; border: 0; background: transparent; }
   .share-link-control input, .share-link-control .primary-action { border: 1px solid var(--line); border-radius: var(--radius); }
