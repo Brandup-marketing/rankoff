@@ -80,10 +80,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .site-nav { display: inline-flex; justify-self: end; gap: 1rem; margin-right: 0.25rem; color: var(--muted); font-size: 0.8rem; font-weight: 750; }
 .site-nav a { display: inline-flex; min-height: 2.75rem; align-items: center; text-decoration: none; }
 .site-nav a:hover { color: var(--ink); }
-.theme-toggle { min-height: 2.75rem; padding: 0.42rem 0.7rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--muted); font-size: 0.75rem; font-weight: 800; }
-.theme-toggle:hover { border-color: var(--line-strong); color: var(--ink); }
-.language-toggle { min-height: 2.75rem; padding: 0.42rem 0.7rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--muted); font-size: 0.75rem; font-weight: 800; }
-.language-toggle:hover { border-color: var(--line-strong); color: var(--ink); }
+.theme-toggle, .language-toggle { display: inline-flex; min-width: 4.6rem; min-height: 2.75rem; align-items: center; justify-content: center; gap: 0.35rem; padding: 0.42rem 0.68rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-subtle); color: var(--muted); font-size: 0.72rem; font-weight: 800; white-space: nowrap; transition: border-color 160ms var(--ease), background 160ms var(--ease), color 160ms var(--ease), transform 160ms var(--ease); }
+.theme-toggle::before, .language-toggle::before { display: inline-grid; place-items: center; width: 1.15rem; height: 1.15rem; border: 1px solid var(--line-strong); border-radius: 50%; color: var(--accent-strong); font-size: 0.68rem; line-height: 1; }
+.theme-toggle::before { content: "◐"; }
+.language-toggle::before { content: "文"; }
+.theme-toggle:hover, .language-toggle:hover { border-color: var(--accent); background: var(--surface); color: var(--ink); }
+.theme-toggle:active, .language-toggle:active { transform: translateY(1px); }
 .demo-state i, .market-status i { width: 0.45rem; height: 0.45rem; border-radius: 50%; background: var(--up); }
 
 .claim-stage { padding: 0.9rem 0 0.55rem; }
@@ -323,9 +325,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .time-tabs button { min-height: 2.6rem; padding-inline: 0.45rem; font-size: 0.72rem; }
   .demo-state { display: none; }
   .site-nav { display: none; }
-  .theme-toggle, .language-toggle { width: 2.6rem; min-height: 2.6rem; padding-inline: 0; font-size: 0; }
-  .theme-toggle::before { content: "☼"; font-size: 1rem; }
-  .language-toggle::before { content: "中"; font-size: 0.8rem; }
+  .theme-toggle, .language-toggle { min-width: 2.8rem; min-height: 2.6rem; padding-inline: 0.55rem; font-size: 0.66rem; }
   .claim-stage { padding: 0.9rem 0 0.8rem; }
   .claim-panel h1 { font-size: 2.2rem; }
   .claim-copy { margin-top: 0.45rem; font-size: 0.82rem; }
@@ -383,7 +383,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .brand-lockup-image { width: 8rem; height: 2.75rem; }
   .time-tabs { padding: 0.14rem; }
   .time-tabs button { min-height: 2.45rem; padding-inline: 0.28rem; font-size: 0.68rem; }
-  .theme-toggle, .language-toggle { width: 2.45rem; min-height: 2.45rem; }
+  .theme-toggle, .language-toggle { width: 2.6rem; min-width: 2.6rem; min-height: 2.45rem; padding-inline: 0; font-size: 0; }
   .rank-share-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .rank-share-control { min-width: 1.55rem; justify-content: center; padding-inline: .2rem; }
 }

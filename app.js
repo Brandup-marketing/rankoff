@@ -18,8 +18,8 @@
     "Other",
   ];
   const translations = {
-    en: { navBoard: "Board", navAbout: "About", heroCopy: "Put your product where people look first. Your listing stays at the top until someone pays more.", totalBid: "Your total bid", productUrl: "Your product URL or @handle", chooseMarket: "Choose a market", challengeCategory: "Challenge category", categoryRule: "Must match the listing you’ll outrank.", reviewBid: "Review your bid", demoOnly: "Preview board · no payment is collected", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest valid bid takes #1. Pay more to move up.", todayRanking: "Today’s top ranking", latestActivity: "Latest activity", liveUpdates: "Live bid updates", howItWorks: "How ranking works" },
-    zh: { navBoard: "榜单", navAbout: "关于", heroCopy: "把你的产品放到大家最先看到的位置。只要没有更高出价，你的介绍就会保持在榜首。", totalBid: "你的总出价", productUrl: "产品网址或 @账号", chooseMarket: "选择市场", challengeCategory: "挑战分类", categoryRule: "必须与您要超越的条目相同。", reviewBid: "确认出价", demoOnly: "预览榜单 · 不会收取费用", markets: "市场分类", liveLeaderboard: "实时榜单", boardSummary: "最高有效出价获得第 1 名。提高出价即可上升。", todayRanking: "今日热门排名", latestActivity: "最新动态", liveUpdates: "实时竞价更新", howItWorks: "排名规则" },
+    en: { navBoard: "Board", navAbout: "About", heroCopy: "Put your product where people look first. Your listing stays at the top until someone pays more.", totalBid: "Your total bid", productUrl: "Your product URL or @handle", chooseMarket: "Choose a market", challengeCategory: "Challenge category", categoryRule: "Must match the listing you’ll outrank.", reviewBid: "Review your bid", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest valid bid takes #1. Pay more to move up.", todayRanking: "Today’s top ranking", latestActivity: "Latest activity", liveUpdates: "Live bid updates", howItWorks: "How ranking works" },
+    zh: { navBoard: "榜单", navAbout: "关于", heroCopy: "把你的产品放到大家最先看到的位置。只要没有更高出价，你的介绍就会保持在榜首。", totalBid: "你的总出价", productUrl: "产品网址或 @账号", chooseMarket: "选择市场", challengeCategory: "挑战分类", categoryRule: "必须与您要超越的条目相同。", reviewBid: "确认出价", markets: "市场分类", liveLeaderboard: "实时榜单", boardSummary: "最高有效出价获得第 1 名。提高出价即可上升。", todayRanking: "今日热门排名", latestActivity: "最新动态", liveUpdates: "实时竞价更新", howItWorks: "排名规则" },
   };
   const categoryTranslations = { Agents: "智能代理", Marketing: "营销", Developer: "开发者", Business: "商业", Agencies: "代理机构", Ecommerce: "电商", Productivity: "效率工具", Design: "设计", SEO: "SEO", Other: "其他" };
 
@@ -167,7 +167,6 @@
     heroPrice: document.querySelector("[data-hero-next-price]"),
     heroContext: document.querySelector("[data-hero-context]"),
     boardState: document.querySelector("[data-board-state]"),
-    demoNote: document.querySelector("[data-demo-note]"),
     inlineSubmit: document.querySelector("[data-inline-submit]"),
     currentLeader: document.querySelector("[data-current-leader]"),
     leaderBid: document.querySelector("[data-leader-bid]"),
@@ -381,11 +380,6 @@
     if (elements.boardHeading) elements.boardHeading.textContent = chinese
       ? (production ? "实时赞助榜单" : "预览赞助榜单")
       : (production ? "Live sponsored leaderboard" : "Preview sponsored leaderboard");
-    if (elements.demoNote) {
-      elements.demoNote.textContent = production
-        ? (chinese ? "实时排名 · 付款仅在托管结账后确认" : "Live ranking data · payment is only confirmed after hosted checkout")
-        : languageText("demoOnly");
-    }
     if (elements.activityNote) elements.activityNote.textContent = chinese
       ? (production ? "已验证竞价动态" : "预览市场动态")
       : (production ? "Verified market events" : "Preview market activity");
