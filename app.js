@@ -912,8 +912,8 @@
 
     const rank = createElement("div", "featured-rank", `#${position}`);
     const evidence = createElement("div", "featured-evidence");
-    const bid = createElement("div", "featured-metric");
-    bid.append(createElement("span", "", state.language === "zh" ? "价格" : "Price"), createElement("strong", "", money(getBid(listing))));
+    const bid = createElement("div", "featured-metric featured-price");
+    bid.append(createElement("strong", "", money(getBid(listing))));
     const bidStack = createElement("div", "featured-bid-stack");
     bidStack.append(bid, createShareControl(listing, position));
     const clicks = createElement("div", "featured-metric");
