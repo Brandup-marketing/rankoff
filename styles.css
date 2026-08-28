@@ -330,7 +330,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .activity-metric span, .activity-rank span { color: var(--muted); font-size: .6rem; white-space: nowrap; }
 .activity-rank { justify-items: end; }
 .activity-rank strong { color: var(--accent-strong); }
-.activity-time { margin-left: auto; color: var(--muted); font-size: .64rem; font-weight: 750; white-space: nowrap; }
+.activity-time { color: var(--muted); font-size: .64rem; font-weight: 750; white-space: nowrap; }
 .activity-tape li.activity-empty { grid-column: 1 / -1; min-height: 4.6rem; }
 .activity-tape li.activity-empty strong { display: block; margin-bottom: .18rem; color: var(--ink); font-size: .76rem; }
 .activity-tape li.activity-empty span { color: var(--muted); }
