@@ -182,7 +182,6 @@
     inlineChallenge: document.querySelector("[data-inline-challenge]"),
     inlineBid: document.querySelector("[data-inline-bid]"),
     inlineUrl: document.querySelector("[data-inline-url]"),
-    categoryRule: document.querySelector("[data-category-rule]"),
     heroPrice: document.querySelector("[data-hero-next-price]"),
     heroContext: document.querySelector("[data-hero-context]"),
     boardState: document.querySelector("[data-board-state]"),
@@ -928,11 +927,6 @@
     const leaderCategory = canonicalCategory(leader.category) || "Other";
     if (elements.categorySelect && categories.includes(leaderCategory)) {
       elements.categorySelect.value = leaderCategory;
-    }
-    if (elements.categoryRule) {
-      elements.categoryRule.textContent = state.language === "zh"
-        ? `必须与要超越的 ${leader.name} 属于同一类别。`
-        : `Must match ${leader.name}’s ${categoryName(leader.category)} category.`;
     }
     const nextPrice = boardSource === "local" || !remoteNextBid ? getBid(leader) + 1 : remoteNextBid;
 
