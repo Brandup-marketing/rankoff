@@ -33,6 +33,9 @@ html[data-theme="light"] {
   --up-soft: oklch(94% 0.035 160);
 }
 
+html[data-theme="light"] .brand { background: transparent; }
+html[data-theme="light"] .brand-lockup-image { filter: invert(1) hue-rotate(180deg); mix-blend-mode: multiply; }
+
 *,
 *::before,
 *::after { box-sizing: border-box; }
