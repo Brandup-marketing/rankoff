@@ -253,7 +253,12 @@
       elements.themeToggle.setAttribute("aria-pressed", String(dark));
     }
     renderActive();
-    elements.grid?.replaceChildren(...categoryConfig.map(renderCard));
+    elements.grid?.replaceChildren(...categoryConfig.map((config) => {
+      const card = renderCard(config);
+      card.dataset.categoryId = config.id;
+      return card;
+    }));
+    window.dispatchEvent(new CustomEvent("rankoff:content-updated"));
   }
 
   function savePreferences() {

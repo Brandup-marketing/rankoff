@@ -1008,6 +1008,7 @@
     renderSidebar();
     renderTotals();
     updateBoardSourceLabels();
+    window.dispatchEvent(new CustomEvent("rankoff:content-updated"));
   }
 
   function setBidTarget() {

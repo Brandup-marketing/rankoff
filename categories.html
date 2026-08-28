@@ -37,11 +37,22 @@
           <a href="./categories.html" aria-current="page">Categories</a>
           <a href="./about.html">About</a>
         </nav>
+        <button class="search-toggle" type="button" data-search-toggle aria-expanded="false" aria-controls="site-search" aria-label="Search products and categories"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.6 4.6"></path></svg></button>
         <div class="category-actions">
           <button class="language-toggle" type="button" data-language-toggle aria-pressed="false">中文</button>
           <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch colour theme" aria-pressed="true">Light</button>
         </div>
       </header>
+
+      <form class="site-search" id="site-search" data-site-search role="search" hidden>
+        <div class="site-search-field">
+          <span class="site-search-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.6 4.6"></path></svg></span>
+          <label class="visually-hidden" for="site-search-input">Search products and categories</label>
+          <input id="site-search-input" data-site-search-input type="search" autocomplete="off" placeholder="Search products and categories…" />
+          <button class="search-close" type="button" data-search-close>Close</button>
+        </div>
+        <div class="site-search-results" data-search-results role="listbox" aria-label="Search results" hidden></div>
+      </form>
 
       <section class="category-status" aria-label="Board status">
         <span class="status-indicator" aria-hidden="true"></span>
@@ -83,6 +94,7 @@
       </footer>
     </main>
 
+    <script src="./search.js?v=1" defer></script>
     <script src="./categories.js?v=1" defer></script>
   </body>
 </html>

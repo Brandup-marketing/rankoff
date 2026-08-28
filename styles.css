@@ -65,7 +65,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 .topbar {
   display: grid;
-  grid-template-columns: auto auto minmax(0, 1fr) auto auto auto;
+  grid-template-columns: auto auto minmax(0, 1fr) auto auto auto auto;
   align-items: center;
   gap: 0.8rem;
   min-height: 4rem;
@@ -83,6 +83,26 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .site-nav { display: inline-flex; justify-self: end; gap: 1rem; margin-right: 0.25rem; color: var(--muted); font-size: 0.8rem; font-weight: 750; }
 .site-nav a { display: inline-flex; min-height: 2.75rem; align-items: center; text-decoration: none; }
 .site-nav a:hover { color: var(--ink); }
+.search-toggle { display: inline-grid; place-items: center; width: 2.75rem; height: 2.75rem; padding: 0; border: 1px solid var(--line); border-radius: 50%; background: var(--surface-subtle); color: var(--muted); line-height: 1; transition: border-color 160ms var(--ease), background 160ms var(--ease), color 160ms var(--ease), transform 160ms var(--ease); }
+.search-toggle svg, .site-search-glyph svg { width: 1.25rem; height: 1.25rem; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
+.search-toggle:hover, .search-toggle[aria-expanded="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-strong); }
+.search-toggle:active { transform: translateY(1px); }
+.site-search { display: grid; gap: 0.55rem; margin: 0.65rem 0 0; }
+.site-search-field { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 0.65rem; min-height: 3.5rem; padding: 0.28rem 0.35rem 0.28rem 1rem; border: 2px solid var(--accent); border-radius: 999px; background: var(--surface-subtle); }
+.site-search-glyph { color: var(--accent-strong); font-size: 1.45rem; line-height: 1; }
+.site-search-field input { min-width: 0; min-height: 2.7rem; padding: 0; border: 0; outline: 0; background: transparent; color: var(--ink); font-size: 1rem; }
+.site-search-field input::placeholder { color: var(--muted); opacity: 1; }
+.search-close { min-height: 2.45rem; padding: 0.4rem 0.7rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--muted); font-size: 0.7rem; font-weight: 800; }
+.search-close:hover { border-color: var(--line-strong); color: var(--ink); }
+.site-search-results { display: grid; max-height: min(24rem, 55vh); overflow: auto; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--surface); }
+.search-result { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.15rem 0.65rem; padding: 0.75rem 0.9rem; border-bottom: 1px solid var(--line); color: var(--ink); text-decoration: none; }
+.search-result:last-child { border-bottom: 0; }
+.search-result:hover, .search-result:focus-visible { background: var(--surface-subtle); }
+.search-result-kind { grid-row: span 2; align-self: start; padding: 0.16rem 0.35rem; border: 1px solid var(--line); border-radius: 0.25rem; color: var(--accent-strong); font-size: 0.6rem; font-weight: 850; text-transform: uppercase; }
+.search-result strong { overflow: hidden; font-size: 0.8rem; text-overflow: ellipsis; white-space: nowrap; }
+.search-result span:last-child { overflow: hidden; color: var(--muted); font-size: 0.7rem; text-overflow: ellipsis; white-space: nowrap; }
+.search-empty { margin: 0; padding: 0.9rem; color: var(--muted); font-size: 0.78rem; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; padding: 0; border: 0; margin: -1px; clip: rect(0 0 0 0); white-space: nowrap; }
 .theme-toggle, .language-toggle { display: inline-flex; min-width: 4.6rem; min-height: 2.75rem; align-items: center; justify-content: center; gap: 0.35rem; padding: 0.42rem 0.68rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-subtle); color: var(--muted); font-size: 0.72rem; font-weight: 800; white-space: nowrap; transition: border-color 160ms var(--ease), background 160ms var(--ease), color 160ms var(--ease), transform 160ms var(--ease); }
 .theme-toggle::before, .language-toggle::before { display: inline-grid; place-items: center; width: 1.15rem; height: 1.15rem; border: 1px solid var(--line-strong); border-radius: 50%; color: var(--accent-strong); font-size: 0.68rem; line-height: 1; }
 .theme-toggle::before { content: "◐"; }
@@ -321,12 +341,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 @media (max-width: 46rem) {
   .activity-tape { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .app-shell { width: min(calc(100% - 1rem), var(--content)); }
-  .topbar { grid-template-columns: minmax(0, 1fr) auto auto auto; gap: 0.35rem; }
+  .topbar { grid-template-columns: minmax(0, 1fr) auto auto auto auto; gap: 0.35rem; }
   .brand { width: 3.35rem; height: 3.35rem; }
   .time-tabs { justify-self: end; }
   .time-tabs button { min-height: 2.6rem; padding-inline: 0.45rem; font-size: 0.72rem; }
   .demo-state { display: none; }
   .site-nav { display: none; }
+  .search-toggle { width: 2.6rem; height: 2.6rem; }
   .theme-toggle, .language-toggle { min-width: 2.8rem; min-height: 2.6rem; padding-inline: 0.55rem; font-size: 0.66rem; }
   .claim-stage { padding: 0.9rem 0 0.8rem; }
   .claim-panel h1 { font-size: 2.2rem; }
@@ -385,6 +406,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .time-tabs { padding: 0.14rem; }
   .time-tabs button { min-height: 2.45rem; padding-inline: 0.28rem; font-size: 0.68rem; }
   .theme-toggle, .language-toggle { width: 2.6rem; min-width: 2.6rem; min-height: 2.45rem; padding-inline: 0; font-size: 0; }
+  .search-toggle { width: 2.45rem; height: 2.45rem; }
+  .site-search-field { min-height: 3.15rem; padding-left: 0.8rem; }
+  .site-search-field input { font-size: 0.85rem; }
+  .search-close { font-size: 0; }
+  .search-close::before { content: "×"; font-size: 1.1rem; }
   .rank-share-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .rank-share-control { min-width: 1.55rem; justify-content: center; padding-inline: .2rem; }
 }
