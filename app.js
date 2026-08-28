@@ -1077,10 +1077,9 @@
     }
     identity.append(name);
     if (listing.description) {
-      const description = listing.description.length > 60 ? `${listing.description.slice(0, 57).trimEnd()}…` : listing.description;
+      const description = listing.description.length > 48 ? `${listing.description.slice(0, 45).trimEnd()}…` : listing.description;
       identity.append(createElement("span", "activity-description", description));
     }
-    identity.append(createElement("span", "activity-context", presentation.context));
     const action = createElement("span", `activity-action activity-action-${presentation.type}`, presentation.action);
     const metric = createElement("div", "activity-metric");
     metric.append(createElement("strong", "", presentation.metric));
