@@ -195,7 +195,6 @@
     todayRankingList: document.querySelector("[data-today-ranking-list]"),
     todaySeeAll: document.querySelector("[data-today-see-all]"),
     activityList: document.querySelector("[data-activity-list]"),
-    activityNote: document.querySelector("[data-activity-note]"),
     liveDot: document.querySelector(".live-dot"),
     panelToggles: Array.from(document.querySelectorAll("[data-panel-toggle]")),
     statVisitors: document.querySelector("[data-stat-visitors]"),
@@ -437,7 +436,6 @@
         : (production ? " Live board" : boardSource === "local" ? " Preview board" : " Connected preview");
     }
     if (elements.boardHeading) elements.boardHeading.textContent = chinese ? "实时赞助榜单" : "Live sponsored leaderboard";
-    if (elements.activityNote) elements.activityNote.textContent = chinese ? "实时变化" : "Live moves";
     if (elements.liveDot) elements.liveDot.hidden = !production;
     if (elements.measurementSummary) {
       elements.measurementSummary.textContent = chinese ? "点击如何统计" : "How clicks are measured";
