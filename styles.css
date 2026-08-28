@@ -174,7 +174,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .today-ranking-item:first-child { border-top: 0; }
 .board-interstitial .today-ranking-item:first-child { border-top: 0; }
 .today-ranking-position { color: var(--muted); font-size: .7rem; font-weight: 850; font-variant-numeric: tabular-nums; }
-.today-ranking-item .product-cell { gap: .5rem; }
+.today-ranking-item .product-cell { grid-area: auto; gap: .5rem; }
 .today-ranking-item .product-mark { width: 2rem; height: 2rem; flex-basis: 2rem; border-radius: .35rem; font-size: .62rem; }
 .today-ranking-item .product-meta { display: flex; gap: .25rem; margin: 0; font-size: .62rem; }
 .today-ranking-item .product-meta > :not(.category-meta) { display: none; }
