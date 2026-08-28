@@ -6,8 +6,8 @@ a { color: inherit; text-underline-offset: 0.18em; }
 a:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
 .about-shell { width: min(calc(100% - 2rem), 76rem); margin: 0 auto; padding-bottom: 2rem; }
 .about-header { display: flex; align-items: center; justify-content: space-between; min-height: 5rem; border-bottom: 1px solid var(--line); }
-.about-brand { display: block; width: 11.9rem; height: 3.55rem; overflow: hidden; background: #050505; line-height: 0; }
-.about-brand img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: left center; }
+.about-brand { display: block; width: 4.5rem; height: 4.5rem; overflow: hidden; border-radius: 0.5rem; background: #050505; line-height: 0; }
+.about-brand img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; }
 .about-header nav { display: flex; gap: 1.25rem; color: var(--muted); font-size: 0.84rem; font-weight: 700; }
 .about-header nav a { display: inline-flex; min-height: 2.75rem; align-items: center; }
 .about-header nav a[aria-current="page"] { color: var(--ink); }
@@ -40,5 +40,5 @@ h2 { margin: 0; font-size: clamp(1.8rem, 4vw, 3.2rem); letter-spacing: -0.03em; 
 .about-footer { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.78rem; }
 .about-footer span:first-child { color: var(--ink); font-weight: 900; letter-spacing: 0.05em; }
 .about-footer a { color: var(--accent); font-weight: 800; }
-@media (max-width: 44rem) { .about-shell { width: min(calc(100% - 1rem), 76rem); } .about-brand { width: 9.5rem; height: 3.2rem; } .about-header nav { gap: 0.35rem; font-size: 0.75rem; } .about-header nav a { padding-inline: 0.25rem; } .about-hero { padding: 4rem 0 4.5rem; } .origin-grid, .live-state { grid-template-columns: 1fr; gap: 2.5rem; } .about-disclosure { grid-column: auto; margin: -1.5rem 0 0; } .timeline-grid { grid-template-columns: 1fr; gap: 2rem; } .about-footer { flex-wrap: wrap; } }
+@media (max-width: 44rem) { .about-shell { width: min(calc(100% - 1rem), 76rem); } .about-brand { width: 3.35rem; height: 3.35rem; } .about-header nav { gap: 0.35rem; font-size: 0.75rem; } .about-header nav a { padding-inline: 0.25rem; } .about-hero { padding: 4rem 0 4.5rem; } .origin-grid, .live-state { grid-template-columns: 1fr; gap: 2.5rem; } .about-disclosure { grid-column: auto; margin: -1.5rem 0 0; } .timeline-grid { grid-template-columns: 1fr; gap: 2rem; } .about-footer { flex-wrap: wrap; } }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
