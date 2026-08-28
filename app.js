@@ -913,16 +913,18 @@
     const rank = createElement("div", "featured-rank", `#${position}`);
     const evidence = createElement("div", "featured-evidence");
     const bid = createElement("div", "featured-metric");
-    bid.append(createElement("span", "", `${windowLabel()} bid`), createElement("strong", "", money(getBid(listing))));
+    bid.append(createElement("span", "", state.language === "zh" ? "出价" : "Bid"), createElement("strong", "", money(getBid(listing))));
+    const bidStack = createElement("div", "featured-bid-stack");
+    bidStack.append(bid, createShareControl(listing, position));
     const clicks = createElement("div", "featured-metric");
     const clickLabel = boardSource === "production"
       ? (listing.verified ? (state.language === "zh" ? "已验证点击" : "Verified clicks") : (state.language === "zh" ? "估算点击" : "Estimated clicks"))
       : (state.language === "zh" ? "示例点击" : "Sample clicks");
     clicks.append(createElement("span", "", clickLabel), createElement("strong", "", compact.format(getClicks(listing))));
-    evidence.append(bid, clicks);
+    evidence.append(bidStack, clicks);
 
     card.id = `listing-${listing.id}`;
-    card.append(rank, productIdentity(listing, "p", position), evidence, createClaimControl(minimum));
+    card.append(rank, productIdentity(listing, "p"), evidence, createClaimControl(minimum));
     return card;
   }
 

@@ -219,6 +219,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .featured-1 .product-name { font-size: 1.1rem; }
 .featured-listing .listing-description { -webkit-line-clamp: 2; }
 .featured-evidence { grid-area: evidence; display: flex; min-width: 0; justify-content: flex-end; gap: 1rem; }
+.featured-bid-stack { display: grid; justify-items: end; gap: .18rem; }
 .featured-metric { display: grid; gap: 0.15rem; min-width: 5rem; }
 .featured-metric span { color: var(--muted); font-size: 0.67rem; font-weight: 700; }
 .featured-metric strong { color: var(--ink); font-size: 1.08rem; font-variant-numeric: tabular-nums; }
@@ -475,7 +476,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .featured-listing .product-name { font-size: 0.9rem; }
   .featured-evidence { display: block; justify-self: end; }
   .featured-evidence .featured-metric { min-width: 0; }
-  .featured-evidence .featured-metric:nth-child(2) { display: none; }
+  .featured-evidence > .featured-metric { display: none; }
   .featured-evidence .featured-metric span { font-size: 0.6rem; }
   .featured-evidence .featured-metric strong { font-size: 0.86rem; text-align: right; }
   .panel-toggle { min-width: 2.25rem; justify-content: center; padding-inline: 0.35rem; font-size: 0; }
