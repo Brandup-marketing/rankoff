@@ -26,8 +26,7 @@
     members.forEach((member) => { aliases[member.toLowerCase()] = market; });
     return aliases;
   }, {}));
-  const shortcutCategories = Object.freeze(["Agents", "Marketing", "Developer", "Crypto"]);
-  const shortcutIcons = Object.freeze({ all: "▦", Agents: "✦", Marketing: "↗", Developer: "</>", Crypto: "₿" });
+  const categoryIcons = Object.freeze({ all: "▦", Agents: "✦", Marketing: "↗", Developer: "</>", Business: "◆", Crypto: "₿", Ecommerce: "◇", Design: "✎", Productivity: "✓", Health: "+", Games: "◈", Travel: "⌖", Domains: "◎", Other: "•••" });
   const translations = {
     en: { navBoard: "Board", navCategories: "Categories", navAbout: "About", heroCopy: "Put your product in the spot people see first. Your listing stays at the top until someone pays more.", totalBid: "Your total bid", productUrl: "Website or social account", productUrlPlaceholder: "example.com or @yourusername", invalidWebsite: "Enter a valid website or social account, such as example.com or @yourusername.", chooseMarket: "Choose a market", challengeCategory: "Challenge category", categoryRule: "Must match the listing you’ll outrank.", reviewBid: "Review your bid", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest valid bid takes #1. Pay more to move up.", todayRanking: "Today’s top ranking", latestActivity: "Latest activity", liveUpdates: "Latest updates", howItWorks: "How ranking works", searchPlaceholder: "Search products and categories…", close: "Close", seeAll: "See all", past24: "Past 24h", livePulse: "Live bids", rank: "Rank", listing: "Listing", bid: "Bid", clicks: "Clicks", sponsored: "Sponsored", rules: "Every listing is sponsored. The highest verified bid ranks first.", position: "Position", positionCopy: "Held until a higher verified bid wins.", charge: "Charge", chargeCopy: "One payment after review.", reporting: "Reporting", reportingCopy: "Clicks shown for the selected timeframe.", readRules: "Read all rules →", rulesLink: "Rules", terms: "Terms", privacyLink: "Privacy", payments: "Payments", confirmRank: "Confirm this rank", confirmRankIntro: "Check the rank and price, then accept the terms to continue.", rankLabel: "Rank", priceLabel: "Price", dueNow: "Due now", confirmationCopy: "Your listing will publish at this rank after payment settles. Someone else can take a higher position.", agreeTerms: "I have read and agree to the Terms of Service.", cancel: "Cancel", continueCheckout: "Continue to checkout" },
     zh: { navBoard: "榜单", navCategories: "分类", navAbout: "关于", heroCopy: "把产品放到最显眼的位置。只要没有更高的有效出价，你的介绍就会留在榜首。", totalBid: "你的总出价", productUrl: "网站或社交账号", productUrlPlaceholder: "example.com 或 @yourusername", invalidWebsite: "请输入有效的网站或社交账号，例如 example.com 或 @yourusername。", chooseMarket: "选择市场", challengeCategory: "挑战类别", categoryRule: "必须与您要超越的条目类别相同。", reviewBid: "确认出价", markets: "市场", liveLeaderboard: "实时榜单", boardSummary: "最高有效出价获得第 1 名。提高出价即可上升。", todayRanking: "今日热门榜", latestActivity: "最新动态", liveUpdates: "最新动态", howItWorks: "排名规则", searchPlaceholder: "搜索产品和分类…", close: "关闭", seeAll: "查看全部", past24: "近 24 小时", livePulse: "实时竞价", rank: "排名", listing: "条目", bid: "出价", clicks: "点击", sponsored: "赞助", rules: "每个条目都是赞助展示。最高的已验证出价排名第一。", position: "排名位置", positionCopy: "保持到有人以更高的已验证出价胜出。", charge: "费用", chargeCopy: "审核后一次性付款。", reporting: "数据", reportingCopy: "显示所选时间范围内的点击。", readRules: "查看完整规则 →", rulesLink: "规则", terms: "条款", privacyLink: "隐私", payments: "付款", confirmRank: "确认此排名", confirmRankIntro: "核对排名与价格，同意条款后继续。", rankLabel: "排名", priceLabel: "价格", dueNow: "现在支付", confirmationCopy: "付款结算后，你的条目会发布在此排名。其他人仍可出价取得更高位置。", agreeTerms: "我已阅读并同意《服务条款》。", cancel: "取消", continueCheckout: "继续付款" },
@@ -170,6 +169,7 @@
     measurementSummary: document.querySelector("[data-measurement-summary]"),
     measurementCopy: document.querySelector("[data-measurement-copy]"),
     categoryRail: document.querySelector("[data-category-rail]"),
+    categoryScrollButtons: Array.from(document.querySelectorAll("[data-category-scroll]")),
     categorySelect: document.querySelector("[data-category-select]"),
     windowButtons: Array.from(document.querySelectorAll("[data-board-window]")),
     themeToggle: document.querySelector("[data-theme-toggle]"),
@@ -741,25 +741,43 @@
 
   function renderCategories() {
     if (!elements.categoryRail) return;
+    elements.categoryScrollButtons.forEach((button) => {
+      const previous = Number(button.dataset.categoryScroll) < 0;
+      button.setAttribute("aria-label", state.language === "zh" ? (previous ? "向左滚动市场" : "向右滚动市场") : (previous ? "Scroll markets left" : "Scroll markets right"));
+    });
     const shortLabels = state.language === "zh"
-      ? { Agents: "AI", Marketing: "营销", Developer: "开发工具", Crypto: "加密" }
-      : { Agents: "AI", Marketing: "Marketing", Developer: "Developer", Crypto: "Crypto" };
-    const buttons = [{ label: state.language === "zh" ? "全部" : "All", value: DEFAULT_CATEGORY }, ...shortcutCategories.map((category) => ({ label: shortLabels[category], value: category }))];
-    const explore = createElement("a", "category-chip category-explore", state.language === "zh" ? "探索全部 →" : "Explore →");
-    explore.href = "./categories.html";
+      ? { Agents: "AI", Marketing: "营销与 SEO", Developer: "开发工具", Business: "商业服务", Crypto: "金融与加密", Ecommerce: "电商与硬件", Design: "设计与媒体", Productivity: "效率与教育", Health: "健康", Games: "游戏", Travel: "旅行与房产", Domains: "网站与域名", Other: "其他" }
+      : { Agents: "AI", Marketing: "Marketing & SEO", Developer: "Developer", Business: "Business", Crypto: "Finance & Crypto", Ecommerce: "Ecommerce & Hardware", Design: "Design & Media", Productivity: "Productivity & Education", Health: "Health", Games: "Games", Travel: "Travel & Property", Domains: "Web & Domains", Other: "Other" };
+    const buttons = [{ label: state.language === "zh" ? "全部" : "All", value: DEFAULT_CATEGORY }, ...categories.map((category) => ({ label: shortLabels[category], value: category }))];
     elements.categoryRail.replaceChildren(
       ...buttons.map(({ label, value }) => {
         const button = createElement("button", "category-chip");
         button.type = "button";
         button.dataset.category = value;
         button.setAttribute("aria-pressed", String(state.category === value));
-        const icon = createElement("span", "category-chip-icon", shortcutIcons[value]);
+        const icon = createElement("span", "category-chip-icon", categoryIcons[value]);
         icon.setAttribute("aria-hidden", "true");
         button.append(icon, createElement("span", "category-chip-label", label));
         return button;
       }),
-      explore,
     );
+    window.requestAnimationFrame(() => {
+      const selected = elements.categoryRail.querySelector('[aria-pressed="true"]');
+      if (selected instanceof HTMLElement) {
+        const left = selected.offsetLeft - (elements.categoryRail.clientWidth - selected.offsetWidth) / 2;
+        elements.categoryRail.scrollTo({ left: Math.max(0, left), behavior: "auto" });
+      }
+      updateCategoryScrollControls();
+    });
+  }
+
+  function updateCategoryScrollControls() {
+    if (!elements.categoryRail) return;
+    const maxScroll = Math.max(0, elements.categoryRail.scrollWidth - elements.categoryRail.clientWidth);
+    elements.categoryScrollButtons.forEach((button) => {
+      const direction = Number(button.dataset.categoryScroll) || 1;
+      button.disabled = direction < 0 ? elements.categoryRail.scrollLeft <= 1 : elements.categoryRail.scrollLeft >= maxScroll - 1;
+    });
   }
 
   function rankMilestone(position) {
@@ -1384,6 +1402,19 @@
     render();
     void refreshBoardFromApi();
   });
+
+  elements.categoryRail?.addEventListener("scroll", updateCategoryScrollControls, { passive: true });
+
+  elements.categoryScrollButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      if (!elements.categoryRail) return;
+      const direction = Number(button.dataset.categoryScroll) || 1;
+      const distance = Math.max(240, elements.categoryRail.clientWidth * 0.72);
+      elements.categoryRail.scrollBy({ left: direction * distance, behavior: "smooth" });
+    });
+  });
+
+  window.addEventListener("resize", updateCategoryScrollControls, { passive: true });
 
   elements.categorySelect?.addEventListener("change", (event) => {
     const value = event.currentTarget instanceof HTMLSelectElement ? event.currentTarget.value : categories[0];

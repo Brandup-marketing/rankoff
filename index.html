@@ -22,7 +22,7 @@
     <meta name="theme-color" content="#090a0c" />
     <title>RANKOFF | Bid Your Way to #1</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=15" />
+    <link rel="stylesheet" href="./styles.css?v=16" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -113,7 +113,11 @@
 
           <section class="category-market" aria-labelledby="category-heading">
             <h2 id="category-heading" data-i18n="markets">Markets</h2>
-            <div class="category-rail" data-category-rail aria-label="Filter by category"></div>
+            <div class="category-scroll-shell">
+              <button class="category-scroll-control" type="button" data-category-scroll="-1" aria-label="Scroll markets left">‹</button>
+              <div class="category-rail" data-category-rail aria-label="Filter by category"></div>
+              <button class="category-scroll-control" type="button" data-category-scroll="1" aria-label="Scroll markets right">›</button>
+            </div>
           </section>
 
           <div class="top-three top-three-hero" data-top-three aria-label="Top three sponsored listings"></div>
@@ -269,6 +273,6 @@
     <div class="toast" data-toast role="status" aria-live="polite" aria-atomic="true"></div>
     <script src="./search.js?v=1" defer></script>
     <script src="./share.js?v=1" defer></script>
-    <script src="./app.js?v=15" defer></script>
+    <script src="./app.js?v=16" defer></script>
   </body>
 </html>
