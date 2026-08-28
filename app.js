@@ -732,12 +732,13 @@
     const details = createElement("a", "listing-details", chinese ? "查看详情" : "See details");
     details.href = listingDetailsHref(listing);
     details.setAttribute("aria-label", chinese ? `查看 ${listing.name} 的详细信息` : `See details for ${listing.name}`);
-    meta.append(details);
     if (listing.isDemo) meta.append(createElement("span", "local-chip", "Local"));
     if (Number.isSafeInteger(position) && position > 0) meta.append(createShareControl(listing, position));
 
     const description = createElement(descriptionTag, "listing-description", listing.description);
-    copy.append(listingLink(listing), meta, description);
+    const actions = createElement("div", "product-actions");
+    actions.append(details);
+    copy.append(listingLink(listing), description, meta, actions);
     wrapper.append(mark, copy);
     return wrapper;
   }
