@@ -1,0 +1,21 @@
+# RANKOFF
+
+Rankoff is a public sponsored leaderboard where products bid for visible rank.
+
+## Canonical Site
+
+- Homepage: https://rankoff.my/
+- About: https://rankoff.my/about.html
+- Rules, terms, privacy, and payment notes: https://rankoff.my/legal.html
+
+## What The Product Does
+
+Rankoff lets makers submit a product URL, choose a market category, and challenge the current sponsored rank with a higher bid. The board shows each listing's rank, product identity, description, category signal, click count, and bid amount.
+
+## Current Status
+
+Rankoff is live as a preview board. Production payments are disabled until merchant credentials, review rules, and launch settings are enabled.
+
+## Positioning
+
+Use "public sponsored leaderboard", "bid for rank", "claim #1", and "sponsored product ranking" when describing Rankoff.
