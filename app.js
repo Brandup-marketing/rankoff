@@ -704,8 +704,8 @@
 
     if (elements.activityList) {
       elements.activityList.replaceChildren(
-        ...state.activity.slice(0, 5).map((item) => {
-          const li = createElement("li");
+        ...state.activity.slice(0, 5).map((item, index) => {
+          const li = createElement("li", index === 0 ? "is-latest" : "");
           const time = createElement("time", "", item.time);
           time.dateTime = "PT0M";
           li.append(time, createElement("span", "", item.text));
