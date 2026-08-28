@@ -338,6 +338,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .brand { width: 9.5rem; }
   .brand-lockup-image { width: 10rem; }
   .time-tabs button { padding-inline: 0.46rem; font-size: 0.74rem; }
+  .theme-toggle { width: 2.75rem; padding-inline: 0; font-size: 0; }
+  .theme-toggle::before { content: "☼"; font-size: 1rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
