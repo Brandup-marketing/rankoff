@@ -920,8 +920,8 @@
 
     if (elements.boardSummary) {
       elements.boardSummary.textContent = state.language === "zh"
-        ? `${state.activeWindow === "today" ? "近 24 小时" : "全部时间"}榜单：${total} 个赞助产品。最高有效出价获得第 1 名。`
-        : `${windowLabel()} board: ${total} sponsored listings. Highest valid bid takes #1.`;
+        ? `${total} 个条目 · 实时更新`
+        : `${total} listings · Updated live`;
     }
   }
 
