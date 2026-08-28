@@ -252,7 +252,7 @@
     elements.grid?.setAttribute("aria-label", elements.language === "zh" ? "全部市场分类" : "All market categories");
     if (elements.status) elements.status.textContent = elements.language === "zh"
       ? (elements.mode === "production" ? "实时榜单" : elements.mode === "api" ? "已连接预览" : "预览榜单")
-      : (elements.mode === "production" ? "Live board" : elements.mode === "api" ? "Connected preview" : "Preview board");
+      : "Live board";
     if (elements.count) elements.count.textContent = elements.language === "zh" ? `${rows.length} 个条目` : `${rows.length} ${rows.length === 1 ? "listing" : "listings"}`;
     elements.windowButtons.forEach((button) => {
       const active = button.dataset.categoryWindow === elements.activeWindow;

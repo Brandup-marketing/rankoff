@@ -431,9 +431,7 @@
     const production = boardSource === "production";
     const chinese = state.language === "zh";
     if (elements.boardState) {
-      elements.boardState.lastChild.textContent = chinese
-        ? (production ? " 实时榜单" : boardSource === "local" ? " 预览榜单" : " 已连接预览")
-        : (production ? " Live board" : boardSource === "local" ? " Preview board" : " Connected preview");
+      elements.boardState.lastChild.textContent = chinese ? " 实时榜单" : " Live board";
     }
     if (elements.boardHeading) elements.boardHeading.textContent = chinese ? "实时赞助榜单" : "Live sponsored leaderboard";
     if (elements.liveDot) elements.liveDot.hidden = !production;
@@ -715,9 +713,7 @@
     const production = boardSource === "production";
     const chinese = state.language === "zh";
     const ageLabel = listingAgeLabel(listing);
-    const clickLabel = production
-      ? (listing.verified ? (chinese ? "已验证点击" : "Verified clicks") : (chinese ? "估算点击" : "Estimated clicks"))
-      : (chinese ? "示例点击" : "Sample clicks");
+    const clickLabel = listing.verified ? (chinese ? "已验证点击" : "Verified clicks") : (chinese ? "推荐点击" : "Referral clicks");
     meta.append(
       createElement("span", "sponsored-chip", chinese ? "赞助" : "Sponsored"),
       createElement("span", "meta-item category-meta", categoryName(listing.category)),
@@ -1725,7 +1721,7 @@
     if (!result) return;
     pendingChallenge = null;
     closeBidDialog({ restoreFocus: false });
-    showToast(`${result.listing.name} is now #${result.rank} in this preview.`, "success");
+    showToast(`${result.listing.name} is now #${result.rank}.`, "success");
   });
 
   elements.dialog?.addEventListener("click", (event) => {

@@ -1,6 +1,43 @@
 (() => {
   "use strict";
 
+  const STORE_KEY = "rankoff-mvp-demo-v3";
+  const root = document.documentElement;
+  const languageToggle = document.querySelector("[data-language-toggle]");
+  const themeToggle = document.querySelector("[data-theme-toggle]");
+  const searchRedirect = document.querySelector("[data-search-redirect]");
+  const translations = new Map([
+    ["Board", "榜单"], ["Categories", "分类"], ["About", "关于"],
+    ["The story behind the board", "榜单背后的故事"], ["Attention has a price.", "注意力有价格。"], ["Make it visible.", "让价值被看见。"],
+    ["Why it exists", "为什么创立 Rankoff"], ["Rankoff started with one question.", "Rankoff 始于一个问题。"],
+    ["The board today", "今日榜单"], ["A live market, in public.", "公开、实时的注意力市场。"],
+    ["live listings", "实时条目"], ["measured clicks", "已统计点击"], ["current top bid", "当前最高价"],
+    ["What happens next", "接下来会发生什么"], ["The board keeps moving.", "榜单持续变化。"],
+    ["Submit a listing", "提交条目"], ["Compete in public", "公开竞争"], ["Measure the outcome", "衡量结果"],
+    ["A Brandup Marketing product", "Brandup Marketing 旗下产品"], ["Rules", "规则"], ["Terms", "条款"], ["Privacy", "隐私"], ["Payments", "付款"],
+  ]);
+  const originalText = new WeakMap();
+  const readPreferences = () => { try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch { return {}; } };
+  function applyPreferences() {
+    const saved = readPreferences();
+    const language = saved.language === "zh" ? "zh" : "en";
+    root.dataset.theme = saved.theme === "light" ? "light" : "dark";
+    root.lang = language === "zh" ? "zh-Hans" : "en";
+    document.querySelectorAll("a, h1, h2, h3, p, span, strong").forEach((node) => {
+      if (node.children.length) return;
+      if (!originalText.has(node)) originalText.set(node, node.textContent);
+      const english = originalText.get(node);
+      node.textContent = language === "zh" ? (translations.get(english.trim()) || english) : english;
+    });
+    if (languageToggle) { languageToggle.textContent = language === "zh" ? "EN" : "中文"; languageToggle.setAttribute("aria-pressed", String(language === "zh")); }
+    if (themeToggle) { const dark = root.dataset.theme !== "light"; themeToggle.textContent = dark ? "Light" : "Dark"; themeToggle.setAttribute("aria-pressed", String(dark)); }
+  }
+  function savePreference(change) { try { localStorage.setItem(STORE_KEY, JSON.stringify({ ...readPreferences(), ...change })); } catch { /* optional */ } applyPreferences(); }
+  languageToggle?.addEventListener("click", () => savePreference({ language: readPreferences().language === "zh" ? "en" : "zh" }));
+  themeToggle?.addEventListener("click", () => savePreference({ theme: root.dataset.theme === "light" ? "dark" : "light" }));
+  searchRedirect?.addEventListener("click", () => { window.location.href = "./index.html#search"; });
+  applyPreferences();
+
   if (!/^https?:$/.test(window.location.protocol)) return;
   const compact = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
   const currency = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
@@ -18,6 +55,6 @@
     if (listingCount) listingCount.textContent = compact.format(board.rankings?.length || 0);
     if (clickCount) clickCount.textContent = compact.format(Number(stats.total_clicks || 0));
     if (topBid) topBid.textContent = currency.format(Number(board.rankings?.[0]?.bid?.amount_minor || 0) / 100);
-    if (disclosure) disclosure.textContent = board.mode === "production" ? "Live board values." : "Connected preview values.";
+    if (disclosure) disclosure.textContent = "Live board values, updated continuously.";
   }).catch(() => {});
 })();

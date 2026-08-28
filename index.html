@@ -22,7 +22,7 @@
     <meta name="theme-color" content="#090a0c" />
     <title>RANKOFF | Bid Your Way to #1</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=27" />
+    <link rel="stylesheet" href="./styles.css?v=28" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -57,7 +57,7 @@
           <button type="button" data-board-window="all" aria-pressed="true">All-time</button>
           <button type="button" data-board-window="today" aria-pressed="false">Past 24h</button>
         </nav>
-        <span class="demo-state" data-board-state><i aria-hidden="true"></i> Preview board</span>
+        <span class="demo-state" data-board-state><i aria-hidden="true"></i> Live board</span>
         <nav class="site-nav" aria-label="Main navigation"><a href="./categories.html" data-i18n="navCategories">Categories</a><a href="./about.html" data-i18n="navAbout">About</a></nav>
         <button class="search-toggle" type="button" data-search-toggle aria-expanded="false" aria-controls="site-search" data-i18n-aria-label="searchPlaceholder" aria-label="Search products and categories"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.6 4.6"></path></svg></button>
         <button class="language-toggle" type="button" data-language-toggle aria-pressed="false">中文</button>
@@ -161,14 +161,14 @@
       <section class="board-section" id="board" aria-labelledby="board-heading">
         <div class="board-toolbar">
           <div>
-            <h2 id="board-heading" data-board-heading>Preview leaderboard</h2>
+            <h2 id="board-heading" data-board-heading>Sponsored leaderboard</h2>
           </div>
           <div class="board-context">
             <button type="button" class="refresh-button" data-board-refresh data-i18n="refresh">Refresh</button>
             <p data-board-summary data-i18n="boardSummary">Highest valid bid takes #1. Pay more to move up.</p>
             <details class="measurement-note">
               <summary data-measurement-summary>How clicks are measured</summary>
-              <p data-measurement-copy>Preview click totals are illustrative. Verified click reporting begins only after live tracking is enabled.</p>
+              <p data-measurement-copy>Referral clicks update from Rankoff tracking for the selected timeframe.</p>
             </details>
           </div>
         </div>
@@ -274,8 +274,8 @@
     </dialog>
 
     <div class="toast" data-toast role="status" aria-live="polite" aria-atomic="true"></div>
-    <script src="./search.js?v=1" defer></script>
+    <script src="./search.js?v=2" defer></script>
     <script src="./share.js?v=1" defer></script>
-    <script src="./app.js?v=34" defer></script>
+    <script src="./app.js?v=35" defer></script>
   </body>
 </html>

@@ -12,7 +12,7 @@
   border-bottom: 0;
 }
 
-.categories-topbar .brand { width: 13rem; height: 3.7rem; }
+.categories-topbar .brand { width: 5.25rem; height: 5.25rem; }
 .categories-nav { justify-self: end; margin-right: 0; gap: 1.65rem; font-size: 0.9rem; }
 .categories-nav a[aria-current="page"] { color: var(--ink); text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 0.16rem; text-underline-offset: 0.45rem; }
 .category-actions { display: inline-flex; gap: 0.45rem; }
@@ -115,10 +115,19 @@ html[data-theme="light"] .categories-topbar .brand-emblem-image, html[data-theme
 
 @media (max-width: 48rem) {
   .categories-shell { width: min(calc(100% - 1.25rem), 82rem); }
-  .categories-topbar { grid-template-columns: minmax(0, 1fr) auto auto auto; min-height: 4.6rem; }
-  .categories-topbar .brand { width: 8.5rem; height: 3.2rem; }
+  .categories-topbar {
+    grid-template-areas: "brand search actions" "tabs tabs tabs";
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    min-height: 4.6rem;
+    padding-block: .35rem .55rem;
+  }
+  .categories-topbar .brand { width: 3.75rem; height: 3.75rem; }
   .categories-nav { display: none; }
-  .category-actions { justify-self: end; }
+  .categories-topbar .brand { grid-area: brand; }
+  .categories-topbar .time-tabs { grid-area: tabs; justify-self: stretch; }
+  .categories-topbar .time-tabs button { flex: 1 1 50%; }
+  .categories-topbar .search-toggle { grid-area: search; }
+  .category-actions { grid-area: actions; justify-self: end; }
   .category-status { margin-top: 1.25rem; font-size: 0.73rem; }
   .category-hero { margin: 3.2rem 0 3rem; }
   .category-hero h1 { font-size: 2.7rem; }
@@ -130,7 +139,7 @@ html[data-theme="light"] .categories-topbar .brand-emblem-image, html[data-theme
 
 @media (max-width: 34rem) {
   .categories-topbar { gap: 0.2rem; }
-  .categories-topbar .brand { width: 7.2rem; height: 3.2rem; }
+  .categories-topbar .brand { width: 3.35rem; height: 3.35rem; }
   .category-actions { gap: 0.2rem; }
   .category-status { flex-wrap: wrap; justify-content: center; max-width: 100%; text-align: center; }
   .active-category { grid-template-columns: 2.4rem minmax(0, 1fr); gap: 0.7rem; }

@@ -1,11 +1,9 @@
 .listing-shell { min-height: 100vh; }
 
-.listing-topbar {
-  grid-template-columns: auto minmax(0, 1fr) auto auto;
-}
+.listing-topbar { grid-template-columns: auto minmax(0, 1fr) auto auto auto; }
 
 .listing-topbar .site-nav { justify-self: end; }
-.listing-search-button, .listing-header-controls { justify-self: end; }
+.listing-topbar .search-toggle { justify-self: end; }
 
 .listing-breadcrumb {
   padding: 1.25rem 0 0.9rem;
@@ -194,7 +192,7 @@
 }
 
 @media (max-width: 46rem) {
-  .listing-topbar { grid-template-columns: minmax(0, 1fr) auto auto; }
+  .listing-topbar { grid-template-columns: minmax(0, 1fr) auto auto auto; }
   .listing-topbar .site-nav { display: none; }
   .listing-loading { grid-template-columns: 3.75rem minmax(0, 1fr); }
   .listing-loading span:nth-child(3) { display: none; }

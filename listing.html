@@ -14,9 +14,8 @@
     <meta name="theme-color" content="#090a0c" />
     <title>Sponsored listing | RANKOFF</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=27" />
-    <link rel="stylesheet" href="./styles.css?v=26" />
-    <link rel="stylesheet" href="./listing.css?v=1" />
+    <link rel="stylesheet" href="./styles.css?v=28" />
+    <link rel="stylesheet" href="./listing.css?v=4" />
   </head>
   <body>
     <a class="skip-link" href="#listing-detail">Skip to listing details</a>
@@ -27,8 +26,7 @@
           <img class="brand-final-logo" src="./assets/rankoff-final-logo.png?v=3" alt="RANKOFF — Bid your way to number one" width="1254" height="1254" />
         </a>
         <nav class="site-nav" aria-label="Main navigation"><a href="./categories.html">Categories</a><a href="./about.html" data-copy="about">About</a></nav>
-        <button class="listing-search-button" type="button" aria-label="Search products and categories" onclick="window.location.href='./index.html#search'">⌕</button>
-        <span class="listing-header-controls"><button type="button" data-language-toggle aria-pressed="false">中文</button><button type="button" data-theme-toggle aria-pressed="true">Light</button></span>
+        <button class="search-toggle" type="button" data-search-redirect aria-label="Search products and categories"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.6 4.6"></path></svg></button>
         <button class="language-toggle" type="button" data-language-toggle aria-pressed="false">中文</button>
         <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch colour theme" aria-pressed="true">Light</button>
       </header>
@@ -55,7 +53,7 @@
                 <div class="listing-labels">
                   <span class="sponsored-chip" data-copy="sponsored">Sponsored</span>
                   <span data-category></span>
-                  <span class="estimated-chip" data-placement-label>Preview listing</span>
+                  <span class="verified-chip" data-placement-label>Public listing</span>
                 </div>
                 <h1 data-title>Listing</h1>
                 <p class="listing-host" data-host></p>
@@ -73,21 +71,21 @@
               <div class="evidence-heading">
                 <div>
                   <h2 id="evidence-heading" data-copy="evidence">Public ranking evidence</h2>
-                  <p data-evidence-note>Preview values are illustrative and are not verified performance.</p>
+                  <p data-evidence-note>Rank, price, and referral clicks update from the public board.</p>
                 </div>
-                <span class="evidence-status" data-mode>Preview data</span>
+                <span class="evidence-status is-verified" data-mode>Live data</span>
               </div>
 
               <dl class="evidence-metrics">
                 <div><dt data-copy="rank">Current rank</dt><dd data-rank>—</dd></div>
                 <div><dt data-copy="allTimeBid">All-time bid</dt><dd data-bid>—</dd></div>
-                <div><dt data-click-label>Sample clicks</dt><dd data-clicks>—</dd></div>
+                <div><dt data-click-label>Referral clicks</dt><dd data-clicks>—</dd></div>
               </dl>
 
               <div class="period-comparison" data-today-row>
                 <div><span data-copy="past24">Past 24h</span><strong data-today-rank>—</strong></div>
                 <div><span data-copy="allTimeBid">All-time bid</span><strong data-today-bid>—</strong></div>
-                <div><span data-click-label-today>Sample clicks</span><strong data-today-clicks>—</strong></div>
+                <div><span data-click-label-today>Referral clicks</span><strong data-today-clicks>—</strong></div>
               </div>
             </section>
           </div>
@@ -103,9 +101,8 @@
       </section>
 
       <footer class="footer listing-footer">
-        <a class="footer-brand" href="./index.html" aria-label="RANKOFF home"><img class="footer-logo-image" src="./assets/rankoff-final-logo.png?v=2" alt="RANKOFF" width="1254" height="1254" /></a>
-        <span data-copy="footer">Transparent sponsored ranking. Every position has a visible price.</span>
-        <span class="footer-links"><a href="./legal.html" data-copy="legal">Legal</a><a href="mailto:hello@rankoff.my" data-copy="contact">Contact</a></span>
+        <div class="footer-identity"><a class="footer-brand" href="./index.html" aria-label="RANKOFF home"><img class="footer-logo-image" src="./assets/rankoff-final-logo.png?v=3" alt="RANKOFF" width="1254" height="1254" /></a><span class="footer-credit"><strong>Rankoff</strong><span>A Brandup Marketing product</span></span></div>
+        <span class="footer-links"><a href="./legal.html#rules">Rules</a><a href="./legal.html#terms">Terms</a><a href="./legal.html#privacy">Privacy</a><a href="./legal.html#payments">Payments</a></span>
       </footer>
     </main>
 
@@ -138,6 +135,6 @@
 
     <div class="toast" role="status" aria-live="polite" data-toast></div>
     <script src="./share.js?v=1" defer></script>
-    <script src="./listing.js?v=3" defer></script>
+    <script src="./listing.js?v=4" defer></script>
   </body>
 </html>

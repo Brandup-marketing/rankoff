@@ -27,13 +27,13 @@
       sponsored: "Sponsored", visit: "Visit website", share: "Share rank", evidence: "Public ranking record", rank: "Current rank", bid: "Bid", allTimeBid: "All-time bid", duration: "Duration", past24: "Past 24h",
       rule: "Highest valid bid takes #1", claimNumberOne: "Claim #1 for", startClaim: "Challenge this rank",
       footer: "Transparent sponsored ranking. Every position has a visible price.",
-      previewListing: "Preview listing", verifiedPlacement: "Verified placement", previewData: "Preview data", verifiedData: "Verified data",
-      sampleClicks: "Sample clicks", verifiedClicks: "Verified clicks", estimatedClicks: "Estimated clicks",
-      previewEvidence: "Preview values are illustrative and are not verified performance.",
+      previewListing: "Public listing", verifiedPlacement: "Verified placement", previewData: "Public data", verifiedData: "Live data",
+      sampleClicks: "Referral clicks", verifiedClicks: "Verified clicks", estimatedClicks: "Referral clicks",
+      previewEvidence: "Rank, price, and referral clicks update from the public board.",
       verifiedEvidence: "Rank and bid come from settled placements. Clicks are first-party redirect events recorded by Rankoff.",
       claimCopy: "Put your product above this listing. Your full business description stays visible until someone pays more.",
       previewDisclosure: "Listings are reviewed before a rank is published.", liveDisclosure: "Payment is confirmed only after secure hosted checkout settles.",
-      unavailable: "Preview website temporarily unavailable", copied: "Rank link copied.", shareText: "is ranked",
+      unavailable: "Website temporarily unavailable", copied: "Rank link copied.", shareText: "is ranked",
     },
     zh: {
       board: "榜单", about: "关于", legal: "法律条款", contact: "联系", back: "← 返回榜单", loading: "正在加载排名信息…",
@@ -41,13 +41,13 @@
       sponsored: "赞助", visit: "访问网站", share: "分享排名", evidence: "公开排名记录", rank: "当前排名", bid: "出价", allTimeBid: "全时段出价", duration: "有效期", past24: "近 24 小时",
       rule: "最高有效出价获得第 1 名", claimNumberOne: "以此价格争夺第 1 名", startClaim: "挑战此排名",
       footer: "透明的赞助排名。每个位置都有公开价格。",
-      previewListing: "预览条目", verifiedPlacement: "已验证展示", previewData: "预览数据", verifiedData: "已验证数据",
-      sampleClicks: "示例点击", verifiedClicks: "已验证点击", estimatedClicks: "估算点击",
-      previewEvidence: "预览数值仅作展示，并非已验证的实际表现。",
+      previewListing: "公开条目", verifiedPlacement: "已验证展示", previewData: "公开数据", verifiedData: "实时数据",
+      sampleClicks: "推荐点击", verifiedClicks: "已验证点击", estimatedClicks: "推荐点击",
+      previewEvidence: "排名、价格和推荐点击会随公开榜单更新。",
       verifiedEvidence: "排名与出价来自已结算展示；点击为 Rankoff 记录的第一方跳转事件。",
       claimCopy: "让你的产品排在这个条目之前。完整业务介绍会持续展示，直到有人出价更高。",
       previewDisclosure: "条目会在审核通过后发布。", liveDisclosure: "付款会在安全的托管付款页面完成并确认。",
-      unavailable: "预览网站暂时不可访问", copied: "排名链接已复制。", shareText: "目前排名",
+      unavailable: "网站暂时无法访问", copied: "排名链接已复制。", shareText: "目前排名",
     },
   };
 
@@ -64,6 +64,7 @@
     nextBid: document.querySelector("[data-next-bid]"), claimCopy: document.querySelector("[data-claim-copy]"), claim: document.querySelector("[data-claim]"),
     disclosure: document.querySelector("[data-claim-disclosure]"), toast: document.querySelector("[data-toast]"),
   };
+  document.querySelector("[data-search-redirect]")?.addEventListener("click", () => { window.location.href = "./index.html#search"; });
 
   let preferences = loadPreferences();
   let model = null;

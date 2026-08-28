@@ -119,4 +119,5 @@
   syncCopy();
   document.addEventListener("keydown", (event) => { if (event.key === "Escape" && !search.hidden) closeSearch(); });
   window.addEventListener("rankoff:content-updated", () => { syncCopy(); renderResults(); });
+  if (window.location.hash === "#search") openSearch();
 })();
