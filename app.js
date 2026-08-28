@@ -18,8 +18,8 @@
     "Other",
   ];
   const translations = {
-    en: { navBoard: "Board", navAbout: "About", heroCopy: "Put your product where people look first. Your listing stays at the top until someone pays more.", totalBid: "Your total bid", productUrl: "Your product URL or @handle", chooseMarket: "Choose a market", reviewBid: "Review your bid", demoOnly: "Preview board · no payment is collected", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest valid bid takes #1. Pay more to move up.", latestActivity: "Latest activity", liveUpdates: "Live bid updates", howItWorks: "How ranking works" },
-    zh: { navBoard: "榜单", navAbout: "关于", heroCopy: "把你的产品放到大家最先看到的位置。只要没有更高出价，你的介绍就会保持在榜首。", totalBid: "你的总出价", productUrl: "产品网址或 @账号", chooseMarket: "选择市场", reviewBid: "确认出价", demoOnly: "预览榜单 · 不会收取费用", markets: "市场分类", liveLeaderboard: "实时榜单", boardSummary: "最高有效出价获得第 1 名。提高出价即可上升。", latestActivity: "最新动态", liveUpdates: "实时竞价更新", howItWorks: "排名规则" },
+    en: { navBoard: "Board", navAbout: "About", heroCopy: "Put your product where people look first. Your listing stays at the top until someone pays more.", totalBid: "Your total bid", productUrl: "Your product URL or @handle", chooseMarket: "Choose a market", challengeCategory: "Challenge category", categoryRule: "Must match the listing you’ll outrank.", reviewBid: "Review your bid", demoOnly: "Preview board · no payment is collected", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest valid bid takes #1. Pay more to move up.", latestActivity: "Latest activity", liveUpdates: "Live bid updates", howItWorks: "How ranking works" },
+    zh: { navBoard: "榜单", navAbout: "关于", heroCopy: "把你的产品放到大家最先看到的位置。只要没有更高出价，你的介绍就会保持在榜首。", totalBid: "你的总出价", productUrl: "产品网址或 @账号", chooseMarket: "选择市场", challengeCategory: "挑战分类", categoryRule: "必须与您要超越的条目相同。", reviewBid: "确认出价", demoOnly: "预览榜单 · 不会收取费用", markets: "市场分类", liveLeaderboard: "实时榜单", boardSummary: "最高有效出价获得第 1 名。提高出价即可上升。", latestActivity: "最新动态", liveUpdates: "实时竞价更新", howItWorks: "排名规则" },
   };
   const categoryTranslations = { Agents: "智能代理", Marketing: "营销", Developer: "开发者", Business: "商业", Agencies: "代理机构", Ecommerce: "电商", Productivity: "效率工具", Design: "设计", SEO: "SEO", Other: "其他" };
 
@@ -163,6 +163,7 @@
     inlineChallenge: document.querySelector("[data-inline-challenge]"),
     inlineBid: document.querySelector("[data-inline-bid]"),
     inlineUrl: document.querySelector("[data-inline-url]"),
+    categoryRule: document.querySelector("[data-category-rule]"),
     heroPrice: document.querySelector("[data-hero-next-price]"),
     heroContext: document.querySelector("[data-hero-context]"),
     boardState: document.querySelector("[data-board-state]"),
@@ -758,6 +759,14 @@
   function renderLeader() {
     const leader = rankedListings()[0];
     if (!leader) return;
+    if (elements.categorySelect && categories.includes(leader.category)) {
+      elements.categorySelect.value = leader.category;
+    }
+    if (elements.categoryRule) {
+      elements.categoryRule.textContent = state.language === "zh"
+        ? `必须与 ${leader.name} 的${categoryTranslations[leader.category] || leader.category}分类相同。`
+        : `Must match ${leader.name}’s ${leader.category} category.`;
+    }
     const nextPrice = boardSource === "local" || !remoteNextBid ? getBid(leader) + 1 : remoteNextBid;
 
     if (elements.heroPrice) elements.heroPrice.textContent = money(nextPrice);
@@ -1290,11 +1299,25 @@
       return;
     }
 
-    const category = String(formData.get("productCategory") || categories[0]);
+    const outranked = rankedListings()[0];
+    const requiredCategory = outranked && categories.includes(outranked.category)
+      ? outranked.category
+      : state.category !== DEFAULT_CATEGORY && categories.includes(state.category) ? state.category : "";
+    const category = String(formData.get("productCategory") || "");
+    if (!requiredCategory || category !== requiredCategory) {
+      if (elements.categorySelect && requiredCategory) elements.categorySelect.value = requiredCategory;
+      showToast(
+        state.language === "zh"
+          ? `挑战分类必须与${outranked?.name || "目标条目"}相同。`
+          : `Choose ${requiredCategory || "the target listing’s"} to match the listing you’ll outrank.`,
+        "error",
+      );
+      return;
+    }
     pendingChallenge = {
       url: parsedUrl,
       name: nameFromUrl(parsedUrl.toString()),
-      category: categories.includes(category) ? category : categories[0],
+      category: requiredCategory,
     };
 
     const min = getMinimumForPosition(1);
