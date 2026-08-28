@@ -282,8 +282,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .rank-share-control:hover { background: color-mix(in srgb, var(--blue) 12%, transparent); color: var(--ink); }
 .rank-share-control:active { transform: translateY(1px); }
 .rank-share-icon { font-size: .78rem; line-height: 1; }
-.featured-bid-stack .rank-share-control { visibility: hidden; opacity: 0; transition: opacity 160ms var(--ease), visibility 160ms var(--ease); }
-.featured-listing:hover .featured-bid-stack .rank-share-control, .featured-listing:focus-within .featured-bid-stack .rank-share-control { visibility: visible; opacity: 1; }
+.featured-bid-stack .rank-share-control { visibility: visible; opacity: 1; }
 
 .row-actions { display: flex; justify-content: flex-end; gap: 0.35rem; }
 .bid-button, .share-button { min-height: 2.75rem; padding: 0.45rem 0.7rem; border-radius: 0.3rem; font-size: 0.72rem; font-weight: 800; white-space: nowrap; }
