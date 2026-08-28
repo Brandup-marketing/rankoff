@@ -34,7 +34,8 @@ html[data-theme="light"] {
 }
 
 html[data-theme="light"] .brand { background: transparent; }
-html[data-theme="light"] .brand-lockup-image { filter: invert(1) hue-rotate(180deg); mix-blend-mode: multiply; }
+html[data-theme="light"] .brand-emblem-image, html[data-theme="light"] .brand-wordmark-image { filter: invert(1) hue-rotate(180deg); mix-blend-mode: multiply; }
+html[data-theme="light"] .brand-emblem-crop, html[data-theme="light"] .brand-wordmark-crop { background: #fff; }
 
 *,
 *::before,
@@ -74,8 +75,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   border-bottom: 1px solid var(--line);
 }
 
-.brand { display: block; width: 5.25rem; height: 5.25rem; overflow: hidden; border-radius: 0.5rem; background: #050505; line-height: 0; text-decoration: none; }
-.brand-lockup-image { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; image-rendering: auto; }
+.brand { display: flex; width: 13rem; height: 3.7rem; align-items: center; overflow: hidden; border-radius: 0.5rem; background: #050505; line-height: 0; text-decoration: none; }
+.brand-horizontal { display: flex; width: 100%; height: 100%; align-items: center; gap: 0.55rem; padding: 0.28rem 0.5rem; }
+.brand-emblem-crop { display: block; width: 2.75rem; height: 2.75rem; flex: 0 0 2.75rem; overflow: hidden; border-radius: 0.35rem; background: #050505; }
+.brand-emblem-image { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; image-rendering: auto; }
+.brand-wordmark-crop { display: block; min-width: 0; height: 2.1rem; flex: 1 1 auto; overflow: hidden; background: #050505; }
+.brand-wordmark-image { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; image-rendering: auto; }
 
 .time-tabs { display: inline-flex; justify-self: center; padding: 0.18rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
 .time-tabs button { min-height: 2.75rem; padding: 0.42rem 0.8rem; border: 0; border-radius: 999px; background: transparent; color: var(--muted); font-size: 0.8rem; font-weight: 750; }
@@ -356,7 +361,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .activity-tape { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .app-shell { width: min(calc(100% - 1rem), var(--content)); }
   .topbar { grid-template-columns: minmax(0, 1fr) auto auto auto auto; gap: 0.35rem; }
-  .brand { width: 3.8rem; height: 3.8rem; }
+  .brand { width: 4rem; height: 3.2rem; }
+  .brand-wordmark-crop { display: none; }
   .time-tabs { justify-self: end; }
   .time-tabs button { min-height: 2.6rem; padding-inline: 0.45rem; font-size: 0.72rem; }
   .demo-state { display: none; }
@@ -419,6 +425,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .board-interstitial { grid-template-columns: 1fr; gap: .8rem; padding: .8rem; }
   .topbar { gap: 0.18rem; }
   .brand { width: 3.2rem; height: 3.2rem; }
+  .brand-horizontal { justify-content: center; padding: 0.2rem; }
+  .brand-emblem-crop { width: 2.65rem; height: 2.65rem; flex-basis: 2.65rem; }
   .time-tabs { padding: 0.14rem; }
   .time-tabs button { min-height: 2.45rem; padding-inline: 0.28rem; font-size: 0.68rem; }
   .theme-toggle, .language-toggle { width: 2.6rem; min-width: 2.6rem; min-height: 2.45rem; padding-inline: 0; font-size: 0; }

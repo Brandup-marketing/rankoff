@@ -12,7 +12,7 @@
   border-bottom: 0;
 }
 
-.categories-topbar .brand { width: 5.25rem; height: 5.25rem; }
+.categories-topbar .brand { width: 13rem; height: 3.7rem; }
 .categories-nav { justify-self: end; margin-right: 0; gap: 1.65rem; font-size: 0.9rem; }
 .categories-nav a[aria-current="page"] { color: var(--ink); text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 0.16rem; text-underline-offset: 0.45rem; }
 .category-actions { display: inline-flex; gap: 0.45rem; }
@@ -100,7 +100,7 @@
 .categories-footer { margin-top: 4rem; }
 
 html[data-theme="light"] .categories-topbar .brand { background: transparent; }
-html[data-theme="light"] .categories-topbar .brand-lockup-image { filter: invert(1) hue-rotate(180deg); mix-blend-mode: multiply; }
+html[data-theme="light"] .categories-topbar .brand-emblem-image, html[data-theme="light"] .categories-topbar .brand-wordmark-image { filter: invert(1) hue-rotate(180deg); mix-blend-mode: multiply; }
 
 @media (max-width: 62rem) {
   .categories-topbar { grid-template-columns: auto auto minmax(0, 1fr) auto auto; gap: 0.7rem; }
@@ -111,7 +111,7 @@ html[data-theme="light"] .categories-topbar .brand-lockup-image { filter: invert
 @media (max-width: 48rem) {
   .categories-shell { width: min(calc(100% - 1.25rem), 82rem); }
   .categories-topbar { grid-template-columns: minmax(0, 1fr) auto auto auto; min-height: 4.6rem; }
-  .categories-topbar .brand { width: 3.8rem; height: 3.8rem; }
+  .categories-topbar .brand { width: 4rem; height: 3.2rem; }
   .categories-nav { display: none; }
   .category-actions { justify-self: end; }
   .category-status { margin-top: 1.25rem; font-size: 0.73rem; }
