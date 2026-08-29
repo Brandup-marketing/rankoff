@@ -34,6 +34,7 @@ html[data-theme="light"] {
 }
 
 html[data-theme="light"] .brand { background: transparent; }
+html[data-theme="light"] .brand-final-logo { content: url("./assets/rankoff-logo-light.png?v=1"); }
 html[data-theme="light"] .brand-emblem-image, html[data-theme="light"] .brand-wordmark-image { filter: invert(1) hue-rotate(180deg); mix-blend-mode: multiply; }
 html[data-theme="light"] .brand-emblem-crop, html[data-theme="light"] .brand-wordmark-crop { background: transparent; }
 
