@@ -57,9 +57,10 @@ export async function loadPublicBoard(db, board, { category, period, limit, page
          l.hostname,
          l.favicon_url,
          l.category,
+         SUM(b.amount_minor) OVER (PARTITION BY b.listing_id) AS total_minor,
          ROW_NUMBER() OVER (
            PARTITION BY b.listing_id
-           ORDER BY b.amount_minor DESC, b.settled_at ASC, b.id ASC
+           ORDER BY b.settled_at DESC, b.id DESC
          ) AS listing_bid_order
        FROM bids b
        INNER JOIN listings l ON l.id = b.listing_id
@@ -70,7 +71,7 @@ export async function loadPublicBoard(db, board, { category, period, limit, page
        SELECT
          *,
          ROW_NUMBER() OVER (
-           ORDER BY amount_minor DESC, settled_at ASC, bid_id ASC
+           ORDER BY total_minor DESC, settled_at ASC, bid_id ASC
          ) AS public_rank
        FROM best
      )
@@ -85,11 +86,15 @@ export async function loadPublicBoard(db, board, { category, period, limit, page
   );
   const summaryStatement = db.prepare(
     `SELECT
-       COUNT(DISTINCT b.listing_id) AS total_count,
-       COALESCE(MAX(b.amount_minor), 0) AS top_amount_minor
-     FROM bids b
-     INNER JOIN listings l ON l.id = b.listing_id
-     WHERE ${where.join(" AND ")}`,
+       COUNT(*) AS total_count,
+       COALESCE(MAX(listing_total), 0) AS top_amount_minor
+     FROM (
+       SELECT SUM(b.amount_minor) AS listing_total
+       FROM bids b
+       INNER JOIN listings l ON l.id = b.listing_id
+       WHERE ${where.join(" AND ")}
+       GROUP BY b.listing_id
+     )`,
   );
   const activityStatement = db.prepare(
     `WITH recent AS (
@@ -101,7 +106,7 @@ export async function loadPublicBoard(db, board, { category, period, limit, page
          l.title,
          l.destination_url,
          l.favicon_url,
-         (SELECT MAX(previous.amount_minor)
+         (SELECT COALESCE(SUM(previous.amount_minor), 0)
           FROM bids previous
           WHERE previous.board_id = b.board_id
             AND previous.listing_id = b.listing_id
@@ -153,7 +158,7 @@ export async function loadPublicBoard(db, board, { category, period, limit, page
     },
     bid: {
       id: row.bid_id,
-      amount_minor: Number(row.amount_minor),
+      amount_minor: Number(row.total_minor),
       currency: row.currency,
       settled_at: row.settled_at,
     },
@@ -166,7 +171,7 @@ export async function loadPublicBoard(db, board, { category, period, limit, page
     .filter((row) => rankByListing.has(row.listing_id))
     .map((row) => {
       const previousAmount = Number(row.previous_amount_minor || 0);
-      const amount = Number(row.amount_minor || 0);
+      const paid = Number(row.amount_minor || 0);
       return {
         id: row.bid_id,
         type: previousAmount > 0 ? "topped_up" : "joined",
@@ -174,8 +179,8 @@ export async function loadPublicBoard(db, board, { category, period, limit, page
         listing_name: row.title,
         listing_url: row.destination_url,
         icon_url: row.favicon_url,
-        amount_minor: amount,
-        delta_minor: Math.max(0, amount - previousAmount),
+        amount_minor: previousAmount + paid,
+        delta_minor: paid,
         rank: rankByListing.get(row.listing_id),
         created_at: row.settled_at,
       };
@@ -255,16 +260,10 @@ export async function loadListingForBid(db, listingId) {
 }
 
 export async function loadMinimumBid(db, listing) {
-  const row = await db
-    .prepare(
-      `SELECT COALESCE(MAX(amount_minor), 0) AS top_amount_minor
-       FROM bids b
-       INNER JOIN listings l ON l.id = b.listing_id
-       WHERE b.board_id = ?1 AND b.status = 'settled' AND l.status = 'approved'`,
-    )
-    .bind(listing.board_id)
-    .first();
-  return Number(row?.top_amount_minor || 0) + Number(listing.min_increment_minor);
+  // Cumulative ranking: every settled payment adds to the listing's total, so any
+  // amount from the board increment upward is a valid top-up. Taking a specific
+  // position is a matter of the resulting total, not a per-payment floor.
+  return Number(listing.min_increment_minor);
 }
 
 export async function findIdempotentBid(db, listingId, idempotencyKey) {

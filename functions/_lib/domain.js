@@ -24,25 +24,36 @@ export function rankEligibleBids(listings, bids) {
   const approved = new Set(
     listings.filter((listing) => listing.status === "approved").map((listing) => listing.id),
   );
-  const bestByListing = new Map();
+  const totals = new Map();
 
   for (const bid of bids) {
     if (bid.status !== "settled" || !approved.has(bid.listing_id) || !bid.settled_at) continue;
-    const current = bestByListing.get(bid.listing_id);
-    if (!current || compareBids(bid, current) < 0) bestByListing.set(bid.listing_id, bid);
+    const entry = totals.get(bid.listing_id) || { listing_id: bid.listing_id, total_minor: 0, last_bid: null };
+    entry.total_minor += Number(bid.amount_minor);
+    if (!entry.last_bid || compareBidRecency(bid, entry.last_bid) < 0) entry.last_bid = bid;
+    totals.set(bid.listing_id, entry);
   }
 
-  return [...bestByListing.values()].sort(compareBids).map((bid, index) => ({
+  return [...totals.values()].sort(compareTotals).map((entry, index) => ({
     rank: index + 1,
-    bid,
+    listing_id: entry.listing_id,
+    total_minor: entry.total_minor,
+    bid: entry.last_bid,
   }));
 }
 
-export function compareBids(left, right) {
-  if (left.amount_minor !== right.amount_minor) return right.amount_minor - left.amount_minor;
-  const settledComparison = String(left.settled_at).localeCompare(String(right.settled_at));
+export function compareTotals(left, right) {
+  if (left.total_minor !== right.total_minor) return right.total_minor - left.total_minor;
+  // Equal totals: the listing that reached its total first (older last bid) ranks higher.
+  const settledComparison = String(left.last_bid.settled_at).localeCompare(String(right.last_bid.settled_at));
   if (settledComparison !== 0) return settledComparison;
-  return String(left.id).localeCompare(String(right.id));
+  return String(left.listing_id).localeCompare(String(right.listing_id));
+}
+
+function compareBidRecency(left, right) {
+  const settledComparison = String(right.settled_at).localeCompare(String(left.settled_at));
+  if (settledComparison !== 0) return settledComparison;
+  return String(right.id).localeCompare(String(left.id));
 }
 
 export function paymentTransition(eventType, currentStatus) {
