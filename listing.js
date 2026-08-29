@@ -69,7 +69,8 @@
   let preferences = loadPreferences();
   let model = null;
   let toastTimer = null;
-  const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+  const boardCurrencyFormat = (code) => new Intl.NumberFormat(code === "MYR" ? "en-MY" : "en-US", { style: "currency", currency: code || "USD", maximumFractionDigits: 0 });
+  let money = boardCurrencyFormat("USD");
   const count = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
 
   function loadPreferences() {
@@ -139,6 +140,7 @@
         const [allResponse, todayResponse] = await Promise.all([fetch(allUrl, { cache: "no-store" }), fetch(todayUrl, { cache: "no-store" })]);
         if (allResponse.ok && todayResponse.ok) {
           const [allPayload, todayPayload] = await Promise.all([allResponse.json(), todayResponse.json()]);
+          money = boardCurrencyFormat(String(allPayload.board?.currency || "USD").toUpperCase());
           const allEntry = allPayload.rankings?.find((entry) => String(entry.listing?.id) === id);
           const todayEntry = todayPayload.rankings?.find((entry) => String(entry.listing?.id) === id);
           if (allEntry) {

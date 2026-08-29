@@ -3,7 +3,8 @@
 
   const STORE_KEY = "rankoff-mvp-demo-v3";
   const compact = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
-  const currency = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+  const boardCurrencyFormat = (code) => new Intl.NumberFormat(code === "MYR" ? "en-MY" : "en-US", { style: "currency", currency: code || "USD", maximumFractionDigits: 0 });
+  let currency = boardCurrencyFormat("USD");
   const categoryConfig = [
     { id: "Agents", name: "AI & Automation", zh: "AI 与自动化", icon: "✦", members: ["Agents", "AIMedia"] },
     { id: "Marketing", name: "Marketing, SEO & Social", zh: "营销、SEO 与社交媒体", icon: "◒", members: ["Marketing", "SEO", "Social", "Sales", "Attention", "People"] },
@@ -297,6 +298,7 @@
       ]);
       if (!allResponse.ok || !todayResponse.ok) return;
       const [allPayload, todayPayload] = await Promise.all([allResponse.json(), todayResponse.json()]);
+      currency = boardCurrencyFormat(String(allPayload.board?.currency || "USD").toUpperCase());
       const allRows = normalizeRows(allPayload, "all");
       const todayRows = normalizeRows(todayPayload, "today");
       if (allRows.length) elements.allRows = mergeRows(allRows, todayRows);

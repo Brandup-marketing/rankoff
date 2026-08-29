@@ -40,7 +40,8 @@
 
   if (!/^https?:$/.test(window.location.protocol)) return;
   const compact = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
-  const currency = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+  const boardCurrencyFormat = (code) => new Intl.NumberFormat(code === "MYR" ? "en-MY" : "en-US", { style: "currency", currency: code || "USD", maximumFractionDigits: 0 });
+  let currency = boardCurrencyFormat("USD");
 
   Promise.all([
     fetch("./api/v1/board?board=global&period=all&limit=100", { headers: { Accept: "application/json" }, cache: "no-store" }),
@@ -48,6 +49,7 @@
   ]).then(async ([boardResponse, statsResponse]) => {
     if (!boardResponse.ok || !statsResponse.ok) return;
     const [board, stats] = await Promise.all([boardResponse.json(), statsResponse.json()]);
+    currency = boardCurrencyFormat(String(board.board?.currency || "USD").toUpperCase());
     const listingCount = document.querySelector("[data-about-listings]");
     const clickCount = document.querySelector("[data-about-clicks]");
     const topBid = document.querySelector("[data-about-bid]");
