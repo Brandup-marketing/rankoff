@@ -8,8 +8,9 @@
     "RANKOFF_MODE": "demo",
     "PAYMENTS_ENABLED": "false",
     "BOARD_SLUG": "global",
-    "DEFAULT_CURRENCY": "USD",
-    "DODO_ENVIRONMENT": "test_mode"
+    "DEFAULT_CURRENCY": "MYR",
+    "DODO_ENVIRONMENT": "live_mode",
+    "DODO_PRODUCT_ID": "pdt_0NmSKNT2Fc2M9dSgRkEEZ"
   },
   "d1_databases": [
     {
