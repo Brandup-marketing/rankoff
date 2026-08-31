@@ -773,7 +773,6 @@
     details.setAttribute("aria-label", chinese ? `查看 ${listing.name} 的详细信息` : `See details for ${listing.name}`);
     meta.append(details);
     if (listing.isDemo) meta.append(createElement("span", "local-chip", "Local"));
-    if (Number.isSafeInteger(position) && position > 0) meta.append(createShareControl(listing, position));
 
     const description = createElement(descriptionTag, "listing-description", listing.description);
     copy.append(listingLink(listing, position), description, meta);
