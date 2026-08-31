@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { buildProductView, escapeHtml, formatDate, formatMoney, normalizeSlug, productPath, renderProductPage } from "../../functions/_lib/product.js";
+import { discoverShareImage } from "../../functions/og/[slug].js";
 import { productEntries } from "../../functions/sitemap.xml.js";
 
 const shell = readFileSync(new URL("../../listing.html", import.meta.url), "utf8");
@@ -119,4 +120,35 @@ test("a listing with no settled history renders no record block at all", () => {
     buildProductView({ entry, todayEntry: null, board: { currency: "MYR" }, snapshotId: "", record: null }),
   );
   assert.match(html, /<ul class="listing-record" data-record hidden><\/ul>/);
+});
+
+test("the share image points at this listing's own resolver", () => {
+  const html = renderProductPage(
+    shell,
+    buildProductView({ entry, todayEntry: null, board: { currency: "MYR" }, snapshotId: "", record: null }),
+  );
+  assert.match(html, /<meta property="og:image" content="https:\/\/rankoff\.my\/og\/brandupdesignmarketing\.com" \/>/);
+  assert.match(html, /<meta name="twitter:image" content="https:\/\/rankoff\.my\/og\/brandupdesignmarketing\.com" \/>/);
+  // The merchant's image is whatever size they publish, so a fixed one would lie.
+  assert.ok(!html.includes("og:image:width"), "a hardcoded size must not survive");
+  assert.ok(!html.includes("og:image:height"), "a hardcoded size must not survive");
+});
+
+test("share image discovery takes only an https image the page itself declares", async () => {
+  const page = (body, url = "https://example.com/") => async () => ({ ok: true, url, text: async () => body });
+  assert.equal(
+    await discoverShareImage("https://example.com/", page('<meta property="og:image" content="/card.png">')),
+    "https://example.com/card.png",
+  );
+  assert.equal(
+    await discoverShareImage("https://example.com/", page('<meta name="twitter:image" content="https://cdn.example.com/a.jpg">')),
+    "https://cdn.example.com/a.jpg",
+  );
+  assert.equal(
+    await discoverShareImage("https://example.com/", page('<meta property="og:image" content="http://insecure.example/a.png">')),
+    "",
+    "an http image would break the page's https lock",
+  );
+  assert.equal(await discoverShareImage("https://example.com/", page("<p>no meta here</p>")), "");
+  assert.equal(await discoverShareImage("https://example.com/", async () => ({ ok: false })), "");
 });

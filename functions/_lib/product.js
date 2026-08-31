@@ -112,13 +112,22 @@ export function renderProductPage(shell, view) {
   html = replaceTag(html, /<link rel="canonical" href="[^"]*"\s*\/>/, `<link rel="canonical" href="${canonical}" />`);
   html = replaceTag(html, /<meta property="og:title" content="[^"]*"\s*\/>/, `<meta property="og:title" content="${title}" />`);
   html = replaceTag(html, /<meta property="og:description" content="[^"]*"\s*\/>/, `<meta property="og:description" content="${description}" />`);
+  // The merchant's own share image when they publish one; /og resolves it and
+  // falls back to the Rankoff card. Its size is theirs, so the shell's fixed
+  // 1200x630 declaration has to go with it.
+  html = replaceTag(
+    html,
+    /<meta property="og:image" content="[^"]*"\s*\/>/,
+    `<meta property="og:image" content="${escapeHtml(`${SITE_ORIGIN}/og/${view.hostname}`)}" />`,
+  );
+  html = html.replace(/\s*<meta property="og:image:(?:width|height)" content="[^"]*"\s*\/>/g, "");
   html = html.replace(
     "</head>",
     `  <meta property="og:url" content="${canonical}" />\n`
       + `    <meta name="twitter:card" content="summary_large_image" />\n`
       + `    <meta name="twitter:title" content="${title}" />\n`
       + `    <meta name="twitter:description" content="${description}" />\n`
-      + `    <meta name="twitter:image" content="${SITE_ORIGIN}/assets/rankoff-og-card.png" />\n`
+      + `    <meta name="twitter:image" content="${escapeHtml(`${SITE_ORIGIN}/og/${view.hostname}`)}" />\n`
       + `    <script type="application/ld+json">${jsonLd}</script>\n`
       + `  </head>`,
   );
