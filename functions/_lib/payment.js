@@ -38,6 +38,10 @@ export async function createDodoCheckout(env, bid) {
   });
 
   if (!response.ok) {
+    // Surface the provider's rejection in function logs; the body of a failed
+    // checkout-creation call carries no card data or secrets.
+    const detail = await response.text().catch(() => "");
+    console.log("dodo_checkout_rejected", response.status, detail.slice(0, 500));
     throw new ApiError(502, "checkout_provider_error", "Hosted checkout could not be created.");
   }
   let payload;
