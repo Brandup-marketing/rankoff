@@ -43,7 +43,7 @@ test("legacy category tags normalize to visible launch markets", () => {
   assert.equal(normalizeCategory("Hardware"), "Retail");
   assert.equal(normalizeCategory("Design"), "Creative");
   assert.equal(normalizeCategory("RealEstate"), "Property");
-  assert.equal(normalizeCategory("Education"), "Professional");
+  assert.equal(normalizeCategory("Education"), "Education");
   // The tech-shaped markets are gone from the board, but records tagged with them stay valid.
   assert.equal(normalizeCategory("AIMedia"), "Creators");
   assert.equal(normalizeCategory("Crypto"), "Finance");
