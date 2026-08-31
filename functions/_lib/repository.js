@@ -345,7 +345,7 @@ export async function createListing(db, listing) {
       `INSERT INTO listings (
          id, board_id, owner_reference_hash, title, description, destination_url,
          hostname, favicon_url, category, status, created_at, updated_at
-       ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, 'pending_review', ?10, ?10)`,
+       ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?11)`,
     )
     .bind(
       listing.id,
@@ -357,6 +357,7 @@ export async function createListing(db, listing) {
       listing.hostname,
       listing.faviconUrl,
       listing.category,
+      listing.status || "pending_review",
       listing.createdAt,
     )
     .run();
@@ -508,4 +509,23 @@ function publicBoard(board) {
     currency: board.currency,
     min_increment_minor: Number(board.min_increment_minor),
   };
+}
+
+export async function findListingByHostname(db, boardId, hostname) {
+  return db
+    .prepare(
+      `SELECT id, title, status, hostname FROM listings
+       WHERE board_id = ?1 AND hostname = ?2
+       ORDER BY created_at ASC LIMIT 1`,
+    )
+    .bind(boardId, hostname)
+    .first();
+}
+
+export async function countListingsCreatedSince(db, boardId, sinceIso) {
+  const row = await db
+    .prepare(`SELECT COUNT(*) AS n FROM listings WHERE board_id = ?1 AND created_at >= ?2`)
+    .bind(boardId, sinceIso)
+    .first();
+  return Number(row?.n || 0);
 }

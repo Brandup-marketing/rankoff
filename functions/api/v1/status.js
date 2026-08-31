@@ -16,7 +16,7 @@ export async function onRequestGet(context) {
   return json({
     mode: "production",
     ranking_source: "settled_verified_bids",
-    listing_submission: { state: "invite_only", moderation_required: true },
+    listing_submission: { state: "open", moderation_required: false },
     checkout: { state: checkoutLive ? "live" : "disabled", charges_possible: checkoutLive },
   });
 }

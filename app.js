@@ -1438,8 +1438,26 @@
             return false;
           }
         });
-    if (!candidate) {
-      throw new Error("This website must be approved before it can bid.");
+    let listingId = candidate?.id;
+    if (!listingId) {
+      // A website the board has never seen: create its listing on the spot.
+      // The server screens the submission and returns the existing entry when
+      // the hostname is already on the board, so payments always accumulate
+      // onto one listing per website.
+      if (!pendingChallenge?.url) throw new Error("Enter your website first.");
+      const created = await fetch("./api/v1/listings", {
+        method: "POST",
+        headers: { Accept: "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify({
+          url: pendingChallenge.url.href,
+          category: pendingChallenge.category || state.category,
+        }),
+      });
+      const createdPayload = await created.json().catch(() => ({}));
+      if (!created.ok || !createdPayload?.listing?.id) {
+        throw new Error(createdPayload?.error?.message || "This website could not be listed. No payment was made.");
+      }
+      listingId = createdPayload.listing.id;
     }
 
     const idempotencyKey = crypto.randomUUID();
@@ -1451,7 +1469,7 @@
         "Idempotency-Key": idempotencyKey,
       },
       body: JSON.stringify({
-        listing_id: candidate.id,
+        listing_id: listingId,
         amount_minor: amount * 100,
         currency: remoteCurrency,
         snapshot_id: remoteSnapshotId,

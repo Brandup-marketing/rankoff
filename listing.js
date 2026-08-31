@@ -32,7 +32,7 @@
       previewEvidence: "Rank, price, and referral clicks update from the public board.",
       verifiedEvidence: "Rank and bid come from settled placements. Clicks are first-party redirect events recorded by Rankoff.",
       claimCopy: "Put your product above this listing. Your full business description stays visible until someone pays more.",
-      previewDisclosure: "Listings are reviewed before a rank is published.", liveDisclosure: "Payment is confirmed only after secure hosted checkout settles.",
+      previewDisclosure: "Submissions pass automated checks instantly; listings may be removed after publication if they break the rules.", liveDisclosure: "Payment is confirmed only after secure hosted checkout settles.",
       unavailable: "Website temporarily unavailable", copied: "Rank link copied.", shareText: "is ranked",
     },
     zh: {
@@ -46,7 +46,7 @@
       previewEvidence: "排名、价格和推荐点击会随公开榜单更新。",
       verifiedEvidence: "排名与出价来自已结算展示；点击为 Rankoff 记录的第一方跳转事件。",
       claimCopy: "让你的产品排在这个条目之前。完整业务介绍会持续展示，直到有人出价更高。",
-      previewDisclosure: "条目会在审核通过后发布。", liveDisclosure: "付款会在安全的托管付款页面完成并确认。",
+      previewDisclosure: "提交即通过自动筛查并发布；违反规则的条目可能在发布后被移除。", liveDisclosure: "付款会在安全的托管付款页面完成并确认。",
       unavailable: "网站暂时无法访问", copied: "排名链接已复制。", shareText: "目前排名",
     },
   };
