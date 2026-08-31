@@ -1023,7 +1023,7 @@
     evidence.append(bidStack);
 
     card.id = `listing-${listing.id}`;
-    card.append(rank, productIdentity(listing, "p"), evidence, createClaimControl(minimum));
+    card.append(rank, productIdentity(listing, "p", position), evidence, createClaimControl(minimum));
     return card;
   }
 
