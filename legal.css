@@ -21,3 +21,12 @@ h3 { margin: 2rem 0 0.55rem; font-size: 1.05rem; }
 .legal-footer { margin-top: 2rem; padding-bottom: 3rem; }
 html[data-theme="light"] .payment-flow span { background: var(--surface-subtle); }
 @media (max-width: 640px) { .legal-shell { width: min(calc(100% - 1.25rem), 70rem); } .legal-header { grid-template-columns: minmax(0,1fr) auto auto auto; } .legal-header .site-nav { display: none; } .legal-intro { padding-top: 3rem; } .payment-flow { grid-template-columns: 1fr 1fr; } }
+
+.legal-zh { border-left: 3px solid var(--accent); }
+.legal-zh h2 { max-width: 24ch; font-size: clamp(1.4rem, 2.4vw, 1.9rem); }
+.legal-zh li + li { margin-top: 0.6rem; }
+.legal-zh strong { color: var(--ink); }
+.legal-zh-authority { margin-top: 1.25rem; padding-top: 0.9rem; border-top: 1px solid var(--line); font-size: 0.875rem; }
+.legal-zh-authority span { display: block; margin-top: 0.3rem; opacity: 0.72; }
+.legal-zh:focus { outline: none; }
+.legal-zh:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }

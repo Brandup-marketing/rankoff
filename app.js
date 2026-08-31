@@ -29,8 +29,8 @@
   }, {}));
   const categoryIcons = Object.freeze({ all: "▦", Agents: "✦", Marketing: "↗", Developer: "</>", Business: "◆", Crypto: "₿", Ecommerce: "◇", Design: "✎", Productivity: "✓", Health: "+", Games: "◈", Travel: "⌖", Domains: "◎", Other: "•••" });
   const translations = {
-    en: { navBoard: "Board", navCategories: "Categories", navAbout: "About", heroCopy: "Put your product in the spot people see first. Your listing stays at the top until someone pays more.", totalBid: "Your total bid", productUrl: "Website or social account", productUrlPlaceholder: "example.com or @yourusername", invalidWebsite: "Enter a valid website or social account, such as example.com or @yourusername.", chooseMarket: "Choose a market", challengeCategory: "Challenge category", categoryRule: "Must match the listing you’ll outrank.", reviewBid: "Review your bid", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest total takes #1. Top up any time to move up.", todayRanking: "Today’s leaders", latestActivity: "Latest activity", liveUpdates: "Latest updates", howItWorks: "How ranking works", searchPlaceholder: "Search products and categories…", close: "Close", seeAll: "See all", past24: "Past 24h", livePulse: "Live bids", refresh: "Refresh", rank: "Rank", listing: "Listing", bid: "Bid", clicks: "Clicks", sponsored: "Sponsored", rules: "Every listing is sponsored. The highest settled total ranks first.", position: "Position", positionCopy: "Held until another listing's settled total passes it.", charge: "Charge", chargeCopy: "One payment after review.", reporting: "Reporting", reportingCopy: "Clicks shown for the selected timeframe.", readRules: "Read all rules →", rulesLink: "Rules", terms: "Terms", termsOfService: "Terms of Service", privacyLink: "Privacy", payments: "Payments", footerCredit: "A Brandup Marketing product", confirmRank: "Confirm this rank", confirmRankIntro: "Check the rank and price, then agree to the Terms of Service to continue.", rankLabel: "Rank", priceLabel: "Price", dueNow: "Due now", confirmationCopy: "Your listing goes live at this rank after payment confirms. Someone else can still claim a higher rank.", agreeTermsPrefix: "I have read and agree to the ", agreeTermsSuffix: ".", cancel: "Cancel", continueCheckout: "Continue to checkout" },
-    zh: { navBoard: "榜单", navCategories: "分类", navAbout: "关于", heroCopy: "把产品放到最显眼的位置。只要没有更高的有效出价，你的介绍就会留在榜首。", totalBid: "你的总出价", productUrl: "网站或社交账号", productUrlPlaceholder: "example.com 或 @yourusername", invalidWebsite: "请输入有效的网站或社交账号，例如 example.com 或 @yourusername。", chooseMarket: "选择市场", challengeCategory: "挑战类别", categoryRule: "必须与您要超越的条目类别相同。", reviewBid: "确认出价", markets: "市场", liveLeaderboard: "实时榜单", boardSummary: "累计出价最高者获得第 1 名。随时追加出价即可上升。", todayRanking: "今日领先", latestActivity: "最新动态", liveUpdates: "最新动态", howItWorks: "排名规则", searchPlaceholder: "搜索产品和分类…", close: "关闭", seeAll: "查看全部", past24: "近 24 小时", livePulse: "实时竞价", refresh: "刷新", rank: "排名", listing: "条目", bid: "出价", clicks: "点击", sponsored: "赞助", rules: "每个条目都是赞助展示。累计已结算出价最高者排名第一。", position: "排名位置", positionCopy: "保持到其他条目的累计出价超过为止。", charge: "费用", chargeCopy: "审核后一次性付款。", reporting: "数据", reportingCopy: "显示所选时间范围内的点击。", readRules: "查看完整规则 →", rulesLink: "规则", terms: "条款", termsOfService: "服务条款", privacyLink: "隐私", payments: "付款", footerCredit: "Brandup Marketing 出品", confirmRank: "确认此排名", confirmRankIntro: "核对排名与价格，同意《服务条款》后继续。", rankLabel: "排名", priceLabel: "价格", dueNow: "现在支付", confirmationCopy: "付款确认后，你的条目会以此排名上线。其他人仍可出价取得更高排名。", agreeTermsPrefix: "我已阅读并同意《", agreeTermsSuffix: "》。", cancel: "取消", continueCheckout: "继续付款" },
+    en: { navBoard: "Board", navCategories: "Categories", navAbout: "About", heroCopy: "Put your product in the spot people see first. Your listing stays at the top until someone pays more.", totalBid: "Your total bid", productUrl: "Website or social account", productUrlPlaceholder: "example.com or @yourusername", invalidWebsite: "Enter a valid website or social account, such as example.com or @yourusername.", chooseMarket: "Choose a market", challengeCategory: "Challenge category", categoryRule: "Must match the listing you’ll outrank.", reviewBid: "Review your bid", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest total takes #1. Top up any time to move up.", todayRanking: "Today’s leaders", latestActivity: "Latest activity", liveUpdates: "Latest updates", howItWorks: "How ranking works", searchPlaceholder: "Search products and categories…", close: "Close", seeAll: "See all", past24: "Past 24h", livePulse: "Live bids", refresh: "Refresh", rank: "Rank", listing: "Listing", bid: "Bid", clicks: "Clicks", sponsored: "Sponsored", rules: "Every listing is paid advertising. The highest settled total ranks first \u2014 no prizes, no draws, and no element of chance.", position: "Position", positionCopy: "Held until another listing's settled total passes it.", charge: "Charge", chargeCopy: "One payment after review.", reporting: "Reporting", reportingCopy: "Clicks shown for the selected timeframe.", readRules: "Read all rules →", rulesLink: "Rules", terms: "Terms", termsOfService: "Terms of Service", privacyLink: "Privacy", payments: "Payments", footerCredit: "A Brandup Marketing product", confirmRank: "Confirm this rank", confirmRankIntro: "Check the rank and price, then agree to the Terms of Service to continue.", chanceDisclaimer: "This is a one-time fee for advertising placement \u2014 not a wager, deposit, or contest entry. There are no prizes and no element of chance.", rankLabel: "Rank", priceLabel: "Price", dueNow: "Due now", confirmationCopy: "Your listing goes live at this rank after payment confirms. Someone else can still claim a higher rank. This is a one-time fee for advertising placement \u2014 not a wager, deposit, or contest entry. There are no prizes and no element of chance.", agreeTermsPrefix: "I have read and agree to the ", agreeTermsSuffix: ".", cancel: "Cancel", continueCheckout: "Continue to checkout" },
+    zh: { navBoard: "榜单", navCategories: "分类", navAbout: "关于", heroCopy: "把产品放到最显眼的位置。只要没有更高的有效出价，你的介绍就会留在榜首。", totalBid: "你的总出价", productUrl: "网站或社交账号", productUrlPlaceholder: "example.com 或 @yourusername", invalidWebsite: "请输入有效的网站或社交账号，例如 example.com 或 @yourusername。", chooseMarket: "选择市场", challengeCategory: "挑战类别", categoryRule: "必须与您要超越的条目类别相同。", reviewBid: "确认出价", markets: "市场", liveLeaderboard: "实时榜单", boardSummary: "累计出价最高者获得第 1 名。随时追加出价即可上升。", todayRanking: "今日领先", latestActivity: "最新动态", liveUpdates: "最新动态", howItWorks: "排名规则", searchPlaceholder: "搜索产品和分类…", close: "关闭", seeAll: "查看全部", past24: "近 24 小时", livePulse: "实时竞价", refresh: "刷新", rank: "排名", listing: "条目", bid: "出价", clicks: "点击", sponsored: "广告", rules: "每个条目都是付费广告。累计已结算付款最高者排名第一 —— 没有奖品、没有抽奖，也不涉及任何运气成分。", position: "排名位置", positionCopy: "保持到其他条目的累计出价超过为止。", charge: "费用", chargeCopy: "审核后一次性付款。", reporting: "数据", reportingCopy: "显示所选时间范围内的点击。", readRules: "查看完整规则 →", rulesLink: "规则", terms: "条款", termsOfService: "服务条款", privacyLink: "隐私", payments: "付款", footerCredit: "Brandup Marketing 出品", confirmRank: "确认此排名", confirmRankIntro: "核对排名与价格，同意《服务条款》后继续。", chanceDisclaimer: "此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。", rankLabel: "排名", priceLabel: "价格", dueNow: "现在支付", confirmationCopy: "付款确认后，你的条目会以此排名上线。其他人仍可出价取得更高排名。此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。", agreeTermsPrefix: "我已阅读并同意《", agreeTermsSuffix: "》。", cancel: "取消", continueCheckout: "继续付款" },
   };
   const categoryLabels = { Agents: "AI & Automation", Marketing: "Marketing, SEO & Social", Developer: "Developer Tools & Security", Business: "Business & Professional Services", Crypto: "Finance, Crypto & Investing", Ecommerce: "Ecommerce, Retail & Hardware", Design: "Design, Content & Media", Productivity: "Productivity & Education", Health: "Health & Wellness", Games: "Games & Entertainment", Travel: "Travel, Local & Property", Domains: "Web, Domains & Discovery", Other: "Other" };
   const categoryTranslations = { Agents: "AI 与自动化", Marketing: "营销、SEO 与社交媒体", Developer: "开发工具与安全", Business: "商业与专业服务", Crypto: "金融、加密与投资", Ecommerce: "电商、零售与硬件", Design: "设计、内容与媒体", Productivity: "效率工具与教育", Health: "健康与生活方式", Games: "游戏与娱乐", Travel: "旅行、本地与房地产", Domains: "网站、域名与发现", Other: "其他" };
@@ -233,6 +233,12 @@
   let remoteNextBid = null;
   let remoteSnapshotId = null;
   let remoteCurrency = "USD";
+  // The board floor (RM1), kept separate from the price of #1. Ranking is
+  // cumulative, so these are two different numbers and must never be conflated.
+  let remoteMinIncrement = 1;
+  // Once the buyer edits the amount we stop prefilling it, so a board refresh
+  // can never silently replace the number they chose.
+  let inlineBidTouched = false;
   let boardViewSent = false;
 
   function cloneListing(listing) {
@@ -430,7 +436,7 @@
     if (elements.boardState) {
       elements.boardState.lastChild.textContent = chinese ? " 实时榜单" : " Live board";
     }
-    if (elements.boardHeading) elements.boardHeading.textContent = chinese ? "实时赞助榜单" : "Live sponsored leaderboard";
+    if (elements.boardHeading) elements.boardHeading.textContent = chinese ? "实时广告榜单" : "Live sponsored leaderboard";
     if (elements.liveDot) elements.liveDot.hidden = !production;
     if (elements.measurementSummary) {
       elements.measurementSummary.textContent = chinese ? "点击如何统计" : "How clicks are measured";
@@ -483,6 +489,7 @@
       remoteNextBid = dollarsFromMinor(payload.next_bid_minor, null);
       remoteSnapshotId = payload.snapshot_id || null;
       remoteCurrency = String(payload.board?.currency || "USD").toUpperCase();
+      remoteMinIncrement = dollarsFromMinor(payload.board?.min_increment_minor, 1);
       currency = boardCurrencyFormat(remoteCurrency);
       const symbolNode = document.querySelector("[data-currency-symbol]");
       if (symbolNode) symbolNode.textContent = remoteCurrency === "MYR" ? "RM" : "$";
@@ -715,7 +722,7 @@
     const ageLabel = listingAgeLabel(listing);
     const clickLabel = listing.verified ? (chinese ? "已验证点击" : "Verified clicks") : (chinese ? "推荐点击" : "Referral clicks");
     meta.append(
-      createElement("span", "sponsored-chip", chinese ? "赞助" : "Sponsored"),
+      createElement("span", "sponsored-chip", chinese ? "广告" : "Sponsored"),
       createElement("span", "meta-item category-meta", categoryName(listing.category)),
       createElement("span", "meta-item", ageLabel),
       createElement("span", "meta-item", listingHostLabel(listing)),
@@ -744,28 +751,80 @@
     return getBid(ranked[index - 1]) + 1;
   }
 
-  function minimumForActiveBid() {
+  document.addEventListener("input", (event) => {
+    if (event.target === elements.inlineBid) inlineBidTouched = true;
+  });
+
+  /**
+   * A returning customer tops up through the same hero form, so a submission
+   * whose URL already sits on the board is a top-up, not a new listing.
+   * startLiveCheckout matches on hostname the same way, so the rank we preview
+   * has to add to that listing's settled total instead of standing alone.
+   */
+  function existingListingForPending() {
+    if (!pendingChallenge?.url) return null;
+    return state.listings.find((item) => {
+      try {
+        return new URL(item.url).hostname === pendingChallenge.url.hostname;
+      } catch {
+        return false;
+      }
+    }) || null;
+  }
+
+  /**
+   * The lowest payment the board accepts. Any amount at or above this is a
+   * valid top-up — it simply lands at a lower rank. The server agrees
+   * (loadMinimumBid returns the board increment), so this must NOT be the
+   * price of #1.
+   */
+  function boardMinimum() {
+    return boardSource === "local" ? 1 : Math.max(1, remoteMinIncrement);
+  }
+
+  /** Suggested amount to take the next rank up. A default, never a gate. */
+  function suggestedBidForNextRank() {
     const ranked = rankedListings();
-    if (!ranked.length) return 1;
-    if (activeBid?.type === "new") return getBid(ranked[0]) + 1;
+    if (!ranked.length) return boardMinimum();
+    if (activeBid?.type === "new") {
+      const existing = existingListingForPending();
+      const leader = ranked[0];
+      if (existing && leader && existing.id !== leader.id) {
+        return Math.max(boardMinimum(), getBid(leader) - getBid(existing) + boardMinimum());
+      }
+      if (existing && leader && existing.id === leader.id) return boardMinimum();
+      return getBid(leader) + boardMinimum();
+    }
 
     const listing = state.listings.find((item) => item.id === activeBid?.listingId);
     if (!listing) return getBid(ranked[0]) + 1;
     const index = ranked.findIndex((item) => item.id === listing.id);
-    if (index <= 0) return getBid(listing) + 1;
-    return getBid(ranked[index - 1]) + 1;
+    // A top-up ADDS to this listing's existing total, so the suggestion is the
+    // gap to close — not the rival's total. Suggesting the rival's total
+    // overcharged every returning customer by everything they had already paid.
+    if (index <= 0) return boardMinimum();
+    const gap = getBid(ranked[index - 1]) - getBid(listing) + boardMinimum();
+    return Math.max(boardMinimum(), gap);
   }
 
   function projectedRank(amount) {
     const ranked = rankedListings();
     if (activeBid?.type === "new") {
-      return ranked.filter((listing) => getBid(listing) > amount).length + 1;
+      const existing = existingListingForPending();
+      const total = existing ? getBid(existing) + amount : amount;
+      return ranked.filter((listing) => listing.id !== existing?.id && getBid(listing) > total).length + 1;
     }
 
     const listing = state.listings.find((item) => item.id === activeBid?.listingId);
     if (!listing) return null;
+    // Cumulative: this payment adds to whatever the listing has already
+    // settled. Replacing the total instead of adding to it projected the wrong
+    // rank for every repeat customer.
+    const projectedTotal = getBid(listing) + amount;
     const projected = ranked.map((item) =>
-      item.id === listing.id ? { ...item, bids: { ...item.bids, [state.activeWindow]: amount } } : item,
+      item.id === listing.id
+        ? { ...item, bids: { ...item.bids, [state.activeWindow]: projectedTotal } }
+        : item,
     );
     return rankedListings(projected).findIndex((item) => item.id === listing.id) + 1;
   }
@@ -953,8 +1012,8 @@
             : `${money(openingPrice)} takes #1. Be the first product on the board.`;
         }
         if (elements.inlineBid) {
-          elements.inlineBid.min = String(openingPrice);
-          elements.inlineBid.value = String(openingPrice);
+          elements.inlineBid.min = String(boardMinimum());
+          if (!inlineBidTouched) elements.inlineBid.value = String(openingPrice);
         }
       }
       return;
@@ -976,8 +1035,11 @@
     if (elements.leaderCategory) elements.leaderCategory.textContent = categoryName(leader.category);
     if (elements.currentLeader) elements.currentLeader.replaceChildren(productIdentity(leader));
     if (elements.inlineBid) {
-      elements.inlineBid.min = String(nextPrice);
-      elements.inlineBid.value = String(nextPrice);
+      // min is the board floor, value is only a suggestion. Setting min to the
+      // price of #1 made native validation reject every smaller entry, which
+      // shut out exactly the cheap listings cumulative ranking exists to allow.
+      elements.inlineBid.min = String(boardMinimum());
+      if (!inlineBidTouched) elements.inlineBid.value = String(nextPrice);
     }
   }
 
@@ -1206,8 +1268,7 @@
   function updateBidPreview() {
     if (!elements.bidAmount || !activeBid) return;
     const amount = Number(elements.bidAmount.value);
-    const minimum = minimumForActiveBid();
-    if (!Number.isSafeInteger(amount) || amount < minimum || amount > MAX_BID) return;
+    if (!Number.isSafeInteger(amount) || amount < boardMinimum() || amount > MAX_BID) return;
     const rank = projectedRank(amount);
     const listing = activeBid.type === "new"
       ? pendingChallenge
@@ -1216,9 +1277,16 @@
     if (elements.dialogRank) elements.dialogRank.textContent = `#${rank}`;
     if (elements.dialogPrice) elements.dialogPrice.textContent = money(amount);
     if (elements.dialogContext) elements.dialogContext.textContent = `${checkoutBoardLabel()} · ${categoryName(category)}`;
-    if (elements.dialogExplanation) elements.dialogExplanation.textContent = state.language === "zh"
-      ? `付款确认后，${listing?.name || "你的条目"}将在${checkoutBoardLabel()}获得第 ${rank} 名。其他人仍可出价取得更高排名。`
-      : `After payment confirms, ${listing?.name || "your listing"} will take #${rank} on the ${checkoutBoardLabel().toLowerCase()}. Someone else can still claim a higher rank.`;
+    if (elements.dialogExplanation) {
+      // This runs on every dialog open and every amount change, so it must
+      // re-append the advertising disclaimer. Without it the static
+      // confirmationCopy is overwritten and the disclosure never reaches the
+      // buyer at the moment of payment.
+      const projection = state.language === "zh"
+        ? `付款确认后，${listing?.name || "你的条目"}将在${checkoutBoardLabel()}获得第 ${rank} 名。其他人仍可出价取得更高排名。`
+        : `After payment confirms, ${listing?.name || "your listing"} will take #${rank} on the ${checkoutBoardLabel().toLowerCase()}. Someone else can still claim a higher rank.`;
+      elements.dialogExplanation.textContent = `${projection} ${languageText("chanceDisclaimer")}`;
+    }
   }
 
   function openBidDialog(trigger, listingId = null) {
@@ -1227,8 +1295,15 @@
     lastTrigger = trigger;
     elements.bidForm.reset();
 
-    const min = minimumForActiveBid();
-    elements.bidAmount.value = String(Math.max(min, Number(elements.inlineBid?.value) || min));
+    // Respect what the buyer typed. This used to be Math.max(min, entered),
+    // which silently replaced a RM1 entry with the price of #1 — the confirm
+    // dialog then asked for hundreds of times what they had asked for.
+    const entered = Number(elements.inlineBid?.value);
+    elements.bidAmount.value = String(
+      Number.isSafeInteger(entered) && entered >= boardMinimum() && entered <= MAX_BID
+        ? entered
+        : suggestedBidForNextRank(),
+    );
     updateBidPreview();
 
     if (typeof elements.dialog.showModal === "function") {
@@ -1598,7 +1673,8 @@
     if (inlineAdjust instanceof HTMLButtonElement && elements.inlineBid) {
       const amount = Number(elements.inlineBid.value) || Number(elements.inlineBid.min) || 1;
       const adjustment = Number(inlineAdjust.dataset.inlineAdjust) || 0;
-      const min = Number(elements.inlineBid.min) || 1;
+      const min = boardMinimum();
+      inlineBidTouched = true;
       elements.inlineBid.value = String(Math.min(MAX_BID, Math.max(min, amount + adjustment)));
       elements.inlineBid.focus();
       return;
@@ -1606,9 +1682,10 @@
 
     const challengeTrigger = target.closest("[data-prepare-challenge]");
     if (challengeTrigger instanceof HTMLElement && elements.inlineBid) {
-      const minimum = Number(challengeTrigger.dataset.prepareChallenge) || Number(elements.inlineBid.min) || 1;
-      elements.inlineBid.value = String(minimum);
-      elements.inlineBid.min = String(minimum);
+      const suggestion = Number(challengeTrigger.dataset.prepareChallenge) || suggestedBidForNextRank();
+      elements.inlineBid.value = String(suggestion);
+      elements.inlineBid.min = String(boardMinimum());
+      inlineBidTouched = false;
       elements.inlineChallenge?.scrollIntoView({ behavior: "smooth", block: "center" });
       window.setTimeout(() => elements.inlineUrl?.focus(), 220);
       showToast(`Challenge prepared at ${money(minimum)}. Add your product to continue.`);
@@ -1617,9 +1694,9 @@
 
     const adjustButton = target.closest("[data-bid-adjust]");
     if (adjustButton instanceof HTMLButtonElement && elements.bidAmount && activeBid) {
-      const amount = Number(elements.bidAmount.value) || minimumForActiveBid();
+      const amount = Number(elements.bidAmount.value) || suggestedBidForNextRank();
       const adjustment = Number(adjustButton.dataset.bidAdjust) || 0;
-      const min = minimumForActiveBid();
+      const min = boardMinimum();
       elements.bidAmount.value = String(Math.min(MAX_BID, Math.max(min, amount + adjustment)));
       updateBidPreview();
       elements.bidAmount.focus();
@@ -1681,11 +1758,18 @@
       category: requiredCategory,
     };
 
-    const min = getMinimumForPosition(1);
+    // Any amount at or above the board floor is valid — it simply lands at a
+    // lower rank. This used to demand the price of #1 and overwrite what the
+    // buyer had typed, which made a small first listing impossible.
+    const min = boardMinimum();
     const amount = Number(formData.get("challengeAmount"));
     if (!Number.isSafeInteger(amount) || amount < min) {
-      if (elements.inlineBid) elements.inlineBid.value = String(min);
-      showToast(`Claiming #1 starts at ${money(min)}.`, "error");
+      showToast(
+        state.language === "zh"
+          ? `最低 ${money(min)} 起。`
+          : `Listings start at ${money(min)}.`,
+        "error",
+      );
       return;
     }
 
@@ -1704,8 +1788,8 @@
     }
 
     const amount = Number(elements.bidAmount.value);
-    if (amount < minimumForActiveBid()) {
-      showToast(`Bid at least ${money(minimumForActiveBid())}.`, "error");
+    if (amount < boardMinimum()) {
+      showToast(`Bid at least ${money(boardMinimum())}.`, "error");
       return;
     }
 
