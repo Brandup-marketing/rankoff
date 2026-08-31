@@ -50,3 +50,34 @@ test("preview bid endpoint never creates a charge", async () => {
     (error) => error.code === "checkout_disabled" && error.status === 503,
   );
 });
+
+test("a bid without an accepted Terms of Service is refused before any charge", async () => {
+  const env = {
+    RANKOFF_MODE: "production",
+    PAYMENTS_ENABLED: "true",
+    DODO_ENVIRONMENT: "live_mode",
+    DODO_PRODUCT_ID: "pdt_test",
+    DODO_PAYMENTS_API_KEY: "key_test",
+    DODO_PAYMENTS_WEBHOOK_KEY: "whk_test",
+  };
+  const body = { listing_id: "listing_1", amount_minor: 500, currency: "MYR" };
+  const request = (payload) => new Request("https://rankoff.my/api/v1/bids", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Idempotency-Key": "idem_key_12345678" },
+    body: JSON.stringify(payload),
+  });
+
+  await assert.rejects(
+    createBid({ request: request(body), env }),
+    (error) => error.code === "terms_not_accepted" && error.status === 422,
+  );
+  await assert.rejects(
+    createBid({ request: request({ ...body, agreed_terms: "yes" }), env }),
+    (error) => error.code === "terms_not_accepted",
+  );
+  // Consent present: it gets past the gate and fails later, on the missing database.
+  await assert.rejects(
+    createBid({ request: request({ ...body, agreed_terms: true }), env }),
+    (error) => error.code !== "terms_not_accepted",
+  );
+});

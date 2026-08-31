@@ -285,8 +285,8 @@ export async function createPendingBid(db, bid) {
       `INSERT INTO bids (
          id, board_id, listing_id, amount_minor, currency, status, idempotency_key,
          request_fingerprint, challenged_rank, challenged_snapshot_id, provider,
-         created_at, updated_at
-       ) VALUES (?1, ?2, ?3, ?4, ?5, 'pending_payment', ?6, ?7, 1, ?8, 'dodo', ?9, ?9)`,
+         created_at, updated_at, terms_version, agreed_at
+       ) VALUES (?1, ?2, ?3, ?4, ?5, 'pending_payment', ?6, ?7, 1, ?8, 'dodo', ?9, ?9, ?10, ?11)`,
     )
     .bind(
       bid.id,
@@ -298,6 +298,8 @@ export async function createPendingBid(db, bid) {
       bid.fingerprint,
       bid.snapshotId,
       bid.createdAt,
+      bid.termsVersion,
+      bid.agreedAt,
     )
     .run();
 }

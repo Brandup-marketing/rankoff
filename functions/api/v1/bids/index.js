@@ -1,4 +1,4 @@
-import { ApiError, defaultCurrency, isProduction, maxBidMinor, paymentConfigurationReady, requireDatabase } from "../../../_lib/config.js";
+import { ApiError, TERMS_VERSION, defaultCurrency, isProduction, maxBidMinor, paymentConfigurationReady, requireDatabase } from "../../../_lib/config.js";
 import { getRequestId, json, methodNotAllowed, readJson } from "../../../_lib/http.js";
 import { createDodoCheckout } from "../../../_lib/payment.js";
 import { createPendingBid, findIdempotentBid, loadListingForBid, loadMinimumBid, markBidSetupFailed, publicBid, updateBidCheckout } from "../../../_lib/repository.js";
@@ -11,6 +11,11 @@ export async function onRequestPost(context) {
   }
   const input = await readJson(context.request);
   const idempotencyKey = requireString(context.request.headers.get("Idempotency-Key"), "Idempotency-Key", { min: 8, max: 128 });
+  if (input.agreed_terms !== true) {
+    throw new ApiError(422, "terms_not_accepted", "Agree to the Terms of Service before paying for a rank.");
+  }
+  // Record the version the payer was actually shown; fall back to ours when the page is stale.
+  const agreedVersion = /^\d{4}-\d{2}-\d{2}$/.test(String(input.terms_version || "")) ? String(input.terms_version) : TERMS_VERSION;
   const listingId = requireString(input.listing_id, "listing_id", { max: 128 });
   const amountMinor = parsePositiveMinorUnits(input.amount_minor, "amount_minor", maxBidMinor(context.env));
   const currency = normalizeCurrency(input.currency || defaultCurrency(context.env));
@@ -28,7 +33,7 @@ export async function onRequestPost(context) {
   }
 
   const now = new Date().toISOString();
-  const bid = { id: crypto.randomUUID(), boardId: listing.board_id, listingId, amountMinor, currency, idempotencyKey, fingerprint, snapshotId: input.snapshot_id || null, createdAt: now };
+  const bid = { id: crypto.randomUUID(), boardId: listing.board_id, listingId, amountMinor, currency, idempotencyKey, fingerprint, snapshotId: input.snapshot_id || null, createdAt: now, termsVersion: agreedVersion, agreedAt: now };
   await createPendingBid(db, bid);
   try {
     const checkout = await createDodoCheckout(context.env, bid);
