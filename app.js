@@ -731,6 +731,21 @@
       meta.append(createElement("span", "meta-item listing-clicks", `${compact.format(getClicks(listing))} ${chinese ? "次点击" : "clicks"}`));
       meta.append(createElement("span", listing.verified ? "verified-chip" : "estimated-chip", clickLabel));
     }
+    // One-click visit, outbid-style — but through the tracked /go redirect so
+    // the click still lands in the listing's verified-clicks count.
+    const visit = createElement("a", "listing-visit", chinese ? "访问网站 ↗" : "Visit ↗");
+    if (production) {
+      const go = new URL(`./go/${listing.id}`, window.location.href);
+      if (Number.isSafeInteger(position) && position > 0) go.searchParams.set("rank", String(position));
+      if (remoteSnapshotId) go.searchParams.set("snapshot", remoteSnapshotId);
+      visit.href = go.toString();
+    } else {
+      visit.href = listing.url;
+    }
+    visit.target = "_blank";
+    visit.rel = "noopener nofollow sponsored";
+    visit.setAttribute("aria-label", chinese ? `访问 ${listing.name} 的网站` : `Visit ${listing.name}'s website`);
+    meta.append(visit);
     const details = createElement("a", "listing-details", chinese ? "查看详情" : "See details");
     details.href = listingDetailsHref(listing);
     details.setAttribute("aria-label", chinese ? `查看 ${listing.name} 的详细信息` : `See details for ${listing.name}`);
