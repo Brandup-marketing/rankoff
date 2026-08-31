@@ -28,6 +28,9 @@ export async function createDodoCheckout(env, bid) {
     },
     body: JSON.stringify({
       product_cart: [{ product_id: env.DODO_PRODUCT_ID, quantity: 1, amount: bid.amountMinor }],
+      // Advertising placement is a simple B2C charge: no buyer tax id, and the
+      // hosted page's tax-id validation rejects Malaysian formats anyway.
+      feature_flags: { allow_tax_id: false },
       return_url: returnUrl,
       metadata: {
         rankoff_bid_id: bid.id,
