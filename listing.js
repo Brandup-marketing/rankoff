@@ -129,7 +129,8 @@
   }
 
   async function loadListing() {
-    const id = new URL(location.href).searchParams.get("id") || "";
+    // /product/<hostname> renders on the server and hands the id down on <body>.
+    const id = new URL(location.href).searchParams.get("id") || document.body.dataset.listingId || "";
     if (!id) return showError();
     let fallback = localListing(id);
     let productionBoard = false;

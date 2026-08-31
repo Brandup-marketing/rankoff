@@ -6,6 +6,8 @@
   const PAGE_SIZE = 50;
   const DEFAULT_CATEGORY = "all";
   const BOARD_API_ENDPOINT = "./api/v1/board";
+  // Keep in step with TERMS_VERSION in functions/_lib/config.js and the date printed on /legal.
+  const TERMS_VERSION = "2026-08-30";
   const categoryGroups = Object.freeze({
     Agents: ["Agents", "AIMedia"],
     Marketing: ["Marketing", "SEO", "Social", "Sales", "Attention", "People"],
@@ -699,9 +701,22 @@
   }
 
   function listingDetailsHref(listing) {
+    // Permanent, shareable address for a live listing; the id form still redirects here.
+    const hostname = productHostname(listing);
+    if (hostname) return new URL(`./product/${hostname}`, window.location.href).toString();
     const detail = new URL("./listing.html", window.location.href);
     detail.searchParams.set("id", listing.id);
     return detail.toString();
+  }
+
+  function productHostname(listing) {
+    if (listing?.isDemo) return "";
+    try {
+      const hostname = new URL(listing.url).hostname.toLowerCase();
+      return /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+$/.test(hostname) ? hostname : "";
+    } catch {
+      return "";
+    }
   }
 
   function listingAgeLabel(listing) {
@@ -1543,6 +1558,8 @@
         amount_minor: amount * 100,
         currency: remoteCurrency,
         snapshot_id: remoteSnapshotId,
+        agreed_terms: elements.bidAgree?.checked === true,
+        terms_version: TERMS_VERSION,
       }),
     });
     const payload = await response.json().catch(() => ({}));

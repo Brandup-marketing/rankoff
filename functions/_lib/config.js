@@ -17,6 +17,9 @@ export const MARKET_GROUPS = Object.freeze({
 export const VISIBLE_CATEGORIES = Object.freeze(Object.keys(MARKET_GROUPS));
 export const CATEGORIES = Object.freeze([...new Set(Object.values(MARKET_GROUPS).flat())]);
 
+// Matches the "Last updated" date printed on /legal. Bump both together, never one alone.
+export const TERMS_VERSION = "2026-08-30";
+
 export function marketCategory(value) {
   const category = String(value || "").toLowerCase();
   for (const [market, members] of Object.entries(MARKET_GROUPS)) {
