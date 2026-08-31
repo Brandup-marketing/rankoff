@@ -11,6 +11,10 @@
   const SOCIAL_PLATFORMS = ["instagram", "tiktok", "facebook", "x"];
   // Which markets actually hold a listing, learned from the unfiltered board.
   let marketsWithListings = new Set();
+  // The board the merchant is actually joining, which is their chosen market and
+  // not whatever the visitor happens to be browsing. Rank and price both come
+  // from here, so a market with nobody in it costs the floor and leads at #1.
+  let chosenMarket = null;
   const categoryGroups = Object.freeze({ Creators: ["Creators", "Attention", "People", "AIMedia"], Property: ["Property", "RealEstate", "Travel"], Interior: ["Interior"], Beauty: ["Beauty"], Health: ["Health"], Sports: ["Sports"], Food: ["Food"], Marketing: ["Marketing", "SEO", "Social", "Sales", "Agencies"], Creative: ["Creative", "Design", "Writing", "Audio", "News"], Professional: ["Professional", "Business", "Careers", "Productivity"], Education: ["Education", "Training", "Academy"], Finance: ["Finance", "Insurance", "Banking", "Crypto"], Electronics: ["Electronics", "Repair"], Retail: ["Retail", "Ecommerce", "Hardware"], Home: ["Home"], Automotive: ["Automotive", "Auto"], Other: ["Other", "Agents", "Developer", "Security", "Crypto", "Games", "Domains", "Discovery"] });
   const categories = Object.freeze(Object.keys(categoryGroups));
   const categoryAliases = Object.freeze(Object.entries(categoryGroups).reduce((aliases, [market, members]) => {
@@ -166,6 +170,7 @@
     categoryRail: document.querySelector("[data-category-rail]"),
     categoryScrollButtons: Array.from(document.querySelectorAll("[data-category-scroll]")),
     categorySelect: document.querySelector("[data-category-select]"),
+    dialogTarget: document.querySelector("[data-dialog-target]"),
     windowButtons: Array.from(document.querySelectorAll("[data-board-window]")),
     themeToggle: document.querySelector("[data-theme-toggle]"),
     languageToggle: document.querySelector("[data-language-toggle]"),
@@ -681,6 +686,30 @@
     return error?.message || (chinese ? "此网址无法上榜，未产生任何费用。" : "This website could not be listed. No payment was made.");
   }
 
+  const SOCIAL_HOSTS = {
+    "instagram.com": { key: "instagram", label: "Instagram", reject: ["p", "reel", "reels", "stories", "tv", "explore"] },
+    "tiktok.com": { key: "tiktok", label: "TikTok", reject: ["video", "tag", "music", "discover", "live"] },
+    "facebook.com": { key: "facebook", label: "Facebook Page", reject: ["profile.php", "groups", "posts", "reel", "reels", "stories", "watch", "photo", "events"] },
+    "fb.com": { key: "facebook", label: "Facebook Page", reject: ["profile.php", "groups", "posts", "reel", "reels", "stories", "watch", "photo", "events"] },
+    "x.com": { key: "x", label: "X", reject: ["status", "i", "search"] },
+    "twitter.com": { key: "x", label: "X", reject: ["status", "i", "search"] },
+  };
+
+  // Mirrors functions/_lib/platform.js so the merchant hears about a post or a
+  // reel while typing, not after they have pressed the button that costs money.
+  function socialTarget(url) {
+    const host = url.hostname.toLowerCase().replace(/^(?:www|m|mobile|web)\./, "");
+    const platform = SOCIAL_HOSTS[host];
+    if (!platform) return null;
+    const segments = url.pathname.split("/").filter(Boolean);
+    const handle = decodeURIComponent(segments[0] || "").replace(/^@/, "").toLowerCase();
+    const usable = handle
+      && segments.length === 1
+      && !platform.reject.includes(handle)
+      && /^[a-z0-9](?:[a-z0-9._-]{0,58}[a-z0-9])?$/.test(handle);
+    return { ...platform, handle: usable ? handle : "" };
+  }
+
   function parseProductUrl(value) {
     const raw = String(value || "").trim();
     if (!raw) throw new TypeError("A product URL is required.");
@@ -936,11 +965,38 @@
     return Math.max(boardMinimum(), gap);
   }
 
+  async function loadChosenMarket(category) {
+    chosenMarket = null;
+    if (!categories.includes(category) || !/^https?:$/.test(window.location.protocol)) return;
+    const endpoint = new URL(BOARD_API_ENDPOINT, window.location.href);
+    endpoint.searchParams.set("board", "global");
+    endpoint.searchParams.set("category", category);
+    endpoint.searchParams.set("period", state.activeWindow);
+    endpoint.searchParams.set("limit", String(PAGE_SIZE));
+    try {
+      const response = await fetch(endpoint, { headers: { Accept: "application/json" }, cache: "no-store" });
+      if (!response.ok) return;
+      const payload = await response.json();
+      if (payload?.mode !== "production" || !Array.isArray(payload.rankings)) return;
+      chosenMarket = {
+        category,
+        totals: payload.rankings.map((entry) => Math.ceil(Number(entry.bid?.amount_minor || 0) / 100)),
+        nextBid: dollarsFromMinor(payload.next_bid_minor, null),
+      };
+    } catch {
+      /* Falling back to the visible board is still a truthful projection. */
+    }
+    render();
+  }
+
   function projectedRank(amount) {
     const ranked = rankedListings();
     if (activeBid?.type === "new") {
       const existing = existingListingForPending();
       const total = existing ? getBid(existing) + amount : amount;
+      if (chosenMarket && chosenMarket.category === pendingChallenge?.category && !existing) {
+        return chosenMarket.totals.filter((value) => value > total).length + 1;
+      }
       return ranked.filter((listing) => listing.id !== existing?.id && getBid(listing) > total).length + 1;
     }
 
@@ -1151,11 +1207,12 @@
       }
       return;
     }
+    // The market is the merchant's own answer, never inherited from whoever leads
+    // the board: a hardware shop pre-filled with the leader's Marketing can reach
+    // checkout without anyone noticing it was filed in the wrong trade.
     const leaderCategory = canonicalCategory(leader.category) || "Other";
-    if (elements.categorySelect && categories.includes(leaderCategory)) {
-      elements.categorySelect.value = leaderCategory;
-    }
-    const nextPrice = boardSource === "local" || !remoteNextBid ? getBid(leader) + 1 : remoteNextBid;
+    const marketPrice = chosenMarket && chosenMarket.category === elements.categorySelect?.value ? chosenMarket.nextBid : null;
+    const nextPrice = marketPrice || (boardSource === "local" || !remoteNextBid ? getBid(leader) + 1 : remoteNextBid);
 
     if (elements.heroPrice) elements.heroPrice.textContent = money(nextPrice);
     if (elements.heroContext) {
@@ -1410,6 +1467,19 @@
     if (elements.dialogRank) elements.dialogRank.textContent = `#${rank}`;
     if (elements.dialogPrice) elements.dialogPrice.textContent = money(amount);
     if (elements.dialogContext) elements.dialogContext.textContent = `${checkoutBoardLabel()} · ${categoryName(category)}`;
+    if (elements.dialogTarget) {
+      // The merchant confirms which account they pasted before any money moves.
+      const listing = state.listings.find((item) => item.id === activeBid?.listingId);
+      const url = activeBid?.type === "new" ? pendingChallenge?.url : (() => { try { return new URL(listing?.url || ""); } catch { return null; } })();
+      const social = url ? socialTarget(url) : null;
+      const name = social?.handle
+        ? `@${social.handle}`
+        : (url ? `${url.hostname.replace(/^(?:www|m)\./, "")}${social ? url.pathname.replace(/\/+$/, "") : ""}` : listing?.name || "");
+      elements.dialogTarget.textContent = social
+        ? `${name} · ${social.label} · ${categoryName(category)}`
+        : `${name} · ${categoryName(category)}`;
+      elements.dialogTarget.hidden = !name;
+    }
     if (elements.dialogExplanation) {
       // This runs on every dialog open and every amount change, so it must
       // re-append the advertising disclaimer. Without it the static
@@ -1877,6 +1947,10 @@
     card.click();
   });
 
+  elements.categorySelect?.addEventListener("change", (event) => {
+    void loadChosenMarket(String(event.target.value || ""));
+  });
+
   elements.inlineChallenge?.addEventListener("submit", (event) => {
     event.preventDefault();
     if (!elements.inlineChallenge.reportValidity()) return;
@@ -1890,25 +1964,30 @@
       return;
     }
 
-    const outranked = rankedListings()[0];
-    const requiredCategory = outranked && canonicalCategory(outranked.category)
-      ? canonicalCategory(outranked.category)
-      : state.category !== DEFAULT_CATEGORY && categories.includes(state.category) ? state.category : "";
-    const category = String(formData.get("productCategory") || "");
-    if (!requiredCategory || category !== requiredCategory) {
-      if (elements.categorySelect && requiredCategory) elements.categorySelect.value = requiredCategory;
+    const target = socialTarget(parsedUrl);
+    if (target && !target.handle) {
       showToast(
         state.language === "zh"
-          ? `挑战分类必须与${outranked?.name || "目标条目"}相同。`
-          : `Choose ${requiredCategory ? categoryName(requiredCategory) : "the target listing’s category"} to match the listing you’ll outrank.`,
+          ? `请贴上 ${target.label} 的主页链接，不是某一则贴文、Reel 或限时动态。`
+          : `Use the ${target.label} profile address, not a post, reel or story.`,
         "error",
       );
       return;
     }
+
+    // A merchant's trade is their own: a hardware shop is Retail whatever the
+    // board's current leader happens to sell. Each market keeps its own
+    // leaderboard, so listing outside the leader's trade is the normal case.
+    const category = String(formData.get("productCategory") || "");
+    if (!categories.includes(category)) {
+      showToast(state.language === "zh" ? "请先选择你的行业类别。" : "Choose the market this business belongs to.", "error");
+      return;
+    }
     pendingChallenge = {
+      // "Instagram will take #1" names the platform, not the business standing on it.
+      name: target?.handle ? `@${target.handle}` : nameFromUrl(parsedUrl.toString()),
       url: parsedUrl,
-      name: nameFromUrl(parsedUrl.toString()),
-      category: requiredCategory,
+      category,
     };
 
     // Any amount at or above the board floor is valid — it simply lands at a
