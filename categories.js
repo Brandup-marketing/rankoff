@@ -16,8 +16,11 @@
     { id: "Marketing", name: "Marketing & Advertising", zh: "营销与广告", icon: "↗", members: ["Marketing", "SEO", "Social", "Sales", "Agencies"] },
     { id: "Creative", name: "Creative & Production", zh: "创意与制作", icon: "✎", members: ["Creative", "Design", "Writing", "Audio", "News"] },
     { id: "Professional", name: "Professional Services", zh: "专业服务", icon: "◆", members: ["Professional", "Business", "Careers", "Productivity", "Education"] },
+    { id: "Finance", name: "Finance & Insurance", zh: "金融与保险", icon: "◧", members: ["Finance", "Insurance", "Banking", "Crypto"] },
+    { id: "Electronics", name: "Electronics & Repair", zh: "电子与维修", icon: "▣", members: ["Electronics", "Repair"] },
     { id: "Retail", name: "Retail & Ecommerce", zh: "零售与电商", icon: "◇", members: ["Retail", "Ecommerce", "Hardware"] },
-    { id: "Home", name: "Home & Auto Services", zh: "家居与汽车服务", icon: "⚙", members: ["Home"] },
+    { id: "Home", name: "Home Services", zh: "家居服务", icon: "⚙", members: ["Home"] },
+    { id: "Automotive", name: "Automotive", zh: "汽车", icon: "◎", members: ["Automotive", "Auto"] },
     { id: "Other", name: "Other", zh: "其他", icon: "•••", members: ["Other", "Agents", "Developer", "Security", "Crypto", "Games", "Domains", "Discovery"] },
   ];
   const categoryAliases = Object.freeze(categoryConfig.reduce((aliases, config) => {

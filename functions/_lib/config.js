@@ -9,8 +9,11 @@ export const MARKET_GROUPS = Object.freeze({
   Marketing: Object.freeze(["Marketing", "SEO", "Social", "Sales", "Agencies"]),
   Creative: Object.freeze(["Creative", "Design", "Writing", "Audio", "News"]),
   Professional: Object.freeze(["Professional", "Business", "Careers", "Productivity", "Education"]),
+  Finance: Object.freeze(["Finance", "Insurance", "Banking", "Crypto"]),
+  Electronics: Object.freeze(["Electronics", "Repair"]),
   Retail: Object.freeze(["Retail", "Ecommerce", "Hardware"]),
   Home: Object.freeze(["Home"]),
+  Automotive: Object.freeze(["Automotive", "Auto"]),
   Other: Object.freeze(["Other", "Agents", "Developer", "Security", "Crypto", "Games", "Domains", "Discovery"]),
 });
 
