@@ -301,9 +301,10 @@
       currency = boardCurrencyFormat(String(allPayload.board?.currency || "USD").toUpperCase());
       const allRows = normalizeRows(allPayload, "all");
       const todayRows = normalizeRows(todayPayload, "today");
-      if (allRows.length) elements.allRows = mergeRows(allRows, todayRows);
-      if (todayRows.length) elements.todayRows = todayRows;
-      elements.mode = allPayload.mode === "production" ? "production" : "api";
+      const productionBoard = allPayload.mode === "production";
+      if (productionBoard || allRows.length) elements.allRows = mergeRows(allRows, todayRows);
+      if (productionBoard || todayRows.length) elements.todayRows = todayRows;
+      elements.mode = productionBoard ? "production" : "api";
       render();
     } catch { /* keep the local preview */ }
   }

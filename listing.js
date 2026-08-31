@@ -132,6 +132,7 @@
     const id = new URL(location.href).searchParams.get("id") || "";
     if (!id) return showError();
     let fallback = localListing(id);
+    let productionBoard = false;
 
     if (/^https?:$/.test(location.protocol)) {
       try {
@@ -140,6 +141,7 @@
         const [allResponse, todayResponse] = await Promise.all([fetch(allUrl, { cache: "no-store" }), fetch(todayUrl, { cache: "no-store" })]);
         if (allResponse.ok && todayResponse.ok) {
           const [allPayload, todayPayload] = await Promise.all([allResponse.json(), todayResponse.json()]);
+          productionBoard = allPayload.mode === "production";
           money = boardCurrencyFormat(String(allPayload.board?.currency || "USD").toUpperCase());
           const allEntry = allPayload.rankings?.find((entry) => String(entry.listing?.id) === id);
           const todayEntry = todayPayload.rankings?.find((entry) => String(entry.listing?.id) === id);
@@ -158,7 +160,7 @@
       } catch { /* The local preview below remains useful offline. */ }
     }
 
-    if (!model && fallback) model = { ...fallback, mode: "preview", nextBid: Math.max(...previewListings.map((item) => item.bid), fallback.bid) + 1 };
+    if (!model && fallback && !productionBoard) model = { ...fallback, mode: "preview", nextBid: Math.max(...previewListings.map((item) => item.bid), fallback.bid) + 1 };
     if (!model) return showError();
     renderModel();
     elements.loading.hidden = true;
