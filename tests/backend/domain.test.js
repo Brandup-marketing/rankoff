@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
+import { CATEGORIES, VISIBLE_CATEGORIES } from "../../functions/_lib/config.js";
 import { minimumWinningBid, paymentTransition, rankEligibleBids } from "../../functions/_lib/domain.js";
 import { normalizeCategory, normalizeDestinationUrl, parsePositiveMinorUnits } from "../../functions/_lib/validation.js";
 
@@ -38,7 +39,18 @@ test("URL and money validation reject unsafe inputs", () => {
 });
 
 test("legacy category tags normalize to visible launch markets", () => {
-  assert.equal(normalizeCategory("Hardware"), "Ecommerce");
   assert.equal(normalizeCategory("SEO"), "Marketing");
-  assert.equal(normalizeCategory("AIMedia"), "Agents");
+  assert.equal(normalizeCategory("Hardware"), "Retail");
+  assert.equal(normalizeCategory("Design"), "Creative");
+  assert.equal(normalizeCategory("RealEstate"), "Property");
+  assert.equal(normalizeCategory("Education"), "Professional");
+  // The tech-shaped markets are gone from the board, but records tagged with them stay valid.
+  assert.equal(normalizeCategory("AIMedia"), "Creators");
+  assert.equal(normalizeCategory("Crypto"), "Other");
+  assert.equal(normalizeCategory("Developer"), "Other");
+
+  // No stored tag may resolve to a market the board no longer shows.
+  for (const tag of CATEGORIES) {
+    assert.ok(VISIBLE_CATEGORIES.includes(normalizeCategory(tag)), `${tag} resolves outside the board`);
+  }
 });

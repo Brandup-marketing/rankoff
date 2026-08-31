@@ -6,20 +6,19 @@
   const boardCurrencyFormat = (code) => new Intl.NumberFormat(code === "MYR" ? "en-MY" : "en-US", { style: "currency", currency: code || "USD", maximumFractionDigits: 0 });
   let currency = boardCurrencyFormat("USD");
   const categoryConfig = [
-    { id: "Agents", name: "AI & Automation", zh: "AI 与自动化", icon: "✦", members: ["Agents", "AIMedia"] },
-    { id: "Marketing", name: "Marketing, SEO & Social", zh: "营销、SEO 与社交媒体", icon: "◒", members: ["Marketing", "SEO", "Social", "Sales", "Attention", "People"] },
-    { id: "Developer", name: "Developer Tools & Security", zh: "开发工具与安全", icon: "⌘", members: ["Developer", "Security"] },
-    { id: "Business", name: "Business & Professional Services", zh: "商业与专业服务", icon: "◌", members: ["Business", "Agencies", "Careers"] },
-    { id: "Crypto", name: "Finance, Crypto & Investing", zh: "金融、加密与投资", icon: "₿", members: ["Crypto"] },
-    { id: "Ecommerce", name: "Ecommerce, Retail & Hardware", zh: "电商、零售与硬件", icon: "□", members: ["Ecommerce", "Hardware"] },
-    { id: "Design", name: "Design, Content & Media", zh: "设计、内容与媒体", icon: "◇", members: ["Design", "Writing", "Audio", "News"] },
-    { id: "Productivity", name: "Productivity & Education", zh: "效率工具与教育", icon: "＋", members: ["Productivity", "Education"] },
-    { id: "Health", name: "Health & Beauty", zh: "健康与美容", icon: "♡", members: ["Health"] },
+    { id: "Creators", name: "Creators & Talent", zh: "创作者与艺人", icon: "✦", members: ["Creators", "Attention", "People", "AIMedia"] },
+    { id: "Property", name: "Property & Agents", zh: "房产与经纪", icon: "⌂", members: ["Property", "RealEstate", "Travel"] },
+    { id: "Interior", name: "Interior & Renovation", zh: "室内设计与装修", icon: "▤", members: ["Interior"] },
+    { id: "Beauty", name: "Beauty & Aesthetics", zh: "美容与医美", icon: "✿", members: ["Beauty"] },
+    { id: "Health", name: "Health & Clinics", zh: "健康与诊所", icon: "✚", members: ["Health"] },
     { id: "Sports", name: "Sports & Fitness", zh: "运动与健身", icon: "◐", members: ["Sports"] },
-    { id: "Games", name: "Games & Entertainment", zh: "游戏与娱乐", icon: "⌁", members: ["Games"] },
-    { id: "Travel", name: "Travel, Local & Property", zh: "旅行、本地与房地产", icon: "⌖", members: ["Travel", "RealEstate"] },
-    { id: "Domains", name: "Web, Domains & Discovery", zh: "网站、域名与发现", icon: "◉", members: ["Domains", "Discovery"] },
-    { id: "Other", name: "Other", zh: "其他", icon: "•", members: ["Other"] },
+    { id: "Food", name: "Food & Beverage", zh: "餐饮", icon: "◍", members: ["Food"] },
+    { id: "Marketing", name: "Marketing & Advertising", zh: "营销与广告", icon: "↗", members: ["Marketing", "SEO", "Social", "Sales", "Agencies"] },
+    { id: "Creative", name: "Creative & Production", zh: "创意与制作", icon: "✎", members: ["Creative", "Design", "Writing", "Audio", "News"] },
+    { id: "Professional", name: "Professional Services", zh: "专业服务", icon: "◆", members: ["Professional", "Business", "Careers", "Productivity", "Education"] },
+    { id: "Retail", name: "Retail & Ecommerce", zh: "零售与电商", icon: "◇", members: ["Retail", "Ecommerce", "Hardware"] },
+    { id: "Home", name: "Home & Auto Services", zh: "家居与汽车服务", icon: "⚙", members: ["Home"] },
+    { id: "Other", name: "Other", zh: "其他", icon: "•••", members: ["Other", "Agents", "Developer", "Security", "Crypto", "Games", "Domains", "Discovery"] },
   ];
   const categoryAliases = Object.freeze(categoryConfig.reduce((aliases, config) => {
     aliases[config.id.toLowerCase()] = config.id;

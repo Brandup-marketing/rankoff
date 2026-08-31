@@ -2,14 +2,14 @@
   "use strict";
 
   const STORE_KEY = "rankoff-mvp-demo-v3";
-  const categoryGroups = Object.freeze({ Agents: ["Agents", "AIMedia"], Marketing: ["Marketing", "SEO", "Social", "Sales", "Attention", "People"], Developer: ["Developer", "Security"], Business: ["Business", "Agencies", "Careers"], Crypto: ["Crypto"], Ecommerce: ["Ecommerce", "Hardware"], Design: ["Design", "Writing", "Audio", "News"], Productivity: ["Productivity", "Education"], Health: ["Health"], Sports: ["Sports"], Games: ["Games"], Travel: ["Travel", "RealEstate"], Domains: ["Domains", "Discovery"], Other: ["Other"] });
+  const categoryGroups = Object.freeze({ Creators: ["Creators", "Attention", "People", "AIMedia"], Property: ["Property", "RealEstate", "Travel"], Interior: ["Interior"], Beauty: ["Beauty"], Health: ["Health"], Sports: ["Sports"], Food: ["Food"], Marketing: ["Marketing", "SEO", "Social", "Sales", "Agencies"], Creative: ["Creative", "Design", "Writing", "Audio", "News"], Professional: ["Professional", "Business", "Careers", "Productivity", "Education"], Retail: ["Retail", "Ecommerce", "Hardware"], Home: ["Home"], Other: ["Other", "Agents", "Developer", "Security", "Crypto", "Games", "Domains", "Discovery"] });
   const categoryAliases = Object.freeze(Object.entries(categoryGroups).reduce((aliases, [market, members]) => {
     aliases[market.toLowerCase()] = market;
     members.forEach((member) => { aliases[member.toLowerCase()] = market; });
     return aliases;
   }, {}));
-  const categoryLabels = { Agents: "AI & Automation", Marketing: "Marketing, SEO & Social", Developer: "Developer Tools & Security", Business: "Business & Professional Services", Crypto: "Finance, Crypto & Investing", Ecommerce: "Ecommerce, Retail & Hardware", Design: "Design, Content & Media", Productivity: "Productivity & Education", Health: "Health & Beauty", Sports: "Sports & Fitness", Games: "Games & Entertainment", Travel: "Travel, Local & Property", Domains: "Web, Domains & Discovery", Other: "Other" };
-  const categoryTranslations = { Agents: "AI 与自动化", Marketing: "营销、SEO 与社交媒体", Developer: "开发工具与安全", Business: "商业与专业服务", Crypto: "金融、加密与投资", Ecommerce: "电商、零售与硬件", Design: "设计、内容与媒体", Productivity: "效率工具与教育", Health: "健康与美容", Sports: "运动与健身", Games: "游戏与娱乐", Travel: "旅行、本地与房地产", Domains: "网站、域名与发现", Other: "其他" };
+  const categoryLabels = { Creators: "Creators & Talent", Property: "Property & Agents", Interior: "Interior & Renovation", Beauty: "Beauty & Aesthetics", Health: "Health & Clinics", Sports: "Sports & Fitness", Food: "Food & Beverage", Marketing: "Marketing & Advertising", Creative: "Creative & Production", Professional: "Professional Services", Retail: "Retail & Ecommerce", Home: "Home & Auto Services", Other: "Other" };
+  const categoryTranslations = { Creators: "创作者与艺人", Property: "房产与经纪", Interior: "室内设计与装修", Beauty: "美容与医美", Health: "健康与诊所", Sports: "运动与健身", Food: "餐饮", Marketing: "营销与广告", Creative: "创意与制作", Professional: "专业服务", Retail: "零售与电商", Home: "家居与汽车服务", Other: "其他" };
   const previewListings = [
     ["model-harbor", "Model Harbor", "A release desk for production AI models, approvals, and customer notices.", "https://modelharbor.example/", "Agents", 2480, 2840],
     ["trackline", "Trackline", "Campaign reporting for teams that need a clean answer to what moved.", "https://trackline.example/", "Marketing", 2160, 1910],
