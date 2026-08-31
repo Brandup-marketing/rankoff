@@ -112,3 +112,23 @@ test("a bare social handle is not mistaken for a website", () => {
   assert.equal(identityFor("https://brandupdesignmarketing.com/"), "brandupdesignmarketing.com");
   assert.equal(identityFor("https://shop.com.my/"), "shop.com.my");
 });
+
+test("every link-in-bio and channel platform keeps its accounts apart", () => {
+  // Linktree is what a Malaysian merchant without a website hands out.
+  assert.notEqual(identityFor("https://linktr.ee/kedaiA"), identityFor("https://linktr.ee/kedaiB"));
+  assert.equal(identityFor("https://linktr.ee/kedaiA"), "linktree:kedaia");
+
+  assert.equal(identityFor("https://www.youtube.com/@channelA"), "youtube:channela");
+  assert.equal(identityFor("https://www.youtube.com/channel/UCabc"), "youtube:channel-ucabc");
+  assert.equal(refusalFor("https://www.youtube.com/watch?v=1"), "profile_required");
+
+  // A person and a company sharing a name stay two listings.
+  assert.notEqual(identityFor("https://www.linkedin.com/in/brandup"), identityFor("https://www.linkedin.com/company/brandup"));
+  assert.equal(identityFor("https://www.xiaohongshu.com/user/profile/5f3abc"), "xiaohongshu:5f3abc");
+});
+
+test("a chat link is refused: it is not a page, and the number is not ours to publish", () => {
+  assert.equal(refusalFor("https://wa.me/60123456789"), "chat_link");
+  assert.equal(refusalFor("https://api.whatsapp.com/send?phone=60123456789"), "chat_link");
+  assert.equal(refusalFor("https://t.me/someone"), "chat_link");
+});

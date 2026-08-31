@@ -8,7 +8,7 @@
   const BOARD_API_ENDPOINT = "./api/v1/board";
   // Keep in step with TERMS_VERSION in functions/_lib/config.js and the date printed on /legal.
   const TERMS_VERSION = "2026-08-30";
-  const SOCIAL_PLATFORMS = ["instagram", "tiktok", "facebook", "x"];
+  const SOCIAL_PLATFORMS = ["instagram", "tiktok", "facebook", "x", "linktree", "youtube", "linkedin", "xiaohongshu"];
   // Which markets actually hold a listing, learned from the unfiltered board.
   let marketsWithListings = new Set();
   // The board the merchant is actually joining, which is their chosen market and
@@ -686,27 +686,36 @@
     return error?.message || (chinese ? "此网址无法上榜，未产生任何费用。" : "This website could not be listed. No payment was made.");
   }
 
+  const CHAT_HOSTS = ["wa.me", "api.whatsapp.com", "chat.whatsapp.com", "whatsapp.com", "t.me", "telegram.me", "telegram.dog"];
+  const one = (s) => (s.length === 1 ? s[0] : "");
+  const prefixed = (allowed) => (s) => (s.length === 2 && allowed.includes(s[0]) ? `${s[0]}-${s[1]}` : "");
+
+  // Mirrors functions/_lib/platform.js so a post, a chat link or a video is
+  // refused while the merchant is typing, not after the button that costs money.
   const SOCIAL_HOSTS = {
-    "instagram.com": { key: "instagram", label: "Instagram", reject: ["p", "reel", "reels", "stories", "tv", "explore"] },
-    "tiktok.com": { key: "tiktok", label: "TikTok", reject: ["video", "tag", "music", "discover", "live"] },
-    "facebook.com": { key: "facebook", label: "Facebook Page", reject: ["profile.php", "groups", "posts", "reel", "reels", "stories", "watch", "photo", "events"] },
-    "fb.com": { key: "facebook", label: "Facebook Page", reject: ["profile.php", "groups", "posts", "reel", "reels", "stories", "watch", "photo", "events"] },
-    "x.com": { key: "x", label: "X", reject: ["status", "i", "search"] },
-    "twitter.com": { key: "x", label: "X", reject: ["status", "i", "search"] },
+    "instagram.com": { label: "Instagram", extract: one, reject: ["p", "reel", "reels", "stories", "tv", "explore"] },
+    "instagr.am": { label: "Instagram", extract: one, reject: ["p", "reel", "reels", "stories", "tv", "explore"] },
+    "tiktok.com": { label: "TikTok", extract: one, reject: ["video", "tag", "music", "discover", "live"] },
+    "facebook.com": { label: "Facebook Page", extract: one, reject: ["profile.php", "groups", "posts", "reel", "reels", "stories", "watch", "photo", "events"] },
+    "fb.com": { label: "Facebook Page", extract: one, reject: ["profile.php", "groups", "posts", "reel", "reels", "stories", "watch", "photo", "events"] },
+    "x.com": { label: "X", extract: one, reject: ["status", "i", "search"] },
+    "twitter.com": { label: "X", extract: one, reject: ["status", "i", "search"] },
+    "linktr.ee": { label: "Linktree", extract: one, reject: ["s", "admin", "login", "register", "discover"] },
+    "youtube.com": { label: "YouTube", extract: (s) => (s.length === 1 ? s[0] : prefixed(["c", "user", "channel"])(s)), reject: ["watch", "shorts", "playlist", "results", "feed", "live"] },
+    "linkedin.com": { label: "LinkedIn", extract: prefixed(["in", "company", "school", "showcase"]), reject: ["feed", "posts", "pulse", "jobs"] },
+    "xiaohongshu.com": { label: "小红书", extract: (s) => (s.length === 3 && s[0] === "user" && s[1] === "profile" ? s[2] : ""), reject: ["explore", "discovery"] },
   };
 
-  // Mirrors functions/_lib/platform.js so the merchant hears about a post or a
-  // reel while typing, not after they have pressed the button that costs money.
   function socialTarget(url) {
     const host = url.hostname.toLowerCase().replace(/^(?:www|m|mobile|web)\./, "");
+    if (CHAT_HOSTS.includes(host)) return { chat: true, label: "WhatsApp / Telegram", handle: "" };
     const platform = SOCIAL_HOSTS[host];
     if (!platform) return null;
-    const segments = url.pathname.split("/").filter(Boolean);
-    const handle = decodeURIComponent(segments[0] || "").replace(/^@/, "").toLowerCase();
-    const usable = handle
-      && segments.length === 1
-      && !platform.reject.includes(handle)
-      && /^[a-z0-9](?:[a-z0-9._-]{0,58}[a-z0-9])?$/.test(handle);
+    const segments = url.pathname.split("/").filter(Boolean)
+      .map((segment) => decodeURIComponent(segment).replace(/^@/, "").toLowerCase());
+    const first = segments[0] || "";
+    const handle = platform.reject.includes(first) ? "" : platform.extract(segments);
+    const usable = handle && /^[a-z0-9](?:[a-z0-9._-]{0,58}[a-z0-9])?$/.test(handle);
     return { ...platform, handle: usable ? handle : "" };
   }
 
@@ -1965,11 +1974,20 @@
     }
 
     const target = socialTarget(parsedUrl);
+    if (target?.chat) {
+      showToast(
+        state.language === "zh"
+          ? "聊天链接不是公开主页，而且电话号码不适合公开发布。请改用网站或公开主页。"
+          : "A chat link is not a public page. Use the website or public profile instead.",
+        "error",
+      );
+      return;
+    }
     if (target && !target.handle) {
       showToast(
         state.language === "zh"
-          ? `请贴上 ${target.label} 的主页链接，不是某一则贴文、Reel 或限时动态。`
-          : `Use the ${target.label} profile address, not a post, reel or story.`,
+          ? `请贴上 ${target.label} 的主页链接，不是某一则贴文、Reel 或影片。`
+          : `Use the ${target.label} profile address, not a post, reel or video.`,
         "error",
       );
       return;

@@ -3,33 +3,52 @@
 // the host: without this, every instagram.com listing is one listing, and the
 // second account's payment lands on the first account's rank.
 
+const one = (segments) => (segments.length === 1 ? segments[0] : "");
+// A profile that lives two levels down still has one address: linkedin.com/in/name.
+const prefixed = (allowed) => (segments) =>
+  (segments.length === 2 && allowed.includes(segments[0]) ? `${segments[0]}-${segments[1]}` : "");
+
 const PLATFORMS = new Map([
   ["instagram", {
-    label: "Instagram",
-    action: "viewInstagram",
-    hosts: ["instagram.com", "instagr.am"],
-    reject: ["p", "reel", "reels", "stories", "tv", "explore", "accounts", "direct"],
+    label: "Instagram", action: "viewInstagram", hosts: ["instagram.com", "instagr.am"],
+    extract: one, reject: ["p", "reel", "reels", "stories", "tv", "explore", "accounts", "direct"],
   }],
   ["tiktok", {
-    label: "TikTok",
-    action: "viewTiktok",
-    hosts: ["tiktok.com", "vm.tiktok.com"],
-    reject: ["video", "tag", "music", "discover", "search", "live", "foryou"],
+    label: "TikTok", action: "viewTiktok", hosts: ["tiktok.com", "vm.tiktok.com"],
+    extract: one, reject: ["video", "tag", "music", "discover", "search", "live", "foryou"],
   }],
   ["facebook", {
-    label: "Facebook Page",
-    action: "viewFacebook",
-    hosts: ["facebook.com", "fb.com", "fb.me"],
-    reject: ["profile.php", "groups", "posts", "reel", "reels", "stories", "watch", "story.php", "photo", "photo.php", "events", "marketplace", "people", "pages"],
+    label: "Facebook Page", action: "viewFacebook", hosts: ["facebook.com", "fb.com", "fb.me"],
+    extract: one, reject: ["profile.php", "groups", "posts", "reel", "reels", "stories", "watch", "story.php", "photo", "photo.php", "events", "marketplace", "people", "pages"],
   }],
-  // Kept readable for listings stored before Malaysian social profiles were supported.
   ["x", {
-    label: "X",
-    action: "viewProfile",
-    hosts: ["x.com", "twitter.com"],
-    reject: ["status", "i", "search", "home", "explore", "messages"],
+    label: "X", action: "viewProfile", hosts: ["x.com", "twitter.com"],
+    extract: one, reject: ["status", "i", "search", "home", "explore", "messages"],
+  }],
+  // The link-in-bio page a merchant without a website hands out.
+  ["linktree", {
+    label: "Linktree", action: "viewProfile", hosts: ["linktr.ee"],
+    extract: one, reject: ["s", "admin", "login", "register", "discover"],
+  }],
+  ["youtube", {
+    label: "YouTube", action: "viewProfile", hosts: ["youtube.com", "youtu.be"],
+    extract: (segments) => (segments.length === 1 ? segments[0] : prefixed(["c", "user", "channel"])(segments)),
+    reject: ["watch", "shorts", "playlist", "results", "feed", "live", "embed"],
+  }],
+  ["linkedin", {
+    label: "LinkedIn", action: "viewProfile", hosts: ["linkedin.com"],
+    extract: prefixed(["in", "company", "school", "showcase"]), reject: ["feed", "posts", "pulse", "jobs"],
+  }],
+  ["xiaohongshu", {
+    label: "小红书", action: "viewProfile", hosts: ["xiaohongshu.com", "xhslink.com"],
+    extract: (segments) => (segments.length === 3 && segments[0] === "user" && segments[1] === "profile" ? segments[2] : ""),
+    reject: ["explore", "discovery", "search_result"],
   }],
 ]);
+
+// A chat link is not a public page, and a phone number is not the merchant's to
+// publish when anyone may sponsor anyone.
+export const CHAT_HOSTS = new Set(["wa.me", "api.whatsapp.com", "chat.whatsapp.com", "whatsapp.com", "t.me", "telegram.me", "telegram.dog"]);
 
 const HOST_INDEX = new Map();
 for (const [key, platform] of PLATFORMS) {
@@ -55,21 +74,18 @@ export function accountFrom(url) {
   const key = platformKeyFor(url.hostname);
   if (!key) return null;
   const platform = PLATFORMS.get(key);
-  const segments = url.pathname.split("/").filter(Boolean);
-  const first = decodeURIComponent(segments[0] || "").replace(/^@/, "").toLowerCase();
+  const segments = url.pathname.split("/").filter(Boolean)
+    .map((segment) => decodeURIComponent(segment).replace(/^@/, "").toLowerCase());
 
-  const usable = Boolean(first)
-    && segments.length === 1
-    && !platform.reject.includes(first)
-    && !platform.reject.includes(`${first}.php`)
-    && /^[a-z0-9](?:[a-z0-9._-]{0,58}[a-z0-9])?$/.test(first);
+  const first = segments[0] || "";
+  const handle = platform.reject.includes(first) || platform.reject.includes(`${first}.php`)
+    ? ""
+    : platform.extract(segments);
 
-  return { key, label: platform.label, action: platform.action, handle: usable ? first : "" };
+  const usable = Boolean(handle) && /^[a-z0-9](?:[a-z0-9._-]{0,58}[a-z0-9])?$/.test(handle);
+  return { key, label: platform.label, action: platform.action, handle: usable ? handle : "" };
 }
 
-// Storage key. Social accounts carry their platform so two handles never merge;
-// websites keep the bare hostname they were already stored under, so payment
-// attribution for listings created before this change does not move.
 export function listingIdentity(hostname, account) {
   if (account?.handle) return `${account.key}:${account.handle}`;
   return normalizeHost(hostname);

@@ -1,5 +1,5 @@
 import { ApiError, CATEGORIES, VISIBLE_CATEGORIES, marketCategory } from "./config.js";
-import { accountFrom, listingIdentity } from "./platform.js";
+import { CHAT_HOSTS, accountFrom, listingIdentity, normalizeHost } from "./platform.js";
 import { isKnownTld } from "./tlds.js";
 
 const BLOCKED_HOST_SUFFIXES = [
@@ -65,6 +65,13 @@ export function normalizeDestinationUrl(value) {
   }
 
   url.hash = "";
+  if (CHAT_HOSTS.has(normalizeHost(hostname))) {
+    throw new ApiError(
+      422,
+      "chat_link",
+      "A chat link is not a public page, and a phone number is not yours to publish. Use the website or public profile instead.",
+    );
+  }
   const account = accountFrom(url);
   // "mumeiyan.arkadia" is an Instagram handle, not a domain — without this it
   // would quietly become a listing pointing at a website that does not exist.
