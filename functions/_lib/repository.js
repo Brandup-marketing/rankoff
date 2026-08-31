@@ -445,9 +445,12 @@ export async function recordBoardView(db, event) {
 export async function loadBidForWebhook(db, bidId) {
   return db
     .prepare(
-      `SELECT id, board_id, listing_id, amount_minor, currency, status,
-              provider_checkout_id, provider_payment_id, settled_at
-       FROM bids WHERE id = ?1`,
+      `SELECT b.id, b.board_id, b.listing_id, b.amount_minor, b.currency, b.status,
+              b.provider_checkout_id, b.provider_payment_id, b.settled_at,
+              l.hostname
+       FROM bids b
+       INNER JOIN listings l ON l.id = b.listing_id
+       WHERE b.id = ?1`,
     )
     .bind(bidId)
     .first();

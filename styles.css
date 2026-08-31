@@ -605,3 +605,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   font-weight: 750;
   color: var(--ink);
 }
+
+/* Written into the page for readers and crawlers that never run the script; the
+   board replaces it the moment the client renders. */
+.board-seo-list { display: grid; gap: 0.5rem; margin: 0; padding: 0; list-style: none; }
+.board-seo-list li { display: flex; flex-wrap: wrap; gap: 0.25rem 0.5rem; align-items: baseline; padding: 0.55rem 0; border-bottom: 1px solid var(--line); }
+.board-seo-rank { font-weight: 850; }
+.board-seo-list a { font-weight: 750; text-decoration: none; }
+.board-seo-note { color: var(--muted); font-size: 0.74rem; }

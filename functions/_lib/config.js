@@ -19,6 +19,33 @@ export const MARKET_GROUPS = Object.freeze({
 });
 
 export const VISIBLE_CATEGORIES = Object.freeze(Object.keys(MARKET_GROUPS));
+
+// The names a reader sees. Kept beside the groups so a market cannot be added
+// to the board without one.
+export const MARKET_LABELS = Object.freeze({
+  Creators: "Creators & Talent",
+  Property: "Property & Agents",
+  Interior: "Interior & Renovation",
+  Beauty: "Beauty & Aesthetics",
+  Health: "Health & Clinics",
+  Sports: "Sports & Fitness",
+  Food: "Food & Beverage",
+  Marketing: "Marketing & Advertising",
+  Creative: "Creative & Production",
+  Professional: "Professional Services",
+  Education: "Education & Training",
+  Finance: "Finance & Insurance",
+  Electronics: "Electronics & Repair",
+  Retail: "Retail & Ecommerce",
+  Home: "Home Services",
+  Automotive: "Automotive",
+  Other: "Other",
+});
+
+export function marketLabel(value) {
+  return MARKET_LABELS[marketCategory(value)] || MARKET_LABELS.Other;
+}
+
 export const CATEGORIES = Object.freeze([...new Set(Object.values(MARKET_GROUPS).flat())]);
 
 // Matches the "Last updated" date printed on /legal. Bump both together, never one alone.

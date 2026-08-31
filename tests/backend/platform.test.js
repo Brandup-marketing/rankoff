@@ -132,3 +132,13 @@ test("a chat link is refused: it is not a page, and the number is not ours to pu
   assert.equal(refusalFor("https://api.whatsapp.com/send?phone=60123456789"), "chat_link");
   assert.equal(refusalFor("https://t.me/someone"), "chat_link");
 });
+
+test("every market on the board has a name a reader can see", async () => {
+  const { MARKET_LABELS, marketLabel } = await import("../../functions/_lib/config.js");
+  for (const market of VISIBLE_CATEGORIES) {
+    assert.ok(MARKET_LABELS[market], `${market} has no label`);
+  }
+  // A stored tag resolves to its market's name, never to the raw tag.
+  assert.equal(marketLabel("Travel"), "Property & Agents");
+  assert.equal(marketLabel("Insurance"), "Finance & Insurance");
+});

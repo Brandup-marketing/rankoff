@@ -2,6 +2,8 @@ import { ApiError, isProduction, requireDatabase } from "../../_lib/config.js";
 import { paymentTransition } from "../../_lib/domain.js";
 import { getRequestId, json, MAX_WEBHOOK_BYTES, methodNotAllowed, readText } from "../../_lib/http.js";
 import { applyProviderEvent, loadBidForWebhook, recordSnapshotEntries } from "../../_lib/repository.js";
+import { pingIndexNow } from "../../_lib/indexnow.js";
+import { profilePath } from "../../_lib/platform.js";
 import { verifyStandardWebhook } from "../../_lib/security.js";
 
 export async function onRequestPost(context) {
@@ -72,6 +74,15 @@ export async function onRequestPost(context) {
     } catch {
       /* The board still ranks from the bids themselves. */
     }
+
+    // A settled payment changes the board and publishes a listing's page, so the
+    // engines are told now rather than at whatever hour they next crawl.
+    const origin = new URL(context.request.url).origin;
+    const listingPath = bid.hostname ? profilePath(String(bid.hostname)) : "";
+    context.waitUntil(
+      pingIndexNow(origin, [`${origin}/`, `${origin}/sitemap.xml`, listingPath ? `${origin}${listingPath}` : ""])
+        .catch(() => false),
+    );
   }
   return json({ received: true });
 }

@@ -113,14 +113,17 @@ export function renderProductPage(shell, view) {
   const title = escapeHtml(view.pageTitle);
   const description = escapeHtml(view.metaDescription);
   const canonical = escapeHtml(view.canonical);
+  const subject = { "@type": "Organization", name: view.title, url: view.destination };
+  if (view.platform) subject.alternateName = view.hostname;
   const jsonLd = JSON.stringify({
     "@context": "https://schema.org",
-    "@type": "WebPage",
+    // A social account's page is a profile page; a website's listing is not.
+    "@type": view.platform ? "ProfilePage" : "WebPage",
     name: view.pageTitle,
     url: view.canonical,
     description: view.metaDescription,
     isPartOf: { "@type": "WebSite", name: "RANKOFF", url: `${SITE_ORIGIN}/` },
-    about: { "@type": "Organization", name: view.title, url: view.destination },
+    ...(view.platform ? { mainEntity: subject } : { about: subject }),
   }).replace(/</g, "\\u003c");
 
   // The shell lives at /listing and links its assets relatively; one level deeper
