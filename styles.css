@@ -525,7 +525,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .featured-rank { width: 2.65rem; height: 2.65rem; font-size: 0.92rem; }
   .featured-listing .product-mark { width: 2.65rem; height: 2.65rem; flex-basis: 2.65rem; }
   .featured-listing .product-meta { display: flex; gap: .2rem .38rem; margin-top: .14rem; font-size: .62rem; line-height: 1.2; }
-  .featured-listing .product-meta .sponsored-chip, .featured-listing .product-meta .verified-chip, .featured-listing .product-meta .estimated-chip { display: none; }
+  .featured-listing .product-meta .verified-chip, .featured-listing .product-meta .estimated-chip { display: none; }
   .featured-listing .listing-description { display: -webkit-box; margin: 0; font-size: 0.67rem; line-height: 1.3; -webkit-line-clamp: 1; }
   .featured-listing .product-name { font-size: 0.9rem; }
   .featured-evidence { display: block; align-self: center; justify-self: end; }
@@ -535,6 +535,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .featured-evidence .featured-metric strong { font-size: 0.86rem; text-align: right; }
   .featured-evidence .featured-price strong { font-size: 1rem; }
   .featured-bid-stack .rank-share-control { visibility: visible; opacity: 1; }
+  /* The card is dense on a phone, so the touch area reaches past the ink without moving the layout. */
+  .featured-listing .listing-visit::after, .featured-listing .listing-details::after { content: ""; position: absolute; inset: -.5rem -.3rem; }
+  .featured-bid-stack .rank-share-control::after { content: ""; position: absolute; inset: -.3rem -.55rem -.65rem; }
+  .text-link::after { content: ""; position: absolute; inset: -.55rem -.4rem; }
   .panel-toggle { min-width: 2.25rem; justify-content: center; padding-inline: 0.35rem; font-size: 0; }
   .panel-toggle-icon { font-size: 1.1rem; }
   .activity-event { grid-template-columns: 2.2rem minmax(0, 1fr); min-width: 19rem; max-width: 27rem; min-height: 3.3rem; gap: .4rem; padding: .35rem .45rem; }
