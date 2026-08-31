@@ -484,6 +484,8 @@
       remoteSnapshotId = payload.snapshot_id || null;
       remoteCurrency = String(payload.board?.currency || "USD").toUpperCase();
       currency = boardCurrencyFormat(remoteCurrency);
+      const symbolNode = document.querySelector("[data-currency-symbol]");
+      if (symbolNode) symbolNode.textContent = remoteCurrency === "MYR" ? "RM" : "$";
       render();
       if (boardSource === "production" && !boardViewSent) {
         boardViewSent = true;
