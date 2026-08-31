@@ -498,10 +498,43 @@
         boardViewSent = true;
         void recordBoardView();
       }
+      void mergeCounterpartClicks();
       return true;
     } catch {
       /* Static preview and offline use intentionally fall back to the local board. */
       return false;
+    }
+  }
+
+  async function mergeCounterpartClicks() {
+    if (!/^https?:$/.test(window.location.protocol)) return;
+    if (boardSource !== "production") return;
+    const counterpart = state.activeWindow === "today" ? "all" : "today";
+    const requestId = remoteRequestId;
+    const endpoint = new URL(BOARD_API_ENDPOINT, window.location.href);
+    endpoint.searchParams.set("board", "global");
+    endpoint.searchParams.set("category", state.category);
+    endpoint.searchParams.set("period", counterpart);
+    endpoint.searchParams.set("limit", String(PAGE_SIZE));
+    endpoint.searchParams.set("page", String(boardPage));
+
+    try {
+      const response = await fetch(endpoint, { headers: { Accept: "application/json" }, cache: "no-store" });
+      if (!response.ok) return;
+      const payload = await response.json();
+      if (requestId !== remoteRequestId || !Array.isArray(payload?.rankings)) return;
+      const counts = new Map(payload.rankings.map((entry) => [String(entry?.listing?.id || ""), normalizedClickCount(entry?.clicks)]));
+      const field = counterpart === "today" ? "todayClicks" : "clicks";
+      let changed = false;
+      for (const listing of state.listings) {
+        const count = counts.get(listing.id);
+        if (count === undefined || listing[field] === count) continue;
+        listing[field] = count;
+        changed = true;
+      }
+      if (changed) render();
+    } catch {
+      /* The visible period already rendered; the counterpart figure stays as it was. */
     }
   }
 
