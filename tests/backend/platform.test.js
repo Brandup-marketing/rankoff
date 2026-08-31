@@ -6,6 +6,8 @@ import { accountFrom, destinationAction, displayName, listingIdentity, profilePa
 import { normalizeDestinationUrl } from "../../functions/_lib/validation.js";
 
 const identityOf = (url) => normalizeDestinationUrl(url).identity;
+const identityFor = identityOf;
+const refusalFor = (url) => { try { normalizeDestinationUrl(url); return ""; } catch (error) { return error.code; } };
 const refusal = (url) => {
   try { normalizeDestinationUrl(url); return ""; } catch (error) { return error.code; }
 };
@@ -98,4 +100,15 @@ test("every category the server accepts has a label on both clients", async () =
       assert.ok(labelled.includes(category), `${file} ${variable} is missing ${category}`);
     }
   }
+});
+
+test("a bare social handle is not mistaken for a website", () => {
+  // Malaysian handles carry dots, so "name.name" is ambiguous until the suffix is checked.
+  assert.equal(refusalFor("https://mumeiyan.arkadia"), "unknown_tld");
+  assert.equal(refusalFor("https://kedai.kopi"), "unknown_tld");
+  assert.equal(refusalFor("https://example.con"), "unknown_tld");
+
+  assert.equal(identityFor("https://www.instagram.com/mumeiyan.arkadia/"), "instagram:mumeiyan.arkadia");
+  assert.equal(identityFor("https://brandupdesignmarketing.com/"), "brandupdesignmarketing.com");
+  assert.equal(identityFor("https://shop.com.my/"), "shop.com.my");
 });

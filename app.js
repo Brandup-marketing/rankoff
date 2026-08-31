@@ -664,6 +664,23 @@
     return host.split(".")[0].replace(/[-_]+/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
   }
 
+  // The two mistakes a real merchant makes: typing a handle on its own, and
+  // pasting a post instead of the profile. Both deserve an answer in their language.
+  function submissionError(error) {
+    const chinese = state.language === "zh";
+    if (error?.code === "unknown_tld") {
+      return chinese
+        ? "这不是一个网址。如果是 Instagram、Facebook 或 TikTok 账号，请贴上完整主页链接，例如 instagram.com/yourname。"
+        : error.message;
+    }
+    if (error?.code === "profile_required") {
+      return chinese
+        ? "请贴上主页链接，而不是某一则贴文、Reel、限时动态或群组。"
+        : error.message;
+    }
+    return error?.message || (chinese ? "此网址无法上榜，未产生任何费用。" : "This website could not be listed. No payment was made.");
+  }
+
   function parseProductUrl(value) {
     const raw = String(value || "").trim();
     if (!raw) throw new TypeError("A product URL is required.");
@@ -1571,7 +1588,7 @@
       });
       const createdPayload = await created.json().catch(() => ({}));
       if (!created.ok || !createdPayload?.listing?.id) {
-        throw new Error(createdPayload?.error?.message || "This website could not be listed. No payment was made.");
+        throw new Error(submissionError(createdPayload?.error));
       }
       listingId = createdPayload.listing.id;
     }

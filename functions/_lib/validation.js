@@ -1,5 +1,6 @@
 import { ApiError, CATEGORIES, VISIBLE_CATEGORIES, marketCategory } from "./config.js";
 import { accountFrom, listingIdentity } from "./platform.js";
+import { isKnownTld } from "./tlds.js";
 
 const BLOCKED_HOST_SUFFIXES = [
   ".internal",
@@ -65,6 +66,15 @@ export function normalizeDestinationUrl(value) {
 
   url.hash = "";
   const account = accountFrom(url);
+  // "mumeiyan.arkadia" is an Instagram handle, not a domain — without this it
+  // would quietly become a listing pointing at a website that does not exist.
+  if (!account && !isKnownTld(hostname)) {
+    throw new ApiError(
+      422,
+      "unknown_tld",
+      "That is not a website address. For an Instagram, Facebook or TikTok account, paste the full profile link, such as instagram.com/yourname.",
+    );
+  }
   if (account && !account.handle) {
     throw new ApiError(
       422,
