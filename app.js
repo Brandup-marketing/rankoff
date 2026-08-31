@@ -549,11 +549,22 @@
   }
 
   function createClaimControl(amount) {
-    const control = createElement("button", "claim-rank-control");
+    // A real, always-visible pill: the ONLY bid entry point on the card.
+    const control = createElement("button", "claim-rank-pill", claimLabel(amount));
     control.type = "button";
     control.dataset.prepareChallenge = String(amount);
-    control.setAttribute("aria-label", claimLabel(amount));
     return control;
+  }
+
+  function createVisitOverlay(listing, position) {
+    // The rest of the card is the ad: anywhere you click goes to the buyer's
+    // site through the tracked redirect. Inner links sit above this layer.
+    const overlay = createElement("a", "card-visit-overlay");
+    overlay.href = listingVisitHref(listing, position);
+    overlay.target = "_blank";
+    overlay.rel = "noopener nofollow sponsored";
+    overlay.setAttribute("aria-label", state.language === "zh" ? `访问 ${listing.name} 的网站` : `Visit ${listing.name}'s website`);
+    return overlay;
   }
 
   function createShareControl(listing, position) {
@@ -1011,7 +1022,7 @@
     card.dataset.listingId = listing.id;
     card.setAttribute("role", "listitem");
     const minimum = boardSource !== "local" && remoteNextBid ? remoteNextBid : getBid((remoteLeader || ranked[0])) + 1;
-    card.dataset.claimLabel = claimLabel(minimum);
+
     if (listing.id === changedListingId) card.classList.add("is-updated");
 
     const rank = createElement("div", "featured-rank", `#${position}`);
@@ -1023,7 +1034,7 @@
     evidence.append(bidStack);
 
     card.id = `listing-${listing.id}`;
-    card.append(rank, productIdentity(listing, "p", position), evidence, createClaimControl(minimum));
+    card.append(rank, productIdentity(listing, "p", position), evidence, createVisitOverlay(listing, position), createClaimControl(minimum));
     return card;
   }
 

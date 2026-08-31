@@ -219,8 +219,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .top-three { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.65rem; margin-bottom: 1rem; }
 .featured-listing { position: relative; display: grid; grid-template-areas: "rank product evidence"; grid-template-columns: 3.5rem minmax(0, 1fr) auto; align-items: center; gap: 0.9rem; min-width: 0; max-width: 100%; min-height: 6.35rem; padding: 0.95rem 1rem; border: 1px solid var(--line); border-radius: 0.65rem; background: var(--surface); }
 .featured-listing:focus-within { outline: 2px solid var(--blue); outline-offset: 2px; }
-.featured-listing::after { content: attr(data-claim-label); position: absolute; left: 50%; bottom: -0.65rem; z-index: 2; transform: translate(-50%, 0.35rem); padding: 0.28rem 0.65rem; border-radius: 999px; background: var(--accent); color: white; font-size: 0.68rem; font-weight: 850; opacity: 0; pointer-events: none; transition: opacity 160ms var(--ease), transform 160ms var(--ease); white-space: nowrap; }
-.featured-listing:hover::after, .featured-listing:focus-within::after { opacity: 1; transform: translate(-50%, 0); }
+.claim-rank-pill { position: absolute; left: 50%; bottom: -0.65rem; z-index: 3; padding: 0.28rem 0.65rem; border: 0; border-radius: 999px; background: var(--accent); color: white; font-size: 0.68rem; font-weight: 850; white-space: nowrap; cursor: pointer; transform: translateX(-50%); transition: transform 160ms var(--ease), background 160ms var(--ease); }
+.claim-rank-pill:hover { background: var(--accent-strong, var(--accent)); transform: translateX(-50%) translateY(-2px); }
+.claim-rank-pill:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 .featured-listing.is-updated { animation: row-flash 850ms var(--ease); }
 .featured-1 { border-color: oklch(48% 0.11 28); background: var(--accent-soft); }
 .featured-rank { grid-area: rank; display: grid; place-items: center; width: 3.25rem; height: 3.25rem; border-radius: 50%; background: var(--surface-subtle); color: var(--muted); font-size: 1.15rem; font-weight: 850; font-variant-numeric: tabular-nums; }
@@ -279,8 +280,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .listing-visit:hover { background: var(--action-strong, var(--action)); color: #fff; }
 .listing-details { position: relative; z-index: 3; color: var(--blue); font-size: .64rem; font-weight: 760; text-decoration: none; white-space: nowrap; }
 .listing-details:hover { color: var(--ink); text-decoration: underline; text-underline-offset: .16em; }
-.claim-rank-control { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; margin: 0; padding: 0; border: 0; border-radius: inherit; background: transparent; color: transparent; cursor: pointer; }
-.claim-rank-control:focus-visible { outline: 0; }
+.card-visit-overlay { position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
 .product-meta { display: flex; flex-wrap: wrap; gap: 0.28rem 0.48rem; margin-top: 0.2rem; color: var(--muted); font-size: 0.69rem; font-weight: 650; }
 .category-meta { padding: .1rem .34rem; border: 0; border-radius: 999px; background: color-mix(in srgb, var(--accent) 10%, var(--surface)); color: var(--accent-strong); font-weight: 760; }
 .listing-description { display: -webkit-box; overflow: hidden; margin: 0.2rem 0 0; color: var(--muted); font-size: 0.76rem; line-height: 1.35; -webkit-box-orient: vertical; -webkit-line-clamp: 1; }
