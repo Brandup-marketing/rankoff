@@ -30,6 +30,23 @@ export async function discoverShareImage(pageUrl, fetcher = fetch) {
   }
 }
 
+// Plenty of sites declare a share image that no longer exists. Sending a crawler
+// to a 404 leaves the preview with no picture at all — worse than our own card.
+export async function verifyImage(imageUrl, fetcher = fetch) {
+  if (!imageUrl) return "";
+  try {
+    const response = await fetcher(imageUrl, {
+      headers: { Range: "bytes=0-0", "User-Agent": "RankoffBot/1.0 (+https://rankoff.my)" },
+      redirect: "follow",
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+    });
+    if (!response.ok && response.status !== 206) return "";
+    return /^image\//i.test(response.headers.get("content-type") || "") ? imageUrl : "";
+  } catch {
+    return "";
+  }
+}
+
 function redirect(target, seconds) {
   return new Response(null, {
     status: 302,
@@ -55,7 +72,7 @@ export async function onRequestGet(context) {
     const board = await loadBoard(db, defaultBoardSlug(context.env));
     const listing = await findListingByHostname(db, board.id, hostname);
     if (listing && listing.status === "approved") {
-      target = (await discoverShareImage(`https://${hostname}/`)) || fallback;
+      target = (await verifyImage(await discoverShareImage(`https://${hostname}/`))) || fallback;
     }
   } catch {
     /* The Rankoff card is always a valid answer. */

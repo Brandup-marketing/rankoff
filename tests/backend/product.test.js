@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { buildProductView, escapeHtml, formatDate, formatMoney, normalizeSlug, productPath, renderProductPage } from "../../functions/_lib/product.js";
-import { discoverShareImage } from "../../functions/og/[slug].js";
+import { discoverShareImage, verifyImage } from "../../functions/og/[slug].js";
 import { productEntries } from "../../functions/sitemap.xml.js";
 
 const shell = readFileSync(new URL("../../listing.html", import.meta.url), "utf8");
@@ -151,4 +151,18 @@ test("share image discovery takes only an https image the page itself declares",
   );
   assert.equal(await discoverShareImage("https://example.com/", page("<p>no meta here</p>")), "");
   assert.equal(await discoverShareImage("https://example.com/", async () => ({ ok: false })), "");
+});
+
+test("a declared share image is only used when it really is an image", async () => {
+  const reply = (status, contentType) => async () => ({
+    ok: status < 400,
+    status,
+    headers: { get: () => contentType },
+  });
+  assert.equal(await verifyImage("https://example.com/a.png", reply(200, "image/png")), "https://example.com/a.png");
+  assert.equal(await verifyImage("https://example.com/a.png", reply(206, "image/jpeg")), "https://example.com/a.png");
+  assert.equal(await verifyImage("https://example.com/a.png", reply(200, "text/html; charset=utf-8")), "", "a 404 page is not a share image");
+  assert.equal(await verifyImage("https://example.com/a.png", reply(404, "image/png")), "");
+  assert.equal(await verifyImage(""), "");
+  assert.equal(await verifyImage("https://example.com/a.png", async () => { throw new Error("network"); }), "");
 });
