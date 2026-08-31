@@ -64,7 +64,7 @@
     nextBid: document.querySelector("[data-next-bid]"), claimCopy: document.querySelector("[data-claim-copy]"), claim: document.querySelector("[data-claim]"),
     disclosure: document.querySelector("[data-claim-disclosure]"), toast: document.querySelector("[data-toast]"),
   };
-  document.querySelector("[data-search-redirect]")?.addEventListener("click", () => { window.location.href = "./index.html#search"; });
+  document.querySelector("[data-search-redirect]")?.addEventListener("click", () => { window.location.href = "/index.html#search"; });
 
   let preferences = loadPreferences();
   let model = null;
@@ -137,8 +137,8 @@
 
     if (/^https?:$/.test(location.protocol)) {
       try {
-        const allUrl = new URL("./api/v1/board?board=global&period=all&limit=100", location.href);
-        const todayUrl = new URL("./api/v1/board?board=global&period=today&limit=100", location.href);
+        const allUrl = new URL("/api/v1/board?board=global&period=all&limit=100", location.origin);
+        const todayUrl = new URL("/api/v1/board?board=global&period=today&limit=100", location.origin);
         const [allResponse, todayResponse] = await Promise.all([fetch(allUrl, { cache: "no-store" }), fetch(todayUrl, { cache: "no-store" })]);
         if (allResponse.ok && todayResponse.ok) {
           const [allPayload, todayPayload] = await Promise.all([allResponse.json(), todayResponse.json()]);
@@ -216,7 +216,7 @@
     elements.nextBid.textContent = money.format(model.nextBid || model.bid + 1);
     elements.claimCopy.textContent = text("claimCopy");
     elements.disclosure.textContent = verified ? text("liveDisclosure") : text("previewDisclosure");
-    elements.claim.href = `./index.html#claim`;
+    elements.claim.href = `/index.html#claim`;
     let host = model.url;
     try { host = new URL(model.url).hostname.replace(/^www\./, ""); } catch { /* Keep raw URL. */ }
     elements.host.textContent = host;
@@ -227,7 +227,7 @@
       elements.visit.setAttribute("aria-disabled", "true");
       elements.visit.querySelector("span").textContent = text("unavailable");
     } else {
-      const destination = verified ? new URL(`./go/${encodeURIComponent(model.id)}`, location.href) : new URL(model.url);
+      const destination = verified ? new URL(`/go/${encodeURIComponent(model.id)}`, location.origin) : new URL(model.url);
       if (verified && model.snapshot) destination.searchParams.set("snapshot", model.snapshot);
       if (verified && model.rank) destination.searchParams.set("rank", String(model.rank));
       elements.visit.href = destination.toString();

@@ -59,6 +59,10 @@ test("a reader without JavaScript sees the record itself", () => {
   assert.match(html, /<dd data-bid>RM 5<\/dd>/);
   assert.match(html, /<dd data-clicks>41<\/dd>/);
   assert.match(html, /<div class="listing-content" data-content>/);
+  // One level deeper than the shell, so every asset has to be addressed from the root.
+  assert.ok(!html.includes('href="./'), "relative stylesheet links would 404 under /product/");
+  assert.ok(!html.includes('src="./'), "relative script links would 404 under /product/");
+  assert.match(html, /<link rel="stylesheet" href="\/styles\.css/);
   assert.match(html, /<div class="listing-loading" data-loading hidden>/);
   assert.match(html, /<body data-listing-id="listing-1">/);
 });

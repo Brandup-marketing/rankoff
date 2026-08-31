@@ -83,7 +83,9 @@ export function renderProductPage(shell, view) {
     about: { "@type": "Organization", name: view.title, url: view.destination },
   }).replace(/</g, "\\u003c");
 
-  let html = shell;
+  // The shell lives at /listing and links its assets relatively; one level deeper
+  // at /product/<hostname> those would resolve to /product/styles.css.
+  let html = shell.replace(/(href|src)="\.\//g, '$1="/');
   html = replaceTag(html, /<title>[\s\S]*?<\/title>/, `<title>${title}</title>`);
   html = replaceTag(html, /<meta name="description" content="[^"]*"\s*\/>/, `<meta name="description" content="${description}" />`);
   html = replaceTag(html, /<link rel="canonical" href="[^"]*"\s*\/>/, `<link rel="canonical" href="${canonical}" />`);
