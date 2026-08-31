@@ -5,8 +5,8 @@
   "compatibility_date": "2026-08-28",
   "compatibility_flags": ["nodejs_compat"],
   "vars": {
-    "RANKOFF_MODE": "demo",
-    "PAYMENTS_ENABLED": "false",
+    "RANKOFF_MODE": "production",
+    "PAYMENTS_ENABLED": "true",
     "BOARD_SLUG": "global",
     "DEFAULT_CURRENCY": "MYR",
     "DODO_ENVIRONMENT": "live_mode",
