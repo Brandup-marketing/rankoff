@@ -943,7 +943,22 @@
 
   function renderLeader() {
     const leader = boardSource !== "local" && remoteLeader ? remoteLeader : rankedListings()[0];
-    if (!leader) return;
+    if (!leader) {
+      if (boardSource === "production") {
+        const openingPrice = remoteNextBid || 1;
+        if (elements.heroPrice) elements.heroPrice.textContent = money(openingPrice);
+        if (elements.heroContext) {
+          elements.heroContext.textContent = state.language === "zh"
+            ? `${money(openingPrice)} 即可登上榜单第 1 名。成为板上第一个产品。`
+            : `${money(openingPrice)} takes #1. Be the first product on the board.`;
+        }
+        if (elements.inlineBid) {
+          elements.inlineBid.min = String(openingPrice);
+          elements.inlineBid.value = String(openingPrice);
+        }
+      }
+      return;
+    }
     const leaderCategory = canonicalCategory(leader.category) || "Other";
     if (elements.categorySelect && categories.includes(leaderCategory)) {
       elements.categorySelect.value = leaderCategory;
