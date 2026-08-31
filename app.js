@@ -9,6 +9,8 @@
   // Keep in step with TERMS_VERSION in functions/_lib/config.js and the date printed on /legal.
   const TERMS_VERSION = "2026-08-30";
   const SOCIAL_PLATFORMS = ["instagram", "tiktok", "facebook", "x"];
+  // Which markets actually hold a listing, learned from the unfiltered board.
+  let marketsWithListings = new Set();
   const categoryGroups = Object.freeze({ Creators: ["Creators", "Attention", "People", "AIMedia"], Property: ["Property", "RealEstate", "Travel"], Interior: ["Interior"], Beauty: ["Beauty"], Health: ["Health"], Sports: ["Sports"], Food: ["Food"], Marketing: ["Marketing", "SEO", "Social", "Sales", "Agencies"], Creative: ["Creative", "Design", "Writing", "Audio", "News"], Professional: ["Professional", "Business", "Careers", "Productivity"], Education: ["Education", "Training", "Academy"], Finance: ["Finance", "Insurance", "Banking", "Crypto"], Electronics: ["Electronics", "Repair"], Retail: ["Retail", "Ecommerce", "Hardware"], Home: ["Home"], Automotive: ["Automotive", "Auto"], Other: ["Other", "Agents", "Developer", "Security", "Crypto", "Games", "Domains", "Discovery"] });
   const categories = Object.freeze(Object.keys(categoryGroups));
   const categoryAliases = Object.freeze(Object.entries(categoryGroups).reduce((aliases, [market, members]) => {
@@ -456,6 +458,9 @@
       const period = state.activeWindow;
       const previousActivityId = String(state.activity[0]?.id || "");
       state.listings = payload.rankings.map((entry, index) => normalizeApiRanking(entry, index, period));
+      if (state.category === DEFAULT_CATEGORY && boardPage === 1) {
+        marketsWithListings = new Set(state.listings.map((listing) => canonicalCategory(listing.category)).filter(Boolean));
+      }
       remotePagination = payload.pagination && typeof payload.pagination === "object"
         ? {
             page: Math.max(1, Number(payload.pagination.page) || boardPage),
@@ -945,7 +950,11 @@
     const shortLabels = state.language === "zh"
       ? { Creators: "创作者", Property: "房产", Interior: "室内装修", Beauty: "美容", Health: "健康诊所", Sports: "运动健身", Food: "餐饮", Marketing: "营销", Creative: "创意制作", Professional: "专业服务", Education: "教育与培训", Finance: "金融与保险", Electronics: "电子与维修", Retail: "零售电商", Home: "家居服务", Automotive: "汽车", Other: "其他" }
       : { Creators: "Creators", Property: "Property", Interior: "Interior", Beauty: "Beauty", Health: "Health", Sports: "Sports", Food: "Food", Marketing: "Marketing", Creative: "Creative", Professional: "Professional", Education: "Education", Finance: "Finance", Electronics: "Electronics", Retail: "Retail", Home: "Home", Automotive: "Automotive", Other: "Other" };
-    const buttons = [{ label: state.language === "zh" ? "全部" : "All", value: DEFAULT_CATEGORY }, ...categories.map((category) => ({ label: shortLabels[category], value: category }))];
+    // Markets holding a listing come first: a visitor should meet a board with
+    // something on it, while an empty market stays one scroll away for whoever
+    // wants to take its first place.
+    const ordered = [...categories].sort((left, right) => Number(marketsWithListings.has(right)) - Number(marketsWithListings.has(left)));
+    const buttons = [{ label: state.language === "zh" ? "全部" : "All", value: DEFAULT_CATEGORY }, ...ordered.map((category) => ({ label: shortLabels[category], value: category }))];
     elements.categoryRail.replaceChildren(
       ...buttons.map(({ label, value }) => {
         const button = createElement("button", "category-chip");
