@@ -27,12 +27,32 @@ export function formatMoney(amountMinor, currency) {
   return currency === "MYR" ? `RM ${amount}` : `${currency} ${amount}`;
 }
 
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+export function formatDate(value) {
+  const date = new Date(String(value || ""));
+  if (Number.isNaN(date.getTime())) return "";
+  return `${date.getUTCDate()} ${MONTHS[date.getUTCMonth()]} ${date.getUTCFullYear()}`;
+}
+
+// Only facts the board itself produced. Nothing here is inferred about the merchant.
+export function recordFacts(record) {
+  const facts = [];
+  const firstListed = formatDate(record?.first_settled_at);
+  const lastUpdated = formatDate(record?.last_settled_at);
+  const bidCount = Number(record?.bid_count || 0);
+  if (firstListed) facts.push({ label: "First listed", value: firstListed });
+  if (bidCount > 0) facts.push({ label: "Settled bids", value: String(bidCount) });
+  if (lastUpdated) facts.push({ label: "Last updated", value: lastUpdated });
+  return facts;
+}
+
 function clamp(text, limit) {
   const value = String(text || "").replace(/\s+/g, " ").trim();
   return value.length > limit ? `${value.slice(0, limit - 1).trimEnd()}…` : value;
 }
 
-export function buildProductView({ entry, todayEntry, board, snapshotId }) {
+export function buildProductView({ entry, todayEntry, board, snapshotId, record }) {
   const listing = entry.listing || {};
   const hostname = normalizeSlug(listing.hostname);
   const currency = String(board?.currency || "MYR").toUpperCase();
@@ -57,6 +77,7 @@ export function buildProductView({ entry, todayEntry, board, snapshotId }) {
     todayBid: todayEntry ? formatMoney(todayEntry.bid?.amount_minor, currency) : null,
     todayClicks: todayEntry ? Number(todayEntry.clicks || 0) : null,
     snapshotId: snapshotId || "",
+    facts: recordFacts(record),
     pageTitle: `${title} — #${rank} on RANKOFF`,
     metaDescription: clamp(
       `${title} holds #${rank} on Rankoff with ${bid} in settled bids and ${clicks} verified clicks. ${description}`,
@@ -116,6 +137,15 @@ export function renderProductPage(shell, view) {
   html = html.replace(/(<dd data-rank)>[\s\S]*?<\/dd>/, `$1>#${escapeHtml(view.rank)}</dd>`);
   html = html.replace(/(<dd data-bid)>[\s\S]*?<\/dd>/, `$1>${escapeHtml(view.bid)}</dd>`);
   html = html.replace(/(<dd data-clicks)>[\s\S]*?<\/dd>/, `$1>${escapeHtml(view.clicks)}</dd>`);
+  if (view.facts?.length) {
+    const items = view.facts
+      .map((fact) => `<li><span>${escapeHtml(fact.label)}</span><strong>${escapeHtml(fact.value)}</strong></li>`)
+      .join("");
+    html = html.replace(
+      /<ul class="listing-record" data-record hidden><\/ul>/,
+      `<ul class="listing-record" data-record>${items}</ul>`,
+    );
+  }
   html = html.replace(
     /(<a class="secondary-action listing-visit" data-visit)/,
     `$1 href="${escapeHtml(`${SITE_ORIGIN}/go/${view.id}${view.snapshotId ? `?snapshot=${view.snapshotId}` : ""}`)}"`,

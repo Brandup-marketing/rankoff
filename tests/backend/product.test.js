@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-import { buildProductView, escapeHtml, formatMoney, normalizeSlug, productPath, renderProductPage } from "../../functions/_lib/product.js";
+import { buildProductView, escapeHtml, formatDate, formatMoney, normalizeSlug, productPath, renderProductPage } from "../../functions/_lib/product.js";
 import { productEntries } from "../../functions/sitemap.xml.js";
 
 const shell = readFileSync(new URL("../../listing.html", import.meta.url), "utf8");
@@ -98,4 +98,25 @@ test("the sitemap lists one entry per live listing, dated by its settled bid", (
   assert.match(xml, /<loc>https:\/\/rankoff\.my\/product\/brandupdesignmarketing\.com<\/loc>/);
   assert.match(xml, /<lastmod>2026-08-31<\/lastmod>/);
   assert.equal(xml.match(/<url>/g).length, 1, "an unusable hostname must not reach the sitemap");
+});
+
+test("the record block shows only what the board itself recorded", () => {
+  const record = { bid_count: 3, total_minor: 1500, first_settled_at: "2026-08-31T11:04:27.190Z", last_settled_at: "2026-09-02T04:00:00.000Z" };
+  const html = renderProductPage(
+    shell,
+    buildProductView({ entry, todayEntry: null, board: { currency: "MYR" }, snapshotId: "", record }),
+  );
+
+  assert.match(html, /<span>First listed<\/span><strong>31 Aug 2026<\/strong>/);
+  assert.match(html, /<span>Settled bids<\/span><strong>3<\/strong>/);
+  assert.match(html, /<span>Last updated<\/span><strong>2 Sep 2026<\/strong>/);
+  assert.equal(formatDate("not a date"), "");
+});
+
+test("a listing with no settled history renders no record block at all", () => {
+  const html = renderProductPage(
+    shell,
+    buildProductView({ entry, todayEntry: null, board: { currency: "MYR" }, snapshotId: "", record: null }),
+  );
+  assert.match(html, /<ul class="listing-record" data-record hidden><\/ul>/);
 });

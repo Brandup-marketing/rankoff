@@ -1,7 +1,7 @@
 import { ApiError, isProduction, requireDatabase } from "../../_lib/config.js";
 import { paymentTransition } from "../../_lib/domain.js";
 import { getRequestId, json, MAX_WEBHOOK_BYTES, methodNotAllowed, readText } from "../../_lib/http.js";
-import { applyProviderEvent, loadBidForWebhook } from "../../_lib/repository.js";
+import { applyProviderEvent, loadBidForWebhook, recordSnapshotEntries } from "../../_lib/repository.js";
 import { verifyStandardWebhook } from "../../_lib/security.js";
 
 export async function onRequestPost(context) {
@@ -42,8 +42,9 @@ export async function onRequestPost(context) {
     }
   }
 
+  let snapshotId = null;
   try {
-    await applyProviderEvent(db, {
+    snapshotId = await applyProviderEvent(db, {
       providerEventId,
       eventType,
       eventTimestamp: payload.timestamp || null,
@@ -61,6 +62,16 @@ export async function onRequestPost(context) {
       return json({ received: true, duplicate: true });
     }
     throw error;
+  }
+
+  // The payment is already recorded. Ranking history is a separate promise, so a
+  // failure to write it is logged by the platform and never fails the webhook.
+  if (snapshotId) {
+    try {
+      await recordSnapshotEntries(db, snapshotId, bid.board_id);
+    } catch {
+      /* The board still ranks from the bids themselves. */
+    }
   }
   return json({ received: true });
 }

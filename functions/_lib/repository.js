@@ -531,3 +531,48 @@ export async function countListingsCreatedSince(db, boardId, sinceIso) {
     .first();
   return Number(row?.n || 0);
 }
+
+export async function loadListingRecord(db, listingId) {
+  return db
+    .prepare(
+      `SELECT
+         COUNT(*) AS bid_count,
+         COALESCE(SUM(amount_minor), 0) AS total_minor,
+         MIN(settled_at) AS first_settled_at,
+         MAX(settled_at) AS last_settled_at
+       FROM bids
+       WHERE listing_id = ?1 AND status = 'settled'`,
+    )
+    .bind(listingId)
+    .first();
+}
+
+// Materialises who stood where the moment a payment settled. Kept out of the
+// settlement batch on purpose: a failure here must never stop a paid bid from
+// taking its rank. History that is not written at settlement is lost for good.
+export async function recordSnapshotEntries(db, snapshotId, boardId) {
+  await db
+    .prepare(
+      `INSERT INTO ranking_snapshot_entries (snapshot_id, listing_id, bid_id, rank, amount_minor)
+       SELECT ?1, listing_id, bid_id,
+              ROW_NUMBER() OVER (ORDER BY total_minor DESC, settled_at ASC, bid_id ASC),
+              total_minor
+       FROM (
+         SELECT
+           b.id AS bid_id,
+           b.listing_id,
+           b.settled_at,
+           SUM(b.amount_minor) OVER (PARTITION BY b.listing_id) AS total_minor,
+           ROW_NUMBER() OVER (
+             PARTITION BY b.listing_id
+             ORDER BY b.settled_at DESC, b.id DESC
+           ) AS listing_bid_order
+         FROM bids b
+         INNER JOIN listings l ON l.id = b.listing_id
+         WHERE b.board_id = ?2 AND b.status = 'settled' AND l.status = 'approved'
+       )
+       WHERE listing_bid_order = 1`,
+    )
+    .bind(snapshotId, boardId)
+    .run();
+}

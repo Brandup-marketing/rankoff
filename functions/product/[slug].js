@@ -1,7 +1,7 @@
 import { ApiError, defaultBoardSlug, isProduction, requireDatabase } from "../_lib/config.js";
 import { methodNotAllowed } from "../_lib/http.js";
 import { buildProductView, normalizeSlug, renderProductPage } from "../_lib/product.js";
-import { loadBoard, loadPublicBoard } from "../_lib/repository.js";
+import { loadBoard, loadListingRecord, loadPublicBoard } from "../_lib/repository.js";
 
 const PAGE_LIMIT = 100;
 const MAX_PAGES = 10;
@@ -42,12 +42,16 @@ export async function onRequestGet(context) {
   const { match, payload } = await findRanking(db, board, "all", hostname);
   if (!match) return notFound(template);
 
-  const today = await findRanking(db, board, "today", hostname);
+  const [today, record] = await Promise.all([
+    findRanking(db, board, "today", hostname),
+    loadListingRecord(db, String(match.listing?.id || "")),
+  ]);
   const view = buildProductView({
     entry: match,
     todayEntry: today.match,
     board: payload.board,
     snapshotId: payload.snapshot_id,
+    record,
   });
 
   return new Response(renderProductPage(template, view), {
