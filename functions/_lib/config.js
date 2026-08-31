@@ -8,6 +8,7 @@ export const MARKET_GROUPS = Object.freeze({
   Design: Object.freeze(["Design", "Writing", "Audio", "News"]),
   Productivity: Object.freeze(["Productivity", "Education"]),
   Health: Object.freeze(["Health"]),
+  Sports: Object.freeze(["Sports"]),
   Games: Object.freeze(["Games"]),
   Travel: Object.freeze(["Travel", "RealEstate"]),
   Domains: Object.freeze(["Domains", "Discovery"]),

@@ -34,14 +34,16 @@ export async function onRequestPost(context) {
   const db = requireDatabase(context.env);
   const board = await loadBoard(db, defaultBoardSlug(context.env));
   const destination = normalizeDestinationUrl(input.url);
-  const title = optionalString(input.title, "title", { max: 96 }) || destination.hostname;
+  // A social listing titled "www.instagram.com" would read the same on every card.
+  const title = optionalString(input.title, "title", { max: 96 })
+    || (destination.handle ? `@${destination.handle}` : destination.hostname);
   const description = optionalString(input.description, "description", { max: 240 });
-  screenText(destination.hostname, title, description);
+  screenText(destination.identity, destination.url, title, description);
 
   // One website, one listing: a repeat submission returns the existing entry
   // so every payment lands on the same cumulative total (an add-on, not a
   // duplicate). Only a moderated-away site is refused here.
-  const existing = await findListingByHostname(db, board.id, destination.hostname);
+  const existing = await findListingByHostname(db, board.id, destination.identity);
   if (existing) {
     if (existing.status !== "approved") {
       throw new ApiError(403, "listing_unavailable", "This website cannot be listed on the board.");
@@ -63,12 +65,12 @@ export async function onRequestPost(context) {
     id: crypto.randomUUID(),
     boardId: board.id,
     ownerReferenceHash: await sha256Hex(
-      optionalString(input.owner_reference, "owner_reference", { max: 256 }) || destination.hostname,
+      optionalString(input.owner_reference, "owner_reference", { max: 256 }) || destination.identity,
     ),
     title,
     description,
     destinationUrl: destination.url,
-    hostname: destination.hostname,
+    hostname: destination.identity,
     faviconUrl: destination.faviconUrl,
     category: normalizeCategory(input.category),
     status: "approved",

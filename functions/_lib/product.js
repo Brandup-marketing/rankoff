@@ -2,6 +2,7 @@
 // formats them into the shell that /listing already ships, so a crawler, a
 // WhatsApp preview and a reader without JavaScript all see the same record.
 
+import { destinationAction, displayName, identityParts, profilePath } from "./platform.js";
 export const SITE_ORIGIN = "https://rankoff.my";
 
 const HTML_ESCAPES = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
@@ -47,6 +48,14 @@ export function recordFacts(record) {
   return facts;
 }
 
+export const ACTION_LABELS = Object.freeze({
+  visit: "Visit website",
+  viewInstagram: "View Instagram",
+  viewFacebook: "View Facebook Page",
+  viewTiktok: "View TikTok",
+  viewProfile: "View profile",
+});
+
 function clamp(text, limit) {
   const value = String(text || "").replace(/\s+/g, " ").trim();
   return value.length > limit ? `${value.slice(0, limit - 1).trimEnd()}…` : value;
@@ -54,22 +63,32 @@ function clamp(text, limit) {
 
 export function buildProductView({ entry, todayEntry, board, snapshotId, record }) {
   const listing = entry.listing || {};
-  const hostname = normalizeSlug(listing.hostname);
+  const identity = String(listing.hostname || "");
+  const parts = identityParts(identity);
+  const label = displayName(identity);
   const currency = String(board?.currency || "MYR").toUpperCase();
   const bid = formatMoney(entry.bid?.amount_minor, currency);
   const clicks = Number(entry.clicks || 0);
-  const title = String(listing.title || hostname);
+  const title = String(listing.title || label);
   const description = String(listing.description || "");
   const rank = Number(entry.rank);
 
   return {
     id: String(listing.id || ""),
-    hostname,
+    identity,
+    platform: parts.platform,
+    action: destinationAction(identity),
+    hostname: label,
+    // A platform profile hides its picture from crawlers, so only a website can
+    // hand us a share image of its own.
+    shareImage: parts.platform
+      ? `${SITE_ORIGIN}/assets/rankoff-og-card.png`
+      : `${SITE_ORIGIN}/og/${parts.hostname}`,
     title,
     description,
     category: String(listing.category || "Other"),
     destination: String(listing.url || ""),
-    canonical: `${SITE_ORIGIN}${productPath(hostname)}`,
+    canonical: `${SITE_ORIGIN}${profilePath(identity)}`,
     rank,
     bid,
     clicks,
@@ -118,7 +137,7 @@ export function renderProductPage(shell, view) {
   html = replaceTag(
     html,
     /<meta property="og:image" content="[^"]*"\s*\/>/,
-    `<meta property="og:image" content="${escapeHtml(`${SITE_ORIGIN}/og/${view.hostname}`)}" />`,
+    `<meta property="og:image" content="${escapeHtml(view.shareImage)}" />`,
   );
   html = html.replace(/\s*<meta property="og:image:(?:width|height)" content="[^"]*"\s*\/>/g, "");
   html = html.replace(
@@ -127,9 +146,15 @@ export function renderProductPage(shell, view) {
       + `    <meta name="twitter:card" content="summary_large_image" />\n`
       + `    <meta name="twitter:title" content="${title}" />\n`
       + `    <meta name="twitter:description" content="${description}" />\n`
-      + `    <meta name="twitter:image" content="${escapeHtml(`${SITE_ORIGIN}/og/${view.hostname}`)}" />\n`
+      + `    <meta name="twitter:image" content="${escapeHtml(view.shareImage)}" />\n`
       + `    <script type="application/ld+json">${jsonLd}</script>\n`
       + `  </head>`,
+  );
+
+  // "Visit website" is wrong for a profile; the button says where it actually goes.
+  html = html.replace(
+    /<span data-copy="visit">[\s\S]*?<\/span>/,
+    `<span data-copy="${escapeHtml(view.action)}">${escapeHtml(ACTION_LABELS[view.action] || ACTION_LABELS.visit)}</span>`,
   );
 
   // The shell hydrates from the board API; hand it the listing it is standing on.

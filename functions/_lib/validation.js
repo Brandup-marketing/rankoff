@@ -1,4 +1,5 @@
 import { ApiError, CATEGORIES, VISIBLE_CATEGORIES, marketCategory } from "./config.js";
+import { accountFrom, listingIdentity } from "./platform.js";
 
 const BLOCKED_HOST_SUFFIXES = [
   ".internal",
@@ -63,10 +64,24 @@ export function normalizeDestinationUrl(value) {
   }
 
   url.hash = "";
+  const account = accountFrom(url);
+  if (account && !account.handle) {
+    throw new ApiError(
+      422,
+      "profile_required",
+      `Use the ${account.label} profile address, such as ${hostname}/yourname — not a post, reel, story or group.`,
+    );
+  }
+
   return {
     url: url.toString(),
     hostname,
-    faviconUrl: `${url.origin}/favicon.ico`,
+    identity: listingIdentity(hostname, account),
+    handle: account?.handle || "",
+    platform: account?.key || "",
+    platformLabel: account?.label || "",
+    // A platform favicon is the platform's own logo, identical on every listing.
+    faviconUrl: account ? "" : `${url.origin}/favicon.ico`,
   };
 }
 

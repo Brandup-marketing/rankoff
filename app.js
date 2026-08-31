@@ -8,6 +8,7 @@
   const BOARD_API_ENDPOINT = "./api/v1/board";
   // Keep in step with TERMS_VERSION in functions/_lib/config.js and the date printed on /legal.
   const TERMS_VERSION = "2026-08-30";
+  const SOCIAL_PLATFORMS = ["instagram", "tiktok", "facebook", "x"];
   const categoryGroups = Object.freeze({
     Agents: ["Agents", "AIMedia"],
     Marketing: ["Marketing", "SEO", "Social", "Sales", "Attention", "People"],
@@ -18,6 +19,7 @@
     Design: ["Design", "Writing", "Audio", "News"],
     Productivity: ["Productivity", "Education"],
     Health: ["Health"],
+    Sports: ["Sports"],
     Games: ["Games"],
     Travel: ["Travel", "RealEstate"],
     Domains: ["Domains", "Discovery"],
@@ -29,13 +31,13 @@
     members.forEach((member) => { aliases[member.toLowerCase()] = market; });
     return aliases;
   }, {}));
-  const categoryIcons = Object.freeze({ all: "▦", Agents: "✦", Marketing: "↗", Developer: "</>", Business: "◆", Crypto: "₿", Ecommerce: "◇", Design: "✎", Productivity: "✓", Health: "+", Games: "◈", Travel: "⌖", Domains: "◎", Other: "•••" });
+  const categoryIcons = Object.freeze({ all: "▦", Agents: "✦", Marketing: "↗", Developer: "</>", Business: "◆", Crypto: "₿", Ecommerce: "◇", Design: "✎", Productivity: "✓", Health: "+", Sports: "◐", Games: "◈", Travel: "⌖", Domains: "◎", Other: "•••" });
   const translations = {
-    en: { navBoard: "Board", navCategories: "Categories", navAbout: "About", heroCopy: "Put your product in the spot people see first. Your listing stays at the top until someone pays more.", totalBid: "Your total bid", productUrl: "Website or social account", productUrlPlaceholder: "example.com or @yourusername", invalidWebsite: "Enter a valid website or social account, such as example.com or @yourusername.", chooseMarket: "Choose a market", challengeCategory: "Challenge category", categoryRule: "Must match the listing you’ll outrank.", reviewBid: "Review your bid", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest total takes #1. Top up any time to move up.", todayRanking: "Today’s leaders", latestActivity: "Latest activity", liveUpdates: "Latest updates", howItWorks: "How ranking works", searchPlaceholder: "Search products and categories…", close: "Close", seeAll: "See all", past24: "Past 24h", livePulse: "Live bids", refresh: "Refresh", rank: "Rank", listing: "Listing", bid: "Bid", clicks: "Clicks", sponsored: "Sponsored", rules: "Every listing is paid advertising. The highest settled total ranks first \u2014 no prizes, no draws, and no element of chance.", position: "Position", positionCopy: "Held until another listing's settled total passes it.", charge: "Charge", chargeCopy: "One payment after review.", reporting: "Reporting", reportingCopy: "Clicks shown for the selected timeframe.", readRules: "Read all rules →", rulesLink: "Rules", terms: "Terms", termsOfService: "Terms of Service", privacyLink: "Privacy", payments: "Payments", footerCredit: "A Brandup Marketing product", confirmRank: "Confirm this rank", confirmRankIntro: "Check the rank and price, then agree to the Terms of Service to continue.", chanceDisclaimer: "This is a one-time fee for advertising placement \u2014 not a wager, deposit, or contest entry. There are no prizes and no element of chance.", rankLabel: "Rank", priceLabel: "Price", dueNow: "Due now", confirmationCopy: "Your listing goes live at this rank after payment confirms. Someone else can still claim a higher rank. This is a one-time fee for advertising placement \u2014 not a wager, deposit, or contest entry. There are no prizes and no element of chance.", agreeTermsPrefix: "I have read and agree to the ", agreeTermsSuffix: ".", cancel: "Cancel", continueCheckout: "Continue to checkout" },
-    zh: { navBoard: "榜单", navCategories: "分类", navAbout: "关于", heroCopy: "把产品放到最显眼的位置。只要没有更高的有效出价，你的介绍就会留在榜首。", totalBid: "你的总出价", productUrl: "网站或社交账号", productUrlPlaceholder: "example.com 或 @yourusername", invalidWebsite: "请输入有效的网站或社交账号，例如 example.com 或 @yourusername。", chooseMarket: "选择市场", challengeCategory: "挑战类别", categoryRule: "必须与您要超越的条目类别相同。", reviewBid: "确认出价", markets: "市场", liveLeaderboard: "实时榜单", boardSummary: "累计出价最高者获得第 1 名。随时追加出价即可上升。", todayRanking: "今日领先", latestActivity: "最新动态", liveUpdates: "最新动态", howItWorks: "排名规则", searchPlaceholder: "搜索产品和分类…", close: "关闭", seeAll: "查看全部", past24: "近 24 小时", livePulse: "实时竞价", refresh: "刷新", rank: "排名", listing: "条目", bid: "出价", clicks: "点击", sponsored: "广告", rules: "每个条目都是付费广告。累计已结算付款最高者排名第一 —— 没有奖品、没有抽奖，也不涉及任何运气成分。", position: "排名位置", positionCopy: "保持到其他条目的累计出价超过为止。", charge: "费用", chargeCopy: "审核后一次性付款。", reporting: "数据", reportingCopy: "显示所选时间范围内的点击。", readRules: "查看完整规则 →", rulesLink: "规则", terms: "条款", termsOfService: "服务条款", privacyLink: "隐私", payments: "付款", footerCredit: "Brandup Marketing 出品", confirmRank: "确认此排名", confirmRankIntro: "核对排名与价格，同意《服务条款》后继续。", chanceDisclaimer: "此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。", rankLabel: "排名", priceLabel: "价格", dueNow: "现在支付", confirmationCopy: "付款确认后，你的条目会以此排名上线。其他人仍可出价取得更高排名。此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。", agreeTermsPrefix: "我已阅读并同意《", agreeTermsSuffix: "》。", cancel: "取消", continueCheckout: "继续付款" },
+    en: { navBoard: "Board", navCategories: "Categories", navAbout: "About", heroCopy: "Put your product in the spot people see first. Your listing stays at the top until someone pays more.", totalBid: "Your total bid", productUrl: "Website or public social profile", productUrlPlaceholder: "example.com or instagram.com/yourname", invalidWebsite: "Enter a website or a public profile address, such as example.com or instagram.com/yourname.", chooseMarket: "Choose a market", challengeCategory: "Challenge category", categoryRule: "Must match the listing you’ll outrank.", reviewBid: "Review your bid", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest total takes #1. Top up any time to move up.", todayRanking: "Today’s leaders", latestActivity: "Latest activity", liveUpdates: "Latest updates", howItWorks: "How ranking works", searchPlaceholder: "Search products and categories…", close: "Close", seeAll: "See all", past24: "Past 24h", livePulse: "Live bids", refresh: "Refresh", rank: "Rank", listing: "Listing", bid: "Bid", clicks: "Clicks", sponsored: "Sponsored", rules: "Every listing is paid advertising. The highest settled total ranks first \u2014 no prizes, no draws, and no element of chance.", position: "Position", positionCopy: "Held until another listing's settled total passes it.", charge: "Charge", chargeCopy: "One payment after review.", reporting: "Reporting", reportingCopy: "Clicks shown for the selected timeframe.", readRules: "Read all rules →", rulesLink: "Rules", terms: "Terms", termsOfService: "Terms of Service", privacyLink: "Privacy", payments: "Payments", footerCredit: "A Brandup Marketing product", confirmRank: "Confirm this rank", confirmRankIntro: "Check the rank and price, then agree to the Terms of Service to continue.", chanceDisclaimer: "This is a one-time fee for advertising placement \u2014 not a wager, deposit, or contest entry. There are no prizes and no element of chance.", rankLabel: "Rank", priceLabel: "Price", dueNow: "Due now", confirmationCopy: "Your listing goes live at this rank after payment confirms. Someone else can still claim a higher rank. This is a one-time fee for advertising placement \u2014 not a wager, deposit, or contest entry. There are no prizes and no element of chance.", agreeTermsPrefix: "I understand this is a paid sponsored placement for a public link. It gives me no ownership or editing rights over that account, and the listed party may request removal. I agree to the ", agreeTermsSuffix: ".", cancel: "Cancel", continueCheckout: "Continue to checkout" },
+    zh: { navBoard: "榜单", navCategories: "分类", navAbout: "关于", heroCopy: "把产品放到最显眼的位置。只要没有更高的有效出价，你的介绍就会留在榜首。", totalBid: "你的总出价", productUrl: "网站或公开社交账号", productUrlPlaceholder: "example.com 或 instagram.com/yourname", invalidWebsite: "请输入网站或公开主页网址，例如 example.com 或 instagram.com/yourname。", chooseMarket: "选择市场", challengeCategory: "挑战类别", categoryRule: "必须与您要超越的条目类别相同。", reviewBid: "确认出价", markets: "市场", liveLeaderboard: "实时榜单", boardSummary: "累计出价最高者获得第 1 名。随时追加出价即可上升。", todayRanking: "今日领先", latestActivity: "最新动态", liveUpdates: "最新动态", howItWorks: "排名规则", searchPlaceholder: "搜索产品和分类…", close: "关闭", seeAll: "查看全部", past24: "近 24 小时", livePulse: "实时竞价", refresh: "刷新", rank: "排名", listing: "条目", bid: "出价", clicks: "点击", sponsored: "广告", rules: "每个条目都是付费广告。累计已结算付款最高者排名第一 —— 没有奖品、没有抽奖，也不涉及任何运气成分。", position: "排名位置", positionCopy: "保持到其他条目的累计出价超过为止。", charge: "费用", chargeCopy: "审核后一次性付款。", reporting: "数据", reportingCopy: "显示所选时间范围内的点击。", readRules: "查看完整规则 →", rulesLink: "规则", terms: "条款", termsOfService: "服务条款", privacyLink: "隐私", payments: "付款", footerCredit: "Brandup Marketing 出品", confirmRank: "确认此排名", confirmRankIntro: "核对排名与价格，同意《服务条款》后继续。", chanceDisclaimer: "此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。", rankLabel: "排名", priceLabel: "价格", dueNow: "现在支付", confirmationCopy: "付款确认后，你的条目会以此排名上线。其他人仍可出价取得更高排名。此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。", agreeTermsPrefix: "我了解这是为一个公开链接购买的赞助展示，付款不会获得该账号的所有权或编辑权，被展示方可要求下架。我同意《", agreeTermsSuffix: "》。", cancel: "取消", continueCheckout: "继续付款" },
   };
-  const categoryLabels = { Agents: "AI & Automation", Marketing: "Marketing, SEO & Social", Developer: "Developer Tools & Security", Business: "Business & Professional Services", Crypto: "Finance, Crypto & Investing", Ecommerce: "Ecommerce, Retail & Hardware", Design: "Design, Content & Media", Productivity: "Productivity & Education", Health: "Health & Wellness", Games: "Games & Entertainment", Travel: "Travel, Local & Property", Domains: "Web, Domains & Discovery", Other: "Other" };
-  const categoryTranslations = { Agents: "AI 与自动化", Marketing: "营销、SEO 与社交媒体", Developer: "开发工具与安全", Business: "商业与专业服务", Crypto: "金融、加密与投资", Ecommerce: "电商、零售与硬件", Design: "设计、内容与媒体", Productivity: "效率工具与教育", Health: "健康与生活方式", Games: "游戏与娱乐", Travel: "旅行、本地与房地产", Domains: "网站、域名与发现", Other: "其他" };
+  const categoryLabels = { Agents: "AI & Automation", Marketing: "Marketing, SEO & Social", Developer: "Developer Tools & Security", Business: "Business & Professional Services", Crypto: "Finance, Crypto & Investing", Ecommerce: "Ecommerce, Retail & Hardware", Design: "Design, Content & Media", Productivity: "Productivity & Education", Health: "Health & Beauty", Sports: "Sports & Fitness", Games: "Games & Entertainment", Travel: "Travel, Local & Property", Domains: "Web, Domains & Discovery", Other: "Other" };
+  const categoryTranslations = { Agents: "AI 与自动化", Marketing: "营销、SEO 与社交媒体", Developer: "开发工具与安全", Business: "商业与专业服务", Crypto: "金融、加密与投资", Ecommerce: "电商、零售与硬件", Design: "设计、内容与媒体", Productivity: "效率工具与教育", Health: "健康与美容", Sports: "运动与健身", Games: "游戏与娱乐", Travel: "旅行、本地与房地产", Domains: "网站、域名与发现", Other: "其他" };
 
   const boardCurrencyFormat = (code) => new Intl.NumberFormat(code === "MYR" ? "en-MY" : "en-US", { style: "currency", currency: code || "USD", maximumFractionDigits: 0 });
   let currency = boardCurrencyFormat("USD");
@@ -419,11 +421,12 @@
       id: String(listing.id || `remote-${index + 1}`),
       serverRank: Number.isFinite(Number(entry?.rank)) ? Number(entry.rank) : index + 1,
       name: String(listing.title || listing.hostname || `Listing ${index + 1}`).slice(0, 96),
-      mark: initialsFromUrl(url),
+      mark: initialsFor(String(listing.hostname || ""), url, String(listing.title || "")),
       url,
       iconUrl: typeof listing.favicon_url === "string" ? listing.favicon_url : "",
       description: String(listing.description || "Sponsored listing on Rankoff.").slice(0, 240),
       category: String(listing.category || "Other"),
+      identity: String(listing.hostname || ""),
       age: entry?.bid?.settled_at || previous?.age || "",
       clicks: period === "all" ? clicks : previous?.clicks || clicks,
       todayClicks: period === "today" ? clicks : previous?.todayClicks || 0,
@@ -638,6 +641,19 @@
     return element;
   }
 
+  // "instagram.com" would stamp the same letter on every profile, so an account
+  // takes its initials from its name instead.
+  function initialsFor(identity, url, title) {
+    const split = identity.indexOf(":");
+    const platform = split > 0 ? identity.slice(0, split) : "";
+    if (SOCIAL_PLATFORMS.includes(platform)) {
+      const fromTitle = String(title).trim().split(/\s+/).map((part) => part[0]).join("").slice(0, 3).toUpperCase();
+      if (fromTitle) return fromTitle;
+      return identity.slice(split + 1).slice(0, 3).toUpperCase() || "YOU";
+    }
+    return initialsFromUrl(url);
+  }
+
   function initialsFromUrl(url) {
     try {
       const host = new URL(url).hostname.replace(/^www\./, "");
@@ -661,14 +677,17 @@
   function parseProductUrl(value) {
     const raw = String(value || "").trim();
     if (!raw) throw new TypeError("A product URL is required.");
-    const parsed = raw.startsWith("@")
-      ? new URL(`https://x.com/${encodeURIComponent(raw.slice(1))}`)
-      : new URL(/^[a-z][a-z\d+.-]*:\/\//i.test(raw) ? raw : `https://${raw}`);
+    // A bare @handle does not say which platform, and guessing one lists the
+    // wrong account. Ask for the address the merchant can copy from the app.
+    if (raw.startsWith("@")) throw new TypeError("A full profile address is required.");
+    const parsed = new URL(/^[a-z][a-z\d+.-]*:\/\//i.test(raw) ? raw : `https://${raw}`);
     if (!/^https?:$/.test(parsed.protocol) || !parsed.hostname) throw new TypeError("Only web URLs are supported.");
     return parsed;
   }
 
   function faviconCandidates(listing) {
+    // instagram.com/favicon.ico is Instagram's logo, identical on every profile.
+    if (listingPlatform(listing)) return listing.iconUrl ? [listing.iconUrl] : [];
     try {
       const url = new URL(listing.url);
       if (url.hostname.endsWith(".example") && !listing.iconUrl) return [];
@@ -702,21 +721,35 @@
 
   function listingDetailsHref(listing) {
     // Permanent, shareable address for a live listing; the id form still redirects here.
-    const hostname = productHostname(listing);
-    if (hostname) return new URL(`./product/${hostname}`, window.location.href).toString();
+    const path = listingDetailPath(listing);
+    if (path) return new URL(path, window.location.origin).toString();
     const detail = new URL("./listing.html", window.location.href);
     detail.searchParams.set("id", listing.id);
     return detail.toString();
   }
 
-  function productHostname(listing) {
+  // Mirrors functions/_lib/platform.js: a social account is addressed by its
+  // platform and handle, a website by its hostname.
+  function listingDetailPath(listing) {
     if (listing?.isDemo) return "";
-    try {
-      const hostname = new URL(listing.url).hostname.toLowerCase();
-      return /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+$/.test(hostname) ? hostname : "";
-    } catch {
+    const identity = String(listing?.identity || "");
+    const split = identity.indexOf(":");
+    if (split > 0) {
+      const platform = identity.slice(0, split);
+      const handle = identity.slice(split + 1);
+      if (SOCIAL_PLATFORMS.includes(platform) && /^[a-z0-9](?:[a-z0-9._-]{0,58}[a-z0-9])?$/.test(handle)) {
+        return `/profile/${platform}/${handle}`;
+      }
       return "";
     }
+    return /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+$/.test(identity) ? `/product/${identity}` : "";
+  }
+
+  function listingPlatform(listing) {
+    const identity = String(listing?.identity || "");
+    const split = identity.indexOf(":");
+    const platform = split > 0 ? identity.slice(0, split) : "";
+    return SOCIAL_PLATFORMS.includes(platform) ? platform : "";
   }
 
   function listingAgeLabel(listing) {
@@ -753,8 +786,12 @@
   }
 
   function listingHostLabel(listing) {
+    // "instagram.com" reads the same on every profile; the handle is the address.
     try {
-      return new URL(listing.url).hostname.replace(/^www\./, "");
+      const url = new URL(listing.url);
+      const host = url.hostname.replace(/^(?:www|m)\./, "");
+      if (listingPlatform(listing)) return `${host}${url.pathname.replace(/\/+$/, "")}`;
+      return host;
     } catch {
       return "rankoff.my";
     }
@@ -921,8 +958,8 @@
       button.setAttribute("aria-label", state.language === "zh" ? (previous ? "向左滚动市场" : "向右滚动市场") : (previous ? "Scroll markets left" : "Scroll markets right"));
     });
     const shortLabels = state.language === "zh"
-      ? { Agents: "AI", Marketing: "营销与 SEO", Developer: "开发工具", Business: "商业服务", Crypto: "金融与加密", Ecommerce: "电商与硬件", Design: "设计与媒体", Productivity: "效率与教育", Health: "健康", Games: "游戏", Travel: "旅行与房产", Domains: "网站与域名", Other: "其他" }
-      : { Agents: "AI", Marketing: "Marketing & SEO", Developer: "Developer", Business: "Business", Crypto: "Finance & Crypto", Ecommerce: "Ecommerce & Hardware", Design: "Design & Media", Productivity: "Productivity & Education", Health: "Health", Games: "Games", Travel: "Travel & Property", Domains: "Web & Domains", Other: "Other" };
+      ? { Agents: "AI", Marketing: "营销与 SEO", Developer: "开发工具", Business: "商业服务", Crypto: "金融与加密", Ecommerce: "电商与硬件", Design: "设计与媒体", Productivity: "效率与教育", Health: "健康与美容", Sports: "运动健身", Games: "游戏", Travel: "旅行与房产", Domains: "网站与域名", Other: "其他" }
+      : { Agents: "AI", Marketing: "Marketing & SEO", Developer: "Developer", Business: "Business", Crypto: "Finance & Crypto", Ecommerce: "Ecommerce & Hardware", Design: "Design & Media", Productivity: "Productivity & Education", Health: "Health & Beauty", Sports: "Sports & Fitness", Games: "Games", Travel: "Travel & Property", Domains: "Web & Domains", Other: "Other" };
     const buttons = [{ label: state.language === "zh" ? "全部" : "All", value: DEFAULT_CATEGORY }, ...categories.map((category) => ({ label: shortLabels[category], value: category }))];
     elements.categoryRail.replaceChildren(
       ...buttons.map(({ label, value }) => {

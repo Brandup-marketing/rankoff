@@ -2,14 +2,14 @@
   "use strict";
 
   const STORE_KEY = "rankoff-mvp-demo-v3";
-  const categoryGroups = Object.freeze({ Agents: ["Agents", "AIMedia"], Marketing: ["Marketing", "SEO", "Social", "Sales", "Attention", "People"], Developer: ["Developer", "Security"], Business: ["Business", "Agencies", "Careers"], Crypto: ["Crypto"], Ecommerce: ["Ecommerce", "Hardware"], Design: ["Design", "Writing", "Audio", "News"], Productivity: ["Productivity", "Education"], Health: ["Health"], Games: ["Games"], Travel: ["Travel", "RealEstate"], Domains: ["Domains", "Discovery"], Other: ["Other"] });
+  const categoryGroups = Object.freeze({ Agents: ["Agents", "AIMedia"], Marketing: ["Marketing", "SEO", "Social", "Sales", "Attention", "People"], Developer: ["Developer", "Security"], Business: ["Business", "Agencies", "Careers"], Crypto: ["Crypto"], Ecommerce: ["Ecommerce", "Hardware"], Design: ["Design", "Writing", "Audio", "News"], Productivity: ["Productivity", "Education"], Health: ["Health"], Sports: ["Sports"], Games: ["Games"], Travel: ["Travel", "RealEstate"], Domains: ["Domains", "Discovery"], Other: ["Other"] });
   const categoryAliases = Object.freeze(Object.entries(categoryGroups).reduce((aliases, [market, members]) => {
     aliases[market.toLowerCase()] = market;
     members.forEach((member) => { aliases[member.toLowerCase()] = market; });
     return aliases;
   }, {}));
-  const categoryLabels = { Agents: "AI & Automation", Marketing: "Marketing, SEO & Social", Developer: "Developer Tools & Security", Business: "Business & Professional Services", Crypto: "Finance, Crypto & Investing", Ecommerce: "Ecommerce, Retail & Hardware", Design: "Design, Content & Media", Productivity: "Productivity & Education", Health: "Health & Wellness", Games: "Games & Entertainment", Travel: "Travel, Local & Property", Domains: "Web, Domains & Discovery", Other: "Other" };
-  const categoryTranslations = { Agents: "AI 与自动化", Marketing: "营销、SEO 与社交媒体", Developer: "开发工具与安全", Business: "商业与专业服务", Crypto: "金融、加密与投资", Ecommerce: "电商、零售与硬件", Design: "设计、内容与媒体", Productivity: "效率工具与教育", Health: "健康与生活方式", Games: "游戏与娱乐", Travel: "旅行、本地与房地产", Domains: "网站、域名与发现", Other: "其他" };
+  const categoryLabels = { Agents: "AI & Automation", Marketing: "Marketing, SEO & Social", Developer: "Developer Tools & Security", Business: "Business & Professional Services", Crypto: "Finance, Crypto & Investing", Ecommerce: "Ecommerce, Retail & Hardware", Design: "Design, Content & Media", Productivity: "Productivity & Education", Health: "Health & Beauty", Sports: "Sports & Fitness", Games: "Games & Entertainment", Travel: "Travel, Local & Property", Domains: "Web, Domains & Discovery", Other: "Other" };
+  const categoryTranslations = { Agents: "AI 与自动化", Marketing: "营销、SEO 与社交媒体", Developer: "开发工具与安全", Business: "商业与专业服务", Crypto: "金融、加密与投资", Ecommerce: "电商、零售与硬件", Design: "设计、内容与媒体", Productivity: "效率工具与教育", Health: "健康与美容", Sports: "运动与健身", Games: "游戏与娱乐", Travel: "旅行、本地与房地产", Domains: "网站、域名与发现", Other: "其他" };
   const previewListings = [
     ["model-harbor", "Model Harbor", "A release desk for production AI models, approvals, and customer notices.", "https://modelharbor.example/", "Agents", 2480, 2840],
     ["trackline", "Trackline", "Campaign reporting for teams that need a clean answer to what moved.", "https://trackline.example/", "Marketing", 2160, 1910],
@@ -24,7 +24,7 @@
     en: {
       board: "Board", about: "About", legal: "Legal", contact: "Contact", back: "← Back to leaderboard", loading: "Loading ranking details…",
       notFoundTitle: "Listing not found", notFoundCopy: "This listing may have moved or is no longer on the public board.", returnBoard: "Return to the board",
-      sponsored: "Sponsored", visit: "Visit website", share: "Share rank", evidence: "Public ranking record", rank: "Current rank", bid: "Bid", allTimeBid: "All-time total", past24Bid: "Past 24h total", duration: "Duration", past24: "Past 24h",
+      sponsored: "Sponsored", visit: "Visit website", viewInstagram: "View Instagram", viewFacebook: "View Facebook Page", viewTiktok: "View TikTok", viewProfile: "View profile", share: "Share rank", evidence: "Public ranking record", rank: "Current rank", bid: "Bid", allTimeBid: "All-time total", past24Bid: "Past 24h total", duration: "Duration", past24: "Past 24h",
       rule: "Highest total takes #1", claimNumberOne: "Claim #1 for", startClaim: "Challenge this rank",
       footer: "Transparent sponsored ranking. Every position has a visible price.",
       previewListing: "Public listing", verifiedPlacement: "Verified placement", previewData: "Public data", verifiedData: "Live data",
@@ -38,7 +38,7 @@
     zh: {
       board: "榜单", about: "关于", legal: "法律条款", contact: "联系", back: "← 返回榜单", loading: "正在加载排名信息…",
       notFoundTitle: "找不到此条目", notFoundCopy: "此条目可能已移动，或已不在公开榜单中。", returnBoard: "返回榜单",
-      sponsored: "赞助", visit: "访问网站", share: "分享排名", evidence: "公开排名记录", rank: "当前排名", bid: "出价", allTimeBid: "全时段累计出价", past24Bid: "近 24 小时累计出价", duration: "有效期", past24: "近 24 小时",
+      sponsored: "赞助", visit: "访问网站", viewInstagram: "查看 Instagram", viewFacebook: "查看 Facebook 专页", viewTiktok: "查看 TikTok", viewProfile: "查看主页", share: "分享排名", evidence: "公开排名记录", rank: "当前排名", bid: "出价", allTimeBid: "全时段累计出价", past24Bid: "近 24 小时累计出价", duration: "有效期", past24: "近 24 小时",
       rule: "累计出价最高者获得第 1 名", claimNumberOne: "以此价格争夺第 1 名", startClaim: "挑战此排名",
       footer: "透明的赞助排名。每个位置都有公开价格。",
       previewListing: "公开条目", verifiedPlacement: "已验证展示", previewData: "公开数据", verifiedData: "实时数据",
@@ -121,7 +121,7 @@
 
   function fromRanking(entry) {
     return {
-      id: String(entry.listing.id), title: String(entry.listing.title), description: String(entry.listing.description || "Sponsored listing on Rankoff."),
+      id: String(entry.listing.id), identity: String(entry.listing.hostname || ""), title: String(entry.listing.title), description: String(entry.listing.description || "Sponsored listing on Rankoff."),
       url: String(entry.listing.url || ""), category: String(entry.listing.category || "Other"), icon: String(entry.listing.favicon_url || ""),
       rank: Number(entry.rank), bid: Math.ceil(Number(entry.bid?.amount_minor || 0) / 100), clicks: Number(entry.clicks || 0),
       snapshot: "", mode: "preview",
@@ -169,6 +169,17 @@
     document.querySelector("#listing-detail")?.setAttribute("aria-busy", "false");
   }
 
+  const SOCIAL_PLATFORMS = ["instagram", "tiktok", "facebook", "x"];
+  const ACTION_COPY = { instagram: "viewInstagram", tiktok: "viewTiktok", facebook: "viewFacebook", x: "viewProfile" };
+
+  // Mirrors functions/_lib/platform.js: a profile is addressed by its handle.
+  function modelPlatform() {
+    const identity = String(model?.identity || "");
+    const split = identity.indexOf(":");
+    const platform = split > 0 ? identity.slice(0, split) : "";
+    return SOCIAL_PLATFORMS.includes(platform) ? platform : "";
+  }
+
   function initials(url, title) {
     try { return new URL(url).hostname.split(".")[0].split(/[-_]/).map((part) => part[0]).join("").slice(0, 3).toUpperCase(); }
     catch { return String(title).split(/\s+/).map((part) => part[0]).join("").slice(0, 3).toUpperCase(); }
@@ -177,10 +188,14 @@
   function setIcon() {
     elements.mark.querySelector("img")?.remove();
     elements.mark.classList.remove("has-icon");
-    elements.initials.textContent = initials(model.url, model.title);
+    elements.initials.textContent = modelPlatform()
+      ? String(model.title || "").split(/\s+/).map((part) => part[0]).join("").slice(0, 3).toUpperCase()
+      : initials(model.url, model.title);
     let host = "";
     try { host = new URL(model.url).hostname; } catch { return; }
     if (host.endsWith(".example") && !model.icon) return;
+    // instagram.com/favicon.ico is Instagram's logo, the same on every profile.
+    if (modelPlatform() && !model.icon) return;
     const sources = [...new Set([model.icon, `${new URL(model.url).origin}/favicon.ico`, `https://icons.duckduckgo.com/ip3/${encodeURIComponent(host)}.ico`].filter(Boolean))];
     if (!sources.length) return;
     const img = new Image();
@@ -218,7 +233,11 @@
     elements.disclosure.textContent = verified ? text("liveDisclosure") : text("previewDisclosure");
     elements.claim.href = `/index.html#claim`;
     let host = model.url;
-    try { host = new URL(model.url).hostname.replace(/^www\./, ""); } catch { /* Keep raw URL. */ }
+    try {
+      const parsed = new URL(model.url);
+      const bare = parsed.hostname.replace(/^(?:www|m)\./, "");
+      host = modelPlatform() ? `${bare}${parsed.pathname.replace(/\/+$/, "")}` : bare;
+    } catch { /* Keep raw URL. */ }
     elements.host.textContent = host;
 
     const unavailable = !model.url || (/\.example$/i.test(host) && !verified);
@@ -232,7 +251,7 @@
       if (verified && model.rank) destination.searchParams.set("rank", String(model.rank));
       elements.visit.href = destination.toString();
       elements.visit.removeAttribute("aria-disabled");
-      elements.visit.querySelector("span").textContent = text("visit");
+      elements.visit.querySelector("span").textContent = text(ACTION_COPY[modelPlatform()] || "visit");
     }
     setIcon();
     document.title = `${model.title} — #${model.rank} on RANKOFF`;
