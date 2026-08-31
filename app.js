@@ -634,10 +634,23 @@
     }
   }
 
-  function listingLink(listing) {
+  function listingVisitHref(listing, position = null) {
+    if (boardSource !== "production") return listing.url;
+    const go = new URL(`./go/${listing.id}`, window.location.href);
+    if (Number.isSafeInteger(position) && position > 0) go.searchParams.set("rank", String(position));
+    if (remoteSnapshotId) go.searchParams.set("snapshot", remoteSnapshotId);
+    return go.toString();
+  }
+
+  function listingLink(listing, position = null) {
+    // The name is the row's biggest click target, and the buyer paid for
+    // traffic: it goes straight to their site through the tracked redirect.
+    // Ranking evidence stays one click away behind "See details".
     const link = createElement("a", "product-name", listing.name);
-    link.href = listingDetailsHref(listing);
-    link.setAttribute("aria-label", state.language === "zh" ? `查看 ${listing.name} 的榜单详情` : `View ${listing.name} ranking details`);
+    link.href = listingVisitHref(listing, position);
+    link.target = "_blank";
+    link.rel = "noopener nofollow sponsored";
+    link.setAttribute("aria-label", state.language === "zh" ? `访问 ${listing.name} 的网站` : `Visit ${listing.name}'s website`);
     return link;
   }
 
@@ -690,6 +703,11 @@
 
   function productIdentity(listing, descriptionTag = "p", position = null) {
     const wrapper = createElement("div", "product-cell");
+    const markLink = createElement("a", "product-mark-link");
+    markLink.href = listingVisitHref(listing, position);
+    markLink.target = "_blank";
+    markLink.rel = "noopener nofollow sponsored";
+    markLink.setAttribute("aria-label", state.language === "zh" ? `访问 ${listing.name} 的网站` : `Visit ${listing.name}'s website`);
     const mark = createElement("span", "product-mark");
     mark.setAttribute("aria-hidden", "true");
     const initials = createElement("span", "product-initials", listing.mark);
@@ -734,14 +752,7 @@
     // One-click visit, outbid-style — but through the tracked /go redirect so
     // the click still lands in the listing's verified-clicks count.
     const visit = createElement("a", "listing-visit", chinese ? "访问网站 ↗" : "Visit ↗");
-    if (production) {
-      const go = new URL(`./go/${listing.id}`, window.location.href);
-      if (Number.isSafeInteger(position) && position > 0) go.searchParams.set("rank", String(position));
-      if (remoteSnapshotId) go.searchParams.set("snapshot", remoteSnapshotId);
-      visit.href = go.toString();
-    } else {
-      visit.href = listing.url;
-    }
+    visit.href = listingVisitHref(listing, position);
     visit.target = "_blank";
     visit.rel = "noopener nofollow sponsored";
     visit.setAttribute("aria-label", chinese ? `访问 ${listing.name} 的网站` : `Visit ${listing.name}'s website`);
@@ -754,8 +765,9 @@
     if (Number.isSafeInteger(position) && position > 0) meta.append(createShareControl(listing, position));
 
     const description = createElement(descriptionTag, "listing-description", listing.description);
-    copy.append(listingLink(listing), description, meta);
-    wrapper.append(mark, copy);
+    copy.append(listingLink(listing, position), description, meta);
+    markLink.append(mark);
+    wrapper.append(markLink, copy);
     return wrapper;
   }
 
