@@ -33,7 +33,7 @@
     en: {
       pageKicker: "Owner view",
       pageTitle: "Settled payments",
-      pageLede: "Who paid, what they paid for, and how to reach them. Live records only — nothing on this page is stored in this browser.",
+      pageLede: "Who paid, what they paid for, and how to reach them. Live records only — no payment record and no token is stored in this browser.",
       tokenLabel: "Admin token",
       tokenPlaceholder: "Paste the admin token",
       tokenNote: "The token is held in this tab's memory only. It is never saved to storage, never put in the address bar, and never sent anywhere but this site.",
@@ -76,7 +76,7 @@
     zh: {
       pageKicker: "站主视图",
       pageTitle: "已结算付款",
-      pageLede: "谁付了款、买了什么、如何联系。仅显示实时记录 —— 本页不会在此浏览器中保存任何内容。",
+      pageLede: "谁付了款、买了什么、如何联系。仅显示实时记录 —— 本页不会在此浏览器保存任何付款记录或令牌。",
       tokenLabel: "管理员令牌",
       tokenPlaceholder: "粘贴管理员令牌",
       tokenNote: "令牌只保存在本标签页的内存中：不写入本地存储，不出现在网址里，也只会发送到本站。",

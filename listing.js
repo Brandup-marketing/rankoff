@@ -234,6 +234,14 @@
 
   // #3 of the whole board says nothing; #1 of a market says something. Both are
   // true, and this has to read the same as the card the recipient's app renders.
+  // The day the picture was taken, in the reader's own language.
+  function cardStamp() {
+    const now = new Date();
+    return preferences.language === "zh"
+      ? `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日`
+      : now.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+  }
+
   function shareHeadline() {
     const zh = preferences.language === "zh";
     const useMarket = model.marketRank && model.marketRank < model.rank;
@@ -338,7 +346,13 @@
   elements.theme.addEventListener("click", () => { preferences.theme = preferences.theme === "dark" ? "light" : "dark"; savePreferences(); applyPreferences(); });
   elements.language.addEventListener("click", () => { preferences.language = preferences.language === "zh" ? "en" : "zh"; savePreferences(); applyPreferences(); });
   elements.share.addEventListener("click", async () => {
-    const share = { ...shareHeadline(), url: location.href, image: model.icon, description: model.description };
+    const share = {
+      ...shareHeadline(),
+      url: location.href,
+      image: model.icon,
+      description: model.description,
+      card: { period: "all", capturedAt: cardStamp() },
+    };
     if (window.RankoffShare?.open) {
       window.RankoffShare.open({ ...share, language: preferences.language, onStatus: showToast });
       return;

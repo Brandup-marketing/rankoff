@@ -2021,6 +2021,14 @@
     // truth, and no rank is claimed that the board has not confirmed.
   }
 
+  // The day the picture was taken, in the reader's own language.
+  function cardStamp() {
+    const now = new Date();
+    return state.language === "zh"
+      ? `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日`
+      : now.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+  }
+
   async function shareListing(listingId) {
     const listing = state.listings.find((item) => item.id === listingId);
     if (!listing) return;
@@ -2068,6 +2076,8 @@
         image: listing.iconUrl,
         description: listing.description,
         language: state.language,
+        // The saved image must not print a 24h figure under an all-time label.
+        card: { period: state.activeWindow, capturedAt: cardStamp() },
         onStatus: showToast,
       });
       return;

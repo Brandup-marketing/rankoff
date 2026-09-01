@@ -178,7 +178,10 @@ test("the owner page ships, hides itself from search, and keeps the token out of
 
   assert.match(html, /<meta name="robots" content="noindex, nofollow"/);
   for (const file of ["admin.html", "admin.js", "admin.css"]) assert.ok(build.includes(`'${file}'`), `${file} is missing from the build list`);
-  assert.ok(html.includes("./admin.js?v=1") && html.includes("./admin.css?v=1"));
+  // Version-agnostic: a cache bust is expected to change, but the reference
+  // must exist and must carry one.
+  assert.match(html, /\.\/admin\.js\?v=\d+/);
+  assert.match(html, /\.\/admin\.css\?v=\d+/);
 
   // The token may only ever live in the `token` variable: no storage, no URL,
   // no cookie, and no logging of anything this page loads.

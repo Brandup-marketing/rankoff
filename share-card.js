@@ -34,8 +34,8 @@ const FONT_STACK = 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", 
 const LOGO_TIMEOUT_MS = 4000;
 
 export const CARD_STRINGS = Object.freeze({
-  en: Object.freeze({ total: "Settled total", footer: "Sponsored ranking", board: "on RANKOFF" }),
-  zh: Object.freeze({ total: "累计出价", footer: "赞助排名", board: "RANKOFF 全站" }),
+  en: Object.freeze({ total: "Settled total", todayTotal: "Past 24h total", footer: "Sponsored ranking", board: "on RANKOFF", allTime: "All-time", today: "Past 24h" }),
+  zh: Object.freeze({ total: "累计出价", todayTotal: "近 24 小时累计", footer: "赞助排名", board: "RANKOFF 全站", allTime: "全部时间", today: "近 24 小时" }),
 });
 
 function fontOf(weight, size) {
@@ -132,12 +132,17 @@ export function buildCardModel(options) {
     : `${board || joiner === "on" ? "on" : "in"} ${where}`;
   const total = String(explicit?.total ?? parseSettledTotal(options?.text) ?? "").trim();
 
+  // A PNG outlives the rank it shows. The board it came from and the day it was
+  // taken travel with it, and the money keeps the label of its own window.
+  const period = String(explicit?.period ?? "all") === "today" ? "today" : "all";
   return {
     name,
     place,
     where,
     position,
     total,
+    period,
+    capturedAt: String(explicit?.capturedAt ?? "").trim(),
     language,
     initials: initialsOf(name),
     logoUrl: String(explicit?.logoUrl ?? proxyPathFor(options?.url) ?? ""),
@@ -294,7 +299,9 @@ function paint(model, shape, logo) {
   ctx.font = fontOf(700, 26 * scale);
   ctx.fillStyle = PALETTE.muted;
   ctx.textAlign = "right";
-  ctx.fillText(strings.footer, width - pad, footerBaseline);
+  const board = model.period === "today" ? strings.today : strings.allTime;
+  const stamped = model.capturedAt ? `${strings.footer} · ${board} · ${model.capturedAt}` : `${strings.footer} · ${board}`;
+  ctx.fillText(stamped, width - pad, footerBaseline);
   ctx.textAlign = "left";
   const footerTop = footerBaseline - 56 * scale;
 
@@ -319,7 +326,11 @@ function paint(model, shape, logo) {
   if (model.total) bodyHeight += 44 * scale + 2 + 32 * scale + totalLabelSize * 1.3 + totalValueSize;
 
   const room = footerTop - headerBottom;
-  let y = headerBottom + Math.max(48 * scale, (room - bodyHeight) / 2);
+  // A two-line name plus a total can exceed the room on the square card, and the
+  // old floor of 48*scale then pushed the money down onto "rankoff.my". When the
+  // stack does not fit, start at the top and let the gaps take the loss instead.
+  const slack = room - bodyHeight;
+  let y = headerBottom + (slack > 0 ? Math.max(48 * scale, slack / 2) : 0);
 
   drawLogoTile(ctx, pad, y, tile, logo, model.initials);
   y += tile + 54 * scale;
@@ -353,7 +364,7 @@ function paint(model, shape, logo) {
     y += 32 * scale;
     ctx.fillStyle = PALETTE.muted;
     ctx.font = fontOf(700, totalLabelSize);
-    drawTracked(ctx, strings.total, pad, y, 2 * scale);
+    drawTracked(ctx, model.period === "today" ? strings.todayTotal : strings.total, pad, y, 2 * scale);
     y += totalLabelSize * 1.3;
     ctx.fillStyle = PALETTE.ink;
     ctx.font = fontOf(800, totalValueSize);
