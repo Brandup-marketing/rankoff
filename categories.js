@@ -11,7 +11,7 @@
     { id: "Property", name: "Property & Agents", zh: "房产与经纪", icon: "⌂", members: ["Property", "RealEstate", "Travel"] },
     { id: "Interior", name: "Interior & Renovation", zh: "室内设计与装修", icon: "▤", members: ["Interior"] },
     { id: "Beauty", name: "Beauty & Wellness", zh: "美容与养生", icon: "✿", members: ["Beauty"] },
-    { id: "Health", name: "Health & Clinics", zh: "健康与诊所", icon: "✚", members: ["Health"] },
+    { id: "Health", name: "Health & Medical", zh: "健康与医疗", icon: "✚", members: ["Health"] },
     { id: "Sports", name: "Sports & Fitness", zh: "运动与健身", icon: "◐", members: ["Sports"] },
     { id: "Food", name: "Food & Beverage", zh: "餐饮", icon: "◍", members: ["Food"] },
     { id: "Marketing", name: "Marketing & Advertising", zh: "营销与广告", icon: "↗", members: ["Marketing", "SEO", "Social", "Sales", "Agencies"] },
