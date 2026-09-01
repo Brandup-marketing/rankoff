@@ -1527,7 +1527,16 @@
     const category = canonicalCategory(listing?.category) || state.category;
     if (elements.dialogRank) elements.dialogRank.textContent = `#${rank}`;
     if (elements.dialogPrice) elements.dialogPrice.textContent = money(amount);
-    if (elements.dialogContext) elements.dialogContext.textContent = `${checkoutBoardLabel()} · ${categoryName(category)}`;
+    // "All-time board · Beauty & Wellness" read as the board's own first place;
+    // the rank belongs to the market, and the timeframe is the smaller detail.
+    if (elements.dialogContext) {
+      const timeframe = state.language === "zh"
+        ? (state.activeWindow === "today" ? "近 24 小时" : "全时段")
+        : (state.activeWindow === "today" ? "past 24h" : "all-time");
+      elements.dialogContext.textContent = state.language === "zh"
+        ? `${categoryName(category, "zh")}榜 · ${timeframe}`
+        : `in ${categoryName(category)} · ${timeframe}`;
+    }
     if (elements.dialogTarget) {
       // The merchant confirms which account they pasted before any money moves.
       const listing = state.listings.find((item) => item.id === activeBid?.listingId);
