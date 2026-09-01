@@ -54,6 +54,13 @@ function redirect(target, seconds) {
   });
 }
 
+// Facebook and WhatsApp sometimes ask for the image with HEAD before fetching
+// it; answering that with the shell's HTML makes them skip the picture entirely.
+export async function onRequestHead(context) {
+  const response = await onRequestGet(context);
+  return new Response(null, { status: response.status, headers: response.headers });
+}
+
 export async function onRequestGet(context) {
   const url = new URL(context.request.url);
   const fallback = new URL(FALLBACK, url.origin).toString();
