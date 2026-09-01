@@ -1,4 +1,5 @@
 export const MARKET_GROUPS = Object.freeze({
+  AI: Object.freeze(["AI", "Agents", "AIMedia"]),
   Creators: Object.freeze(["Creators", "Attention", "People"]),
   Property: Object.freeze(["Property", "RealEstate", "Travel"]),
   Interior: Object.freeze(["Interior"]),
@@ -16,7 +17,6 @@ export const MARKET_GROUPS = Object.freeze({
   Construction: Object.freeze(["Construction", "Hardware"]),
   Home: Object.freeze(["Home"]),
   Automotive: Object.freeze(["Automotive", "Auto"]),
-  AI: Object.freeze(["AI", "Agents", "AIMedia"]),
   Other: Object.freeze(["Other", "Developer", "Security", "Games", "Domains", "Discovery"]),
 });
 
@@ -25,6 +25,7 @@ export const VISIBLE_CATEGORIES = Object.freeze(Object.keys(MARKET_GROUPS));
 // The names a reader sees. Kept beside the groups so a market cannot be added
 // to the board without one.
 export const MARKET_LABELS = Object.freeze({
+  AI: "AI Tools & Agents",
   Creators: "Creators & Talent",
   Property: "Property & Agents",
   Interior: "Interior & Renovation",
@@ -42,7 +43,6 @@ export const MARKET_LABELS = Object.freeze({
   Construction: "Hardware & Construction",
   Home: "Home Services",
   Automotive: "Automotive",
-  AI: "AI Tools & Agents",
   Other: "Other",
 });
 
