@@ -6,6 +6,32 @@ import { pingIndexNow } from "../../_lib/indexnow.js";
 import { profilePath } from "../../_lib/platform.js";
 import { verifyStandardWebhook } from "../../_lib/security.js";
 
+// Dodo sends the buyer with every payment event. It was being stored only
+// inside the raw payload, which meant the business could not reach a single
+// person who had paid. The full card number is never sent and never stored.
+export function buyerFrom(data) {
+  const text = (value) => {
+    const trimmed = String(value ?? "").trim();
+    return trimmed && trimmed !== "None" ? trimmed.slice(0, 320) : null;
+  };
+  const customer = data?.customer || {};
+  const billing = data?.billing || {};
+  return {
+    email: text(customer.email),
+    name: text(customer.name),
+    phone: text(customer.phone_number),
+    customerId: text(customer.customer_id),
+    country: text(billing.country),
+    state: text(billing.state),
+    city: text(billing.city),
+    street: text(billing.street),
+    zipcode: text(billing.zipcode),
+    invoiceUrl: text(data?.invoice_url),
+    cardLastFour: text(data?.card_last_four),
+    cardNetwork: text(data?.card_network),
+  };
+}
+
 export async function onRequestPost(context) {
   if (!isProduction(context.env)) throw new ApiError(503, "production_only", "Webhooks are disabled on the preview board.");
   const rawBody = await readText(context.request, {
@@ -57,6 +83,7 @@ export async function onRequestPost(context) {
       paymentId,
       previousStatus: bid.status,
       nextStatus,
+      buyer: buyerFrom(data),
       requestId: getRequestId(context),
     });
   } catch (error) {

@@ -468,13 +468,33 @@ export async function applyProviderEvent(db, event) {
        ) VALUES (?1, 'dodo', ?2, ?3, ?4, ?5, ?6, ?6)`,
     ).bind(crypto.randomUUID(), event.providerEventId, event.eventType, event.eventTimestamp, event.payloadJson, event.receivedAt),
     db.prepare(
+      // COALESCE on every buyer column: a later event (refund, dispute) must
+      // never blank out contact details an earlier one already recorded.
       `UPDATE bids
        SET status = ?2, provider_payment_id = COALESCE(?3, provider_payment_id),
            last_provider_event_id = ?4,
            settled_at = CASE WHEN ?2 = 'settled' THEN COALESCE(settled_at, ?5) ELSE settled_at END,
-           updated_at = ?5
+           updated_at = ?5,
+           buyer_email = COALESCE(?6, buyer_email),
+           buyer_name = COALESCE(?7, buyer_name),
+           buyer_phone = COALESCE(?8, buyer_phone),
+           provider_customer_id = COALESCE(?9, provider_customer_id),
+           buyer_country = COALESCE(?10, buyer_country),
+           buyer_state = COALESCE(?11, buyer_state),
+           buyer_city = COALESCE(?12, buyer_city),
+           buyer_street = COALESCE(?13, buyer_street),
+           buyer_zipcode = COALESCE(?14, buyer_zipcode),
+           invoice_url = COALESCE(?15, invoice_url),
+           card_last_four = COALESCE(?16, card_last_four),
+           card_network = COALESCE(?17, card_network)
        WHERE id = ?1`,
-    ).bind(event.bidId, event.nextStatus, event.paymentId, event.providerEventId, event.receivedAt),
+    ).bind(
+      event.bidId, event.nextStatus, event.paymentId, event.providerEventId, event.receivedAt,
+      event.buyer?.email ?? null, event.buyer?.name ?? null, event.buyer?.phone ?? null, event.buyer?.customerId ?? null,
+      event.buyer?.country ?? null, event.buyer?.state ?? null, event.buyer?.city ?? null,
+      event.buyer?.street ?? null, event.buyer?.zipcode ?? null,
+      event.buyer?.invoiceUrl ?? null, event.buyer?.cardLastFour ?? null, event.buyer?.cardNetwork ?? null,
+    ),
     db.prepare(
       `INSERT INTO audit_events (
          id, actor_type, action, target_type, target_id, provider_event_id,

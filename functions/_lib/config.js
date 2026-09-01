@@ -53,7 +53,7 @@ export function marketLabel(value) {
 export const CATEGORIES = Object.freeze([...new Set(Object.values(MARKET_GROUPS).flat())]);
 
 // Matches the "Last updated" date printed on /legal. Bump both together, never one alone.
-export const TERMS_VERSION = "2026-08-30";
+export const TERMS_VERSION = "2026-09-02";
 
 export function marketCategory(value) {
   const category = String(value || "").toLowerCase();
