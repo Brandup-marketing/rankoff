@@ -1012,15 +1012,30 @@
       if (!response.ok) return;
       const payload = await response.json();
       if (payload?.mode !== "production" || !Array.isArray(payload.rankings)) return;
+      const board = await fetch(new URL(`${BOARD_API_ENDPOINT}?board=global&category=all&period=${state.activeWindow}&limit=${PAGE_SIZE}`, window.location.href), { headers: { Accept: "application/json" }, cache: "no-store" })
+        .then((response) => (response.ok ? response.json() : null))
+        .catch(() => null);
       chosenMarket = {
         category,
         totals: payload.rankings.map((entry) => Math.ceil(Number(entry.bid?.amount_minor || 0) / 100)),
+        // What the same payment is worth on the whole board, so a market's #1
+        // is not mistaken for the top of the home page.
+        boardTotals: Array.isArray(board?.rankings)
+          ? board.rankings.map((entry) => Math.ceil(Number(entry.bid?.amount_minor || 0) / 100))
+          : null,
         nextBid: dollarsFromMinor(payload.next_bid_minor, null),
       };
     } catch {
       /* Falling back to the visible board is still a truthful projection. */
     }
     render();
+  }
+
+  function overallRank(amount) {
+    if (activeBid?.type !== "new" || existingListingForPending()) return null;
+    const totals = chosenMarket?.category === pendingChallenge?.category ? chosenMarket?.boardTotals : null;
+    if (!Array.isArray(totals)) return null;
+    return totals.filter((value) => value >= amount).length + 1;
   }
 
   function projectedRank(amount) {
@@ -1533,9 +1548,13 @@
       const timeframe = state.language === "zh"
         ? (state.activeWindow === "today" ? "近 24 小时" : "全时段")
         : (state.activeWindow === "today" ? "past 24h" : "all-time");
-      elements.dialogContext.textContent = state.language === "zh"
+      const market = state.language === "zh"
         ? `${categoryName(category, "zh")}榜 · ${timeframe}`
         : `in ${categoryName(category)} · ${timeframe}`;
+      const overall = overallRank(amount);
+      elements.dialogContext.textContent = overall && overall !== rank
+        ? (state.language === "zh" ? `${market} · 全站第 ${overall} 名` : `${market} · #${overall} on the whole board`)
+        : market;
     }
     if (elements.dialogTarget) {
       // The merchant confirms which account they pasted before any money moves.
