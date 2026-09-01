@@ -19,6 +19,25 @@ export function decodeEntities(value) {
     .trim();
 }
 
+function linkHref(html, patterns) {
+  for (const pattern of patterns) {
+    const tag = html.match(pattern);
+    if (!tag) continue;
+    // A .ico is the 16px relic; only a real image is worth a card tile.
+    const href = tag[0].match(/href=["']([^"']*)["']/i)?.[1] || "";
+    if (href && !/\.ico(\?|$)/i.test(href)) return decodeEntities(href);
+  }
+  return "";
+}
+
+// Last resort: plenty of sites declare no icon at all and simply put the logo in
+// the header. It is named "logo" often enough to be worth asking for.
+function markupLogo(html) {
+  const tag = html.match(/<img[^>]+(?:src|class|alt|id)=["'][^"']*logo[^"']*["'][^>]*>/i);
+  const src = tag?.[0].match(/src=["']([^"']+)["']/i)?.[1] || "";
+  return /\.(png|jpe?g|webp|svg)(\?|$)/i.test(src) ? decodeEntities(src) : "";
+}
+
 function metaContent(html, patterns) {
   for (const pattern of patterns) {
     const tag = html.match(pattern);
@@ -75,12 +94,17 @@ export function extractSiteInfo(html, hostname, { social = false } = {}) {
     ]),
     hostname,
   );
-  // A profile picture is served from a signed URL that expires within weeks; the
-  // card would quietly fall back to initials, so it is not worth storing.
-  const image = social ? "" : metaContent(head, [
+  // A site's declared icon is a square mark drawn for exactly this purpose;
+  // og:image is usually a wide hero photograph, which reads as a smudge in a
+  // card tile. Ask for the mark first and fall back to the share image.
+  const iconHref = social ? "" : linkHref(head, [
+    /<link[^>]+rel=["'][^"']*apple-touch-icon[^"']*["'][^>]*>/i,
+    /<link[^>]+rel=["'][^"']*icon[^"']*["'][^>]*>/i,
+  ]);
+  const image = social ? "" : (iconHref || metaContent(head, [
     /<meta[^>]+property=["']og:image:secure_url["'][^>]*>/i,
     /<meta[^>]+property=["']og:image["'][^>]*>/i,
-  ]);
+  ]) || markupLogo(head));
   let logo = "";
   try {
     if (!image) throw new Error("no image declared");

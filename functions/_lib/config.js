@@ -28,7 +28,7 @@ export const MARKET_LABELS = Object.freeze({
   Creators: "Creators & Talent",
   Property: "Property & Agents",
   Interior: "Interior & Renovation",
-  Beauty: "Beauty & Aesthetics",
+  Beauty: "Beauty & Wellness",
   Health: "Health & Clinics",
   Sports: "Sports & Fitness",
   Food: "Food & Beverage",
