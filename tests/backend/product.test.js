@@ -205,3 +205,42 @@ test("holding the top of the board keeps the bigger claim", () => {
   assert.equal(view.initials, "RJ");
   assert.match(renderProductPage(shell, view), /class="listing-mark has-icon"[^>]*>.*rakanjayahardware\.com\/logo\.png/s);
 });
+
+test("a market leader's page leads with the market, and still shows the whole board", () => {
+  const view = buildProductView({
+    entry: {
+      rank: 4,
+      clicks: 2,
+      bid: { amount_minor: 500 },
+      listing: { id: "l4", hostname: "uscpap.my", title: "USCPAP", description: "CPAP importer.", category: "Health", url: "https://uscpap.my/" },
+    },
+    board: { currency: "MYR" },
+    marketRank: 1,
+    marketName: "Health & Medical",
+  });
+  assert.equal(view.rankLabel, "Rank in Health & Medical");
+  assert.equal(view.rankValue, "#1");
+  assert.equal(view.rankNote, "#4 on the whole board");
+  const html = renderProductPage(shell, view);
+  assert.match(html, /<dt data-rank-label>Rank in Health &amp; Medical<\/dt>/);
+  assert.match(html, /<dd data-rank>#1<\/dd>/);
+  assert.match(html, /data-rank-note>#4 on the whole board<\/p>/);
+});
+
+test("holding the whole board needs no qualifier", () => {
+  const view = buildProductView({
+    entry: {
+      rank: 1,
+      clicks: 6,
+      bid: { amount_minor: 1000 },
+      listing: { id: "l1", hostname: "rakanjayahardware.com", title: "Rakan Jaya Hardware", description: "Hardware.", category: "Hardware", url: "https://rakanjayahardware.com/" },
+    },
+    board: { currency: "MYR" },
+    marketRank: 1,
+    marketName: "Hardware & Construction",
+  });
+  assert.equal(view.rankLabel, "Current rank");
+  assert.equal(view.rankValue, "#1");
+  assert.equal(view.rankNote, "");
+  assert.match(renderProductPage(shell, view), /data-rank-note hidden><\/p>/);
+});

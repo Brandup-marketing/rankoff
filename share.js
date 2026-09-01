@@ -14,6 +14,12 @@
     copy: dialog.querySelector("[data-share-copy]"),
     whatsapp: dialog.querySelector("[data-share-whatsapp]"),
     whatsappLabel: dialog.querySelector("[data-share-whatsapp-label]"),
+    facebook: dialog.querySelector("[data-share-facebook]"),
+    facebookLabel: dialog.querySelector("[data-share-facebook-label]"),
+    facebookNote: dialog.querySelector("[data-share-facebook-note]"),
+    x: dialog.querySelector("[data-share-x]"),
+    xLabel: dialog.querySelector("[data-share-x-label]"),
+    xNote: dialog.querySelector("[data-share-x-note]"),
     native: dialog.querySelector("[data-share-native]"),
     nativeLabel: dialog.querySelector("[data-share-native-label]"),
     options: dialog.querySelector(".share-options"),
@@ -29,13 +35,15 @@
     en: {
       heading: "Share this rank", intro: "Send the exact position, board, and category.", link: "Rank link",
       copy: "Copy link", copied: "Copied", copySuccess: "Rank link copied.", copyError: "Unable to copy the rank link.",
-      whatsapp: "WhatsApp", whatsappNote: "Send to a contact", native: "Share…", nativeNote: "Messenger and more apps",
+      whatsapp: "WhatsApp", whatsappNote: "Send to a contact", native: "Share…", nativeNote: "Instagram, Messenger, more",
+      facebook: "Facebook", facebookNote: "Post to your timeline", x: "X", xNote: "Post with your rank",
       nativeOpened: "Share menu opened.", close: "Close share options", options: "Share options",
     },
     zh: {
       heading: "分享此排名", intro: "发送准确的排名、榜单与分类。", link: "排名链接",
       copy: "复制链接", copied: "已复制", copySuccess: "排名链接已复制。", copyError: "无法复制排名链接。",
-      whatsapp: "WhatsApp", whatsappNote: "发送给联系人", native: "分享…", nativeNote: "Messenger 与更多应用",
+      whatsapp: "WhatsApp", whatsappNote: "发送给联系人", native: "分享…", nativeNote: "Instagram、Messenger 等",
+      facebook: "Facebook", facebookNote: "发到你的动态", x: "X", xNote: "带排名发帖",
       nativeOpened: "已打开分享菜单。", close: "关闭分享选项", options: "分享选项",
     },
   };
@@ -84,6 +92,21 @@
     }
   }
 
+  // Facebook reads the page's own og tags and drops any text we pass, so the
+  // card does the talking there. X keeps the sentence, so it gets both.
+  function openFacebook() {
+    if (!current) return;
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(current.url)}`, "_blank", "noopener,noreferrer");
+    close();
+  }
+
+  function openX() {
+    if (!current) return;
+    const text = encodeURIComponent(current.text);
+    window.open(`https://x.com/intent/post?text=${text}&url=${encodeURIComponent(current.url)}`, "_blank", "noopener,noreferrer");
+    close();
+  }
+
   function openWhatsApp() {
     if (!current) return;
     const message = encodeURIComponent(`${current.text} ${current.url}`);
@@ -110,6 +133,10 @@
     elements.copy.textContent = strings.copy;
     elements.whatsappLabel.textContent = strings.whatsapp;
     elements.whatsappNote.textContent = strings.whatsappNote;
+    if (elements.facebookLabel) elements.facebookLabel.textContent = strings.facebook;
+    if (elements.facebookNote) elements.facebookNote.textContent = strings.facebookNote;
+    if (elements.xLabel) elements.xLabel.textContent = strings.x;
+    if (elements.xNote) elements.xNote.textContent = strings.xNote;
     elements.nativeLabel.textContent = strings.native;
     elements.nativeNote.textContent = strings.nativeNote;
     elements.options.setAttribute("aria-label", strings.options);
@@ -139,7 +166,10 @@
     }
     elements.url.value = current.url;
     elements.native.hidden = typeof navigator.share !== "function";
-    elements.options.classList.toggle("is-single", elements.native.hidden);
+    // One column is only right when one option survives; with Facebook and X
+    // present, hiding the native sheet still leaves a grid.
+    const visibleOptions = [...dialog.querySelectorAll(".share-option")].filter((option) => !option.hidden).length;
+    elements.options.classList.toggle("is-single", visibleOptions <= 1);
     if (typeof dialog.showModal === "function") {
       if (!dialog.open) dialog.showModal();
     } else dialog.setAttribute("open", "");
@@ -148,6 +178,8 @@
 
   elements.copy.addEventListener("click", copyLink);
   elements.whatsapp.addEventListener("click", openWhatsApp);
+  elements.facebook?.addEventListener("click", openFacebook);
+  elements.x?.addEventListener("click", openX);
   elements.native.addEventListener("click", openNativeShare);
   elements.close.forEach((button) => button.addEventListener("click", close));
   dialog.addEventListener("click", (event) => { if (event.target === dialog) close(); });

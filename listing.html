@@ -17,7 +17,7 @@
     <title>Sponsored listing | RANKOFF</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
     <link rel="stylesheet" href="./styles.css?v=35" />
-    <link rel="stylesheet" href="./listing.css?v=8" />
+    <link rel="stylesheet" href="./listing.css?v=9" />
   </head>
   <body>
     <a class="skip-link" href="#listing-detail">Skip to listing details</a>
@@ -79,10 +79,11 @@
               </div>
 
               <dl class="evidence-metrics">
-                <div><dt data-copy="rank">Current rank</dt><dd data-rank>—</dd></div>
+                <div><dt data-rank-label>Current rank</dt><dd data-rank>—</dd></div>
                 <div><dt data-copy="allTimeBid">All-time total</dt><dd data-bid>—</dd></div>
                 <div><dt data-click-label>Referral clicks</dt><dd data-clicks>—</dd></div>
               </dl>
+              <p class="evidence-qualifier" data-rank-note hidden></p>
 
               <div class="period-comparison" data-today-row>
                 <div><span data-copy="past24">Past 24h</span><strong data-today-rank>—</strong></div>
@@ -136,13 +137,13 @@
         </label>
         <div class="share-options" aria-label="Share options">
           <button class="share-option" type="button" data-share-whatsapp><span data-share-whatsapp-label>WhatsApp</span><small data-share-whatsapp-note>Send to a contact</small></button>
-          <button class="share-option" type="button" data-share-native><span data-share-native-label>Share…</span><small data-share-native-note>Messenger and more apps</small></button>
+          <button class="share-option" type="button" data-share-facebook><span data-share-facebook-label>Facebook</span><small data-share-facebook-note>Post to your timeline</small></button><button class="share-option" type="button" data-share-x><span data-share-x-label>X</span><small data-share-x-note>Post with your rank</small></button><button class="share-option" type="button" data-share-native><span data-share-native-label>Share…</span><small data-share-native-note>Messenger and more apps</small></button>
         </div>
       </div>
     </dialog>
 
     <div class="toast" role="status" aria-live="polite" data-toast></div>
-    <script src="./share.js?v=2" defer></script>
-    <script src="./listing.js?v=23" defer></script>
+    <script src="./share.js?v=4" defer></script>
+    <script src="./listing.js?v=24" defer></script>
   </body>
 </html>

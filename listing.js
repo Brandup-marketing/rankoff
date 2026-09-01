@@ -59,6 +59,7 @@
     category: document.querySelector("[data-category]"), placement: document.querySelector("[data-placement-label]"), host: document.querySelector("[data-host]"),
     description: document.querySelector("[data-description]"), visit: document.querySelector("[data-visit]"), share: document.querySelector("[data-share]"),
     mode: document.querySelector("[data-mode]"), evidenceNote: document.querySelector("[data-evidence-note]"), rank: document.querySelector("[data-rank]"),
+    rankLabel: document.querySelector("[data-rank-label]"), rankNote: document.querySelector("[data-rank-note]"),
     bid: document.querySelector("[data-bid]"), clicks: document.querySelector("[data-clicks]"), clickLabels: document.querySelectorAll("[data-click-label], [data-click-label-today]"),
     todayRank: document.querySelector("[data-today-rank]"), todayBid: document.querySelector("[data-today-bid]"), todayClicks: document.querySelector("[data-today-clicks]"),
     nextBid: document.querySelector("[data-next-bid]"), claimCopy: document.querySelector("[data-claim-copy]"), claim: document.querySelector("[data-claim]"),
@@ -250,13 +251,33 @@
     };
   }
 
+  // The page has to substantiate the claim its own title makes. A listing that
+  // bought first place in a market leads with that, and still shows where the
+  // same payment sits on the whole board rather than hiding it.
+  function rankFrame() {
+    const zh = preferences.language === "zh";
+    if (!(model.marketRank && model.marketRank < model.rank)) {
+      return { label: text("rank"), value: `#${model.rank}`, note: "" };
+    }
+    const market = categoryName(model.category);
+    return {
+      label: zh ? `${market} 排名` : `Rank in ${market}`,
+      value: `#${model.marketRank}`,
+      note: zh ? `全站第 ${model.rank} 名` : `#${model.rank} on the whole board`,
+    };
+  }
+
   function renderModel() {
     const verified = model.mode === "production";
     const clickLabel = verified ? text("verifiedClicks") : text("sampleClicks");
     elements.title.textContent = model.title;
     elements.category.textContent = categoryName(model.category);
     elements.description.textContent = model.description;
-    elements.rank.textContent = `#${model.rank}`;
+    const frame = rankFrame();
+    elements.rankLabel.textContent = frame.label;
+    elements.rank.textContent = frame.value;
+    elements.rankNote.textContent = frame.note;
+    elements.rankNote.hidden = !frame.note;
     elements.bid.textContent = money.format(model.bid);
     elements.clicks.textContent = count.format(model.clicks);
     elements.todayRank.textContent = model.todayRank ? `#${model.todayRank}` : "—";

@@ -113,6 +113,10 @@ export function buildProductView({ entry, todayEntry, board, snapshotId, record,
     facts: recordFacts(record),
     marketRank,
     marketName,
+    // Same frame the title uses, so the page and its own headline agree.
+    rankLabel: useMarket ? `Rank in ${marketName}` : "Current rank",
+    rankValue: useMarket ? `#${marketRank}` : `#${rank}`,
+    rankNote: useMarket ? `#${rank} on the whole board` : "",
     logo: String(listing.favicon_url || ""),
     initials: initialsFor(title, label),
     // Both positions are true; a merchant shares the one worth sharing. #3 of a
@@ -203,7 +207,14 @@ export function renderProductPage(shell, view) {
   html = html.replace(/(<p class="listing-story" data-description)>[\s\S]*?<\/p>/, `$1>${escapeHtml(view.description)}</p>`);
   html = html.replace(/(<span data-category)>[\s\S]*?<\/span>/, `$1>${escapeHtml(view.marketName || view.category)}</span>`);
   html = html.replace(/(<span class="verified-chip" data-placement-label)>[\s\S]*?<\/span>/, `$1>Verified placement</span>`);
-  html = html.replace(/(<dd data-rank)>[\s\S]*?<\/dd>/, `$1>#${escapeHtml(view.rank)}</dd>`);
+  html = html.replace(/(<dt data-rank-label)>[\s\S]*?<\/dt>/, `$1>${escapeHtml(view.rankLabel)}</dt>`);
+  html = html.replace(/(<dd data-rank)>[\s\S]*?<\/dd>/, `$1>${escapeHtml(view.rankValue)}</dd>`);
+  if (view.rankNote) {
+    html = html.replace(
+      /<p class="evidence-qualifier" data-rank-note hidden><\/p>/,
+      `<p class="evidence-qualifier" data-rank-note>${escapeHtml(view.rankNote)}</p>`,
+    );
+  }
   html = html.replace(/(<dd data-bid)>[\s\S]*?<\/dd>/, `$1>${escapeHtml(view.bid)}</dd>`);
   html = html.replace(/(<dd data-clicks)>[\s\S]*?<\/dd>/, `$1>${escapeHtml(view.clicks)}</dd>`);
   if (view.facts?.length) {
