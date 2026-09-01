@@ -7,6 +7,9 @@
   const elements = {
     title: dialog.querySelector("[data-share-title]"),
     text: dialog.querySelector("[data-share-text]"),
+    mark: dialog.querySelector("[data-share-mark]"),
+    image: dialog.querySelector("[data-share-image]"),
+    note: dialog.querySelector("[data-share-note]"),
     url: dialog.querySelector("[data-share-url]"),
     copy: dialog.querySelector("[data-share-copy]"),
     whatsapp: dialog.querySelector("[data-share-whatsapp]"),
@@ -122,6 +125,18 @@
     localize();
     elements.title.textContent = current.title;
     elements.text.textContent = current.text;
+    // The preview is where a merchant decides whether this is worth sending, so
+    // it carries the same brand and words the recipient's app will render.
+    if (elements.note) {
+      elements.note.textContent = String(options.description || "");
+      elements.note.hidden = !options.description;
+    }
+    if (elements.mark && elements.image) {
+      const source = String(options.image || "");
+      elements.mark.hidden = !source;
+      if (source && elements.image.src !== source) elements.image.src = source;
+      elements.image.onerror = () => { elements.mark.hidden = true; };
+    }
     elements.url.value = current.url;
     elements.native.hidden = typeof navigator.share !== "function";
     elements.options.classList.toggle("is-single", elements.native.hidden);

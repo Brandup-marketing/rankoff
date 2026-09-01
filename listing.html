@@ -16,8 +16,8 @@
     <meta name="theme-color" content="#090a0c" />
     <title>Sponsored listing | RANKOFF</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=34" />
-    <link rel="stylesheet" href="./listing.css?v=7" />
+    <link rel="stylesheet" href="./styles.css?v=35" />
+    <link rel="stylesheet" href="./listing.css?v=8" />
   </head>
   <body>
     <a class="skip-link" href="#listing-detail">Skip to listing details</a>
@@ -120,8 +120,12 @@
           <button class="icon-button" type="button" data-share-close aria-label="Close share options">×</button>
         </div>
         <div class="share-preview">
-          <strong data-share-title>RANKOFF</strong>
-          <p data-share-text></p>
+          <span class="share-preview-mark" data-share-mark hidden aria-hidden="true"><img data-share-image alt="" referrerpolicy="no-referrer" decoding="async" /></span>
+          <div class="share-preview-copy">
+            <strong data-share-title>RANKOFF</strong>
+            <p data-share-text></p>
+            <p class="share-preview-note" data-share-note hidden></p>
+          </div>
         </div>
         <label class="share-link-field">
           <span data-share-link-label>Rank link</span>
@@ -138,7 +142,7 @@
     </dialog>
 
     <div class="toast" role="status" aria-live="polite" data-toast></div>
-    <script src="./share.js?v=1" defer></script>
-    <script src="./listing.js?v=20" defer></script>
+    <script src="./share.js?v=2" defer></script>
+    <script src="./listing.js?v=21" defer></script>
   </body>
 </html>

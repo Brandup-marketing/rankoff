@@ -151,6 +151,14 @@
             model.mode = allPayload.mode === "production" ? "production" : "preview";
             model.snapshot = allPayload.snapshot_id || "";
             model.nextBid = Math.ceil(Number(allPayload.next_bid_minor || 100) / 100);
+            // The board is already loaded in full, so the listing's position
+            // inside its own market costs nothing more to work out.
+            const market = categoryAliases[String(allEntry.listing?.category || "").toLowerCase()] || "Other";
+            const inMarket = (allPayload.rankings || []).filter(
+              (entry) => (categoryAliases[String(entry.listing?.category || "").toLowerCase()] || "Other") === market,
+            );
+            const place = inMarket.findIndex((entry) => String(entry.listing?.id) === id);
+            if (place >= 0) model.marketRank = place + 1;
             if (todayEntry) {
               model.todayRank = Number(todayEntry.rank);
               model.todayBid = Math.ceil(Number(todayEntry.bid?.amount_minor || 0) / 100);
@@ -223,6 +231,18 @@
     next();
   }
 
+  // #3 of the whole board says nothing; #1 of a market says something. Both are
+  // true, and this has to read the same as the card the recipient's app renders.
+  function shareHeadline() {
+    const zh = preferences.language === "zh";
+    const useMarket = model.marketRank && model.marketRank < model.rank;
+    const where = useMarket ? categoryName(model.category) : "RANKOFF";
+    const place = useMarket ? model.marketRank : model.rank;
+    return zh
+      ? { title: `${model.title} — ${where} 第 ${place} 名`, text: `${model.title} 目前是 ${where} 第 ${place} 名。` }
+      : { title: `${model.title} — #${place} ${useMarket ? "in" : "on"} ${where}`, text: `${model.title} is #${place} ${useMarket ? "in" : "on"} ${where}.` };
+  }
+
   function renderModel() {
     const verified = model.mode === "production";
     const clickLabel = verified ? text("verifiedClicks") : text("sampleClicks");
@@ -267,7 +287,9 @@
       elements.visit.querySelector("span").textContent = text(ACTION_COPY[modelPlatform()] || "visit");
     }
     setIcon();
-    document.title = `${model.title} — #${model.rank} on RANKOFF`;
+    // The server already wrote the better of the two true positions into the
+    // title; hydration must not quietly demote it to the whole-board number.
+    document.title = `${shareHeadline().title} | RANKOFF`.replace(" | RANKOFF | RANKOFF", " | RANKOFF");
     document.querySelector('meta[property="og:title"]')?.setAttribute("content", document.title);
     document.querySelector('meta[name="description"]')?.setAttribute("content", model.description);
   }
@@ -288,7 +310,7 @@
   elements.theme.addEventListener("click", () => { preferences.theme = preferences.theme === "dark" ? "light" : "dark"; savePreferences(); applyPreferences(); });
   elements.language.addEventListener("click", () => { preferences.language = preferences.language === "zh" ? "en" : "zh"; savePreferences(); applyPreferences(); });
   elements.share.addEventListener("click", async () => {
-    const share = { title: `${model.title} — RANKOFF`, text: `${model.title} ${text("shareText")} #${model.rank} on RANKOFF.`, url: location.href };
+    const share = { ...shareHeadline(), url: location.href, image: model.icon, description: model.description };
     if (window.RankoffShare?.open) {
       window.RankoffShare.open({ ...share, language: preferences.language, onStatus: showToast });
       return;

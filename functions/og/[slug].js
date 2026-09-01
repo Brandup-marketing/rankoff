@@ -24,7 +24,16 @@ export async function discoverShareImage(pageUrl, fetcher = fetch) {
   if (!content) return "";
   try {
     const resolved = new URL(content[1], response.url || pageUrl);
-    return resolved.protocol === "https:" ? resolved.toString() : "";
+    if (resolved.protocol === "https:") return resolved.toString();
+    // Plenty of sites still declare their share image over http while serving
+    // the same file over https. A crawler will not load mixed content, so try
+    // the secure form rather than throwing away the merchant's own picture —
+    // verifyImage decides whether it is really there.
+    if (resolved.protocol === "http:") {
+      resolved.protocol = "https:";
+      return resolved.toString();
+    }
+    return "";
   } catch {
     return "";
   }

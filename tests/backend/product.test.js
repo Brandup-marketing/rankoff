@@ -134,7 +134,7 @@ test("the share image points at this listing's own resolver", () => {
   assert.ok(!html.includes("og:image:height"), "a hardcoded size must not survive");
 });
 
-test("share image discovery takes only an https image the page itself declares", async () => {
+test("share image discovery reads the image a page declares, over https", async () => {
   const page = (body, url = "https://example.com/") => async () => ({ ok: true, url, text: async () => body });
   assert.equal(
     await discoverShareImage("https://example.com/", page('<meta property="og:image" content="/card.png">')),
@@ -146,8 +146,13 @@ test("share image discovery takes only an https image the page itself declares",
   );
   assert.equal(
     await discoverShareImage("https://example.com/", page('<meta property="og:image" content="http://insecure.example/a.png">')),
+    "https://insecure.example/a.png",
+    "a crawler will not load mixed content, so the same file is tried over https",
+  );
+  assert.equal(
+    await discoverShareImage("https://example.com/", page('<meta property="og:image" content="ftp://example.com/a.png">')),
     "",
-    "an http image would break the page's https lock",
+    "only the web protocols are worth trying",
   );
   assert.equal(await discoverShareImage("https://example.com/", page("<p>no meta here</p>")), "");
   assert.equal(await discoverShareImage("https://example.com/", async () => ({ ok: false })), "");
