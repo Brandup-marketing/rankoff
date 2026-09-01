@@ -6,7 +6,7 @@
   const boardCurrencyFormat = (code) => new Intl.NumberFormat(code === "MYR" ? "en-MY" : "en-US", { style: "currency", currency: code || "USD", maximumFractionDigits: 0 });
   let currency = boardCurrencyFormat("USD");
   const categoryConfig = [
-    { id: "Creators", name: "Creators & Talent", zh: "创作者与艺人", icon: "✦", members: ["Creators", "Attention", "People", "AIMedia"] },
+    { id: "Creators", name: "Creators & Talent", zh: "创作者与艺人", icon: "✦", members: ["Creators", "Attention", "People"] },
     { id: "Property", name: "Property & Agents", zh: "房产与经纪", icon: "⌂", members: ["Property", "RealEstate", "Travel"] },
     { id: "Interior", name: "Interior & Renovation", zh: "室内设计与装修", icon: "▤", members: ["Interior"] },
     { id: "Beauty", name: "Beauty & Aesthetics", zh: "美容与医美", icon: "✿", members: ["Beauty"] },
@@ -23,7 +23,8 @@
     { id: "Construction", name: "Hardware & Construction", zh: "五金与建筑", icon: "▦+", members: ["Construction", "Hardware"] },
     { id: "Home", name: "Home Services", zh: "家居服务", icon: "⚙", members: ["Home"] },
     { id: "Automotive", name: "Automotive", zh: "汽车", icon: "◎", members: ["Automotive", "Auto"] },
-    { id: "Other", name: "Other", zh: "其他", icon: "•••", members: ["Other", "Agents", "Developer", "Security", "Crypto", "Games", "Domains", "Discovery"] },
+    { id: "AI", name: "AI Tools & Agents", zh: "AI 工具与智能体", icon: "✧", members: ["AI", "Agents", "AIMedia"] },
+    { id: "Other", name: "Other", zh: "其他", icon: "•••", members: ["Other", "Developer", "Security", "Games", "Domains", "Discovery"] },
   ];
   const categoryAliases = Object.freeze(categoryConfig.reduce((aliases, config) => {
     aliases[config.id.toLowerCase()] = config.id;
