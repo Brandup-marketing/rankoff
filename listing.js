@@ -196,7 +196,14 @@
     if (host.endsWith(".example") && !model.icon) return;
     // instagram.com/favicon.ico is Instagram's logo, the same on every profile.
     if (modelPlatform() && !model.icon) return;
-    const sources = [...new Set([model.icon, `${new URL(model.url).origin}/favicon.ico`, `https://icons.duckduckgo.com/ip3/${encodeURIComponent(host)}.ico`].filter(Boolean))];
+    const origin = new URL(model.url).origin;
+    const sources = [...new Set([
+      `${origin}/apple-touch-icon.png`,
+      `https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=128`,
+      model.icon,
+      `${origin}/favicon.ico`,
+      `https://icons.duckduckgo.com/ip3/${encodeURIComponent(host)}.ico`,
+    ].filter(Boolean))];
     if (!sources.length) return;
     const img = new Image();
     img.alt = "";

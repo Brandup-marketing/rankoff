@@ -736,9 +736,15 @@
     try {
       const url = new URL(listing.url);
       if (url.hostname.endsWith(".example") && !listing.iconUrl) return [];
+      // favicon.ico is 16-32px and turns to mush at card size. The touch icon and
+      // Google's service both serve ~128-180px, so the mark stays sharp.
+      const sharp = [
+        `${url.origin}/apple-touch-icon.png`,
+        `https://www.google.com/s2/favicons?domain=${encodeURIComponent(url.hostname)}&sz=128`,
+      ];
       const direct = `${url.origin}/favicon.ico`;
       const fallback = `https://icons.duckduckgo.com/ip3/${encodeURIComponent(url.hostname)}.ico`;
-      return [...new Set([listing.iconUrl, direct, fallback].filter(Boolean))];
+      return [...new Set([...sharp, listing.iconUrl, direct, fallback].filter(Boolean))];
     } catch {
       return listing.iconUrl ? [listing.iconUrl] : [];
     }
