@@ -238,9 +238,16 @@
     const useMarket = model.marketRank && model.marketRank < model.rank;
     const where = useMarket ? categoryName(model.category) : "RANKOFF";
     const place = useMarket ? model.marketRank : model.rank;
-    return zh
-      ? { title: `${model.title} — ${where} 第 ${place} 名`, text: `${model.title} 目前是 ${where} 第 ${place} 名。` }
-      : { title: `${model.title} — #${place} ${useMarket ? "in" : "on"} ${where}`, text: `${model.title} is #${place} ${useMarket ? "in" : "on"} ${where}.` };
+    const title = zh
+      ? `${model.title} — ${where} 第 ${place} 名`
+      : `${model.title} — #${place} ${useMarket ? "in" : "on"} ${where}`;
+    return {
+      title,
+      text: zh ? `${model.title} 目前是 ${where} 第 ${place} 名。` : `${model.title} is #${place} ${useMarket ? "in" : "on"} ${where}.`,
+      // The server names the board only once; a market headline needs it added,
+      // a whole-board one already carries it.
+      pageTitle: useMarket ? `${title} | RANKOFF` : title,
+    };
   }
 
   function renderModel() {
@@ -289,7 +296,7 @@
     setIcon();
     // The server already wrote the better of the two true positions into the
     // title; hydration must not quietly demote it to the whole-board number.
-    document.title = `${shareHeadline().title} | RANKOFF`.replace(" | RANKOFF | RANKOFF", " | RANKOFF");
+    document.title = shareHeadline().pageTitle;
     document.querySelector('meta[property="og:title"]')?.setAttribute("content", document.title);
     document.querySelector('meta[name="description"]')?.setAttribute("content", model.description);
   }
