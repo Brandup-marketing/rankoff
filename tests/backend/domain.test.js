@@ -40,7 +40,7 @@ test("URL and money validation reject unsafe inputs", () => {
 
 test("legacy category tags normalize to visible launch markets", () => {
   assert.equal(normalizeCategory("SEO"), "Marketing");
-  assert.equal(normalizeCategory("Hardware"), "Retail");
+  assert.equal(normalizeCategory("Hardware"), "Construction");
   assert.equal(normalizeCategory("Design"), "Creative");
   assert.equal(normalizeCategory("RealEstate"), "Property");
   assert.equal(normalizeCategory("Education"), "Education");
