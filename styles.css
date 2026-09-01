@@ -361,6 +361,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .ranking-rules p { margin: .2rem 0 0; color: var(--muted); font-size: .75rem; }
 .ranking-rules dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin: 0; }
 .ranking-rules dl div { min-width: 0; }
+/* Questions an AI search engine can quote. They belong to the rules section, so
+   they carry its full width instead of stacking inside its first column. */
+.answer-links { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: .4rem; }
+.answer-links a { padding: .38rem .6rem; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: .74rem; font-weight: 700; text-decoration: none; }
+.answer-links a:hover { border-color: var(--accent); color: var(--ink); }
 .ranking-rules dt { color: var(--ink); font-size: .7rem; font-weight: 800; }
 .ranking-rules dd { margin: .15rem 0 0; color: var(--muted); font-size: .7rem; line-height: 1.35; }
 .ranking-rules > a { color: var(--blue); font-size: .72rem; font-weight: 750; white-space: nowrap; }
@@ -372,6 +377,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .footer-credit { display: grid; gap: .12rem; }
 .footer-credit strong { color: var(--ink); font-size: .9rem; }
 .footer-credit span { color: var(--muted); }
+.footer-parent { color: var(--muted); text-decoration: none; }
+.footer-parent:hover { color: var(--ink); text-decoration: underline; }
 .footer-links { display: inline-flex; flex-wrap: wrap; justify-content: flex-end; gap: .4rem; }
 .footer-links a { padding: .38rem .55rem; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-weight: 700; text-decoration: none; }
 .footer-links a:hover { border-color: var(--accent); color: var(--ink); }
