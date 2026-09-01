@@ -266,8 +266,12 @@
           <button class="icon-button" type="button" data-share-close aria-label="Close share options">×</button>
         </div>
         <div class="share-preview">
-          <strong data-share-title>RANKOFF</strong>
-          <p data-share-text></p>
+          <span class="share-preview-mark" data-share-mark hidden aria-hidden="true"><img data-share-image alt="" referrerpolicy="no-referrer" decoding="async" /></span>
+          <div class="share-preview-copy">
+            <strong data-share-title>RANKOFF</strong>
+            <p data-share-text></p>
+            <p class="share-preview-note" data-share-note hidden></p>
+          </div>
         </div>
         <label class="share-link-field">
           <span data-share-link-label>Rank link</span>
@@ -286,6 +290,6 @@
     <div class="toast" data-toast role="status" aria-live="polite" aria-atomic="true"></div>
     <script src="./search.js?v=2" defer></script>
     <script src="./share.js?v=2" defer></script>
-    <script src="./app.js?v=70" defer></script>
+    <script src="./app.js?v=71" defer></script>
   </body>
 </html>

@@ -1809,26 +1809,50 @@
     if (!listing) return;
     const rank = rankedListings().findIndex((item) => item.id === listing.id) + 1;
     if (rank < 1) return;
-    const nextPrice = rankedListings().length ? getBid(rankedListings()[0]) + 1 : 1;
-    const text = state.language === "zh"
-      ? `${listing.name} 以 ${money(getBid(listing))} 的赞助出价位居 RANKOFF ${windowLabel()}榜第 ${rank} 名。你能超越它吗？${money(nextPrice)} 起认领第 1 名。`
-      : `${listing.name} holds #${rank} on RANKOFF's ${windowLabel().toLowerCase()} board with a ${money(getBid(listing))} sponsored bid. Think you can outrank it? Claim #1 from ${money(nextPrice)}.`;
-    const url = new URL(window.location.href);
-    if (["localhost", "127.0.0.1", "0.0.0.0"].includes(url.hostname)) {
-      url.protocol = "https:";
-      url.host = "rankoff.my";
-      url.pathname = "/";
-    }
-    url.searchParams.delete("checkout");
-    url.searchParams.delete("reset");
-    url.searchParams.set("period", state.activeWindow);
-    if (state.category === DEFAULT_CATEGORY) url.searchParams.delete("category");
-    else url.searchParams.set("category", state.category);
-    url.hash = `listing-${listing.id}`;
+    // The price the board actually charges. "Leader + 1" ignores the minimum
+    // increment, so the card offered RM 15 while the shared message said RM 11.
+    const claimMinimum = boardSource !== "local" && remoteNextBid
+      ? remoteNextBid
+      : getBid((remoteLeader || rankedListings()[0])) + 1;
 
-    const shareData = { title: state.language === "zh" ? `${listing.name} 的 RANKOFF 排名` : `${listing.name} on RANKOFF`, text, url: url.toString() };
+    // #4 of the whole board says nothing; #1 of a market says something. Both
+    // are true, so the message carries whichever one reads better.
+    const shareMarket = canonicalCategory(listing.category) || "Other";
+    const marketRankOf = rankedListings()
+      .filter((item) => (canonicalCategory(item.category) || "Other") === shareMarket)
+      .findIndex((item) => item.id === listing.id) + 1;
+    const useMarket = marketRankOf > 0 && marketRankOf < rank;
+    const shareWhere = useMarket ? categoryName(listing.category) : "RANKOFF";
+    const sharePlace = useMarket ? marketRankOf : rank;
+
+    const text = state.language === "zh"
+      ? `${listing.name} 以 ${money(getBid(listing))} 的赞助出价位居 ${shareWhere} 第 ${sharePlace} 名。你能超越它吗？${money(claimMinimum)} 起认领第 1 名。`
+      : `${listing.name} holds #${sharePlace} ${useMarket ? "in" : "on"} ${shareWhere} with a ${money(getBid(listing))} sponsored bid. Think you can outrank it? Claim #1 from ${money(claimMinimum)}.`;
+
+    // The listing's own page. Sharing the home page with a hash makes WhatsApp
+    // read Rankoff's own card, so the merchant's brand never appears.
+    const detailPath = listingDetailPath(listing);
+    const shareUrl = new URL(detailPath || "/", "https://rankoff.my");
+    if (!detailPath) {
+      shareUrl.searchParams.set("period", state.activeWindow);
+      shareUrl.hash = `listing-${listing.id}`;
+    }
+
+    const shareData = {
+      title: state.language === "zh"
+        ? `${listing.name} — ${shareWhere} 第 ${sharePlace} 名`
+        : `${listing.name} — #${sharePlace} ${useMarket ? "in" : "on"} ${shareWhere}`,
+      text,
+      url: shareUrl.toString(),
+    };
     if (window.RankoffShare?.open) {
-      window.RankoffShare.open({ ...shareData, language: state.language, onStatus: showToast });
+      window.RankoffShare.open({
+        ...shareData,
+        image: listing.iconUrl,
+        description: listing.description,
+        language: state.language,
+        onStatus: showToast,
+      });
       return;
     }
     const canUseShareSheet = typeof navigator.share === "function"
