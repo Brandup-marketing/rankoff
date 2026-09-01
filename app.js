@@ -1240,7 +1240,14 @@
     card.dataset.rank = String(position);
     card.dataset.listingId = listing.id;
     card.setAttribute("role", "listitem");
-    const minimum = boardSource !== "local" && remoteNextBid ? remoteNextBid : getBid((remoteLeader || ranked[0])) + 1;
+    // "Claim THIS rank" has to price this row. Every card quoted the board
+    // leader's price, so taking #2 off a RM 5 listing was advertised at the
+    // RM 15 it costs to take #1. A position is taken by exceeding the total
+    // that holds it, and a tie loses because it settles later.
+    const ownPrice = getBid(listing) + boardMinimum();
+    const minimum = position === 1 && boardSource !== "local" && remoteNextBid
+      ? Math.max(remoteNextBid, ownPrice)
+      : ownPrice;
 
     if (listing.id === changedListingId) card.classList.add("is-updated");
 
@@ -2033,9 +2040,23 @@
     const challengeTrigger = target.closest("[data-prepare-challenge]");
     if (challengeTrigger instanceof HTMLElement && elements.inlineBid) {
       const suggestion = Number(challengeTrigger.dataset.prepareChallenge) || suggestedBidForNextRank();
+      // The rule is that the category must match the listing being outranked,
+      // and this button already knows which listing that is. Asking the buyer
+      // to pick it again is a step they can only get wrong. It is set BEFORE
+      // the amount: choosing a market recalculates the suggested bid, which
+      // would otherwise overwrite the price this row just promised.
+      const challengedCard = challengeTrigger.closest("[data-listing-id]");
+      const challengedListing = challengedCard
+        ? state.listings.find((item) => item.id === challengedCard.dataset.listingId)
+        : null;
+      const challengedMarket = challengedListing ? canonicalCategory(challengedListing.category) : "";
+      if (challengedMarket && elements.categorySelect && elements.categorySelect.value !== challengedMarket) {
+        elements.categorySelect.value = challengedMarket;
+        elements.categorySelect.dispatchEvent(new Event("change", { bubbles: true }));
+      }
       elements.inlineBid.value = String(suggestion);
       elements.inlineBid.min = String(boardMinimum());
-      inlineBidTouched = false;
+      inlineBidTouched = true;
       elements.inlineChallenge?.scrollIntoView({ behavior: "smooth", block: "center" });
       window.setTimeout(() => elements.inlineUrl?.focus(), 220);
       showToast(state.language === "zh"
