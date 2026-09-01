@@ -294,7 +294,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .rank-share-control { position: relative; z-index: 3; display: inline-flex; min-width: 1.5rem; min-height: 1.5rem; align-items: center; justify-content: center; gap: .18rem; margin: -.2rem 0; padding: .12rem .3rem; border: 0; border-radius: .2rem; background: transparent; color: var(--blue); font-size: .65rem; font-weight: 800; line-height: 1; }
 .rank-share-control:hover { background: color-mix(in srgb, var(--blue) 12%, transparent); color: var(--ink); }
 .rank-share-control:active { transform: translateY(1px); }
-.rank-share-icon { font-size: .78rem; line-height: 1; }
+.rank-share-icon { display: inline-grid; place-items: center; line-height: 1; }
+.rank-share-icon svg { width: .95rem; height: .95rem; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.9; }
 .featured-bid-stack .rank-share-control { visibility: visible; opacity: 1; }
 
 .row-actions { display: flex; justify-content: flex-end; gap: 0.35rem; }
@@ -325,7 +326,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .activity-event { display: grid; grid-template-columns: 2.35rem minmax(0, 1fr); align-items: center; gap: .55rem; width: fit-content; min-width: 22rem; max-width: 32rem; min-height: 3.6rem; padding: .4rem .55rem; border: 1px solid var(--line); border-radius: .45rem; background: var(--surface); }
 .activity-event.is-latest { border-color: color-mix(in srgb, var(--accent) 58%, var(--line)); background: var(--accent-soft); animation: activity-in 220ms var(--ease) both; }
 .activity-mark { position: relative; display: grid; width: 2.35rem; height: 2.35rem; place-items: center; overflow: hidden; border: 1px solid var(--line); border-radius: .42rem; background: var(--surface-subtle); color: var(--ink); font-size: .65rem; font-weight: 850; }
-.activity-mark img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: var(--surface); }
+.activity-mark img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: .1rem; background: #fff; }
 .activity-mark.has-icon .activity-initials { visibility: hidden; }
 .activity-identity { display: grid; min-width: 0; gap: .08rem; }
 .activity-event .activity-identity { max-width: 25rem; }
@@ -583,6 +584,30 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 }
 
 @media (max-width: 34rem) {
+  /* A phone is not a narrow desktop. Three columns left the merchant's own
+     name, story, chips, domain and links sharing 161px, so the name itself
+     truncated. The identity takes the full width and the numbers move below. */
+  .featured-listing {
+    grid-template-areas: "rank product" "evidence evidence";
+    grid-template-columns: 2.6rem minmax(0, 1fr);
+    align-items: start;
+    gap: .6rem .6rem;
+    padding: .8rem .8rem 1.4rem;
+  }
+  .featured-listing .featured-rank { align-self: start; margin-top: .25rem; }
+  /* The logo belongs beside the name, not floating against the whole block. */
+  .featured-listing .product-cell { align-items: flex-start; }
+  /* With the full width available, the merchant's story gets a second line. */
+  .featured-listing .listing-description { -webkit-line-clamp: 2; }
+  /* Seven items shared one wrapping row: two chips, three facts and two links.
+     The links break onto their own line so the facts read as facts. */
+  .featured-listing .product-meta { gap: .3rem .55rem; }
+  .featured-listing .listing-visit::before { content: ""; flex-basis: 100%; height: 0; }
+  .featured-evidence { justify-self: stretch; width: 100%; justify-content: space-between; gap: .6rem; padding-top: .6rem; border-top: 1px solid var(--line); }
+  .featured-bid-stack { flex-direction: row; align-items: center; justify-content: space-between; width: 100%; gap: .6rem; }
+  /* The revenue action was a 163x22px sliver hanging off the card's edge. */
+  .claim-rank-pill { position: static; grid-column: 1 / -1; width: 100%; min-height: 2.75rem; margin-top: .7rem; padding: .5rem .9rem; border-radius: .7rem; font-size: .8rem; transform: none; }
+  .claim-rank-pill:hover { transform: none; }
   .activity-tape { grid-template-columns: 1fr; }
   .board-interstitial { grid-template-columns: 1fr; gap: .8rem; padding: .8rem; }
   .topbar { gap: 0.18rem; }
@@ -603,8 +628,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .site-search-field input { font-size: 0.85rem; }
   .search-close { font-size: 0; }
   .search-close::before { content: "×"; font-size: 1.1rem; }
-  .rank-share-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-  .rank-share-control { min-width: 1.55rem; justify-content: center; padding-inline: .2rem; }
+  /* Sharing a rank is the only way this board grows. A 25px unlabelled glyph
+     beside an identical "Visit ↗" arrow was not an entry point anyone could
+     find, so on a phone it is a named, bordered, thumb-sized button. */
+  .rank-share-control { gap: .3rem; min-width: 0; min-height: 2.75rem; padding: 0 .7rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-subtle); font-size: .72rem; }
+  .rank-share-control:active { background: color-mix(in srgb, var(--blue) 16%, var(--surface-subtle)); }
+  .rank-share-icon svg { width: 1rem; height: 1rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

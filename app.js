@@ -624,7 +624,12 @@
     control.dataset.position = String(position);
     const label = state.language === "zh" ? "分享排名" : "Share rank";
     control.setAttribute("aria-label", state.language === "zh" ? `分享 ${listing.name} 的第 ${position} 名` : `Share ${listing.name}'s #${position} rank`);
-    control.append(createElement("span", "rank-share-icon", "↗"), createElement("span", "rank-share-label", label));
+    // "↗" is what the Visit link already uses; the two were indistinguishable.
+    const glyph = createElement("span", "rank-share-icon");
+    glyph.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">'
+      + '<circle cx="17.5" cy="5.5" r="2.6"></circle><circle cx="6.5" cy="12" r="2.6"></circle><circle cx="17.5" cy="18.5" r="2.6"></circle>'
+      + '<path d="M8.9 10.7 15.1 6.8"></path><path d="M8.9 13.3l6.2 3.9"></path></svg>';
+    control.append(glyph, createElement("span", "rank-share-label", label));
     return control;
   }
 
