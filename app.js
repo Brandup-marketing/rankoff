@@ -912,7 +912,7 @@
       createElement("span", "meta-item", listingHostLabel(listing)),
     );
     if (production) {
-      meta.append(createElement("span", "meta-item listing-clicks", `${compact.format(getClicks(listing))} ${chinese ? "次点击" : "clicks"}`));
+      meta.append(createElement("span", "meta-item listing-clicks", clickLabel(getClicks(listing), chinese)));
       meta.append(createElement("span", listing.verified ? "verified-chip" : "estimated-chip", clickLabel));
     }
     // One-click visit, outbid-style — but through the tracked /go redirect so
@@ -1173,6 +1173,12 @@
       button.textContent = state.language === "zh" ? (previous ? "← 上一页" : "下一页 →") : (previous ? "← Previous" : "Next →");
       button.disabled = previous ? boardPage <= 1 : boardPage >= totalPages;
     });
+  }
+
+  // "1 clicks" reads like a bug on a card a merchant is about to share.
+  function clickLabel(count, chinese) {
+    if (chinese) return `${compact.format(count)} 次点击`;
+    return `${compact.format(count)} ${count === 1 ? "click" : "clicks"}`;
   }
 
   function renderBoard() {
@@ -1437,7 +1443,7 @@
     rank.setAttribute("aria-label", `Today rank ${position}`);
     const identity = productIdentity(listing);
     const bid = createElement("strong", "today-ranking-bid", money(getBid(listing, "today")));
-    const clicks = createElement("span", "today-ranking-clicks", `${compact.format(getClicks(listing, "today"))} ${state.language === "zh" ? "次点击" : "clicks"}`);
+    const clicks = createElement("span", "today-ranking-clicks", clickLabel(getClicks(listing, "today"), state.language === "zh"));
     const proof = createElement("div", "today-ranking-proof");
     proof.append(bid, clicks);
     item.append(rank, identity, proof);
