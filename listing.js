@@ -213,7 +213,11 @@
     img.decoding = "async";
     let index = 0;
     const next = () => { if (index >= sources.length) return img.remove(); img.src = sources[index++]; };
-    img.addEventListener("load", () => elements.mark.classList.add("has-icon"), { once: true });
+    img.addEventListener("load", () => {
+      const ratio = img.naturalWidth / Math.max(1, img.naturalHeight);
+      if (ratio > 2.2 || ratio < 0.45) return img.remove();
+      elements.mark.classList.add("has-icon");
+    }, { once: true });
     img.addEventListener("error", next);
     elements.mark.append(img);
     next();

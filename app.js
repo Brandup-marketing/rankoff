@@ -886,7 +886,13 @@
         icon.src = iconSources[sourceIndex];
         sourceIndex += 1;
       };
-      icon.addEventListener("load", () => mark.classList.add("has-icon"), { once: true });
+      icon.addEventListener("load", () => {
+        // A wide wordmark cannot be read in a square tile: 300x102 renders as
+        // 50x17. Initials say more than an illegible smudge.
+        const ratio = icon.naturalWidth / Math.max(1, icon.naturalHeight);
+        if (ratio > 2.2 || ratio < 0.45) return icon.remove();
+        mark.classList.add("has-icon");
+      }, { once: true });
       icon.addEventListener("error", tryNextSource);
       tryNextSource();
       mark.append(icon);
@@ -1315,7 +1321,13 @@
       if (sourceIndex >= sources.length) return icon.remove();
       icon.src = sources[sourceIndex++];
     };
-    icon.addEventListener("load", () => mark.classList.add("has-icon"), { once: true });
+    icon.addEventListener("load", () => {
+        // A wide wordmark cannot be read in a square tile: 300x102 renders as
+        // 50x17. Initials say more than an illegible smudge.
+        const ratio = icon.naturalWidth / Math.max(1, icon.naturalHeight);
+        if (ratio > 2.2 || ratio < 0.45) return icon.remove();
+        mark.classList.add("has-icon");
+      }, { once: true });
     icon.addEventListener("error", tryNextSource);
     tryNextSource();
     mark.append(icon);
