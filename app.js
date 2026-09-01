@@ -752,7 +752,11 @@
       ];
       const direct = `${url.origin}/favicon.ico`;
       const fallback = `https://icons.duckduckgo.com/ip3/${encodeURIComponent(url.hostname)}.ico`;
-      return [...new Set([...sharp, listing.iconUrl, direct, fallback].filter(Boolean))];
+      // A stored icon that is not the one we guessed at submission was chosen on
+      // purpose, so it outranks the guesses — some hosts answer a missing touch
+      // icon with a placeholder, which would otherwise win by loading first.
+      const chosen = listing.iconUrl && listing.iconUrl !== direct ? [listing.iconUrl] : [];
+      return [...new Set([...chosen, ...sharp, listing.iconUrl, direct, fallback].filter(Boolean))];
     } catch {
       return listing.iconUrl ? [listing.iconUrl] : [];
     }

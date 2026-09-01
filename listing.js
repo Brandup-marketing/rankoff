@@ -197,11 +197,13 @@
     // instagram.com/favicon.ico is Instagram's logo, the same on every profile.
     if (modelPlatform() && !model.icon) return;
     const origin = new URL(model.url).origin;
+    const guessed = `${origin}/favicon.ico`;
     const sources = [...new Set([
+      model.icon && model.icon !== guessed ? model.icon : "",
       `${origin}/apple-touch-icon.png`,
       `https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=128`,
       model.icon,
-      `${origin}/favicon.ico`,
+      guessed,
       `https://icons.duckduckgo.com/ip3/${encodeURIComponent(host)}.ico`,
     ].filter(Boolean))];
     if (!sources.length) return;
