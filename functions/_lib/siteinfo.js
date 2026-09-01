@@ -50,11 +50,15 @@ function usableTitle(value, hostname) {
 // A profile's own metadata describes the platform, not the business: Instagram
 // titles carry "(@handle) • Instagram photos and videos" and its description is
 // a follower count, which is not ours to publish beside a paid position.
+const PLATFORM_BOILERPLATE = /^(instagram|facebook|tiktok|x|twitter|linkedin|linktree|youtube|小红书|log in|login|watch|explore)\b/i;
+
 function cleanProfileTitle(value) {
-  return decodeEntities(value)
-    .replace(/\s*[•·|-]\s*(Instagram|Facebook|TikTok|X|Twitter).*$/i, "")
+  const text = decodeEntities(value)
+    .replace(/\s*[•·|-]\s*(Instagram|Facebook|TikTok|X|Twitter|LinkedIn|YouTube).*$/i, "")
     .replace(/\s*\(@[^)]+\)\s*$/, "")
     .trim();
+  // "TikTok - Make Your Day" is the platform introducing itself, not a business.
+  return PLATFORM_BOILERPLATE.test(text) ? "" : text;
 }
 
 export function extractSiteInfo(html, hostname, { social = false } = {}) {

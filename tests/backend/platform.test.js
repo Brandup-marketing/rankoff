@@ -162,6 +162,7 @@ test("a listing takes its words from the page it points at", async () => {
     <meta property="og:image" content="https://scontent.cdninstagram.com/signed.jpg"></head></html>`;
   const social = extractSiteInfo(profile, "instagram.com", { social: true });
   assert.equal(social.title, "Nike");
+  assert.equal(extractSiteInfo(`<meta property="og:title" content="TikTok - Make Your Day">`, "tiktok.com", { social: true }).title, "", "the platform introducing itself is not a business name");
   assert.equal(social.description, "", "a follower count is not a description");
   assert.equal(social.logo, "", "a signed avatar URL expires within weeks");
 

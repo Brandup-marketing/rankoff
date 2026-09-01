@@ -887,10 +887,10 @@
         sourceIndex += 1;
       };
       icon.addEventListener("load", () => {
-        // A wide wordmark cannot be read in a square tile: 300x102 renders as
-        // 50x17. Initials say more than an illegible smudge.
+        // Only a banner-shaped image is hopeless in a square tile; a wordmark still
+        // carries the brand, which is what the merchant paid to show.
         const ratio = icon.naturalWidth / Math.max(1, icon.naturalHeight);
-        if (ratio > 2.2 || ratio < 0.45) return icon.remove();
+        if (ratio > 3.5 || ratio < 0.3) return icon.remove();
         mark.classList.add("has-icon");
       }, { once: true });
       icon.addEventListener("error", tryNextSource);
@@ -1322,10 +1322,10 @@
       icon.src = sources[sourceIndex++];
     };
     icon.addEventListener("load", () => {
-        // A wide wordmark cannot be read in a square tile: 300x102 renders as
-        // 50x17. Initials say more than an illegible smudge.
+        // Only a banner-shaped image is hopeless in a square tile; a wordmark still
+        // carries the brand, which is what the merchant paid to show.
         const ratio = icon.naturalWidth / Math.max(1, icon.naturalHeight);
-        if (ratio > 2.2 || ratio < 0.45) return icon.remove();
+        if (ratio > 3.5 || ratio < 0.3) return icon.remove();
         mark.classList.add("has-icon");
       }, { once: true });
     icon.addEventListener("error", tryNextSource);
