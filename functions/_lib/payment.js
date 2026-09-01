@@ -1,6 +1,38 @@
 import { ApiError, ServiceUnavailableError, isProduction } from "./config.js";
 import { readText } from "./http.js";
 
+export const DEFAULT_CHECKOUT_RETURN_URL = "https://rankoff.my/?checkout=returned";
+
+// The provider sends the buyer back to a fixed URL, so the page that greets them
+// used to have no idea who had just paid. Carrying the bid id back lets the
+// return page watch the board for that exact bid and congratulate the merchant
+// by position. The owner-configured DODO_RETURN_URL is honoured as-is; the id is
+// appended to whatever it already is, so no environment variable has to change.
+export function buildCheckoutReturnUrl(configuredUrl, bidId) {
+  const base = typeof configuredUrl === "string" && configuredUrl.trim()
+    ? configuredUrl.trim()
+    : DEFAULT_CHECKOUT_RETURN_URL;
+  const id = typeof bidId === "string" ? bidId.trim() : String(bidId ?? "").trim();
+  if (!id) return base;
+  try {
+    const url = new URL(base);
+    url.searchParams.set("checkout", url.searchParams.get("checkout") || "returned");
+    url.searchParams.set("bid", id);
+    return url.toString();
+  } catch {
+    // A relative or malformed value still deserves the id rather than a throw.
+    const [withoutHash, hash] = splitHash(base);
+    const separator = withoutHash.includes("?") ? "&" : "?";
+    const query = `${separator}checkout=returned&bid=${encodeURIComponent(id)}`;
+    return `${withoutHash}${query}${hash}`;
+  }
+}
+
+function splitHash(value) {
+  const index = value.indexOf("#");
+  return index === -1 ? [value, ""] : [value.slice(0, index), value.slice(index)];
+}
+
 export async function createDodoCheckout(env, bid) {
   if (!env.DODO_PAYMENTS_API_KEY || !env.DODO_PRODUCT_ID) {
     throw new ServiceUnavailableError(
@@ -18,7 +50,7 @@ export async function createDodoCheckout(env, bid) {
   const apiBase = env.DODO_ENVIRONMENT === "live_mode"
     ? "https://live.dodopayments.com"
     : "https://test.dodopayments.com";
-  const returnUrl = env.DODO_RETURN_URL || "https://rankoff.my/?checkout=returned";
+  const returnUrl = buildCheckoutReturnUrl(env.DODO_RETURN_URL, bid.id);
   const response = await fetch(`${apiBase}/checkouts`, {
     method: "POST",
     headers: {

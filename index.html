@@ -24,7 +24,7 @@
     <meta name="theme-color" content="#090a0c" />
     <title>RANKOFF | Bid Your Way to #1</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=40" />
+    <link rel="stylesheet" href="./styles.css?v=41" />
     <link rel="stylesheet" href="./answers.css?v=1" />
     <script type="application/ld+json">
       {
@@ -82,8 +82,11 @@
           <h1 id="page-title">Claim <span>#1</span><span data-hero-market></span> for <strong data-hero-next-price>RM 5</strong></h1>
           <p class="claim-copy" data-hero-context data-i18n="heroCopy">Put your product where people look first. Your listing stays at the top until someone pays more.</p>
 
-          <div class="market-entry">
-            <form class="bid-console" data-inline-challenge aria-label="Challenge the leaderboard">
+          <div class="market-entry" data-market-entry data-entry-collapsed="true">
+            <!-- B2 (agent/post-payment): phone-only entry-form toggle. Hidden on
+                 desktop by CSS; the form itself is unchanged. -->
+            <button class="entry-toggle" type="button" data-entry-toggle aria-expanded="false" aria-controls="entry-form"><span data-entry-toggle-label>List your product</span><span class="entry-toggle-icon" aria-hidden="true">+</span></button>
+            <form class="bid-console" id="entry-form" data-inline-challenge aria-label="Challenge the leaderboard">
               <div class="amount-control">
                 <button type="button" data-inline-adjust="-10" aria-label="Decrease bid by ten dollars">−</button>
                 <label>
@@ -125,7 +128,7 @@
           <div class="top-three top-three-hero" data-top-three aria-label="Top three sponsored listings"></div>
 
           <section class="board-interstitial" aria-label="Board pulse">
-            <section class="today-ranking-panel pulse-panel" aria-labelledby="today-ranking-heading">
+            <section class="today-ranking-panel pulse-panel" data-today-panel aria-labelledby="today-ranking-heading">
               <div class="section-heading-line section-heading-line-spread">
                 <div>
                   <h2 id="today-ranking-heading" data-i18n="todayRanking">Today’s leaders</h2>
@@ -290,6 +293,6 @@
     <div class="toast" data-toast role="status" aria-live="polite" aria-atomic="true"></div>
     <script src="./search.js?v=2" defer></script>
     <script src="./share.js?v=4" defer></script>
-    <script src="./app.js?v=77" defer></script>
+    <script src="./app.js?v=78" defer></script>
   </body>
 </html>

@@ -655,3 +655,45 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .board-seo-rank { font-weight: 850; }
 .board-seo-list a { font-weight: 750; text-decoration: none; }
 .board-seo-note { color: var(--muted); font-size: 0.74rem; }
+
+/* ==== BEGIN agent/post-payment (B2 + B3) — appended block, safe to move ==== */
+/* B2: the entry form collapses behind one button on phones so the leaderboard
+   is the first screen. The button does not exist above 34rem, and the form is
+   never hidden there, so desktop behaviour is unchanged. */
+.entry-toggle { display: none; }
+
+@media (max-width: 34rem) {
+  .entry-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    background: var(--accent);
+    color: white;
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 850;
+    line-height: 1.1;
+    cursor: pointer;
+  }
+  .entry-toggle-icon { font-size: 1.15rem; font-weight: 850; line-height: 1; }
+  /* Once the form is open the button is only a way back out, so it steps down
+     from the accent and stops competing with "Review your bid". */
+  .market-entry[data-entry-collapsed="false"] .entry-toggle {
+    border-color: var(--line);
+    background: var(--surface);
+    color: var(--muted);
+    font-weight: 750;
+  }
+  .market-entry[data-entry-collapsed="true"] .bid-console { display: none; }
+
+  /* B3: "Today's leaders" repeats the board sitting right below it while the
+     board is short. It comes back as soon as the board is 8 listings deep. */
+  [data-today-panel][data-thin-board="true"] { display: none; }
+}
+/* ==== END agent/post-payment (B2 + B3) ==================================== */

@@ -210,6 +210,13 @@
     dialogContext: document.querySelector("[data-dialog-context]"),
     dialogExplanation: document.querySelector("[data-dialog-explanation]"),
     toast: document.querySelector("[data-toast]"),
+    // B2/B3 (phone layout): the entry form and its phone-only toggle, plus the
+    // "Today's leaders" panel that duplicates a short board on a small screen.
+    marketEntry: document.querySelector("[data-market-entry]"),
+    entryToggle: document.querySelector("[data-entry-toggle]"),
+    entryToggleLabel: document.querySelector("[data-entry-toggle-label]"),
+    entryToggleIcon: document.querySelector(".entry-toggle-icon"),
+    todayPanel: document.querySelector("[data-today-panel]"),
   };
 
   if (!elements.boardList) return;
@@ -364,6 +371,37 @@
     return language === "zh" ? categoryTranslations[market] : categoryLabels[market];
   }
 
+  // B2: on a phone the first screen used to be the whole entry form, so a
+  // stranger had to scroll past four fields before seeing a single listing.
+  // The form collapses behind one button below 34rem; desktop is untouched.
+  const phoneQuery = typeof window.matchMedia === "function"
+    ? window.matchMedia("(max-width: 34rem)")
+    : null;
+  let phoneEntryOpen = false;
+
+  function entryToggleText(expanded) {
+    if (state.language === "zh") return expanded ? "收起表单" : "上榜你的产品";
+    return expanded ? "Hide the form" : "List your product";
+  }
+
+  function setEntryExpanded(expanded) {
+    if (!elements.marketEntry || !elements.entryToggle) return;
+    elements.marketEntry.dataset.entryCollapsed = String(!expanded);
+    elements.entryToggle.setAttribute("aria-expanded", String(expanded));
+    if (elements.entryToggleLabel) elements.entryToggleLabel.textContent = entryToggleText(expanded);
+    if (elements.entryToggleIcon) elements.entryToggleIcon.textContent = expanded ? "\u2212" : "+";
+  }
+
+  function syncEntryToggle() {
+    // Desktop always shows the form exactly as it did before this change.
+    setEntryExpanded(phoneQuery?.matches ? phoneEntryOpen : true);
+  }
+
+  function openEntryForm() {
+    phoneEntryOpen = true;
+    syncEntryToggle();
+  }
+
   function renderLanguage() {
     document.documentElement.lang = state.language === "zh" ? "zh-CN" : "en";
     document.querySelectorAll("[data-i18n]").forEach((node) => { node.textContent = languageText(node.dataset.i18n); });
@@ -375,6 +413,7 @@
       elements.languageToggle.setAttribute("aria-label", state.language === "zh" ? "Switch to English" : "切换中文");
     }
     updatePanelToggleLabels();
+    syncEntryToggle();
   }
 
   function updatePanelToggleLabels() {
@@ -1464,6 +1503,13 @@
   }
 
   function renderSidebar() {
+    // B3: with a short board this panel just repeats the four rows directly
+    // below it. On a phone that is the whole first screen wasted, so it stays
+    // hidden until the board is deep enough for the two to say different things.
+    if (elements.todayPanel) {
+      const boardDepth = Math.max(state.listings.length, Number(remotePagination?.total) || 0);
+      elements.todayPanel.dataset.thinBoard = String(boardDepth < 8);
+    }
     const todayListings = rankedListings(visibleListings(), "today").slice(0, 3);
     if (elements.todayRankingList) {
       if (!todayListings.length) {
@@ -1823,6 +1869,158 @@
     return copied;
   }
 
+  // ---- B1: post-checkout settlement watch ---------------------------------
+  // The provider returns the buyer here seconds before its settlement webhook
+  // lands, so the board cannot yet show the rank they just paid for. Poll on a
+  // bounded, backing-off schedule and say nothing about a position until the
+  // paid bid is really ranked on the public board.
+  const CHECKOUT_POLL_DELAYS = [1500, 2500, 4000, 6000, 9000, 13000, 18000, 25000];
+  const CHECKOUT_POLL_PAGES = 4;
+
+  function settlementPendingCopy() {
+    return state.language === "zh"
+      ? "已从付款页返回。排名只会在付款结算确认后更新。"
+      : "Checkout returned. Rank changes only after verified payment settlement.";
+  }
+
+  function waitFor(ms) {
+    return new Promise((resolve) => { window.setTimeout(resolve, ms); });
+  }
+
+  async function fetchSettledBid(bidId) {
+    const endpoint = new URL(`./api/v1/bids/${encodeURIComponent(bidId)}`, window.location.href);
+    const response = await fetch(endpoint, { headers: { Accept: "application/json" }, cache: "no-store" });
+    // A bid the API has never heard of is never going to settle: stop watching.
+    if (response.status === 404) return { missing: true, settled: false, listingId: "" };
+    if (!response.ok) return { missing: false, settled: false, listingId: "" };
+    const payload = await response.json();
+    const bid = payload?.bid;
+    if (!bid || bid.status !== "settled") return { missing: false, settled: false, listingId: "" };
+    return { missing: false, settled: true, listingId: String(bid.listing_id || "") };
+  }
+
+  async function findSettledBoardEntry(listingId) {
+    // The unfiltered board, so a listing outside the market or page the visitor
+    // happens to be looking at is still found at its true overall rank.
+    for (let page = 1; page <= CHECKOUT_POLL_PAGES; page += 1) {
+      const endpoint = new URL(BOARD_API_ENDPOINT, window.location.href);
+      endpoint.searchParams.set("board", "global");
+      endpoint.searchParams.set("category", "all");
+      endpoint.searchParams.set("period", "all");
+      endpoint.searchParams.set("limit", "100");
+      endpoint.searchParams.set("page", String(page));
+      const response = await fetch(endpoint, { headers: { Accept: "application/json" }, cache: "no-store" });
+      if (!response.ok) return null;
+      const payload = await response.json();
+      if (!Array.isArray(payload?.rankings)) return null;
+      const match = payload.rankings.find((entry) => String(entry?.listing?.id || "") === listingId);
+      if (match) {
+        // Same screen as the bid total: an absent next price is no price, not RM 1.
+        const nextMinor = Number(payload?.next_bid_minor);
+        const nextBid = Number.isSafeInteger(nextMinor) && nextMinor > 0
+          ? dollarsFromMinor(nextMinor, null)
+          : null;
+        return { entry: match, nextBid };
+      }
+      if (!payload?.pagination?.has_next) return null;
+    }
+    return null;
+  }
+
+  function settlementShareData(entry, nextBid) {
+    const listing = entry?.listing || {};
+    const rank = Number(entry?.rank);
+    if (!Number.isFinite(rank) || rank < 1) return null;
+    const name = String(listing.title || listing.hostname || "").slice(0, 96);
+    if (!name) return null;
+    const totalMinor = Number(entry?.bid?.amount_minor);
+    const total = Number.isSafeInteger(totalMinor) && totalMinor > 0
+      ? dollarsFromMinor(totalMinor, null)
+      : null;
+    const claimMinimum = nextBid !== null && Number.isFinite(nextBid) && nextBid > 0 ? nextBid : null;
+    const zh = state.language === "zh";
+
+    const headline = zh
+      ? `${name} 目前位居 RANKOFF 第 ${rank} 名`
+      : `${name} holds #${rank} on RANKOFF`;
+    // Every clause is dropped rather than guessed when the board did not
+    // return the number behind it.
+    const withBid = total !== null && Number.isFinite(total)
+      ? (zh ? `${headline}，赞助出价 ${money(total)}。` : `${headline} with a ${money(total)} sponsored bid.`)
+      : `${headline}${zh ? "。" : "."}`;
+    const challenge = claimMinimum
+      ? (zh ? `你能超越它吗？${money(claimMinimum)} 起认领第 1 名。` : ` Think you can outrank it? Claim #1 from ${money(claimMinimum)}.`)
+      : "";
+
+    const detailPath = listingDetailPath({ identity: String(listing.hostname || "") });
+    const shareUrl = new URL(detailPath || "/", "https://rankoff.my");
+    if (!detailPath) shareUrl.hash = `listing-${String(listing.id || "")}`;
+
+    return {
+      title: zh ? `${name} — RANKOFF 第 ${rank} 名` : `${name} — #${rank} on RANKOFF`,
+      text: `${withBid}${challenge}`,
+      url: shareUrl.toString(),
+      image: typeof listing.favicon_url === "string" ? listing.favicon_url : "",
+      description: typeof listing.description === "string" ? listing.description : "",
+    };
+  }
+
+  async function openSettlementShare(entry, nextBid) {
+    const shareData = settlementShareData(entry, nextBid);
+    if (!shareData) return;
+    if (window.RankoffShare?.open) {
+      window.RankoffShare.open({
+        title: shareData.title,
+        text: shareData.text,
+        url: shareData.url,
+        image: shareData.image,
+        description: shareData.description,
+        language: state.language,
+        onStatus: showToast,
+      });
+      return;
+    }
+    try {
+      const copied = await copyText(`${shareData.text} ${shareData.url}`);
+      if (copied) showToast(state.language === "zh" ? "排名战报与链接已复制。" : "Rank result and link copied.", "success");
+    } catch {
+      /* Clipboard access is not worth an error on top of good news. */
+    }
+  }
+
+  async function watchCheckoutSettlement(bidId) {
+    let settledListingId = "";
+    for (let attempt = 0; attempt < CHECKOUT_POLL_DELAYS.length; attempt += 1) {
+      await waitFor(CHECKOUT_POLL_DELAYS[attempt]);
+      try {
+        if (!settledListingId) {
+          const status = await fetchSettledBid(bidId);
+          if (status.missing) return;
+          if (!status.settled) continue;
+          if (!status.listingId) return;
+          settledListingId = status.listingId;
+        }
+        const found = await findSettledBoardEntry(settledListingId);
+        if (!found) continue;
+        // Show the visitor the board that now contains them before saying so.
+        await refreshBoardFromApi();
+        const rank = Number(found.entry?.rank);
+        showToast(
+          state.language === "zh"
+            ? `付款已结算 — 你现在是 RANKOFF 第 ${rank} 名。`
+            : `Payment settled — you are #${rank} on RANKOFF.`,
+          "success",
+        );
+        await openSettlementShare(found.entry, found.nextBid);
+        return;
+      } catch {
+        /* Offline, or a transient API hiccup: the honest pending line stands. */
+      }
+    }
+    // Giving up is silent on purpose: the pending message already told the
+    // truth, and no rank is claimed that the board has not confirmed.
+  }
+
   async function shareListing(listingId) {
     const listing = state.listings.find((item) => item.id === listingId);
     if (!listing) return;
@@ -2057,6 +2255,8 @@
       elements.inlineBid.value = String(suggestion);
       elements.inlineBid.min = String(boardMinimum());
       inlineBidTouched = true;
+      // The form may be collapsed on a phone (B2); a challenge must open it.
+      openEntryForm();
       elements.inlineChallenge?.scrollIntoView({ behavior: "smooth", block: "center" });
       window.setTimeout(() => elements.inlineUrl?.focus(), 220);
       showToast(state.language === "zh"
@@ -2222,9 +2422,37 @@
     activeBid = null;
   });
 
+  elements.entryToggle?.addEventListener("click", () => {
+    phoneEntryOpen = elements.entryToggle?.getAttribute("aria-expanded") !== "true";
+    syncEntryToggle();
+    if (phoneEntryOpen) window.setTimeout(() => elements.inlineUrl?.focus(), 120);
+  });
+
+  if (phoneQuery) {
+    const onPhoneQueryChange = () => syncEntryToggle();
+    if (typeof phoneQuery.addEventListener === "function") phoneQuery.addEventListener("change", onPhoneQueryChange);
+    else if (typeof phoneQuery.addListener === "function") phoneQuery.addListener(onPhoneQueryChange);
+  }
+
   render();
   void refreshBoardFromApi();
-  if (new URL(window.location.href).searchParams.has("checkout")) {
-    showToast("Checkout returned. Rank changes only after verified payment settlement.");
+  {
+    const returnLocation = new URL(window.location.href);
+    if (returnLocation.searchParams.has("checkout")) {
+      const returnedBidId = String(returnLocation.searchParams.get("bid") || "").trim();
+      showToast(settlementPendingCopy());
+      if (returnedBidId) {
+        // Drop the identifiers so a reload or a copied link does not replay the
+        // congratulation, then watch the board for this exact bid.
+        returnLocation.searchParams.delete("bid");
+        returnLocation.searchParams.delete("checkout");
+        try {
+          window.history.replaceState({}, "", `${returnLocation.pathname}${returnLocation.search}${returnLocation.hash}`);
+        } catch {
+          /* Some embedded views forbid history writes; the watch still runs. */
+        }
+        void watchCheckoutSettlement(returnedBidId);
+      }
+    }
   }
 })();
