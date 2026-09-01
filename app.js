@@ -1546,13 +1546,11 @@
       // re-append the advertising disclaimer. Without it the static
       // confirmationCopy is overwritten and the disclosure never reaches the
       // buyer at the moment of payment.
-      // The rank belongs to the market being joined, not to the whole board: RM6
-      // leads Beauty & Wellness while the board's own first place costs RM15.
-      // Promising the board would be selling a position that was not bought.
-      const marketName = categories.includes(category) ? categoryName(category) : "";
+      // The account, the rank and the market are already named above; repeating
+      // them here only pushed the advertising disclosure further down the page.
       const projection = state.language === "zh"
-        ? `付款确认后，${listing?.name || "你的条目"}将在${marketName ? `${marketName}（${checkoutBoardLabel()}）` : checkoutBoardLabel()}获得第 ${rank} 名。其他人仍可出价取得更高排名。`
-        : `After payment confirms, ${listing?.name || "your listing"} will take #${rank} in ${marketName || "this market"} on the ${checkoutBoardLabel().toLowerCase()}. Someone else can still claim a higher rank.`;
+        ? "你的条目会在付款确认后以此排名上线。其他人仍可出价取得更高排名。"
+        : "Your listing goes live at this rank when payment confirms. Someone else can claim a higher one.";
       elements.dialogExplanation.textContent = `${projection} ${languageText("chanceDisclaimer")}`;
     }
   }
