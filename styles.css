@@ -363,9 +363,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .ranking-rules dl div { min-width: 0; }
 /* Questions an AI search engine can quote. They belong to the rules section, so
    they carry its full width instead of stacking inside its first column. */
-.answer-links { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: .4rem; }
-.answer-links a { padding: .38rem .6rem; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: .74rem; font-weight: 700; text-decoration: none; }
-.answer-links a:hover { border-color: var(--accent); color: var(--ink); }
+.board-answers { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: .4rem; }
+.board-answers a { padding: .38rem .6rem; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: .74rem; font-weight: 700; text-decoration: none; }
+.board-answers a:hover { border-color: var(--accent); color: var(--ink); }
 .ranking-rules dt { color: var(--ink); font-size: .7rem; font-weight: 800; }
 .ranking-rules dd { margin: .15rem 0 0; color: var(--muted); font-size: .7rem; line-height: 1.35; }
 .ranking-rules > a { color: var(--blue); font-size: .72rem; font-weight: 750; white-space: nowrap; }
