@@ -56,12 +56,23 @@ export const ACTION_LABELS = Object.freeze({
   viewProfile: "View profile",
 });
 
+// The mark falls back to letters when a merchant publishes no logo. A CJK name
+// gets one character; a latin one gets its initials.
+export function initialsFor(title, fallback) {
+  const source = String(title || fallback || "").trim();
+  if (!source) return "R";
+  if (/[\u3400-\u9fff]/.test(source)) return (source.match(/[\u3400-\u9fff]/) || ["R"])[0];
+  const words = source.replace(/[^A-Za-z0-9\s]/g, " ").split(/\s+/).filter(Boolean);
+  if (!words.length) return source.slice(0, 1).toUpperCase();
+  return (words[0][0] + (words[1]?.[0] || "")).toUpperCase();
+}
+
 function clamp(text, limit) {
   const value = String(text || "").replace(/\s+/g, " ").trim();
   return value.length > limit ? `${value.slice(0, limit - 1).trimEnd()}…` : value;
 }
 
-export function buildProductView({ entry, todayEntry, board, snapshotId, record }) {
+export function buildProductView({ entry, todayEntry, board, snapshotId, record, marketRank = null, marketName = "" }) {
   const listing = entry.listing || {};
   const identity = String(listing.hostname || "");
   const parts = identityParts(identity);
@@ -72,6 +83,9 @@ export function buildProductView({ entry, todayEntry, board, snapshotId, record 
   const title = String(listing.title || label);
   const description = String(listing.description || "");
   const rank = Number(entry.rank);
+  const useMarket = Boolean(marketRank && marketName) && marketRank < rank;
+  const headline = useMarket ? `#${marketRank} in ${marketName} | RANKOFF` : `#${rank} on RANKOFF`;
+  const position = useMarket ? `#${marketRank} in ${marketName}` : `#${rank}`;
 
   return {
     id: String(listing.id || ""),
@@ -97,9 +111,16 @@ export function buildProductView({ entry, todayEntry, board, snapshotId, record 
     todayClicks: todayEntry ? Number(todayEntry.clicks || 0) : null,
     snapshotId: snapshotId || "",
     facts: recordFacts(record),
-    pageTitle: `${title} — #${rank} on RANKOFF`,
+    marketRank,
+    marketName,
+    logo: String(listing.favicon_url || ""),
+    initials: initialsFor(title, label),
+    // Both positions are true; a merchant shares the one worth sharing. #3 of a
+    // young board says nothing, #1 of a market says something — and once the
+    // board is large the overall number wins this comparison on its own.
+    pageTitle: `${title} — ${headline}`,
     metaDescription: clamp(
-      `${title} holds #${rank} on Rankoff with ${bid} in settled bids and ${clicks} verified clicks. ${description}`,
+      `${title} holds ${position} on Rankoff with ${bid} in settled bids and ${clicks} verified clicks. ${description}`,
       200,
     ),
   };
@@ -167,6 +188,16 @@ export function renderProductPage(shell, view) {
   html = html.replace(/(<div class="listing-loading" data-loading)>/, "$1 hidden>");
   html = html.replace(/(<div class="listing-content" data-content)\s+hidden>/, "$1>");
   html = html.replace(/(<section id="listing-detail"[^>]*)aria-busy="true"/, '$1aria-busy="false"');
+  // Their logo, on the page they are being asked to send to people. Without this
+  // the shell ships a hardcoded "R" until the page's JavaScript replaces it.
+  const markInner = `<span data-initials>${escapeHtml(view.initials)}</span>`
+    + (view.logo
+      ? `<img src="${escapeHtml(view.logo)}" alt="" referrerpolicy="no-referrer" decoding="async" />`
+      : "");
+  html = html.replace(
+    /<span class="listing-mark" data-mark aria-hidden="true">[\s\S]*?<\/span>\s*<\/span>/,
+    `<span class="listing-mark${view.logo ? " has-icon" : ""}" data-mark aria-hidden="true">${markInner}</span>`,
+  );
   html = html.replace(/(<h1 data-title)>[\s\S]*?<\/h1>/, `$1>${escapeHtml(view.title)}</h1>`);
   html = html.replace(/(<p class="listing-host" data-host)>[\s\S]*?<\/p>/, `$1>${escapeHtml(view.hostname)}</p>`);
   html = html.replace(/(<p class="listing-story" data-description)>[\s\S]*?<\/p>/, `$1>${escapeHtml(view.description)}</p>`);

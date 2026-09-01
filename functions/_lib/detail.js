@@ -1,13 +1,13 @@
-import { ApiError, defaultBoardSlug, isProduction, requireDatabase } from "./config.js";
+import { ApiError, defaultBoardSlug, isProduction, marketLabel, requireDatabase } from "./config.js";
 import { buildProductView, renderProductPage } from "./product.js";
 import { loadBoard, loadListingRecord, loadPublicBoard } from "./repository.js";
 
 const PAGE_LIMIT = 100;
 const MAX_PAGES = 10;
 
-async function findRanking(db, board, period, identity) {
+async function findRanking(db, board, period, identity, category = "all") {
   for (let page = 1; page <= MAX_PAGES; page += 1) {
-    const payload = await loadPublicBoard(db, board, { category: "all", period, limit: PAGE_LIMIT, page });
+    const payload = await loadPublicBoard(db, board, { category, period, limit: PAGE_LIMIT, page });
     const match = payload.rankings.find((entry) => String(entry.listing?.hostname || "") === identity);
     if (match) return { match, payload };
     if (!payload.pagination?.has_next) return { match: null, payload };
@@ -42,9 +42,12 @@ export async function renderDetail(context, identity) {
   const { match, payload } = await findRanking(db, board, "all", identity);
   if (!match) return notFound(template);
 
-  const [today, record] = await Promise.all([
+  // A listing bought first place in its market; the board's own ordering is the
+  // smaller story and the one a merchant would never share.
+  const [today, record, inMarket] = await Promise.all([
     findRanking(db, board, "today", identity),
     loadListingRecord(db, String(match.listing?.id || "")),
+    findRanking(db, board, "all", identity, String(match.listing?.category || "all")),
   ]);
   const view = buildProductView({
     entry: match,
@@ -52,6 +55,8 @@ export async function renderDetail(context, identity) {
     board: payload.board,
     snapshotId: payload.snapshot_id,
     record,
+    marketRank: inMarket.match ? Number(inMarket.match.rank) : null,
+    marketName: marketLabel(match.listing?.category),
   });
 
   return new Response(renderProductPage(template, view), {

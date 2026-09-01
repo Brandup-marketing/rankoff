@@ -166,3 +166,37 @@ test("a declared share image is only used when it really is an image", async () 
   assert.equal(await verifyImage(""), "");
   assert.equal(await verifyImage("https://example.com/a.png", async () => { throw new Error("network"); }), "");
 });
+
+test("a listing below the top of the board shares its market position instead", () => {
+  const view = buildProductView({
+    entry: {
+      rank: 3,
+      clicks: 0,
+      bid: { amount_minor: 500 },
+      listing: { id: "l3", hostname: "orientalwellness.my", title: "中华健康 Oriental Wellness", description: "Traditional massage and TCM.", category: "Beauty", url: "https://www.orientalwellness.my/" },
+    },
+    board: { currency: "MYR" },
+    marketRank: 1,
+    marketName: "Beauty & Wellness",
+  });
+  assert.equal(view.pageTitle, "中华健康 Oriental Wellness — #1 in Beauty & Wellness | RANKOFF");
+  assert.match(view.metaDescription, /holds #1 in Beauty & Wellness on Rankoff/);
+  assert.equal(view.initials, "中");
+});
+
+test("holding the top of the board keeps the bigger claim", () => {
+  const view = buildProductView({
+    entry: {
+      rank: 1,
+      clicks: 5,
+      bid: { amount_minor: 1000 },
+      listing: { id: "l1", hostname: "rakanjayahardware.com", title: "Rakan Jaya Hardware", description: "Industrial hardware supplier.", category: "Hardware", url: "https://rakanjayahardware.com/", favicon_url: "https://rakanjayahardware.com/logo.png" },
+    },
+    board: { currency: "MYR" },
+    marketRank: 1,
+    marketName: "Hardware & Construction",
+  });
+  assert.equal(view.pageTitle, "Rakan Jaya Hardware — #1 on RANKOFF");
+  assert.equal(view.initials, "RJ");
+  assert.match(renderProductPage(shell, view), /class="listing-mark has-icon"[^>]*>.*rakanjayahardware\.com\/logo\.png/s);
+});
