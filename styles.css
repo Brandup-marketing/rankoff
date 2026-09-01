@@ -278,8 +278,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .product-name:hover { color: var(--blue); }
 .product-actions { display: flex; align-items: center; min-height: 1.1rem; margin-top: .22rem; }
 .product-mark-link { display: block; line-height: 0; text-decoration: none; }
-.listing-visit { position: relative; z-index: 3; display: inline-flex; align-items: center; padding: .18rem .55rem; border-radius: 999px; background: var(--action); color: #fff; font-size: .64rem; font-weight: 760; text-decoration: none; white-space: nowrap; }
-.listing-visit:hover { background: var(--action-strong, var(--action)); color: #fff; }
+.listing-visit { position: relative; z-index: 3; display: inline-flex; align-items: center; padding: .18rem .35rem; border-radius: 999px; color: var(--muted); font-size: .64rem; font-weight: 760; text-decoration: none; white-space: nowrap; }
+.listing-visit:hover { background: color-mix(in srgb, var(--ink) 8%, transparent); color: var(--ink); }
 .listing-details { position: relative; z-index: 3; color: var(--blue); font-size: .64rem; font-weight: 760; text-decoration: none; white-space: nowrap; }
 .listing-details:hover { color: var(--ink); text-decoration: underline; text-underline-offset: .16em; }
 .card-visit-overlay { position: absolute; inset: 0; z-index: 1; border-radius: inherit; }

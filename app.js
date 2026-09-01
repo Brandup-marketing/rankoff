@@ -1880,7 +1880,7 @@
     }
 
     try {
-      const copied = await copyText(`${text} ${url.toString()}`);
+      const copied = await copyText(`${text} ${shareUrl.toString()}`);
       showToast(
         copied
           ? (state.language === "zh" ? "排名战报与链接已复制。" : "Rank result and link copied.")
@@ -2038,7 +2038,9 @@
       inlineBidTouched = false;
       elements.inlineChallenge?.scrollIntoView({ behavior: "smooth", block: "center" });
       window.setTimeout(() => elements.inlineUrl?.focus(), 220);
-      showToast(`Challenge prepared at ${money(minimum)}. Add your product to continue.`);
+      showToast(state.language === "zh"
+        ? `已按 ${money(suggestion)} 准备好挑战。填入你的网址即可继续。`
+        : `Challenge prepared at ${money(suggestion)}. Add your product to continue.`);
       return;
     }
 
