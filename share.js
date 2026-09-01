@@ -22,6 +22,12 @@
     xNote: dialog.querySelector("[data-share-x-note]"),
     native: dialog.querySelector("[data-share-native]"),
     nativeLabel: dialog.querySelector("[data-share-native-label]"),
+    card: dialog.querySelector("[data-share-card]"),
+    cardLabel: dialog.querySelector("[data-share-card-label]"),
+    cardNote: dialog.querySelector("[data-share-card-note]"),
+    story: dialog.querySelector("[data-share-story]"),
+    storyLabel: dialog.querySelector("[data-share-story-label]"),
+    storyNote: dialog.querySelector("[data-share-story-note]"),
     options: dialog.querySelector(".share-options"),
     close: Array.from(dialog.querySelectorAll("[data-share-close]")),
     heading: dialog.querySelector("[data-share-heading]"),
@@ -38,6 +44,9 @@
       whatsapp: "WhatsApp", whatsappNote: "Send to a contact", native: "Share…", nativeNote: "Instagram, Messenger, more",
       facebook: "Facebook", facebookNote: "Post to your timeline", x: "X", xNote: "Post with your rank",
       nativeOpened: "Share menu opened.", close: "Close share options", options: "Share options",
+      card: "Save image", cardNote: "Square 1080×1080", story: "Story image", storyNote: "1080×1920 for Stories",
+      cardWorking: "Building your rank card…", cardShared: "Rank card ready to share.",
+      cardSaved: "Rank card saved to your device.", cardError: "Unable to build the rank card.",
     },
     zh: {
       heading: "分享此排名", intro: "发送准确的排名、榜单与分类。", link: "排名链接",
@@ -45,11 +54,15 @@
       whatsapp: "WhatsApp", whatsappNote: "发送给联系人", native: "分享…", nativeNote: "Instagram、Messenger 等",
       facebook: "Facebook", facebookNote: "发到你的动态", x: "X", xNote: "带排名发帖",
       nativeOpened: "已打开分享菜单。", close: "关闭分享选项", options: "分享选项",
+      card: "保存图片", cardNote: "方形 1080×1080", story: "限时动态图", storyNote: "1080×1920 竖版",
+      cardWorking: "正在生成排名卡…", cardShared: "排名卡已准备好分享。",
+      cardSaved: "排名卡已保存到设备。", cardError: "无法生成排名卡。",
     },
   };
 
   let current = null;
   let copyResetTimer = null;
+  let cardBusy = false;
 
   function language() { return current?.language === "zh" ? "zh" : "en"; }
 
@@ -125,6 +138,55 @@
     }
   }
 
+  // The listing page prints the settled total in its record table but leaves it
+  // out of the share sentence, so the card reads the figure the merchant is
+  // already looking at rather than going without one. Nothing is computed here.
+  function settledTotalOnPage() {
+    const printed = String(document.querySelector("[data-bid]")?.textContent || "").trim();
+    return /\d/.test(printed) ? printed : "";
+  }
+
+  function cardModel(options) {
+    const factory = window.RankoffCard?.buildCardModel;
+    if (typeof factory !== "function") return null;
+    const card = { ...(options?.card || {}) };
+    if (!card.total && !window.RankoffCard.parseSettledTotal?.(options?.text)) {
+      const printed = settledTotalOnPage();
+      if (printed) card.total = printed;
+    }
+    return factory({
+      title: options?.title,
+      text: options?.text,
+      url: current.url,
+      language: current.language,
+      card,
+    });
+  }
+
+  async function saveCard(shape) {
+    const model = current?.card;
+    if (!model || cardBusy || typeof window.RankoffCard?.saveRankCard !== "function") return;
+    const strings = labels[language()];
+    const button = shape === "story" ? elements.story : elements.card;
+    cardBusy = true;
+    if (button) button.disabled = true;
+    status(strings.cardWorking, "info");
+    try {
+      const outcome = await window.RankoffCard.saveRankCard(model, shape);
+      if (outcome === "shared") {
+        status(strings.cardShared);
+        close();
+      } else if (outcome === "downloaded") {
+        status(strings.cardSaved);
+      }
+    } catch {
+      status(strings.cardError, "error");
+    } finally {
+      cardBusy = false;
+      if (button) button.disabled = false;
+    }
+  }
+
   function localize() {
     const strings = labels[language()];
     elements.heading.textContent = strings.heading;
@@ -139,6 +201,10 @@
     if (elements.xNote) elements.xNote.textContent = strings.xNote;
     elements.nativeLabel.textContent = strings.native;
     elements.nativeNote.textContent = strings.nativeNote;
+    if (elements.cardLabel) elements.cardLabel.textContent = strings.card;
+    if (elements.cardNote) elements.cardNote.textContent = strings.cardNote;
+    if (elements.storyLabel) elements.storyLabel.textContent = strings.story;
+    if (elements.storyNote) elements.storyNote.textContent = strings.storyNote;
     elements.options.setAttribute("aria-label", strings.options);
     elements.close.forEach((button) => button.setAttribute("aria-label", strings.close));
   }
@@ -166,6 +232,16 @@
     }
     elements.url.value = current.url;
     elements.native.hidden = typeof navigator.share !== "function";
+    // The card states a rank, so it is only offered when that rank can be read
+    // back out of the copy the board itself wrote. A sentence we cannot parse
+    // hides the buttons rather than putting a guessed number onto an image.
+    current.card = cardModel(options);
+    if (elements.card) elements.card.hidden = !current.card;
+    if (elements.story) elements.story.hidden = !current.card;
+    // The merchant's logo is fetched now, while the dialog is being read: Safari
+    // spends the click's user activation on any await, and without activation
+    // the share sheet — the only route to Instagram — never opens.
+    if (current.card) window.RankoffCard.preloadLogo?.(current.card);
     // One column is only right when one option survives; with Facebook and X
     // present, hiding the native sheet still leaves a grid.
     const visibleOptions = [...dialog.querySelectorAll(".share-option")].filter((option) => !option.hidden).length;
@@ -181,6 +257,8 @@
   elements.facebook?.addEventListener("click", openFacebook);
   elements.x?.addEventListener("click", openX);
   elements.native.addEventListener("click", openNativeShare);
+  elements.card?.addEventListener("click", () => { void saveCard("square"); });
+  elements.story?.addEventListener("click", () => { void saveCard("story"); });
   elements.close.forEach((button) => button.addEventListener("click", close));
   dialog.addEventListener("click", (event) => { if (event.target === dialog) close(); });
 
