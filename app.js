@@ -1028,10 +1028,13 @@
     if (activeBid?.type === "new") {
       const existing = existingListingForPending();
       const total = existing ? getBid(existing) + amount : amount;
+      // A tie goes to whoever settled first, and this payment settles last, so an
+      // equal total still outranks it: counting only strictly larger totals
+      // promised #1 for a price that ties the leader.
       if (chosenMarket && chosenMarket.category === pendingChallenge?.category && !existing) {
-        return chosenMarket.totals.filter((value) => value > total).length + 1;
+        return chosenMarket.totals.filter((value) => value >= total).length + 1;
       }
-      return ranked.filter((listing) => listing.id !== existing?.id && getBid(listing) > total).length + 1;
+      return ranked.filter((listing) => listing.id !== existing?.id && getBid(listing) >= total).length + 1;
     }
 
     const listing = state.listings.find((item) => item.id === activeBid?.listingId);
