@@ -142,3 +142,30 @@ test("every market on the board has a name a reader can see", async () => {
   assert.equal(marketLabel("Travel"), "Property & Agents");
   assert.equal(marketLabel("Insurance"), "Finance & Insurance");
 });
+
+test("a listing takes its words from the page it points at", async () => {
+  const { extractSiteInfo } = await import("../../functions/_lib/siteinfo.js");
+
+  const shop = `<html><head>
+    <meta property="og:site_name" content="Rakan Jaya Hardware">
+    <meta name="description" content="Industrial hardware supplier in Kemaman, Terengganu, specialising in oil &amp; gas products, steel and welding equipment.">
+    <meta property="og:image" content="/cdn/logo.png"></head></html>`;
+  const site = extractSiteInfo(shop, "rakanjayahardware.com");
+  assert.equal(site.title, "Rakan Jaya Hardware");
+  assert.match(site.description, /oil & gas products/);
+  assert.equal(site.logo, "https://rakanjayahardware.com/cdn/logo.png");
+
+  // A profile describes the platform and counts followers; neither is ours to publish.
+  const profile = `<html><head>
+    <meta property="og:title" content="Nike (@nike) • Instagram photos and videos">
+    <meta property="og:description" content="291M Followers, 267 Following, 1,671 Posts - See Instagram photos and videos from Nike">
+    <meta property="og:image" content="https://scontent.cdninstagram.com/signed.jpg"></head></html>`;
+  const social = extractSiteInfo(profile, "instagram.com", { social: true });
+  assert.equal(social.title, "Nike");
+  assert.equal(social.description, "", "a follower count is not a description");
+  assert.equal(social.logo, "", "a signed avatar URL expires within weeks");
+
+  // Boilerplate is worse than nothing.
+  assert.equal(extractSiteInfo('<meta name="description" content="Home">', "x.com").description, "");
+  assert.equal(extractSiteInfo('<meta name="description" content="Welcome to our website, we sell things here">', "x.com").description, "");
+});

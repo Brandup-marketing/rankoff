@@ -1,6 +1,7 @@
 import { ApiError, defaultBoardSlug, isProduction, requireDatabase } from "../../_lib/config.js";
 import { json, methodNotAllowed, readJson } from "../../_lib/http.js";
 import { countListingsCreatedSince, createListing, findListingByHostname, loadBoard } from "../../_lib/repository.js";
+import { fetchSiteInfo } from "../../_lib/siteinfo.js";
 import { sha256Hex } from "../../_lib/security.js";
 import { normalizeCategory, normalizeDestinationUrl, optionalString } from "../../_lib/validation.js";
 
@@ -34,10 +35,21 @@ export async function onRequestPost(context) {
   const db = requireDatabase(context.env);
   const board = await loadBoard(db, defaultBoardSlug(context.env));
   const destination = normalizeDestinationUrl(input.url);
+  const givenTitle = optionalString(input.title, "title", { max: 96 });
+  const givenDescription = optionalString(input.description, "description", { max: 240 });
+
+  // A merchant should not have to type what their own page already publishes.
+  // Never allowed to fail the submission: a payment is worth more than a
+  // description we could not fetch.
+  const discovered = givenTitle && givenDescription
+    ? { title: "", description: "", logo: "" }
+    : await fetchSiteInfo(destination.url, destination.hostname, { social: Boolean(destination.platform) });
+
   // A social listing titled "www.instagram.com" would read the same on every card.
-  const title = optionalString(input.title, "title", { max: 96 })
+  const title = givenTitle
+    || discovered.title
     || (destination.handle ? `@${destination.handle}` : destination.hostname);
-  const description = optionalString(input.description, "description", { max: 240 });
+  const description = givenDescription || discovered.description;
   screenText(destination.identity, destination.url, title, description);
 
   // One website, one listing: a repeat submission returns the existing entry
@@ -71,7 +83,7 @@ export async function onRequestPost(context) {
     description,
     destinationUrl: destination.url,
     hostname: destination.identity,
-    faviconUrl: destination.faviconUrl,
+    faviconUrl: discovered.logo || destination.faviconUrl,
     category: normalizeCategory(input.category),
     status: "approved",
     createdAt,
