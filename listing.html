@@ -136,14 +136,15 @@
           </span>
         </label>
         <div class="share-options" aria-label="Share options">
-          <button class="share-option" type="button" data-share-whatsapp><span data-share-whatsapp-label>WhatsApp</span><small data-share-whatsapp-note>Send to a contact</small></button>
+          <button class="share-option" type="button" data-share-card hidden><span data-share-card-label>Save image</span><small data-share-card-note>Square 1080×1080</small></button><button class="share-option" type="button" data-share-story hidden><span data-share-story-label>Story image</span><small data-share-story-note>1080×1920 for Stories</small></button><button class="share-option" type="button" data-share-whatsapp><span data-share-whatsapp-label>WhatsApp</span><small data-share-whatsapp-note>Send to a contact</small></button>
           <button class="share-option" type="button" data-share-facebook><span data-share-facebook-label>Facebook</span><small data-share-facebook-note>Post to your timeline</small></button><button class="share-option" type="button" data-share-x><span data-share-x-label>X</span><small data-share-x-note>Post with your rank</small></button><button class="share-option" type="button" data-share-native><span data-share-native-label>Share…</span><small data-share-native-note>Messenger and more apps</small></button>
         </div>
       </div>
     </dialog>
 
     <div class="toast" role="status" aria-live="polite" data-toast></div>
-    <script src="./share.js?v=4" defer></script>
+    <script src="./share-card.js?v=1" type="module"></script>
+    <script src="./share.js?v=5" defer></script>
     <script src="./listing.js?v=24" defer></script>
   </body>
 </html>
