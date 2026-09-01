@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="referrer" content="same-origin" />
+    <meta name="theme-color" content="#090a0c" />
+    <title>Owner view</title>
+    <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
+    <link rel="stylesheet" href="./styles.css?v=40" />
+    <link rel="stylesheet" href="./admin.css?v=1" />
+  </head>
+  <body>
+    <main class="owner-shell">
+      <header class="owner-topbar">
+        <a class="brand owner-brand" href="./index.html" aria-label="RANKOFF home"><img class="brand-final-logo" src="./assets/rankoff-final-logo.png?v=4" alt="RANKOFF" width="1254" height="1254" /></a>
+        <p class="owner-eyebrow" data-i18n="pageKicker">Owner view</p>
+        <button class="language-toggle" type="button" data-language-toggle aria-pressed="false">中文</button>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch colour theme" aria-pressed="true">Light</button>
+      </header>
+
+      <section class="owner-intro">
+        <h1 data-i18n="pageTitle">Settled payments</h1>
+        <p class="owner-lede" data-i18n="pageLede">Who paid, what they paid for, and how to reach them. Live records only — nothing on this page is stored in this browser.</p>
+      </section>
+
+      <form class="owner-auth" data-owner-form autocomplete="off">
+        <label class="owner-field" for="owner-token"><span data-i18n="tokenLabel">Admin token</span>
+          <input id="owner-token" name="owner-token" type="password" data-owner-token autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" data-i18n-placeholder="tokenPlaceholder" placeholder="Paste the admin token" required />
+        </label>
+        <div class="owner-auth-actions">
+          <button class="owner-primary" type="submit" data-owner-load data-i18n="loadPayments">Load payments</button>
+          <button class="owner-secondary" type="button" data-owner-clear data-i18n="clearToken">Clear token</button>
+        </div>
+        <p class="owner-note" data-i18n="tokenNote">The token is held in this tab's memory only. It is never saved to storage, never put in the address bar, and never sent anywhere but this site.</p>
+      </form>
+
+      <p class="owner-status" data-owner-status role="status" aria-live="polite"></p>
+
+      <section class="owner-summary" data-owner-summary hidden>
+        <div><strong data-owner-count>0</strong><span data-i18n="settledPayments">settled payments</span></div>
+        <div><strong data-owner-total>—</strong><span data-i18n="settledTotal">settled total</span></div>
+      </section>
+
+      <section class="owner-results" data-owner-results hidden aria-labelledby="owner-table-title">
+        <h2 class="visually-hidden" id="owner-table-title" data-i18n="tableTitle">Settled payment records</h2>
+        <div class="owner-table-scroll">
+          <table class="owner-table">
+            <thead>
+              <tr>
+                <th scope="col" data-i18n="colSettled">Settled</th>
+                <th scope="col" data-i18n="colListing">Listing</th>
+                <th scope="col" data-i18n="colAmount">Amount</th>
+                <th scope="col" data-i18n="colBuyer">Buyer</th>
+                <th scope="col" data-i18n="colActions">Reach them</th>
+              </tr>
+            </thead>
+            <tbody data-owner-rows></tbody>
+          </table>
+        </div>
+        <div class="owner-pager">
+          <button class="owner-secondary" type="button" data-owner-previous data-i18n="previousPage">Previous</button>
+          <span class="owner-page" data-owner-page></span>
+          <button class="owner-secondary" type="button" data-owner-next data-i18n="nextPage">Next</button>
+        </div>
+      </section>
+
+      <footer class="owner-footer"><a href="./index.html" data-i18n="backToBoard">Back to the board</a></footer>
+    </main>
+    <script src="./admin.js?v=1" defer></script>
+  </body>
+</html>

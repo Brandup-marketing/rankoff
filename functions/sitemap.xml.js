@@ -5,6 +5,24 @@ import { loadBoard, loadPublicBoard } from "./_lib/repository.js";
 const PAGE_LIMIT = 100;
 const MAX_PAGES = 10;
 
+// The owner view is noindex and shows real customer contact detail. It must
+// never be advertised to a crawler, so the assembled document is filtered
+// rather than trusted: a hand-edited sitemap.xml cannot leak it by accident.
+const PRIVATE_PATHS = Object.freeze(["/admin.html"]);
+
+export function stripPrivatePaths(xml) {
+  return String(xml).replace(/[ \t]*<url>[\s\S]*?<\/url>\n?/g, (block) => {
+    const loc = (/<loc>([\s\S]*?)<\/loc>/.exec(block)?.[1] || "").trim();
+    let path = loc;
+    try {
+      path = new URL(loc).pathname;
+    } catch {
+      /* A relative <loc> is compared as written. */
+    }
+    return PRIVATE_PATHS.includes(path) ? "" : block;
+  });
+}
+
 export function productEntries(rankings) {
   return rankings
     .map((entry) => ({
@@ -40,7 +58,7 @@ export async function onRequestGet(context) {
     }
   }
 
-  return new Response(xml, {
+  return new Response(stripPrivatePaths(xml), {
     headers: { "Content-Type": "application/xml; charset=utf-8", "Cache-Control": "public, max-age=300, must-revalidate" },
   });
 }

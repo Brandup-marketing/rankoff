@@ -599,3 +599,98 @@ export async function recordSnapshotEntries(db, snapshotId, boardId) {
     .bind(snapshotId, boardId)
     .run();
 }
+
+// The owner view. Buyer contact has been landing in `bids` since 0004 with no
+// way to read it short of a database query, so a settled payment could not be
+// answered without an engineer. This is the only read path for those columns,
+// and every caller of it sits behind requireAdmin.
+export async function loadSettledPayments(db, board, { limit, page = 1 }) {
+  const offset = (page - 1) * limit;
+  const [result, summary] = await Promise.all([
+    db
+      .prepare(
+        `SELECT
+           b.id, b.amount_minor, b.currency, b.settled_at, b.created_at,
+           b.provider_payment_id, b.invoice_url, b.card_network, b.card_last_four,
+           b.buyer_name, b.buyer_email, b.buyer_phone, b.provider_customer_id,
+           b.buyer_street, b.buyer_city, b.buyer_state, b.buyer_zipcode, b.buyer_country,
+           l.id AS listing_id, l.title, l.hostname, l.category, l.status AS listing_status
+         FROM bids b
+         INNER JOIN listings l ON l.id = b.listing_id
+         WHERE b.board_id = ?1 AND b.status = 'settled'
+         ORDER BY b.settled_at DESC, b.id DESC
+         LIMIT ?2 OFFSET ?3`,
+      )
+      .bind(board.id, limit, offset)
+      .all(),
+    db
+      .prepare(
+        `SELECT COUNT(*) AS settled_count, COALESCE(SUM(amount_minor), 0) AS total_minor
+         FROM bids
+         WHERE board_id = ?1 AND status = 'settled'`,
+      )
+      .bind(board.id)
+      .first(),
+  ]);
+
+  const total = Number(summary?.settled_count || 0);
+  return {
+    board: publicBoard(board),
+    payments: (result?.results || []).map(adminPayment),
+    summary: {
+      settled_count: total,
+      total_minor: Number(summary?.total_minor || 0),
+      currency: board.currency,
+    },
+    pagination: {
+      page,
+      page_size: limit,
+      total,
+      total_pages: Math.max(1, Math.ceil(total / limit)),
+      has_previous: page > 1,
+      has_next: page * limit < total,
+    },
+  };
+}
+
+// A settled payment as the owner needs it: what was bought, what it cost, who
+// paid, and where the receipt lives. Empty strings become null so the page can
+// say "not recorded" instead of rendering a blank the reader has to interpret.
+export function adminPayment(row) {
+  return {
+    id: row.id,
+    amount_minor: Number(row.amount_minor),
+    currency: row.currency,
+    settled_at: row.settled_at || null,
+    created_at: row.created_at || null,
+    provider_payment_id: nullableText(row.provider_payment_id),
+    invoice_url: nullableText(row.invoice_url),
+    card_network: nullableText(row.card_network),
+    card_last_four: nullableText(row.card_last_four),
+    listing: {
+      id: row.listing_id,
+      title: row.title,
+      hostname: row.hostname,
+      category: row.category,
+      status: row.listing_status,
+    },
+    buyer: {
+      name: nullableText(row.buyer_name),
+      email: nullableText(row.buyer_email),
+      phone: nullableText(row.buyer_phone),
+      customer_id: nullableText(row.provider_customer_id),
+      address: {
+        street: nullableText(row.buyer_street),
+        city: nullableText(row.buyer_city),
+        state: nullableText(row.buyer_state),
+        zipcode: nullableText(row.buyer_zipcode),
+        country: nullableText(row.buyer_country),
+      },
+    },
+  };
+}
+
+function nullableText(value) {
+  const text = String(value ?? "").trim();
+  return text ? text : null;
+}

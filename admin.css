@@ -1,0 +1,139 @@
+/* Owner view. Deliberately plain: this page is a working tool, not a surface
+   anyone is meant to find. Colours come from the tokens in styles.css so it
+   follows the same light and dark themes as the rest of the board. */
+
+.owner-shell {
+  width: min(100% - 2rem, var(--content));
+  margin: 0 auto;
+  padding: 1.5rem 0 4rem;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.owner-topbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.owner-brand { display: inline-flex; width: 2.5rem; }
+.owner-brand img { width: 100%; height: auto; }
+
+.owner-eyebrow {
+  flex: 1;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.owner-intro { display: grid; gap: 0.5rem; }
+.owner-intro h1 { margin: 0; font-size: clamp(1.6rem, 3vw, 2.2rem); line-height: 1.15; }
+.owner-lede { margin: 0; max-width: 46rem; color: var(--muted); }
+
+.owner-auth {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.owner-field { display: grid; gap: 0.4rem; max-width: 32rem; font-size: 0.85rem; color: var(--muted); }
+
+.owner-field input {
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--ink);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: 0.06em;
+}
+
+.owner-field input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+.owner-auth-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+.owner-primary,
+.owner-secondary,
+.owner-action {
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--line-strong);
+  background: var(--surface-subtle);
+  color: var(--ink);
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.owner-primary { border-color: var(--accent); background: var(--accent-soft); }
+.owner-primary:hover, .owner-secondary:hover, .owner-action:hover { border-color: var(--accent); }
+.owner-primary:focus-visible, .owner-secondary:focus-visible, .owner-action:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+.owner-note { margin: 0; max-width: 44rem; color: var(--muted); font-size: 0.8rem; line-height: 1.5; }
+
+.owner-status { margin: 0; min-height: 1.25rem; color: var(--muted); font-size: 0.88rem; }
+
+.owner-summary { display: flex; flex-wrap: wrap; gap: 1rem; }
+
+.owner-summary div {
+  flex: 1 1 12rem;
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.owner-summary strong { font-size: 1.5rem; line-height: 1.1; }
+.owner-summary span { color: var(--muted); font-size: 0.8rem; }
+
+.owner-results { display: grid; gap: 1rem; }
+
+.owner-table-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.owner-table { width: 100%; min-width: 54rem; border-collapse: collapse; font-size: 0.88rem; }
+
+.owner-table th {
+  position: sticky;
+  top: 0;
+  padding: 0.7rem 0.9rem;
+  border-bottom: 1px solid var(--line-strong);
+  background: var(--surface-subtle);
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.owner-table td { padding: 0.8rem 0.9rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+.owner-table tr:last-child td { border-bottom: 0; }
+
+.owner-strong, .owner-muted { display: block; }
+.owner-strong { font-weight: 600; overflow-wrap: anywhere; }
+.owner-muted { margin-top: 0.2rem; color: var(--muted); font-size: 0.8rem; overflow-wrap: anywhere; }
+
+.owner-actions { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+.owner-pager { display: flex; align-items: center; gap: 0.75rem; }
+.owner-page { color: var(--muted); font-size: 0.85rem; }
+
+.owner-footer { padding-top: 1rem; border-top: 1px solid var(--line); font-size: 0.85rem; }
+
+@media (max-width: 40rem) {
+  .owner-eyebrow { font-size: 0.7rem; letter-spacing: 0.1em; }
+  .owner-auth { padding: 1rem; }
+}
