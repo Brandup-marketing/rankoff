@@ -42,13 +42,22 @@ export async function onRequestGet(context) {
       const db = requireDatabase(context.env);
       const board = await loadBoard(db, defaultBoardSlug(context.env));
       const payload = await loadPublicBoard(db, board, { category: "all", period: "all", limit: LIMIT, page: 1 });
-      const markup = renderBoard(payload.rankings, String(payload.board?.currency || "MYR").toUpperCase());
+      const currency = String(payload.board?.currency || "MYR").toUpperCase();
+      const markup = renderBoard(payload.rankings, currency);
       if (markup) {
         html = html.replace(
           /(<div class="board-list" data-board-list[^>]*>)(<\/div>)/,
           (match, open, close) => `${open}${markup}${close}`,
         );
       }
+
+      // The headline price too: before the API answered the page briefly offered
+      // #1 at the board floor, which is not what taking #1 costs.
+      const price = formatMoney(payload.next_bid_minor, currency).replace(" ", "\u00a0");
+      html = html.replace(
+        /(<strong data-hero-next-price[^>]*>)[\s\S]*?(<\/strong>)/,
+        (match, open, close) => `${open}${escapeHtml(price)}${close}`,
+      );
     } catch {
       /* The page still works: its own script draws the board a moment later. */
     }
