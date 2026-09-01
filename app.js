@@ -184,6 +184,7 @@
     inlineBid: document.querySelector("[data-inline-bid]"),
     inlineUrl: document.querySelector("[data-inline-url]"),
     heroPrice: document.querySelector("[data-hero-next-price]"),
+    heroMarket: document.querySelector("[data-hero-market]"),
     heroContext: document.querySelector("[data-hero-context]"),
     boardState: document.querySelector("[data-board-state]"),
     inlineSubmit: document.querySelector("[data-inline-submit]"),
@@ -1226,16 +1227,29 @@
     return card;
   }
 
+  // "Claim #1 for RM 5" is a different promise on a market view than on the whole
+  // board: RM 5 leads an empty Beauty & Wellness while the board's first place
+  // costs more. The headline says which one is being offered.
+  function renderHeroMarket() {
+    if (!elements.heroMarket) return;
+    const named = state.category !== DEFAULT_CATEGORY && categories.includes(state.category);
+    if (!named) return void (elements.heroMarket.textContent = "");
+    elements.heroMarket.textContent = state.language === "zh"
+      ? `（${categoryName(state.category, "zh")}）`
+      : ` in ${categoryName(state.category)}`;
+  }
+
   function renderLeader() {
     const leader = boardSource !== "local" && remoteLeader ? remoteLeader : rankedListings()[0];
     if (!leader) {
       if (boardSource === "production") {
         const openingPrice = remoteNextBid || 1;
+        renderHeroMarket();
         if (elements.heroPrice) elements.heroPrice.textContent = money(openingPrice);
         if (elements.heroContext) {
           elements.heroContext.textContent = state.language === "zh"
-            ? `${money(openingPrice)} 即可登上榜单第 1 名。成为板上第一个产品。`
-            : `${money(openingPrice)} takes #1. Be the first product on the board.`;
+            ? `${money(openingPrice)} 即可登上${state.category === DEFAULT_CATEGORY ? "榜单" : categoryName(state.category, "zh")}第 1 名。成为这里第一个条目。`
+            : `${money(openingPrice)} takes #1${state.category === DEFAULT_CATEGORY ? "" : ` in ${categoryName(state.category)}`}. Be the first listing here.`;
         }
         if (elements.inlineBid) {
           elements.inlineBid.min = String(boardMinimum());
@@ -1251,6 +1265,7 @@
     const marketPrice = chosenMarket && chosenMarket.category === elements.categorySelect?.value ? chosenMarket.nextBid : null;
     const nextPrice = marketPrice || (boardSource === "local" || !remoteNextBid ? getBid(leader) + 1 : remoteNextBid);
 
+    renderHeroMarket();
     if (elements.heroPrice) elements.heroPrice.textContent = money(nextPrice);
     if (elements.heroContext) {
       elements.heroContext.textContent = state.language === "zh"
