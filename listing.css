@@ -119,6 +119,10 @@
 .listing-actions .secondary-action { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
 .listing-actions .secondary-action:hover { border-color: var(--line-strong); color: var(--ink); }
 .listing-actions [aria-disabled="true"] { cursor: not-allowed; opacity: 0.55; pointer-events: none; }
+/* .listing-visit is also the board card's small pill, which sets its own tiny
+   type. Here it is a full-size action beside "Share rank" and has to match it. */
+.listing-actions .listing-visit { gap: .32rem; padding: .65rem .9rem; border-radius: .7rem; background: transparent; color: var(--muted); font: inherit; font-weight: 750; }
+.listing-actions .listing-visit:hover { background: transparent; color: var(--ink); }
 
 .evidence-section { margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid var(--line); }
 .evidence-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1.5rem; }

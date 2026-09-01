@@ -201,7 +201,8 @@ export function renderProductPage(shell, view) {
   html = html.replace(/(<h1 data-title)>[\s\S]*?<\/h1>/, `$1>${escapeHtml(view.title)}</h1>`);
   html = html.replace(/(<p class="listing-host" data-host)>[\s\S]*?<\/p>/, `$1>${escapeHtml(view.hostname)}</p>`);
   html = html.replace(/(<p class="listing-story" data-description)>[\s\S]*?<\/p>/, `$1>${escapeHtml(view.description)}</p>`);
-  html = html.replace(/(<span data-category)>[\s\S]*?<\/span>/, `$1>${escapeHtml(view.category)}</span>`);
+  html = html.replace(/(<span data-category)>[\s\S]*?<\/span>/, `$1>${escapeHtml(view.marketName || view.category)}</span>`);
+  html = html.replace(/(<span class="verified-chip" data-placement-label)>[\s\S]*?<\/span>/, `$1>Verified placement</span>`);
   html = html.replace(/(<dd data-rank)>[\s\S]*?<\/dd>/, `$1>#${escapeHtml(view.rank)}</dd>`);
   html = html.replace(/(<dd data-bid)>[\s\S]*?<\/dd>/, `$1>${escapeHtml(view.bid)}</dd>`);
   html = html.replace(/(<dd data-clicks)>[\s\S]*?<\/dd>/, `$1>${escapeHtml(view.clicks)}</dd>`);
