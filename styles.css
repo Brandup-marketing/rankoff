@@ -438,6 +438,21 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .share-dialog { width: min(calc(100% - 1.5rem), 31rem); }
 .share-panel { gap: 1rem; }
 .share-intro { max-width: 34rem; margin: .3rem 0 0; color: var(--muted); font-size: .76rem; line-height: 1.4; }
+/* The picture is the preview: what a merchant sees here is the file that leaves
+   the phone. The old pair of buttons promised an image nobody could see first. */
+.share-card-preview { display: grid; gap: .55rem; margin: 0 0 .2rem; }
+.share-card-preview img { width: 100%; max-height: 42vh; object-fit: contain; border: 1px solid var(--line); border-radius: .7rem; background: var(--surface-subtle); }
+.share-card-bar { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.share-shape-toggle { display: inline-flex; gap: .25rem; padding: .18rem; border: 1px solid var(--line); border-radius: 999px; }
+.share-shape-toggle button { min-height: 2.1rem; padding: 0 .7rem; border: 0; border-radius: 999px; background: transparent; color: var(--muted); font-size: .72rem; font-weight: 800; }
+.share-shape-toggle button[aria-pressed="true"] { background: var(--surface-subtle); color: var(--ink); }
+.share-card-save { min-height: 2.4rem; padding: 0 .9rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-subtle); color: var(--ink); font-size: .74rem; font-weight: 800; }
+.share-card-save:hover { border-color: var(--accent); }
+.share-card-save[aria-busy="true"] { opacity: .6; }
+/* The card already says the name, the rank and the money. Repeating it in text
+   underneath only made the dialog taller; the text block is the fallback for a
+   listing whose card cannot be painted, so it steps aside when one can. */
+.share-card-preview:not([hidden]) ~ .share-preview { display: none; }
 .share-preview { display: flex; align-items: flex-start; gap: .7rem; padding-block: .15rem; }
 .share-preview-copy { display: grid; gap: .3rem; min-width: 0; }
 .share-preview-mark { flex: 0 0 auto; display: grid; place-items: center; width: 2.75rem; height: 2.75rem; overflow: hidden; border: 1px solid var(--line); border-radius: .6rem; background: #fff; }

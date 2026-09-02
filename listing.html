@@ -16,7 +16,7 @@
     <meta name="theme-color" content="#090a0c" />
     <title>Sponsored listing | RANKOFF</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=41" />
+    <link rel="stylesheet" href="./styles.css?v=43" />
     <link rel="stylesheet" href="./listing.css?v=9" />
   </head>
   <body>
@@ -120,7 +120,17 @@
           </div>
           <button class="icon-button" type="button" data-share-close aria-label="Close share options">×</button>
         </div>
-        <div class="share-preview">
+        <figure class="share-card-preview" data-card-preview hidden>
+          <img data-card-image alt="" decoding="async" />
+          <figcaption class="share-card-bar">
+            <span class="share-shape-toggle" role="group" data-shape-toggle>
+              <button type="button" data-shape="square" aria-pressed="true" data-shape-square>Square</button>
+              <button type="button" data-shape="story" aria-pressed="false" data-shape-story>Story</button>
+            </span>
+            <button type="button" class="share-card-save" data-card-save>Save image</button>
+          </figcaption>
+        </figure>
+        <div class="share-preview" data-text-preview>
           <span class="share-preview-mark" data-share-mark hidden aria-hidden="true"><img data-share-image alt="" referrerpolicy="no-referrer" decoding="async" /></span>
           <div class="share-preview-copy">
             <strong data-share-title>RANKOFF</strong>
@@ -136,7 +146,7 @@
           </span>
         </label>
         <div class="share-options" aria-label="Share options">
-          <button class="share-option" type="button" data-share-card hidden><span data-share-card-label>Save image</span><small data-share-card-note>Square 1080×1080</small></button><button class="share-option" type="button" data-share-story hidden><span data-share-story-label>Story image</span><small data-share-story-note>1080×1920 for Stories</small></button><button class="share-option" type="button" data-share-whatsapp><span data-share-whatsapp-label>WhatsApp</span><small data-share-whatsapp-note>Send to a contact</small></button>
+          <button class="share-option" type="button" data-share-whatsapp><span data-share-whatsapp-label>WhatsApp</span><small data-share-whatsapp-note>Send to a contact</small></button>
           <button class="share-option" type="button" data-share-facebook><span data-share-facebook-label>Facebook</span><small data-share-facebook-note>Post to your timeline</small></button><button class="share-option" type="button" data-share-x><span data-share-x-label>X</span><small data-share-x-note>Post with your rank</small></button><button class="share-option" type="button" data-share-native><span data-share-native-label>Share…</span><small data-share-native-note>Messenger and more apps</small></button>
         </div>
       </div>
@@ -144,7 +154,7 @@
 
     <div class="toast" role="status" aria-live="polite" data-toast></div>
     <script src="./share-card.js?v=1" type="module"></script>
-    <script src="./share.js?v=5" defer></script>
+    <script src="./share.js?v=7" defer></script>
     <script src="./listing.js?v=24" defer></script>
   </body>
 </html>

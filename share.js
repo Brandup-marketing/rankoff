@@ -22,12 +22,11 @@
     xNote: dialog.querySelector("[data-share-x-note]"),
     native: dialog.querySelector("[data-share-native]"),
     nativeLabel: dialog.querySelector("[data-share-native-label]"),
-    card: dialog.querySelector("[data-share-card]"),
-    cardLabel: dialog.querySelector("[data-share-card-label]"),
-    cardNote: dialog.querySelector("[data-share-card-note]"),
-    story: dialog.querySelector("[data-share-story]"),
-    storyLabel: dialog.querySelector("[data-share-story-label]"),
-    storyNote: dialog.querySelector("[data-share-story-note]"),
+    cardPreview: dialog.querySelector("[data-card-preview]"),
+    cardImage: dialog.querySelector("[data-card-image]"),
+    cardSave: dialog.querySelector("[data-card-save]"),
+    shapeSquare: dialog.querySelector("[data-shape-square]"),
+    shapeStory: dialog.querySelector("[data-shape-story]"),
     options: dialog.querySelector(".share-options"),
     close: Array.from(dialog.querySelectorAll("[data-share-close]")),
     heading: dialog.querySelector("[data-share-heading]"),
@@ -39,22 +38,22 @@
 
   const labels = {
     en: {
-      heading: "Share this rank", intro: "Send the exact position, board, and category.", link: "Rank link",
+      heading: "Share this rank", intro: "This is exactly what you will send.", link: "Rank link",
       copy: "Copy link", copied: "Copied", copySuccess: "Rank link copied.", copyError: "Unable to copy the rank link.",
       whatsapp: "WhatsApp", whatsappNote: "Send to a contact", native: "Share…", nativeNote: "Instagram, Messenger, more",
       facebook: "Facebook", facebookNote: "Post to your timeline", x: "X", xNote: "Post with your rank",
       nativeOpened: "Share menu opened.", close: "Close share options", options: "Share options",
-      card: "Save image", cardNote: "Square 1080×1080", story: "Story image", storyNote: "1080×1920 for Stories",
+      card: "Save image", story: "Story", square: "Square", cardAlt: "Your rank card",
       cardWorking: "Building your rank card…", cardShared: "Rank card ready to share.",
       cardSaved: "Rank card saved to your device.", cardError: "Unable to build the rank card.",
     },
     zh: {
-      heading: "分享此排名", intro: "发送准确的排名、榜单与分类。", link: "排名链接",
+      heading: "分享此排名", intro: "你看到的就是发出去的样子。", link: "排名链接",
       copy: "复制链接", copied: "已复制", copySuccess: "排名链接已复制。", copyError: "无法复制排名链接。",
       whatsapp: "WhatsApp", whatsappNote: "发送给联系人", native: "分享…", nativeNote: "Instagram、Messenger 等",
       facebook: "Facebook", facebookNote: "发到你的动态", x: "X", xNote: "带排名发帖",
       nativeOpened: "已打开分享菜单。", close: "关闭分享选项", options: "分享选项",
-      card: "保存图片", cardNote: "方形 1080×1080", story: "限时动态图", storyNote: "1080×1920 竖版",
+      card: "保存图片", story: "竖版", square: "方形", cardAlt: "你的排名卡片",
       cardWorking: "正在生成排名卡…", cardShared: "排名卡已准备好分享。",
       cardSaved: "排名卡已保存到设备。", cardError: "无法生成排名卡。",
     },
@@ -167,9 +166,9 @@
     const model = current?.card;
     if (!model || cardBusy || typeof window.RankoffCard?.saveRankCard !== "function") return;
     const strings = labels[language()];
-    const button = shape === "story" ? elements.story : elements.card;
+    const button = elements.cardSave;
     cardBusy = true;
-    if (button) button.disabled = true;
+    if (button) { button.disabled = true; button.setAttribute("aria-busy", "true"); }
     status(strings.cardWorking, "info");
     try {
       const outcome = await window.RankoffCard.saveRankCard(model, shape);
@@ -183,8 +182,42 @@
       status(strings.cardError, "error");
     } finally {
       cardBusy = false;
-      if (button) button.disabled = false;
+      if (button) { button.disabled = false; button.removeAttribute("aria-busy"); }
     }
+  }
+
+  // The dialog shows the file it is about to send. Rendering happens off the
+  // click that opened it, so a slow logo never blocks the dialog appearing.
+  let cardShape = "square";
+  let previewUrl = "";
+
+  async function renderPreview() {
+    const model = current?.card;
+    if (!elements.cardPreview || !elements.cardImage) return;
+    if (!model || typeof window.RankoffCard?.renderCardBlob !== "function") {
+      elements.cardPreview.hidden = true;
+      return;
+    }
+    try {
+      await window.RankoffCard.preloadLogo?.(model);
+      const blob = await window.RankoffCard.renderCardBlob(model, cardShape);
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+      previewUrl = URL.createObjectURL(blob);
+      elements.cardImage.src = previewUrl;
+      elements.cardImage.alt = labels[language()].cardAlt;
+      elements.cardPreview.hidden = false;
+    } catch {
+      // A card that cannot be painted simply is not offered; the link share and
+      // its own text preview are untouched.
+      elements.cardPreview.hidden = true;
+    }
+  }
+
+  function setShape(shape) {
+    cardShape = shape === "story" ? "story" : "square";
+    elements.shapeSquare?.setAttribute("aria-pressed", String(cardShape === "square"));
+    elements.shapeStory?.setAttribute("aria-pressed", String(cardShape === "story"));
+    void renderPreview();
   }
 
   function localize() {
@@ -201,10 +234,10 @@
     if (elements.xNote) elements.xNote.textContent = strings.xNote;
     elements.nativeLabel.textContent = strings.native;
     elements.nativeNote.textContent = strings.nativeNote;
-    if (elements.cardLabel) elements.cardLabel.textContent = strings.card;
-    if (elements.cardNote) elements.cardNote.textContent = strings.cardNote;
-    if (elements.storyLabel) elements.storyLabel.textContent = strings.story;
-    if (elements.storyNote) elements.storyNote.textContent = strings.storyNote;
+    if (elements.cardSave) elements.cardSave.textContent = strings.card;
+    if (elements.shapeSquare) elements.shapeSquare.textContent = strings.square;
+    if (elements.shapeStory) elements.shapeStory.textContent = strings.story;
+    if (elements.cardImage) elements.cardImage.alt = strings.cardAlt;
     elements.options.setAttribute("aria-label", strings.options);
     elements.close.forEach((button) => button.setAttribute("aria-label", strings.close));
   }
@@ -236,12 +269,11 @@
     // back out of the copy the board itself wrote. A sentence we cannot parse
     // hides the buttons rather than putting a guessed number onto an image.
     current.card = cardModel(options);
-    if (elements.card) elements.card.hidden = !current.card;
-    if (elements.story) elements.story.hidden = !current.card;
+    if (elements.cardPreview) elements.cardPreview.hidden = true;
     // The merchant's logo is fetched now, while the dialog is being read: Safari
     // spends the click's user activation on any await, and without activation
     // the share sheet — the only route to Instagram — never opens.
-    if (current.card) window.RankoffCard.preloadLogo?.(current.card);
+    if (current.card) void renderPreview();
     // One column is only right when one option survives; with Facebook and X
     // present, hiding the native sheet still leaves a grid.
     const visibleOptions = [...dialog.querySelectorAll(".share-option")].filter((option) => !option.hidden).length;
@@ -257,8 +289,9 @@
   elements.facebook?.addEventListener("click", openFacebook);
   elements.x?.addEventListener("click", openX);
   elements.native.addEventListener("click", openNativeShare);
-  elements.card?.addEventListener("click", () => { void saveCard("square"); });
-  elements.story?.addEventListener("click", () => { void saveCard("story"); });
+  elements.cardSave?.addEventListener("click", () => { void saveCard(cardShape); });
+  elements.shapeSquare?.addEventListener("click", () => setShape("square"));
+  elements.shapeStory?.addEventListener("click", () => setShape("story"));
   elements.close.forEach((button) => button.addEventListener("click", close));
   dialog.addEventListener("click", (event) => { if (event.target === dialog) close(); });
 
