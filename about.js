@@ -34,7 +34,7 @@
   };
   const translations = new Map([
     ["Board", "榜单"], ["Categories", "分类"], ["About", "关于"],
-    ["The story behind the board", "榜单背后的故事"], ["Attention has a price.", "注意力有价格。"], ["Make it visible.", "让价值被看见。"],
+    ["The story behind the board", "榜单背后的故事"], ["Attention has a price.", "注意力有价格"], ["Make it visible.", "让价值被看见"],
     ["RANKOFF is the public market for visible attention. Products bid for sponsored rank, show what they do, and stay in position until someone pays more. One board, one clear rule: the highest settled total takes #1.", "RANKOFF 是公开的注意力市场。产品通过竞价获得赞助排名，展示自身价值，并保持位置，直到有人出价更高。一个榜单，一条清晰规则：已结算累计金额最高者登上第 1 名。"],
     ["Why it exists", "为什么创立 Rankoff"], ["Rankoff started with one question.", "Rankoff 始于一个问题。"],
     ["What if a product launch had a visible market instead of a hidden ad slot? What if anyone could see who was winning, what #1 costs, and which products are earning attention?", "如果产品发布面对的是一个透明市场，而不是隐藏的广告位，会怎样？如果任何人都能看见谁在领先、第 1 名值多少钱，以及哪些产品正在赢得关注，会怎样？"],

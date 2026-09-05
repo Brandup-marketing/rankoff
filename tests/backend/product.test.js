@@ -196,7 +196,7 @@ test("an explicit Chinese product locale renders indexable Chinese metadata and 
   assert.match(html, /data-copy="evidence">公开排名记录<\/h2>/);
   assert.match(html, /data-evidence-note>排名与出价来自已结算展示/);
   assert.match(html, /data-copy="allTimeBid">全时段累计出价<\/dt>/);
-  assert.match(html, /data-copy="startClaim">挑战此排名<\/span>/);
+  assert.match(html, /data-copy="startClaim">拿下此排名<\/span>/);
   assert.match(html, /data-next-bid>RM 6<\/strong>/);
   assert.match(html, /href="\/categories\?lang=zh"/);
   assert.match(html, /href="\/\?lang=zh#claim"/);

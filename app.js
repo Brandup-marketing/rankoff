@@ -503,8 +503,10 @@
   let phoneEntryOpen = false;
 
   function entryToggleText(expanded) {
-    if (state.language === "zh") return expanded ? "收起表单" : "挑战第 1 名";
-    return expanded ? "Hide the form" : "Challenge #1";
+    // One verb for one action. The headline says Claim, the card said Claim,
+    // and this button alone said Challenge.
+    if (state.language === "zh") return expanded ? "收起表单" : "拿下第 1 名";
+    return expanded ? "Hide the form" : "Claim #1";
   }
 
   function setEntryExpanded(expanded) {
@@ -776,7 +778,7 @@
 
   function claimLabel(amount) {
     return state.language === "zh"
-      ? `出价 ${money(amount)} 争夺此排名`
+      ? `${money(amount)} 拿下此排名`
       : `Claim this rank for ${money(amount)}`;
   }
 
@@ -1146,7 +1148,9 @@
       createElement("span", "meta-item listing-age", ageLabel),
       createElement("span", "meta-item", listingHostLabel(listing)),
     );
-    if (production) {
+    // A bold "0 verified clicks" on every card reads as a verdict. The age
+    // label already says the listing is new; the count appears once it is real.
+    if (production && getClicks(listing) > 0) {
       meta.append(createElement("span", "meta-item listing-clicks", clickLabel));
     }
     // One-click visit, outbid-style — but through the tracked /go redirect so
@@ -1452,8 +1456,8 @@
 
     if (elements.boardSummary) {
       elements.boardSummary.textContent = state.language === "zh"
-        ? `${total} 个条目 · 实时更新`
-        : `${total} listings · Updated live`;
+        ? `${total} 个条目`
+        : `${total} ${total === 1 ? "listing" : "listings"}`;
     }
   }
 
@@ -1722,6 +1726,8 @@
     // all-time leaders here put lifetime money under a 24-hour heading.
     const todayRanked = visibleListings().filter((listing) => Number(getBid(listing, "today")) > 0);
     const todayListings = rankedListings(todayRanked, "today").slice(0, 3);
+    // An empty "Today's leaders" box under the podium is first-fold dead space.
+    if (elements.todayPanel) elements.todayPanel.dataset.empty = String(!todayListings.length);
     if (elements.todayRankingList) {
       if (!todayListings.length) {
         const empty = createElement("li", "today-ranking-empty", state.language === "zh" ? "暂无今日排名。" : "No activity has ranked today yet.");

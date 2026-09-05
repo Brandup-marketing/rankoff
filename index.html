@@ -29,7 +29,7 @@
     <meta name="theme-color" content="#090a0c" />
     <title>RANKOFF | Bid Your Way to #1</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=51" />
+    <link rel="stylesheet" href="./styles.css?v=65" />
     <link rel="stylesheet" href="./answers.css?v=2" />
     <script id="website-schema" type="application/ld+json">
       {
@@ -62,12 +62,8 @@
           <img class="brand-final-logo" src="./assets/rankoff-final-logo.png?v=4" data-i18n-alt="brandLogoAlt" alt="RANKOFF — Bid your way to number one" width="1254" height="1254" />
         </a>
 
-        <nav class="time-tabs" data-i18n-aria-label="rankingTimeframe" aria-label="Ranking timeframe">
-          <button type="button" data-board-window="all" aria-pressed="true">All-time</button>
-          <button type="button" data-board-window="today" aria-pressed="false">Past 24h</button>
-        </nav>
         <span class="demo-state" data-board-state><i aria-hidden="true"></i> Live board</span>
-        <nav class="site-nav" data-i18n-aria-label="mainNavigation" aria-label="Main navigation"><a href="/categories" data-language-link data-i18n="navCategories">Categories</a><a href="/about" data-language-link data-i18n="navAbout">About</a></nav>
+        <nav class="site-nav" data-i18n-aria-label="mainNavigation" aria-label="Main navigation"><a href="/" data-language-link data-i18n="navBoard" aria-current="page">Board</a><a href="/categories" data-language-link data-i18n="navCategories">Categories</a><a href="/about" data-language-link data-i18n="navAbout">About</a></nav>
         <button class="search-toggle" type="button" data-search-toggle aria-expanded="false" aria-controls="site-search" data-i18n-aria-label="searchPlaceholder" aria-label="Search products and categories"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.6 4.6"></path></svg></button>
         <button class="language-toggle" type="button" data-language-toggle aria-pressed="false">中文</button>
         <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch colour theme" aria-pressed="true">Light</button>
@@ -91,7 +87,7 @@
           <div class="market-entry" data-market-entry data-entry-collapsed="true">
             <!-- B2 (agent/post-payment): phone-only entry-form toggle. Hidden on
                  desktop by CSS; the form itself is unchanged. -->
-            <button class="entry-toggle" type="button" data-entry-toggle aria-expanded="false" aria-controls="entry-form"><span data-entry-toggle-label>Challenge #1</span><span class="entry-toggle-icon" aria-hidden="true">+</span></button>
+            <button class="entry-toggle" type="button" data-entry-toggle aria-expanded="false" aria-controls="entry-form"><span data-entry-toggle-label>Claim #1</span><span class="entry-toggle-icon" aria-hidden="true">+</span></button>
             <form class="bid-console" id="entry-form" data-inline-challenge data-i18n-aria-label="challengeLeaderboard" aria-label="Challenge the leaderboard">
               <div class="amount-control">
                 <button type="button" data-inline-adjust="-10" data-i18n-aria-label="decreaseBid" aria-label="Decrease bid by ten">−</button>
@@ -131,6 +127,23 @@
             </div>
           </section>
 
+          <div class="board-toolbar">
+            <div class="board-toolbar-lead">
+              <h2 id="board-heading" data-board-heading>Sponsored leaderboard</h2>
+              <nav class="time-tabs" data-i18n-aria-label="rankingTimeframe" aria-label="Ranking timeframe">
+                <button type="button" data-board-window="all" aria-pressed="true">All-time</button>
+                <button type="button" data-board-window="today" aria-pressed="false">Past 24h</button>
+              </nav>
+            </div>
+            <div class="board-context">
+                <p data-board-summary data-i18n="boardSummary">Highest total takes #1. Top up any time to move up.</p>
+              <details class="measurement-note">
+                <summary data-measurement-summary>How clicks are measured</summary>
+                <p data-measurement-copy>Referral clicks update from Rankoff tracking for the selected timeframe.</p>
+              </details>
+            </div>
+          </div>
+
           <div class="top-three top-three-hero" data-top-three data-i18n-aria-label="topThree" aria-label="Top three sponsored listings"></div>
 
           <section class="board-interstitial" data-i18n-aria-label="boardPulse" aria-label="Board pulse">
@@ -166,24 +179,11 @@
               </div>
             </section>
           </section>
+
         </div>
       </section>
 
       <section class="board-section" id="board" aria-labelledby="board-heading">
-        <div class="board-toolbar">
-          <div>
-            <h2 id="board-heading" data-board-heading>Sponsored leaderboard</h2>
-          </div>
-          <div class="board-context">
-            <button type="button" class="refresh-button" data-board-refresh data-i18n="refresh">Refresh</button>
-            <p data-board-summary data-i18n="boardSummary">Highest total takes #1. Top up any time to move up.</p>
-            <details class="measurement-note">
-              <summary data-measurement-summary>How clicks are measured</summary>
-              <p data-measurement-copy>Referral clicks update from Rankoff tracking for the selected timeframe.</p>
-            </details>
-          </div>
-        </div>
-
         <div class="board-list" data-board-list aria-live="polite" data-i18n-aria-label="boardListings" aria-label="Sponsored listings"></div>
         <nav class="board-pagination" data-board-pagination aria-label="Leaderboard pages" hidden>
           <button type="button" class="pagination-button" data-board-page="previous">← Previous</button>
@@ -193,6 +193,7 @@
           </div>
           <button type="button" class="pagination-button" data-board-page="next">Next →</button>
         </nav>
+
       </section>
 
       <section class="ranking-rules" aria-labelledby="ranking-rules-heading">
@@ -307,6 +308,6 @@
     <script src="./search.js?v=4" defer></script>
     <script src="./share-card.js?v=5" type="module"></script>
     <script src="./share.js?v=8" defer></script>
-    <script src="./app.js?v=85" defer></script>
+    <script src="./app.js?v=87" defer></script>
   </body>
 </html>

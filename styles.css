@@ -9,6 +9,8 @@
   --line-strong: oklch(40% 0.016 25);
   --accent: oklch(64% 0.225 28);
   --accent-strong: oklch(70% 0.205 28);
+  /* For small text — chips, eyebrows. Bright enough on dark, deepened in light. */
+  --accent-ink: var(--accent-strong);
   --accent-soft: oklch(21% 0.055 28);
   --up: oklch(74% 0.145 160);
   --up-soft: oklch(22% 0.035 160);
@@ -34,6 +36,8 @@ html[data-theme="light"] {
   /* The dark-theme blue is 2.49:1 on this surface — below the 4.5:1 that link
      text needs. This value measures 5.59:1 on white, 5.05:1 on --surface-subtle. */
   --blue: oklch(52% 0.17 255);
+  /* --accent-strong is 3.0:1 on white; small text needs 4.5:1. */
+  --accent-ink: oklch(52% 0.2 28);
 }
 
 html[data-theme="light"] .brand { background: transparent; }
@@ -80,7 +84,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 .topbar {
   display: grid;
-  grid-template-columns: auto auto minmax(0, 1fr) auto auto auto auto;
+  /* brand · live-state · nav · search · language · theme */
+  grid-template-columns: auto minmax(0, 1fr) auto auto auto auto;
   align-items: center;
   gap: 0.8rem;
   min-height: 4rem;
@@ -177,10 +182,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .top-three-hero { margin-top: 0.65rem; margin-bottom: 0; }
 
 .board-interstitial { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; margin: 1.1rem 0 0; padding: 1rem; border: 1px solid var(--line); border-radius: .65rem; background: var(--surface-subtle); }
+[data-today-panel][data-empty="true"] { display: none; }
 .today-ranking-panel, .board-interstitial .activity-section { min-width: 0; padding: 0; }
 .section-heading-line-spread { align-items: flex-start; justify-content: space-between; margin-bottom: .7rem; }
 .section-heading-line-spread h2 { margin-top: .08rem; }
-.eyebrow { margin: 0; color: var(--accent-strong); font-size: .63rem; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+.eyebrow { margin: 0; color: var(--accent-ink); font-size: .63rem; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
 .text-link { position: relative; z-index: 3; color: var(--blue); font-size: .72rem; font-weight: 800; text-decoration: none; white-space: nowrap; }
 .text-link:hover { color: var(--ink); text-decoration: underline; text-underline-offset: .18em; }
 .today-ranking-list { display: grid; gap: 0; margin: 0; padding: 0; }
@@ -221,6 +227,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .category-chip-label { line-height: 1; }
 
 .board-toolbar { display: flex; align-items: end; justify-content: space-between; gap: 1rem; padding: 1.4rem 0 0.7rem; }
+.board-toolbar-lead { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 0.9rem; }
+.board-toolbar-lead .time-tabs { justify-self: auto; }
 .board-toolbar h2 { margin: 0; color: var(--ink); font-size: 1.15rem; font-weight: 850; }
 .board-toolbar p { margin: 0; color: var(--muted); font-size: 0.76rem; text-align: right; }
 .board-context { display: grid; justify-items: end; gap: 0.35rem; }
@@ -298,11 +306,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .listing-details { position: relative; z-index: 3; color: var(--blue); font-size: .64rem; font-weight: 760; text-decoration: none; white-space: nowrap; }
 .listing-details:hover { color: var(--ink); text-decoration: underline; text-underline-offset: .16em; }
 .card-visit-overlay { position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
-.product-meta { display: flex; flex-wrap: wrap; gap: 0.28rem 0.48rem; margin-top: 0.2rem; color: var(--muted); font-size: 0.69rem; font-weight: 650; }
-.category-meta { padding: .1rem .34rem; border: 0; border-radius: 999px; background: color-mix(in srgb, var(--accent) 10%, var(--surface)); color: var(--accent-strong); font-weight: 760; }
+.product-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.28rem 0.48rem; margin-top: 0.2rem; color: var(--muted); font-size: 0.69rem; font-weight: 650; }
+.category-meta { display: inline-flex; align-items: center; padding: .1rem .34rem; border: 0; border-radius: 999px; background: color-mix(in srgb, var(--accent) 10%, var(--surface)); color: var(--accent-ink); font-weight: 760; }
 .listing-description { display: -webkit-box; overflow: hidden; margin: 0.2rem 0 0; color: var(--muted); font-size: 0.76rem; line-height: 1.35; -webkit-box-orient: vertical; -webkit-line-clamp: 1; }
 .sponsored-chip, .local-chip, .verified-chip, .estimated-chip { display: inline-flex; align-items: center; padding: 0.12rem 0.3rem; border: 1px solid var(--line); border-radius: 0.2rem; font-size: 0.62rem; font-weight: 800; line-height: 1; }
-.sponsored-chip { border-color: oklch(48% 0.11 28); color: var(--accent-strong); }
+.sponsored-chip { border-color: var(--line-strong); color: var(--muted); }
 .verified-chip { border-color: oklch(48% 0.08 160); color: var(--up); }
 .estimated-chip { border-color: var(--line-strong); color: var(--muted); }
 .local-chip { color: var(--blue); }
@@ -459,10 +467,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 /* The picture is the control: one click writes the PNG. It is a real button
    so a keyboard reaches it, and it says so on hover. */
 .share-card-shot { display: block; width: 100%; padding: 0; border: 0; border-radius: .7rem; background: transparent; cursor: pointer; }
-.share-card-shot img { display: block; width: 100%; max-height: 42vh; object-fit: contain; border: 1px solid var(--line); border-radius: .7rem; background: var(--surface-subtle); transition: border-color 160ms var(--ease); }
+.share-card-shot img { display: block; width: min(100%, 42vh); height: auto; aspect-ratio: 1 / 1; margin: 0 auto; object-fit: contain; border: 1px solid var(--line); border-radius: .7rem; background: var(--surface-subtle); transition: border-color 160ms var(--ease); }
 .share-card-shot:hover img { border-color: var(--accent); }
 .share-card-shot:active img { transform: translateY(1px); }
-.share-card-bar { display: flex; align-items: center; justify-content: flex-end; gap: .5rem; }
+.share-card-bar { display: flex; align-items: center; justify-content: center; gap: .5rem; }
 .share-card-save { min-height: 2.75rem; padding: 0 .9rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-subtle); color: var(--ink); font-size: .75rem; font-weight: 800; }
 .share-card-save:hover { border-color: var(--accent); }
 .share-card-save[aria-busy="true"] { opacity: .6; }
@@ -510,7 +518,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 }
 
 @media (max-width: 75rem) and (min-width: 46.01rem) {
-  .topbar { grid-template-columns: auto auto minmax(0, 1fr) auto auto auto auto; gap: 0.45rem; }
+  .topbar { grid-template-columns: auto minmax(0, 1fr) auto auto auto; gap: 0.45rem; }
+  .site-nav { justify-self: end; }
   .brand { width: 4.75rem; height: 4.75rem; flex-basis: 4.75rem; }
   .demo-state { display: none; }
   .site-nav { gap: 0.65rem; margin-right: 0; }
@@ -520,7 +529,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .activity-tape, .board-interstitial .today-ranking-list { grid-template-columns: 1fr; }
   .category-market { grid-template-columns: minmax(0, 1fr); gap: .45rem; }
   .app-shell { width: min(calc(100% - 1rem), var(--content)); }
-  .topbar { grid-template-columns: minmax(0, 1fr) auto auto auto auto; gap: 0.35rem; }
+  .topbar { grid-template-columns: auto minmax(0, 1fr) auto auto auto; gap: 0.35rem; }
   .brand { width: 3.75rem; height: 3.75rem; flex-basis: 3.75rem; }
   .brand-horizontal { gap: 0.35rem; padding-inline: 0.35rem; }
   .brand-emblem-crop { width: 2.35rem; height: 2.35rem; flex-basis: 2.35rem; }
@@ -530,22 +539,15 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .demo-state { display: none; }
   .site-nav { display: none; }
 
-  .app-shell:not(.listing-shell):not(.answers-shell) > .topbar {
-    grid-template-areas:
-      "brand tabs tabs tabs tabs"
-      "nav nav search language theme";
-    grid-template-columns: auto minmax(0, 1fr) auto auto auto;
-    row-gap: .3rem;
-    padding-block: .35rem .5rem;
-  }
-  .app-shell:not(.listing-shell):not(.answers-shell) > .topbar .brand { grid-area: brand; }
-  .app-shell:not(.listing-shell):not(.answers-shell) > .topbar .time-tabs { grid-area: tabs; width: min(100%, 18rem); justify-self: start; }
-  .app-shell:not(.listing-shell):not(.answers-shell) > .topbar .time-tabs button { flex: 1 1 50%; }
-  .app-shell:not(.listing-shell):not(.answers-shell) > .topbar .site-nav { grid-area: nav; display: flex; justify-self: stretch; justify-content: flex-end; gap: .25rem; margin: 0; padding: 0; border: 0; }
-  .site-nav a { min-width: 2.75rem; justify-content: center; padding-inline: .4rem; }
-  .app-shell:not(.listing-shell):not(.answers-shell) > .topbar .search-toggle { grid-area: search; }
-  .app-shell:not(.listing-shell):not(.answers-shell) > .topbar .language-toggle { grid-area: language; }
-  .app-shell:not(.listing-shell):not(.answers-shell) > .topbar .theme-toggle { grid-area: theme; }
+  /* One row, as on the desktop: identity, the three links, the controls. The
+     controls go compact so it fits a 375px phone; below 22rem the nav takes
+     its own row rather than clip — that covers 320 and 360px devices (see the end of this file). */
+  .app-shell:not(.listing-shell):not(.answers-shell) > .topbar { padding-block: .35rem .5rem; }
+  .app-shell:not(.listing-shell):not(.answers-shell) > .topbar .site-nav { display: flex; justify-self: end; gap: .5rem; margin: 0; font-size: .72rem; }
+  .site-nav a { min-height: 2.75rem; padding-inline: .25rem; }
+  .theme-toggle, .language-toggle { min-width: 2.75rem; padding-inline: .45rem; }
+  .theme-toggle { gap: 0; font-size: 0; }
+  .theme-toggle::before { font-size: .95rem; }
   .search-toggle { width: 2.75rem; height: 2.75rem; }
   .theme-toggle, .language-toggle { min-width: 2.8rem; min-height: 2.75rem; padding-inline: 0.55rem; font-size: 0.75rem; }
   .claim-stage { padding: 0.9rem 0 0.8rem; }
@@ -564,9 +566,15 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .market-status span + span::before { display: none; }
   .category-market { align-items: flex-start; flex-direction: column; gap: 0.35rem; }
   .category-rail { width: 100%; }
-  .board-toolbar { align-items: flex-start; flex-direction: column; gap: 0.3rem; }
+  .board-toolbar { align-items: stretch; flex-direction: column; gap: .5rem; padding: 1rem 0 .5rem; }
+  .board-toolbar-lead { justify-content: space-between; }
+  /* The heading and the filter never fit one 359px row; rather than wrap by
+     accident, the filter takes its own row and stretches, as it did in the header. */
+  .board-toolbar-lead .time-tabs { width: min(100%, 18rem); }
+  .board-toolbar-lead .time-tabs button { flex: 1 1 50%; }
   .board-toolbar p { text-align: left; }
-  .board-context { justify-items: start; }
+  /* Stacked, these five pieces took 258px between the markets and the first card. */
+  .board-context { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem .8rem; }
   .measurement-note { font-size: .75rem; text-align: left; }
   .measurement-note summary { display: inline-flex; min-height: 2.75rem; align-items: center; }
   .measurement-note p { right: auto; left: 0; width: min(21rem, calc(100vw - 2rem)); }
@@ -625,7 +633,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .board-answers a, .footer-links a, .ranking-rules > a { display: inline-flex; min-height: 2.75rem; align-items: center; }
   .board-answers a, .ranking-rules > a { font-size: .75rem; }
   .footer-parent { display: inline-flex; min-height: 2.75rem; align-items: center; }
-  .claim-rank-pill { position: static; grid-column: 1 / -1; width: 100%; min-height: 2.75rem; margin-top: .7rem; padding: .5rem .9rem; border-radius: .7rem; font-size: .8rem; transform: none; }
+
   .claim-rank-pill:hover { transform: none; }
   .rank-share-control { gap: .3rem; min-width: 0; min-height: 2.75rem; padding: 0 .7rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-subtle); font-size: .75rem; }
   .product-meta, .listing-description, .demo-note { font-size: 0.75rem; }
@@ -640,7 +648,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     grid-template-columns: 2.6rem minmax(0, 1fr);
     align-items: start;
     gap: .6rem .6rem;
-    padding: .8rem .8rem 1.4rem;
+    padding: .8rem;
   }
   .featured-listing .featured-rank { align-self: start; margin-top: .25rem; }
   /* The logo belongs beside the name, not floating against the whole block. */
@@ -654,7 +662,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .featured-evidence { justify-self: stretch; width: 100%; justify-content: space-between; gap: .6rem; padding-top: .6rem; border-top: 1px solid var(--line); }
   .featured-bid-stack { flex-direction: row; align-items: center; justify-content: space-between; width: 100%; gap: .6rem; }
   /* The revenue action was a 163x22px sliver hanging off the card's edge. */
-  .claim-rank-pill { position: static; grid-column: 1 / -1; width: 100%; min-height: 2.75rem; margin-top: .7rem; padding: .5rem .9rem; border-radius: .7rem; font-size: .8rem; transform: none; }
+  /* The hero already says Claim #1; a red bar on every card said it five more
+     times. Per-rank claiming lives on the listing page. */
+  .claim-rank-pill { display: none; }
   .claim-rank-pill:hover { transform: none; }
   .activity-tape { grid-template-columns: 1fr; }
   .board-interstitial { grid-template-columns: 1fr; gap: .8rem; padding: .8rem; }
@@ -969,6 +979,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   }
   .standard-listing .listing-age,
   .standard-listing .listing-visit { display: none; }
+  /* Same as the podium: the hostname wrapped the row and made #4+ taller than #1–3. */
+  .standard-listing .product-meta > .meta-item:not(.category-meta):not(.listing-clicks) { display: none; }
 }
 
 @media (max-width: 34rem) {
@@ -1026,4 +1038,71 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     width: 100%;
     white-space: normal;
   }
+}
+
+/* Below the podium the board is a list, and a list wants density: one line per
+   listing — rank · logo · name · market · total · claim · share. The cards that
+   used to sit here were 152px tall and said no more than this row does. Scoped to
+   .board-list so the podium keeps its stage and so these win over every earlier
+   breakpoint rule for .standard-listing without editing them. */
+.board-list .standard-listing { grid-template-areas: "rank product evidence claim"; grid-template-columns: 2.25rem minmax(0, 1fr) auto auto; align-items: center; gap: .6rem; min-height: 0; margin-bottom: 0; padding: .45rem .75rem; }
+.board-list .standard-listing .featured-rank { width: 2.25rem; height: 2.25rem; margin: 0; font-size: .82rem; }
+.board-list .standard-listing .product-mark { width: 2.25rem; height: 2.25rem; flex-basis: 2.25rem; }
+.board-list .standard-listing .product-cell { align-items: center; gap: .55rem; }
+.board-list .standard-listing .product-copy { display: flex; align-items: center; gap: .55rem; min-width: 0; }
+.board-list .standard-listing .product-name { flex: 0 1 auto; padding-block: 0; font-size: .9rem; }
+.board-list .standard-listing .listing-description { display: none; }
+.board-list .standard-listing .product-meta { flex-wrap: nowrap; margin: 0; }
+.board-list .standard-listing .product-meta > .meta-item:not(.category-meta) { display: none; }
+.board-list .standard-listing .featured-evidence { display: flex; align-self: center; justify-self: end; gap: .6rem; width: auto; padding: 0; border: 0; }
+.board-list .standard-listing .featured-bid-stack { flex-direction: row; align-items: center; gap: .6rem; }
+.board-list .standard-listing .featured-price { min-width: 0; }
+.board-list .standard-listing .featured-price span { display: none; }
+.board-list .standard-listing .featured-price strong { font-size: 1rem; }
+.board-list .standard-listing .rank-share-control { margin: 0; }
+.board-list .standard-listing .claim-rank-pill { position: static; grid-area: claim; width: auto; margin: 0; padding: .3rem .6rem; border: 0; border-radius: 999px; background: var(--accent); color: #fff; font-size: .68rem; transform: none; }
+.board-list .standard-listing .claim-rank-pill:hover { transform: none; background: var(--accent-strong); }
+@media (max-width: 34rem) {
+  /* The phone keeps the hero as the only claim; the row loses that column and
+     stacks name over market so nothing truncates at 359px. */
+  /* With RM and the share button beside it the copy column was ~115px and every
+     chip took its own line. Give the copy the full width and drop the money to a
+     third line, right-aligned: name / chips / total — ~100px, nothing wraps inside. */
+  /* A phone list row: rank + name is the identity, so the logo tile goes — it
+     cost the 45px the chips needed. Money and the share icon sit on the first
+     line; the chips take the second. ~90px instead of a 200px card. */
+  .board-list .standard-listing { grid-template-areas: "rank product evidence"; grid-template-columns: 2.25rem minmax(0, 1fr) auto; align-items: start; gap: .5rem; padding: .55rem .7rem; }
+  .board-list .standard-listing .featured-rank { margin-top: .05rem; }
+  .board-list .standard-listing .product-mark-link { display: none; }
+  .board-list .standard-listing .product-cell { min-width: 0; }
+  .board-list .standard-listing .featured-evidence { align-self: start; gap: .4rem; margin-top: .05rem; }
+  .board-list .standard-listing .featured-price strong { font-size: .95rem; }
+  .board-list .standard-listing .product-copy { flex-direction: column; align-items: flex-start; gap: .2rem; width: 100%; min-width: 0; }
+  /* nowrap on the row overflowed the viewport once three chips met a 183px
+     column; the chips may wrap to a second line, but never break inside. */
+  .board-list .standard-listing .product-meta { flex-wrap: wrap; row-gap: .25rem; max-width: 100%; }
+  .board-list .standard-listing .category-meta, .board-list .standard-listing .listing-details { white-space: nowrap; }
+  /* Sponsored · market · See details total ~205px at their card sizes and the
+     column has ~192, so the link fell to a third line — a 44px one. Trimmed to
+     list-row sizes the three share a line; the link keeps a 32px target (AA). */
+  .board-list .standard-listing .product-meta { gap: .25rem .4rem; }
+  .board-list .standard-listing .sponsored-chip, .board-list .standard-listing .category-meta { font-size: .58rem; }
+  .board-list .standard-listing .listing-details { min-height: 2rem; padding-inline: .2rem; font-size: .68rem; }
+  .board-list .standard-listing .rank-share-label { display: none; }
+  .board-list .standard-listing .rank-share-control { min-width: 2.25rem; min-height: 2.25rem; padding: 0; }
+}
+@media (max-width: 46rem) {
+  /* The answer already sits in the rules panel under the board. */
+  .measurement-note { display: none; }
+}
+
+@media (max-width: 22.5rem) {
+  /* 320px phones: the single row cannot hold six items, so the nav takes a
+     second row — the same two-row shape every page used before. */
+  .topbar { grid-template-areas: "brand search language theme" "nav nav nav nav"; grid-template-columns: minmax(0, 1fr) auto auto auto; row-gap: .3rem; }
+  .topbar .brand { grid-area: brand; }
+  .topbar .site-nav, .about-header nav { grid-area: nav; justify-self: stretch; justify-content: flex-end; }
+  .topbar .search-toggle { grid-area: search; }
+  .topbar .language-toggle { grid-area: language; }
+  .topbar .theme-toggle { grid-area: theme; }
 }

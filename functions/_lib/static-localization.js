@@ -29,7 +29,7 @@ const STATIC_LOCALIZED_METADATA = Object.freeze({
 });
 
 const HOME_STATIC_COPY = Object.freeze({
-  skipLeaderboard: "跳到榜单", navCategories: "分类", navAbout: "关于",
+  skipLeaderboard: "跳到榜单", navBoard: "榜单", navCategories: "分类", navAbout: "关于",
   heroCopy: "把产品放到最显眼的位置。只要没有更高的有效出价，你的介绍就会留在榜首。",
   totalBid: "你的总出价", productUrl: "网站或公开社交账号", productUrlPlaceholder: "example.com 或 instagram.com/yourname",
   challengeCategory: "挑战类别", chooseMarket: "选择市场", reviewBid: "确认出价", markets: "市场",
@@ -51,14 +51,14 @@ const HOME_STATIC_COPY = Object.freeze({
 });
 
 const CATEGORIES_STATIC_COPY = Object.freeze({
-  skipCategories: "跳至分类", categories: "分类", about: "关于", footerParent: "Brandup Marketing 旗下产品",
+  skipCategories: "跳至分类", board: "榜单", categories: "分类", about: "关于", footerParent: "Brandup Marketing 旗下产品",
   rules: "规则", terms: "条款", privacy: "隐私", payments: "付款", seeBoard: "查看榜单", browseMarkets: "浏览市场",
   heroCopy: "每个类别都有自己的榜单。选择一个市场，看看谁在领先。", activeHeading: "最活跃的分类", allHeading: "全部分类", allCopy: "选择一个市场，查看其实时榜单。",
 });
 
 const ABOUT_STATIC_COPY = Object.freeze({
   Board: "榜单", Categories: "分类", About: "关于", "The story behind the board": "榜单背后的故事",
-  "Attention has a price.": "注意力有价格。", "Make it visible.": "让价值被看见。",
+  "Attention has a price.": "注意力有价格", "Make it visible.": "让价值被看见",
   "RANKOFF is the public market for visible attention. Products bid for sponsored rank, show what they do, and stay in position until someone pays more. One board, one clear rule: the highest settled total takes #1.": "RANKOFF 是公开的注意力市场。产品通过竞价获得赞助排名，展示自身价值，并保持位置，直到有人出价更高。一个榜单，一条清晰规则：已结算累计金额最高者登上第 1 名。",
   "Why it exists": "为什么创立 Rankoff", "Rankoff started with one question.": "Rankoff 始于一个问题。",
   "What if a product launch had a visible market instead of a hidden ad slot? What if anyone could see who was winning, what #1 costs, and which products are earning attention?": "如果产品发布面对的是一个透明市场，而不是隐藏的广告位，会怎样？如果任何人都能看见谁在领先、第 1 名值多少钱，以及哪些产品正在赢得关注，会怎样？",
@@ -164,7 +164,7 @@ export function localizeStaticPage(shell, page, language = "en") {
     html = html.replace(/<h1 id="page-title">[\s\S]*?<\/h1>/, `<h1 id="page-title"><strong data-hero-next-price>${price}</strong><span class="hero-word" data-hero-join> 拿下</span><span data-hero-market></span><span data-hero-rank>第 1 名</span><span class="hero-word" data-hero-lead></span></h1>`);
     html = html.replace(/>All-time<\/button>/g, ">全部时间</button>").replace(/>Past 24h<\/button>/g, ">近 24 小时</button>");
     html = html.replace(/(<span class="demo-state"[^>]*>\s*<i[^>]*><\/i>\s*)Live board(<\/span>)/, "$1实时榜单$2");
-    html = html.replace(/(<span data-entry-toggle-label>)Challenge #1(<\/span>)/, "$1挑战第 1 名$2");
+    html = html.replace(/(<span data-entry-toggle-label>)Claim #1(<\/span>)/, "$1拿下第 1 名$2");
     html = html.replace(/(<span data-panel-toggle-label>)Minimize(<\/span>)/g, "$1收起$2");
     html = html.replace(/href="\/\?period=today#board"/, 'href="/?lang=zh&amp;period=today#board"');
     html = html.replace(/>Sponsored leaderboard<\/h2>/, ">实时赞助榜单</h2>");
