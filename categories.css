@@ -1,5 +1,5 @@
 .categories-shell {
-  width: min(calc(100% - 2.5rem), 82rem);
+  width: min(calc(100% - 2rem), var(--content));
   max-width: 100%;
   margin: 0 auto;
   padding-bottom: max(2rem, env(safe-area-inset-bottom));
@@ -8,12 +8,9 @@
 .categories-topbar {
   grid-template-columns: auto auto minmax(0, 1fr) auto auto;
   gap: 1.25rem;
-  min-height: 5.5rem;
-  border-bottom: 0;
 }
 
-.categories-topbar .brand { width: 5.25rem; height: 5.25rem; }
-.categories-nav { justify-self: end; margin-right: 0; gap: 1.65rem; font-size: 0.9rem; }
+.categories-nav { justify-self: end; margin-right: 0; }
 .categories-nav a[aria-current="page"] { color: var(--ink); text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 0.16rem; text-underline-offset: 0.45rem; }
 .category-actions { display: inline-flex; gap: 0.45rem; }
 .categories-topbar .search-toggle { justify-self: end; }
@@ -38,14 +35,14 @@
 .status-indicator, .section-dot { display: inline-block; width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--accent); }
 .status-indicator { background: var(--up); box-shadow: 0 0 0 0.28rem var(--up-soft); }
 
-.category-hero { margin: 4.25rem 0 4rem; }
+.category-hero { margin: 2.5rem 0; }
 .section-kicker { margin: 0 0 0.65rem; color: var(--accent-strong); font-size: 0.75rem; font-weight: 850; letter-spacing: 0.08em; text-transform: uppercase; }
-.category-hero h1 { margin: 0; font-size: 3.5rem; font-weight: 850; letter-spacing: -0.035em; line-height: 1; text-wrap: balance; }
-.category-hero > p:last-child { max-width: 40rem; margin: 1.2rem 0 0; color: var(--muted); font-size: 1.3rem; line-height: 1.35; }
+.category-hero h1 { margin: 0; font-size: 3.2rem; font-weight: 850; letter-spacing: -0.035em; line-height: 1; text-wrap: balance; }
+.category-hero > p:last-child { max-width: 44rem; margin: 1.2rem 0 0; color: var(--muted); font-size: 1.05rem; line-height: 1.4; }
 
 .section-heading { display: flex; align-items: center; gap: 0.65rem; margin-bottom: 1.15rem; }
 .section-heading h2 { margin: 0; font-size: 1.08rem; font-weight: 850; letter-spacing: -0.01em; }
-.section-heading-spread { align-items: flex-end; justify-content: space-between; }
+.section-heading-spread { align-items: baseline; justify-content: space-between; }
 .section-heading-spread > div { display: flex; align-items: center; gap: 0.65rem; }
 .section-heading-spread p { margin: 0; color: var(--muted); font-size: 0.78rem; }
 .active-category-list { display: grid; gap: 0.75rem; }
@@ -54,10 +51,9 @@
   grid-template-columns: 2.75rem minmax(0, 1fr) auto;
   align-items: center;
   gap: 0.9rem;
-  min-height: 5.8rem;
   padding: 0.85rem 1rem;
   border: 1px solid var(--line);
-  border-radius: 0.8rem;
+  border-radius: 0.65rem;
   background: var(--surface-subtle);
   text-decoration: none;
   transition: border-color 160ms var(--ease), background 160ms var(--ease), transform 160ms var(--ease);
@@ -67,40 +63,43 @@
 .category-icon { display: grid; place-items: center; width: 2.7rem; height: 2.7rem; border-radius: 50%; background: var(--accent-soft); color: var(--accent-strong); font-size: 1.25rem; font-weight: 800; }
 .active-category h3 { margin: 0; color: var(--ink); font-size: 1rem; line-height: 1.2; }
 .active-category p { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.78rem; }
-.active-category time { color: var(--muted); font-size: 0.78rem; white-space: nowrap; }
+.active-category time { color: var(--muted); font-size: 0.64rem; font-weight: 750; white-space: nowrap; }
 .active-empty { margin: 0; padding: 1rem; border: 1px dashed var(--line-strong); color: var(--muted); font-size: 0.82rem; }
 
-.all-categories-section { margin-top: 4.1rem; }
+.all-categories-section { margin-top: 2.5rem; }
 .category-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; }
 .category-card {
   min-width: 0;
-  min-height: 21.5rem;
   padding: 1.35rem 1.35rem 1rem;
-  border: 1px solid var(--line-strong);
-  border-radius: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
   background: var(--surface);
   transition: border-color 180ms var(--ease), transform 180ms var(--ease), background 180ms var(--ease);
 }
 .category-card:hover { border-color: var(--accent); background: var(--surface-subtle); transform: translateY(-2px); }
 .category-card-head { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1.1rem; }
-.category-card .category-icon { width: 3.1rem; height: 3.1rem; flex: 0 0 3.1rem; font-size: 1.4rem; }
 .category-card-head h3 { min-width: 0; margin: 0; color: var(--ink); font-size: 1.2rem; line-height: 1.18; text-wrap: balance; }
-.category-card-head a { margin-left: auto; color: var(--blue); font-size: 0.74rem; font-weight: 800; white-space: nowrap; }
-.category-card-head a:hover { color: var(--ink); }
-.category-rankings { display: grid; }
-.category-rank-row { display: grid; grid-template-columns: 2.25rem 2.75rem minmax(0, 1fr) auto; align-items: center; gap: 0.6rem; min-height: 4rem; border-top: 1px solid var(--line); }
+/* styles.css sets a decoration COLOUR but never text-decoration-line, so the
+   browser underline survives and every child inherits it. */
+.category-card-head a { margin-left: auto; color: var(--blue); font-size: 0.74rem; font-weight: 800; white-space: nowrap; text-decoration: none; }
+.category-card-head a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 0.16em; }
+.category-rank-row { display: grid; grid-template-columns: 2.25rem 2.75rem minmax(0, 1fr) auto; align-items: center; gap: 0.6rem; min-height: 4rem; border-top: 1px solid var(--line); text-decoration: none; }
 .category-rank { color: var(--muted); font-size: 0.88rem; font-weight: 850; font-variant-numeric: tabular-nums; }
-.category-logo { display: grid; place-items: center; width: 2.45rem; height: 2.45rem; overflow: hidden; border: 1px solid var(--line); border-radius: 0.7rem; background: var(--surface-subtle); color: var(--ink); font-size: 0.68rem; font-weight: 850; }
-.category-logo img { width: 100%; height: 100%; object-fit: contain; background: var(--surface-subtle); }
+.category-logo { display: grid; place-items: center; width: 2.45rem; height: 2.45rem; overflow: hidden; border: 1px solid var(--line); border-radius: 0.4rem; background: var(--surface-subtle); color: var(--ink); font-size: 0.68rem; font-weight: 850; }
+/* Cut-out logos are drawn for a light page; dark lettering vanishes on a dark
+   tile. styles.css forces #fff behind .product-mark img for exactly this. */
+.category-logo img { width: 100%; height: 100%; object-fit: contain; padding: 0.12rem; background: #fff; }
 .category-rank-copy { min-width: 0; }
 .category-rank-copy strong { display: block; overflow: hidden; color: var(--ink); font-size: 0.9rem; text-overflow: ellipsis; white-space: nowrap; }
 .category-rank-copy span { display: block; overflow: hidden; margin-top: 0.15rem; color: var(--muted); font-size: 0.73rem; text-overflow: ellipsis; white-space: nowrap; }
 .category-rank-bid { color: var(--accent-strong); font-size: 0.88rem; font-weight: 850; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.category-empty { display: grid; align-content: center; min-height: 12rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.8rem; }
-.category-empty strong { display: block; margin-bottom: 0.25rem; color: var(--ink); font-size: 0.9rem; }
-.category-empty a { width: fit-content; margin-top: 0.6rem; color: var(--blue); font-weight: 800; text-decoration: none; }
+/* Sized to its content. A 12rem floor wrapped 74px of text in 192px of nothing,
+   fifteen times over. */
+.category-empty { display: grid; justify-items: start; gap: 0.25rem; padding-top: 0.75rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.8rem; }
+.category-empty strong { color: var(--ink); font-size: 0.9rem; }
+.category-empty a { margin-top: 0.35rem; color: var(--blue); font-weight: 800; text-decoration: none; }
 .category-empty a:hover { text-decoration: underline; text-underline-offset: 0.16em; }
-.categories-footer { margin-top: 4rem; }
+.categories-footer { margin-top: 2.5rem; }
 
 @keyframes category-pulse { 0%, 100% { box-shadow: 0 0 0 0 var(--up-soft); } 50% { box-shadow: 0 0 0 .28rem transparent; } }
 
@@ -114,7 +113,7 @@ html[data-theme="light"] .categories-topbar .brand-emblem-image, html[data-theme
 }
 
 @media (max-width: 48rem) {
-  .categories-shell { width: min(calc(100% - 1.25rem), 82rem); }
+  .categories-shell { width: min(calc(100% - 1rem), var(--content)); }
   .categories-topbar {
     grid-template-areas: "brand search actions" "tabs tabs tabs";
     grid-template-columns: minmax(0, 1fr) auto auto;
@@ -129,11 +128,11 @@ html[data-theme="light"] .categories-topbar .brand-emblem-image, html[data-theme
   .categories-topbar .search-toggle { grid-area: search; }
   .category-actions { grid-area: actions; justify-self: end; }
   .category-status { margin-top: 1.25rem; font-size: 0.73rem; }
-  .category-hero { margin: 3.2rem 0 3rem; }
+  .category-hero { margin: 2rem 0; }
   .category-hero h1 { font-size: 2.7rem; }
   .category-hero > p:last-child { margin-top: 0.9rem; font-size: 1.08rem; }
   .category-grid { grid-template-columns: 1fr; }
-  .all-categories-section { margin-top: 3.2rem; }
+  .all-categories-section { margin-top: 2rem; }
   .section-heading-spread { align-items: flex-start; flex-direction: column; gap: 0.35rem; }
 }
 
@@ -142,10 +141,14 @@ html[data-theme="light"] .categories-topbar .brand-emblem-image, html[data-theme
   .categories-topbar .brand { width: 3.35rem; height: 3.35rem; }
   .category-actions { gap: 0.2rem; }
   .category-status { flex-wrap: wrap; justify-content: center; max-width: 100%; text-align: center; }
-  .active-category { grid-template-columns: 2.4rem minmax(0, 1fr); gap: 0.7rem; }
+  /* The icon is 2.7rem; a 2.4rem track overflowed it into the gap at 375px. */
+  .active-category { grid-template-columns: 2.75rem minmax(0, 1fr); gap: 0.7rem; }
   .active-category time { grid-column: 2; margin-top: -0.5rem; }
   .category-rank-row { grid-template-columns: 1.8rem 2.45rem minmax(0, 1fr) auto; gap: 0.45rem; }
   .category-card { padding-inline: 1rem; }
+  /* Both truncate to a fragment at this width and cost a line each. */
+  .category-empty span { display: none; }
+  .category-rank-copy span { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

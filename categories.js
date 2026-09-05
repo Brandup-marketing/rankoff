@@ -234,10 +234,9 @@
       strong.textContent = elements.language === "zh" ? "等待首个条目" : "Waiting for the first listing";
       const copy = document.createElement("span");
       copy.textContent = elements.language === "zh" ? "这个市场将在首个有效出价后开始排名。" : "This market starts ranking after its first valid bid.";
-      const open = document.createElement("a");
-      open.href = hrefFor(config.id);
-      open.textContent = elements.language === "zh" ? "打开市场 →" : "Open market →";
-      empty.append(strong, copy, open);
+      // "View board →" already sits in this card's header pointing at the same
+      // URL. Two calls to action, one destination, fifteen cards.
+      empty.append(strong, copy);
       rankings.append(empty);
     } else {
       rows.forEach((row, index) => {
@@ -266,6 +265,7 @@
   }
 
   function render() {
+    applyLanguageAttribute();
     const rows = selectedRows();
     const labels = staticCopy[elements.language];
     document.querySelectorAll("[data-copy]").forEach((node) => { if (labels[node.dataset.copy]) node.textContent = labels[node.dataset.copy]; });
@@ -297,6 +297,10 @@
       return card;
     }));
     window.dispatchEvent(new CustomEvent("rankoff:content-updated"));
+  }
+
+  function applyLanguageAttribute() {
+    elements.root.lang = elements.language === "zh" ? "zh-CN" : "en";
   }
 
   function savePreferences() {
