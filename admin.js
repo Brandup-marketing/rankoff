@@ -15,6 +15,7 @@
     form: document.querySelector("[data-owner-form]"),
     token: document.querySelector("[data-owner-token]"),
     clear: document.querySelector("[data-owner-clear]"),
+    cards: document.querySelector("[data-owner-cards]"),
     load: document.querySelector("[data-owner-load]"),
     status: document.querySelector("[data-owner-status]"),
     summary: document.querySelector("[data-owner-summary]"),
@@ -38,6 +39,7 @@
       tokenPlaceholder: "Paste the admin token",
       tokenNote: "The token is held in this tab's memory only. It is never saved to storage, never put in the address bar, and never sent anywhere but this site.",
       loadPayments: "Load payments",
+      buildCards: "Generate share cards", cardsNeedToken: "Paste the admin token first.", cardsUnavailable: "The card renderer did not load.", cardsWorking: "Painting {n} share cards\u2026", cardsDone: "{done} share cards stored, {failed} failed.", cardsFailed: "Share cards could not be generated.", 
       clearToken: "Clear token",
       settledPayments: "settled payments",
       settledTotal: "settled total",
@@ -81,6 +83,7 @@
       tokenPlaceholder: "粘贴管理员令牌",
       tokenNote: "令牌只保存在本标签页的内存中：不写入本地存储，不出现在网址里，也只会发送到本站。",
       loadPayments: "载入付款记录",
+      buildCards: "\u751f\u6210\u5206\u4eab\u5361\u7247", cardsNeedToken: "\u8bf7\u5148\u8d34\u4e0a\u7ba1\u7406\u4ee4\u724c\u3002", cardsUnavailable: "\u5361\u7247\u6e32\u67d3\u5668\u672a\u52a0\u8f7d\u3002", cardsWorking: "\u6b63\u5728\u7ed8\u5236 {n} \u5f20\u5206\u4eab\u5361\u7247\u2026", cardsDone: "\u5df2\u5b58\u5165 {done} \u5f20\uff0c{failed} \u5f20\u5931\u8d25\u3002", cardsFailed: "\u65e0\u6cd5\u751f\u6210\u5206\u4eab\u5361\u7247\u3002", 
       clearToken: "清除令牌",
       settledPayments: "笔已结算付款",
       settledTotal: "已结算总额",
@@ -364,6 +367,63 @@
     return text("unavailable");
   }
 
+  // Workers have no canvas, so the picture a link preview shows has to be
+  // painted in a browser. It is painted here, by the owner, rather than accepted
+  // from the public — an open upload would let anyone choose the image that
+  // represents a paying merchant in every share of their listing.
+  async function generateShareCards() {
+    const C = window.RankoffCard;
+    if (!token) return setStatus(text("cardsNeedToken"));
+    if (!C?.renderOgCard || !C?.buildCardModel) return setStatus(text("cardsUnavailable"));
+    if (elements.cards) elements.cards.disabled = true;
+    let done = 0;
+    let failed = 0;
+    try {
+      const board = await fetch("/api/v1/board?board=global&category=all&period=all&limit=100", { cache: "no-store" }).then((r) => r.json());
+      const rankings = board?.rankings || [];
+      setStatus(text("cardsWorking").replace("{n}", String(rankings.length)));
+      for (const entry of rankings) {
+        const listing = entry.listing || {};
+        const money = `RM ${Math.ceil(Number(entry.bid?.amount_minor || 0) / 100)}`;
+        const model = C.buildCardModel({
+          language: "en",
+          card: {
+            name: String(listing.title || listing.hostname || ""),
+            place: Number(entry.rank),
+            where: "RANKOFF",
+            total: money,
+            period: "all",
+            capturedAt: new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }),
+            logoUrl: C.proxyPathFor(String(listing.url || "")) || "",
+          },
+        });
+        if (!model) { failed += 1; continue; }
+        try {
+          const blob = await C.renderOgCard(model);
+          const response = await fetch(`/api/v1/admin/listings/${encodeURIComponent(listing.id)}/card`, {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": blob.type || "image/jpeg",
+              "X-Rankoff-Rank": String(entry.rank),
+              "X-Rankoff-Total": money,
+            },
+            body: blob,
+          });
+          if (response.ok) done += 1;
+          else failed += 1;
+        } catch {
+          failed += 1;
+        }
+      }
+      setStatus(text("cardsDone").replace("{done}", String(done)).replace("{failed}", String(failed)));
+    } catch {
+      setStatus(text("cardsFailed"));
+    } finally {
+      if (elements.cards) elements.cards.disabled = false;
+    }
+  }
+
   async function load(page) {
     if (inFlight) return;
     if (!token) {
@@ -409,6 +469,7 @@
     load(1);
   });
 
+  elements.cards?.addEventListener("click", () => { void generateShareCards(); });
   elements.clear?.addEventListener("click", () => {
     token = "";
     if (elements.token) elements.token.value = "";

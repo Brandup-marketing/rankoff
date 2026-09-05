@@ -694,3 +694,36 @@ function nullableText(value) {
   const text = String(value ?? "").trim();
   return text ? text : null;
 }
+
+// The rank card a link preview shows. Kept in its own table so the blob never
+// travels with the rows the board reads on every request.
+export async function saveListingShareCard(db, card) {
+  await db
+    .prepare(
+      `INSERT INTO listing_share_cards (
+         listing_id, content_type, width, height, bytes, image,
+         source_rank, source_total, created_at, updated_at
+       ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?9)
+       ON CONFLICT(listing_id) DO UPDATE SET
+         content_type = excluded.content_type,
+         width = excluded.width,
+         height = excluded.height,
+         bytes = excluded.bytes,
+         image = excluded.image,
+         source_rank = excluded.source_rank,
+         source_total = excluded.source_total,
+         updated_at = excluded.updated_at`,
+    )
+    .bind(
+      card.listingId, card.contentType, card.width, card.height, card.bytes,
+      card.image, card.sourceRank ?? null, card.sourceTotal ?? null, card.updatedAt,
+    )
+    .run();
+}
+
+export async function loadListingShareCard(db, listingId) {
+  return db
+    .prepare("SELECT content_type, width, height, bytes, image, updated_at FROM listing_share_cards WHERE listing_id = ?1")
+    .bind(listingId)
+    .first();
+}

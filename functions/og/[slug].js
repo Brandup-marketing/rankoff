@@ -1,6 +1,6 @@
 import { defaultBoardSlug, isProduction, requireDatabase } from "../_lib/config.js";
 import { normalizeSlug } from "../_lib/product.js";
-import { findListingByHostname, loadBoard } from "../_lib/repository.js";
+import { findListingByHostname, loadBoard, loadListingShareCard } from "../_lib/repository.js";
 
 const FALLBACK = "/assets/rankoff-og-card.png";
 const FETCH_TIMEOUT_MS = 2500;
@@ -88,6 +88,22 @@ export async function onRequestGet(context) {
     const board = await loadBoard(db, defaultBoardSlug(context.env));
     const listing = await findListingByHostname(db, board.id, hostname);
     if (listing && listing.status === "approved") {
+      // A stored rank card wins: it is the only picture that actually states
+      // the position the merchant paid for, so a WhatsApp or Facebook preview
+      // carries the trophy rather than the merchant's own logo.
+      const card = await loadListingShareCard(db, listing.id);
+      if (card?.image) {
+        const body = card.image instanceof ArrayBuffer ? card.image : new Uint8Array(card.image);
+        const cardResponse = new Response(body, {
+          headers: {
+            "Content-Type": String(card.content_type || "image/png"),
+            "Cache-Control": `public, max-age=${CACHE_SECONDS}`,
+            "Content-Length": String(card.bytes || 0),
+          },
+        });
+        context.waitUntil(cache.put(cacheKey, cardResponse.clone()));
+        return cardResponse;
+      }
       target = (await verifyImage(await discoverShareImage(`https://${hostname}/`))) || fallback;
     }
   } catch {

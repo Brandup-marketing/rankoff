@@ -16,6 +16,9 @@ export const CARD_SHAPES = Object.freeze({
   // story, so the wordmark and the footer are held inside that chrome, and the
   // type runs larger because the card is read at arm's length on a phone.
   story: Object.freeze({ name: "story", width: 1080, height: 1920, pad: 92, scale: 1.3, safeTop: 150, safeBottom: 200 }),
+  // What WhatsApp, Facebook and X draw in a link preview. They crop to roughly
+  // 1.91:1, so a square card loses its own edges there.
+  og: Object.freeze({ name: "og", width: 1200, height: 630, pad: 64, scale: 0.82, safeTop: 0, safeBottom: 0 }),
 });
 
 // The dark theme's own tokens, resolved to sRGB. The card is always dark, even
@@ -613,6 +616,20 @@ export function downloadRankCard(model, shapeName) {
   return preloadLogo(model).then(write);
 }
 
+// The link-preview card. JPEG because the endpoint that stores it has a byte
+// ceiling and a preview is never inspected at full size.
+export async function renderOgCard(model) {
+  await preloadLogo(model);
+  const canvas = paint(model, CARD_SHAPES.og, model.logo || null);
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => (blob ? resolve(blob) : reject(new Error("og_card_failed"))),
+      "image/jpeg",
+      0.88,
+    );
+  });
+}
+
 export function saveRankCard(model, shapeName) {
   if (model?.logoState === "ready" || !model?.logoUrl) return shareBlob(model, shapeName);
   return preloadLogo(model).then(() => shareBlob(model, shapeName));
@@ -630,6 +647,7 @@ const api = Object.freeze({
   renderCardBlobSync,
   saveRankCard,
   downloadRankCard,
+  renderOgCard,
 });
 
 if (typeof window !== "undefined") window.RankoffCard = api;
