@@ -25,8 +25,7 @@
     cardPreview: dialog.querySelector("[data-card-preview]"),
     cardImage: dialog.querySelector("[data-card-image]"),
     cardSave: dialog.querySelector("[data-card-save]"),
-    shapeSquare: dialog.querySelector("[data-shape-square]"),
-    shapeStory: dialog.querySelector("[data-shape-story]"),
+    cardShot: dialog.querySelector("[data-card-shot]"),
     options: dialog.querySelector(".share-options"),
     close: Array.from(dialog.querySelectorAll("[data-share-close]")),
     heading: dialog.querySelector("[data-share-heading]"),
@@ -43,7 +42,7 @@
       whatsapp: "WhatsApp", whatsappNote: "Send to a contact", native: "Share…", nativeNote: "Instagram, Messenger, more",
       facebook: "Facebook", facebookNote: "Post to your timeline", x: "X", xNote: "Post with your rank",
       nativeOpened: "Share menu opened.", close: "Close share options", options: "Share options",
-      card: "Save image", story: "Story", square: "Square", cardAlt: "Your rank card",
+      card: "Save image", cardAlt: "Your rank card — click to download",
       cardWorking: "Building your rank card…", cardShared: "Rank card ready to share.",
       cardSaved: "Rank card saved to your device.", cardError: "Unable to build the rank card.",
     },
@@ -53,7 +52,7 @@
       whatsapp: "WhatsApp", whatsappNote: "发送给联系人", native: "分享…", nativeNote: "Instagram、Messenger 等",
       facebook: "Facebook", facebookNote: "发到你的动态", x: "X", xNote: "带排名发帖",
       nativeOpened: "已打开分享菜单。", close: "关闭分享选项", options: "分享选项",
-      card: "保存图片", story: "竖版", square: "方形", cardAlt: "你的排名卡片",
+      card: "保存图片", cardAlt: "你的排名卡片 —— 点击下载",
       cardWorking: "正在生成排名卡…", cardShared: "排名卡已准备好分享。",
       cardSaved: "排名卡已保存到设备。", cardError: "无法生成排名卡。",
     },
@@ -171,7 +170,7 @@
     if (button) { button.disabled = true; button.setAttribute("aria-busy", "true"); }
     status(strings.cardWorking, "info");
     try {
-      const outcome = await window.RankoffCard.saveRankCard(model, shape);
+      const outcome = await window.RankoffCard.downloadRankCard(model, shape);
       if (outcome === "shared") {
         status(strings.cardShared);
         close();
@@ -188,7 +187,7 @@
 
   // The dialog shows the file it is about to send. Rendering happens off the
   // click that opened it, so a slow logo never blocks the dialog appearing.
-  let cardShape = "square";
+  const cardShape = "square";
   let previewUrl = "";
 
   async function renderPreview() {
@@ -213,11 +212,19 @@
     }
   }
 
-  function setShape(shape) {
-    cardShape = shape === "story" ? "story" : "square";
-    elements.shapeSquare?.setAttribute("aria-pressed", String(cardShape === "square"));
-    elements.shapeStory?.setAttribute("aria-pressed", String(cardShape === "story"));
-    void renderPreview();
+  // The native sheet is the only route to Instagram — on a phone. On a Mac the
+  // same call offers AirDrop, Mail and Notes and no Instagram at all, so the
+  // button would promise something it cannot deliver. Ask whether this device
+  // can share a FILE, which is what the card is, rather than whether it has a
+  // share API at all.
+  function canShareFiles() {
+    if (typeof navigator.share !== "function" || typeof navigator.canShare !== "function") return false;
+    if (typeof File !== "function") return false;
+    try {
+      return navigator.canShare({ files: [new File([new Uint8Array(1)], "probe.png", { type: "image/png" })] });
+    } catch {
+      return false;
+    }
   }
 
   function localize() {
@@ -235,8 +242,6 @@
     elements.nativeLabel.textContent = strings.native;
     elements.nativeNote.textContent = strings.nativeNote;
     if (elements.cardSave) elements.cardSave.textContent = strings.card;
-    if (elements.shapeSquare) elements.shapeSquare.textContent = strings.square;
-    if (elements.shapeStory) elements.shapeStory.textContent = strings.story;
     if (elements.cardImage) elements.cardImage.alt = strings.cardAlt;
     elements.options.setAttribute("aria-label", strings.options);
     elements.close.forEach((button) => button.setAttribute("aria-label", strings.close));
@@ -264,7 +269,7 @@
       elements.image.onerror = () => { elements.mark.hidden = true; };
     }
     elements.url.value = current.url;
-    elements.native.hidden = typeof navigator.share !== "function";
+    elements.native.hidden = !canShareFiles();
     // The card states a rank, so it is only offered when that rank can be read
     // back out of the copy the board itself wrote. A sentence we cannot parse
     // hides the buttons rather than putting a guessed number onto an image.
@@ -290,8 +295,7 @@
   elements.x?.addEventListener("click", openX);
   elements.native.addEventListener("click", openNativeShare);
   elements.cardSave?.addEventListener("click", () => { void saveCard(cardShape); });
-  elements.shapeSquare?.addEventListener("click", () => setShape("square"));
-  elements.shapeStory?.addEventListener("click", () => setShape("story"));
+  elements.cardShot?.addEventListener("click", () => { void saveCard(cardShape); });
   elements.close.forEach((button) => button.addEventListener("click", close));
   dialog.addEventListener("click", (event) => { if (event.target === dialog) close(); });
 

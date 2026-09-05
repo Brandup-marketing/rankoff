@@ -24,7 +24,7 @@
     <meta name="theme-color" content="#090a0c" />
     <title>RANKOFF | Bid Your Way to #1</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=43" />
+    <link rel="stylesheet" href="./styles.css?v=44" />
     <link rel="stylesheet" href="./answers.css?v=1" />
     <script type="application/ld+json">
       {
@@ -269,12 +269,10 @@
           <button class="icon-button" type="button" data-share-close aria-label="Close share options">×</button>
         </div>
         <figure class="share-card-preview" data-card-preview hidden>
-          <img data-card-image alt="" decoding="async" />
+          <button class="share-card-shot" type="button" data-card-shot>
+            <img data-card-image alt="" decoding="async" />
+          </button>
           <figcaption class="share-card-bar">
-            <span class="share-shape-toggle" role="group" data-shape-toggle>
-              <button type="button" data-shape="square" aria-pressed="true" data-shape-square>Square</button>
-              <button type="button" data-shape="story" aria-pressed="false" data-shape-story>Story</button>
-            </span>
             <button type="button" class="share-card-save" data-card-save>Save image</button>
           </figcaption>
         </figure>
@@ -302,8 +300,8 @@
 
     <div class="toast" data-toast role="status" aria-live="polite" aria-atomic="true"></div>
     <script src="./search.js?v=2" defer></script>
-    <script src="./share-card.js?v=3" type="module"></script>
-    <script src="./share.js?v=7" defer></script>
+    <script src="./share-card.js?v=4" type="module"></script>
+    <script src="./share.js?v=8" defer></script>
     <script src="./app.js?v=78" defer></script>
   </body>
 </html>

@@ -601,6 +601,18 @@ function shareBlob(model, shapeName) {
 
 // Synchronous on the path that matters: when the logo is already in hand this
 // returns a promise created inside the click handler, not after an await.
+// Clicking the picture means "give me the file". saveRankCard may open the OS
+// sheet instead, which is right for the Share button below but wrong here.
+export function downloadRankCard(model, shapeName) {
+  const write = () => {
+    const blob = renderCardBlobSync(model, shapeName);
+    download(blob, cardFileName(model.name, shapeName));
+    return "downloaded";
+  };
+  if (model?.logoState === "ready" || !model?.logoUrl) return Promise.resolve(write());
+  return preloadLogo(model).then(write);
+}
+
 export function saveRankCard(model, shapeName) {
   if (model?.logoState === "ready" || !model?.logoUrl) return shareBlob(model, shapeName);
   return preloadLogo(model).then(() => shareBlob(model, shapeName));
@@ -617,6 +629,7 @@ const api = Object.freeze({
   renderCardBlob,
   renderCardBlobSync,
   saveRankCard,
+  downloadRankCard,
 });
 
 if (typeof window !== "undefined") window.RankoffCard = api;

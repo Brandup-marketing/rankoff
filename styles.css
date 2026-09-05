@@ -441,11 +441,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 /* The picture is the preview: what a merchant sees here is the file that leaves
    the phone. The old pair of buttons promised an image nobody could see first. */
 .share-card-preview { display: grid; gap: .55rem; margin: 0 0 .2rem; }
-.share-card-preview img { width: 100%; max-height: 42vh; object-fit: contain; border: 1px solid var(--line); border-radius: .7rem; background: var(--surface-subtle); }
-.share-card-bar { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
-.share-shape-toggle { display: inline-flex; gap: .25rem; padding: .18rem; border: 1px solid var(--line); border-radius: 999px; }
-.share-shape-toggle button { min-height: 2.1rem; padding: 0 .7rem; border: 0; border-radius: 999px; background: transparent; color: var(--muted); font-size: .72rem; font-weight: 800; }
-.share-shape-toggle button[aria-pressed="true"] { background: var(--surface-subtle); color: var(--ink); }
+/* The picture is the control: one click writes the PNG. It is a real button
+   so a keyboard reaches it, and it says so on hover. */
+.share-card-shot { display: block; width: 100%; padding: 0; border: 0; border-radius: .7rem; background: transparent; cursor: pointer; }
+.share-card-shot img { display: block; width: 100%; max-height: 42vh; object-fit: contain; border: 1px solid var(--line); border-radius: .7rem; background: var(--surface-subtle); transition: border-color 160ms var(--ease); }
+.share-card-shot:hover img { border-color: var(--accent); }
+.share-card-shot:active img { transform: translateY(1px); }
+.share-card-bar { display: flex; align-items: center; justify-content: flex-end; gap: .5rem; }
 .share-card-save { min-height: 2.4rem; padding: 0 .9rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-subtle); color: var(--ink); font-size: .74rem; font-weight: 800; }
 .share-card-save:hover { border-color: var(--accent); }
 .share-card-save[aria-busy="true"] { opacity: .6; }
