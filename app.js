@@ -408,6 +408,10 @@
 
   function renderLanguage() {
     document.documentElement.lang = state.language === "zh" ? "zh-CN" : "en";
+    // The headline is reached again from renderLeader, but only once the board
+    // has loaded. Without this it stays English on first paint, and stays
+    // English for good if the board request fails.
+    renderHeroHeadline();
     document.querySelectorAll("[data-i18n]").forEach((node) => { node.textContent = languageText(node.dataset.i18n); });
     document.querySelectorAll("[data-i18n-placeholder]").forEach((node) => { node.setAttribute("placeholder", languageText(node.dataset.i18nPlaceholder)); });
     document.querySelectorAll("[data-i18n-aria-label]").forEach((node) => { node.setAttribute("aria-label", languageText(node.dataset.i18nAriaLabel)); });

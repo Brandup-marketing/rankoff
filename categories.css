@@ -6,7 +6,9 @@
 }
 
 .categories-topbar {
-  grid-template-columns: auto auto minmax(0, 1fr) auto auto;
+  /* brand · nav · search · actions — four children, four tracks. The nav needs
+     the flexible one for its justify-self: end to reach the right edge. */
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
   gap: 1.25rem;
 }
 
@@ -111,7 +113,7 @@ html[data-theme="light"] .categories-topbar .brand { background: transparent; }
 html[data-theme="light"] .categories-topbar .brand-emblem-image, html[data-theme="light"] .categories-topbar .brand-wordmark-image { filter: invert(1) hue-rotate(180deg); mix-blend-mode: multiply; }
 
 @media (max-width: 62rem) {
-  .categories-topbar { grid-template-columns: auto auto minmax(0, 1fr) auto auto; gap: 0.7rem; }
+  .categories-topbar { grid-template-columns: auto minmax(0, 1fr) auto auto; gap: 0.7rem; }
   .categories-nav { gap: 0.9rem; }
   .category-hero { margin-top: 3.5rem; }
 }
