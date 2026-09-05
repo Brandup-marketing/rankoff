@@ -17,8 +17,8 @@
     <meta name="theme-color" content="#090a0c" />
     <title>RANKOFF | Categories</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=45" />
-    <link rel="stylesheet" href="./categories.css?v=4" />
+    <link rel="stylesheet" href="./styles.css?v=46" />
+    <link rel="stylesheet" href="./categories.css?v=5" />
   </head>
   <body>
     <a class="skip-link" href="#categories" data-copy="skipCategories">Skip to categories</a>
@@ -28,11 +28,6 @@
         <a class="brand" href="./index.html" aria-label="RANKOFF home">
           <img class="brand-final-logo" src="./assets/rankoff-final-logo.png?v=4" alt="RANKOFF — Bid your way to number one" width="1254" height="1254" />
         </a>
-
-        <nav class="time-tabs" aria-label="Category timeframe">
-          <button type="button" data-category-window="all" aria-pressed="true">All-time</button>
-          <button type="button" data-category-window="today" aria-pressed="false">Today</button>
-        </nav>
 
         <nav class="site-nav categories-nav" aria-label="Main navigation">
           <a href="./categories.html" aria-current="page" data-copy="categories">Categories</a>
@@ -84,7 +79,10 @@
             <span class="section-dot" aria-hidden="true"></span>
             <h2 id="all-categories-heading" data-copy="allHeading">All categories</h2>
           </div>
-          <p data-copy="allCopy">Choose a market to view its live board.</p>
+          <nav class="time-tabs" aria-label="Category timeframe">
+            <button type="button" data-category-window="all" aria-pressed="true">All-time</button>
+            <button type="button" data-category-window="today" aria-pressed="false">Today</button>
+          </nav>
         </div>
         <div class="category-grid" data-category-grid></div>
       </section>
@@ -96,6 +94,6 @@
     </main>
 
     <script src="./search.js?v=2" defer></script>
-    <script src="./categories.js?v=12" defer></script>
+    <script src="./categories.js?v=13" defer></script>
   </body>
 </html>

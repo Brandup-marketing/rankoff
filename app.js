@@ -185,6 +185,10 @@
     inlineUrl: document.querySelector("[data-inline-url]"),
     heroPrice: document.querySelector("[data-hero-next-price]"),
     heroMarket: document.querySelector("[data-hero-market]"),
+    heroTitle: document.querySelector("#page-title"),
+    heroLead: document.querySelector("[data-hero-lead]"),
+    heroRank: document.querySelector("[data-hero-rank]"),
+    heroJoin: document.querySelector("[data-hero-join]"),
     heroContext: document.querySelector("[data-hero-context]"),
     boardState: document.querySelector("[data-board-state]"),
     inlineSubmit: document.querySelector("[data-inline-submit]"),
@@ -1321,10 +1325,28 @@
   function renderHeroMarket() {
     if (!elements.heroMarket) return;
     const named = state.category !== DEFAULT_CATEGORY && categories.includes(state.category);
-    if (!named) return void (elements.heroMarket.textContent = "");
-    elements.heroMarket.textContent = state.language === "zh"
-      ? `（${categoryName(state.category, "zh")}）`
-      : ` in ${categoryName(state.category)}`;
+    elements.heroMarket.textContent = !named
+      ? ""
+      : state.language === "zh"
+        ? categoryName(state.category, "zh")
+        : ` in ${categoryName(state.category)}`;
+    renderHeroHeadline();
+  }
+
+  // English reads "Claim #1 in Beauty & Wellness for RM 15". Chinese puts the
+  // price first — "RM 15 拿下美容与养生第 1 名" — which slot substitution cannot
+  // express, so the headline's parts are reordered per language. Left in English
+  // it was the one headline on the site that never translated.
+  function renderHeroHeadline() {
+    if (!elements.heroTitle || !elements.heroLead || !elements.heroRank || !elements.heroJoin) return;
+    const chinese = state.language === "zh";
+    elements.heroLead.textContent = chinese ? "" : "Claim ";
+    elements.heroRank.textContent = chinese ? "第 1 名" : "#1";
+    elements.heroJoin.textContent = chinese ? " 拿下" : " for ";
+    const order = chinese
+      ? [elements.heroPrice, elements.heroJoin, elements.heroMarket, elements.heroRank]
+      : [elements.heroLead, elements.heroRank, elements.heroMarket, elements.heroJoin, elements.heroPrice];
+    elements.heroTitle.replaceChildren(...order.filter(Boolean));
   }
 
   function renderLeader() {

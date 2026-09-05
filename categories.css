@@ -67,7 +67,9 @@
 .active-empty { margin: 0; padding: 1rem; border: 1px dashed var(--line-strong); color: var(--muted); font-size: 0.82rem; }
 
 .all-categories-section { margin-top: 2.5rem; }
-.category-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; }
+/* Three columns from ~1000px. Two 646px cards holding one 64px row read as
+   panels; at 397px they read as what they are — directory entries. */
+.category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr)); gap: 0.75rem; }
 .category-card {
   min-width: 0;
   padding: 1.35rem 1.35rem 1rem;
@@ -83,7 +85,7 @@
    browser underline survives and every child inherits it. */
 .category-card-head a { margin-left: auto; color: var(--blue); font-size: 0.74rem; font-weight: 800; white-space: nowrap; text-decoration: none; }
 .category-card-head a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 0.16em; }
-.category-rank-row { display: grid; grid-template-columns: 2.25rem 2.75rem minmax(0, 1fr) auto; align-items: center; gap: 0.6rem; min-height: 4rem; border-top: 1px solid var(--line); text-decoration: none; }
+.category-rank-row { display: grid; grid-template-columns: 2.25rem 2.75rem minmax(0, 1fr) auto; align-items: center; gap: 0.6rem; min-height: 3.5rem; border-top: 1px solid var(--line); text-decoration: none; }
 .category-rank { color: var(--muted); font-size: 0.88rem; font-weight: 850; font-variant-numeric: tabular-nums; }
 .category-logo { display: grid; place-items: center; width: 2.45rem; height: 2.45rem; overflow: hidden; border: 1px solid var(--line); border-radius: 0.4rem; background: var(--surface-subtle); color: var(--ink); font-size: 0.68rem; font-weight: 850; }
 /* Cut-out logos are drawn for a light page; dark lettering vanishes on a dark
@@ -91,7 +93,9 @@
 .category-logo img { width: 100%; height: 100%; object-fit: contain; padding: 0.12rem; background: #fff; }
 .category-rank-copy { min-width: 0; }
 .category-rank-copy strong { display: block; overflow: hidden; color: var(--ink); font-size: 0.9rem; text-overflow: ellipsis; white-space: nowrap; }
-.category-rank-copy span { display: block; overflow: hidden; margin-top: 0.15rem; color: var(--muted); font-size: 0.73rem; text-overflow: ellipsis; white-space: nowrap; }
+/* Truncated to roughly 33 characters at every column width we ship, which is a
+   fragment, not information. The full description lives on the listing page. */
+.category-rank-copy span { display: none; }
 .category-rank-bid { color: var(--accent-strong); font-size: 0.88rem; font-weight: 850; font-variant-numeric: tabular-nums; white-space: nowrap; }
 /* Sized to its content. A 12rem floor wrapped 74px of text in 192px of nothing,
    fifteen times over. */
@@ -115,7 +119,7 @@ html[data-theme="light"] .categories-topbar .brand-emblem-image, html[data-theme
 @media (max-width: 48rem) {
   .categories-shell { width: min(calc(100% - 1rem), var(--content)); }
   .categories-topbar {
-    grid-template-areas: "brand search actions" "tabs tabs tabs";
+    grid-template-areas: "brand search actions";
     grid-template-columns: minmax(0, 1fr) auto auto;
     min-height: 4.6rem;
     padding-block: .35rem .55rem;
@@ -123,8 +127,6 @@ html[data-theme="light"] .categories-topbar .brand-emblem-image, html[data-theme
   .categories-topbar .brand { width: 3.75rem; height: 3.75rem; }
   .categories-nav { display: none; }
   .categories-topbar .brand { grid-area: brand; }
-  .categories-topbar .time-tabs { grid-area: tabs; justify-self: stretch; }
-  .categories-topbar .time-tabs button { flex: 1 1 50%; }
   .categories-topbar .search-toggle { grid-area: search; }
   .category-actions { grid-area: actions; justify-self: end; }
   .category-status { margin-top: 1.25rem; font-size: 0.73rem; }
@@ -146,9 +148,8 @@ html[data-theme="light"] .categories-topbar .brand-emblem-image, html[data-theme
   .active-category time { grid-column: 2; margin-top: -0.5rem; }
   .category-rank-row { grid-template-columns: 1.8rem 2.45rem minmax(0, 1fr) auto; gap: 0.45rem; }
   .category-card { padding-inline: 1rem; }
-  /* Both truncate to a fragment at this width and cost a line each. */
+  /* Boilerplate repeated in fifteen cards; the bold line above already says it. */
   .category-empty span { display: none; }
-  .category-rank-copy span { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

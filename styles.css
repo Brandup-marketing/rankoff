@@ -31,6 +31,9 @@ html[data-theme="light"] {
   --line-strong: oklch(76% 0.018 25);
   --accent-soft: oklch(94% 0.045 28);
   --up-soft: oklch(94% 0.035 160);
+  /* The dark-theme blue is 2.49:1 on this surface — below the 4.5:1 that link
+     text needs. This value measures 5.59:1 on white, 5.05:1 on --surface-subtle. */
+  --blue: oklch(52% 0.17 255);
 }
 
 html[data-theme="light"] .brand { background: transparent; }
@@ -138,6 +141,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 .claim-panel h1 { margin: 0; color: var(--ink); font-size: 3.2rem; font-weight: 850; letter-spacing: -0.035em; line-height: 1; text-align: center; text-wrap: balance; }
 .claim-panel h1 span { color: var(--accent); font-variant-numeric: tabular-nums; white-space: nowrap; }
+/* The connective words are spans only so the headline can be reordered for
+   Chinese, where the price leads. They are not the accented parts. */
+.claim-panel h1 .hero-word { color: inherit; white-space: normal; }
 .claim-panel h1 strong { color: var(--accent-strong); font-weight: inherit; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .claim-copy { max-width: 52ch; margin: 0.6rem auto 0; color: var(--muted); font-size: 0.9rem; line-height: 1.45; text-align: center; }
 

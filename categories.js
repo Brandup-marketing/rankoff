@@ -180,11 +180,19 @@
 
   function renderActive() {
     if (!elements.active) return;
+    const section = elements.active.closest(".active-section");
     const ranked = categoryConfig
       .map((config, index) => ({ config, rows: categoryRows(config.id), index }))
       .filter(({ rows }) => rows.length)
       .sort((a, b) => b.rows.length - a.rows.length || b.rows[0].bid - a.rows[0].bid || a.index - b.index)
       .slice(0, 3);
+
+    // With one listing per market every row reads "1 listing · highest bid RM x"
+    // and names markets the grid below already shows. The block earns its place
+    // once a market actually holds more than one listing.
+    const worthShowing = ranked.some(({ rows }) => rows.length > 1);
+    if (section) section.hidden = !worthShowing;
+    if (!worthShowing) return void elements.active.replaceChildren();
 
     if (!ranked.length) {
       const empty = document.createElement("p");
