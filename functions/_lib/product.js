@@ -216,6 +216,10 @@ export function renderProductPage(shell, view) {
     );
   }
   html = html.replace(/(<dd data-bid)>[\s\S]*?<\/dd>/, `$1>${escapeHtml(view.bid)}</dd>`);
+  // The shell ships the preview wording, "Referral clicks". Writing the count
+  // without its label left every crawler and no-JS reader with the unverified
+  // word beside a verified figure.
+  html = html.replace(/(<dt data-click-label)>[\s\S]*?<\/dt>/, `$1>Verified clicks</dt>`);
   html = html.replace(/(<dd data-clicks)>[\s\S]*?<\/dd>/, `$1>${escapeHtml(view.clicks)}</dd>`);
   if (view.facts?.length) {
     const items = view.facts

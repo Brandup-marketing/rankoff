@@ -121,16 +121,29 @@
   }
 
   function fallbackRows() {
+    // Demo listings are fictional companies with four-figure bids. They must
+    // never stand in for the real board on a served origin — a failed fetch
+    // used to leave them on screen as though they were paying merchants.
+    // app.js:270 already takes this precaution for the board itself.
+    if (/^https?:$/.test(window.location.protocol)) return [];
     return fallbackListings.map((listing) => ({ ...listing, bid: listing.bid, period: "all" }));
   }
 
   function mergeRows(allRows, todayRows) {
     const todayById = new Map(todayRows.map((row) => [row.id, row]));
-    return allRows.map((row) => ({ ...row, todayBid: todayById.get(row.id)?.bid || Math.max(1, Math.floor(row.bid / 4)), todayClicks: todayById.get(row.id)?.clicks || Math.floor(row.clicks / 5) }));
+    // A listing the 24h payload does not return took nothing in 24 hours.
+    // The old fallbacks invented a quarter of its lifetime total and a fifth
+    // of its lifetime clicks, and the board printed them as fact.
+    return allRows.map((row) => ({ ...row, todayBid: todayById.get(row.id)?.bid ?? 0, todayClicks: todayById.get(row.id)?.clicks ?? 0 }));
   }
 
   function selectedRows() {
-    return elements.activeWindow === "today" ? elements.allRows.map((row) => ({ ...row, bid: row.todayBid || Math.max(1, Math.floor(row.bid / 4)), clicks: row.todayClicks || 0 })) : elements.allRows;
+    if (elements.activeWindow !== "today") return elements.allRows;
+    // No 24h bid means the listing is not on the 24h board at all, so the
+    // market falls through to its own empty state instead of a made-up price.
+    return elements.allRows
+      .filter((row) => Number(row.todayBid) > 0)
+      .map((row) => ({ ...row, bid: row.todayBid, clicks: row.todayClicks || 0 }));
   }
 
   function categoryRows(id) {
@@ -295,7 +308,7 @@
 
   async function loadBoard() {
     elements.allRows = fallbackRows();
-    elements.todayRows = fallbackRows().map((row) => ({ ...row, bid: row.todayBid, clicks: row.todayClicks || Math.floor(row.clicks / 5), period: "today" }));
+    elements.todayRows = fallbackRows().map((row) => ({ ...row, bid: row.todayBid, clicks: row.todayClicks || 0, period: "today" }));
     if (!/^https?:$/.test(window.location.protocol)) return;
     try {
       const [allResponse, todayResponse] = await Promise.all([

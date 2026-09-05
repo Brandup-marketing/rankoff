@@ -454,7 +454,9 @@
     const previous = state.listings.find((item) => item.id === String(listing.id || ""));
     const amount = dollarsFromMinor(entry?.bid?.amount_minor, previous ? getBid(previous, period) : 1);
     const clicks = normalizedClickCount(entry?.clicks);
-    const bids = previous ? { ...previous.bids } : { all: amount, today: amount };
+    // Seeding the other window with this one's money made a lifetime total
+    // read as a 24-hour total. What we did not fetch, we do not know.
+    const bids = previous ? { ...previous.bids } : { all: null, today: null };
     bids[period] = amount;
 
     return {
@@ -571,14 +573,24 @@
       if (!response.ok) return;
       const payload = await response.json();
       if (requestId !== remoteRequestId || !Array.isArray(payload?.rankings)) return;
-      const counts = new Map(payload.rankings.map((entry) => [String(entry?.listing?.id || ""), normalizedClickCount(entry?.clicks)]));
+      const counterpartRows = new Map(payload.rankings.map((entry) => [String(entry?.listing?.id || ""), entry]));
+      // Absence means "earned nothing in that window" only when the response
+      // held the whole board. Paged short, a listing may sit on another page,
+      // and zeroing it would invent a fact rather than report one.
+      const counterpartComplete = Number(payload?.pagination?.total || 0) <= payload.rankings.length;
       const field = counterpart === "today" ? "todayClicks" : "clicks";
       let changed = false;
       for (const listing of state.listings) {
-        const count = counts.get(listing.id);
-        if (count === undefined || listing[field] === count) continue;
-        listing[field] = count;
-        changed = true;
+        const counterpartEntry = counterpartRows.get(listing.id);
+        if (!counterpartEntry && !counterpartComplete) continue;
+        const count = counterpartEntry ? normalizedClickCount(counterpartEntry.clicks) : 0;
+        if (listing[field] !== count) { listing[field] = count; changed = true; }
+        // dollarsFromMinor floors at 1, so it cannot express a genuine zero.
+        const minor = Number(counterpartEntry?.bid?.amount_minor);
+        const amount = counterpartEntry
+          ? (Number.isSafeInteger(minor) && minor >= 0 ? Math.ceil(minor / 100) : null)
+          : 0;
+        if (listing.bids[counterpart] !== amount) { listing.bids[counterpart] = amount; changed = true; }
       }
       if (changed) render();
     } catch {
@@ -1510,7 +1522,10 @@
       const boardDepth = Math.max(state.listings.length, Number(remotePagination?.total) || 0);
       elements.todayPanel.dataset.thinBoard = String(boardDepth < 8);
     }
-    const todayListings = rankedListings(visibleListings(), "today").slice(0, 3);
+    // Until the 24h total is known this panel has nothing to say. Showing the
+    // all-time leaders here put lifetime money under a 24-hour heading.
+    const todayRanked = visibleListings().filter((listing) => Number(getBid(listing, "today")) > 0);
+    const todayListings = rankedListings(todayRanked, "today").slice(0, 3);
     if (elements.todayRankingList) {
       if (!todayListings.length) {
         const empty = createElement("li", "today-ranking-empty", state.language === "zh" ? "暂无今日排名。" : "No activity has ranked today yet.");
