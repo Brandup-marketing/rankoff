@@ -28,7 +28,7 @@
       rule: "Highest total takes #1", claimNumberOne: "Claim #1 for", startClaim: "Challenge this rank",
       footer: "Transparent sponsored ranking. Every position has a visible price.",
       previewListing: "Public listing", verifiedPlacement: "Verified placement", previewData: "Public data", verifiedData: "Live data",
-      sampleClicks: "Referral clicks", verifiedClicks: "Verified clicks", estimatedClicks: "Referral clicks",
+      sampleClicks: "Referral clicks", verifiedClicks: "Verified clicks", estimatedClicks: "Referral clicks", past24Clicks: "Past 24h clicks",
       previewEvidence: "Rank, price, and referral clicks update from the public board.",
       verifiedEvidence: "Rank and bid come from settled placements. Clicks are first-party redirect events recorded by Rankoff.",
       claimCopy: "Put your product above this listing. Your full business description stays visible until someone pays more.",
@@ -42,7 +42,7 @@
       rule: "累计出价最高者获得第 1 名", claimNumberOne: "以此价格争夺第 1 名", startClaim: "挑战此排名",
       footer: "透明的赞助排名。每个位置都有公开价格。",
       previewListing: "公开条目", verifiedPlacement: "已验证展示", previewData: "公开数据", verifiedData: "实时数据",
-      sampleClicks: "推荐点击", verifiedClicks: "已验证点击", estimatedClicks: "推荐点击",
+      sampleClicks: "推荐点击", verifiedClicks: "已验证点击", estimatedClicks: "推荐点击", past24Clicks: "近 24 小时点击",
       previewEvidence: "排名、价格和推荐点击会随公开榜单更新。",
       verifiedEvidence: "排名与出价来自已结算展示；点击为 Rankoff 记录的第一方跳转事件。",
       claimCopy: "让你的产品排在这个条目之前。完整业务介绍会持续展示，直到有人出价更高。",
@@ -60,7 +60,7 @@
     description: document.querySelector("[data-description]"), visit: document.querySelector("[data-visit]"), share: document.querySelector("[data-share]"),
     mode: document.querySelector("[data-mode]"), evidenceNote: document.querySelector("[data-evidence-note]"), rank: document.querySelector("[data-rank]"),
     rankLabel: document.querySelector("[data-rank-label]"), rankNote: document.querySelector("[data-rank-note]"),
-    bid: document.querySelector("[data-bid]"), clicks: document.querySelector("[data-clicks]"), clickLabels: document.querySelectorAll("[data-click-label], [data-click-label-today]"),
+    bid: document.querySelector("[data-bid]"), clicks: document.querySelector("[data-clicks]"), clickLabels: document.querySelectorAll("[data-click-label]"), clickLabelToday: document.querySelector("[data-click-label-today]"),
     todayRank: document.querySelector("[data-today-rank]"), todayBid: document.querySelector("[data-today-bid]"), todayClicks: document.querySelector("[data-today-clicks]"),
     nextBid: document.querySelector("[data-next-bid]"), claimCopy: document.querySelector("[data-claim-copy]"), claim: document.querySelector("[data-claim]"),
     disclosure: document.querySelector("[data-claim-disclosure]"), toast: document.querySelector("[data-toast]"),
@@ -292,6 +292,9 @@
     elements.todayBid.textContent = model.todayBid ? money.format(model.todayBid) : "—";
     elements.todayClicks.textContent = Number.isFinite(model.todayClicks) ? count.format(model.todayClicks) : "—";
     elements.clickLabels.forEach((node) => { node.textContent = clickLabel; });
+    // The 24h row carries its own scope, like the two rows above it. Sharing the
+    // all-time label made the same metric read twice with two different values.
+    if (elements.clickLabelToday) elements.clickLabelToday.textContent = text("past24Clicks");
     elements.placement.textContent = verified ? text("verifiedPlacement") : text("previewListing");
     elements.placement.className = verified ? "verified-chip" : "estimated-chip";
     elements.mode.textContent = verified ? text("verifiedData") : text("previewData");
