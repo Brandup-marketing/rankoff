@@ -7,7 +7,7 @@
   const DEFAULT_CATEGORY = "all";
   const BOARD_API_ENDPOINT = "./api/v1/board";
   // Keep in step with TERMS_VERSION in functions/_lib/config.js and the date printed on /legal.
-  const TERMS_VERSION = "2026-08-30";
+  const TERMS_VERSION = "2026-09-02";
   // The demo board exists for opening index.html straight off disk. On a served
   // origin it must never render: for the moment before the API answers it put a
   // fake USD price on a page that sells in ringgit, and it overwrote the real
@@ -30,9 +30,27 @@
   }, {}));
   const categoryIcons = Object.freeze({ all: "▦", Creators: "✦", Property: "⌂", Interior: "▤", Beauty: "✿", Health: "✚", Sports: "◐", Food: "◍", Marketing: "↗", Creative: "✎", Professional: "◆", Education: "✎+", Finance: "◧", Electronics: "▣", Retail: "◇", Construction: "▦+", Home: "⚙", Automotive: "◎", AI: "✧", Other: "•••" });
   const translations = {
-    en: { navBoard: "Board", navCategories: "Categories", navAbout: "About", heroCopy: "Put your product in the spot people see first. Your listing stays at the top until someone pays more.", totalBid: "Your total bid", productUrl: "Website or public social profile", productUrlPlaceholder: "example.com or instagram.com/yourname", invalidWebsite: "Enter a website or a public profile address, such as example.com or instagram.com/yourname.", chooseMarket: "Choose a market", challengeCategory: "Challenge category", categoryRule: "Must match the listing you’ll outrank.", reviewBid: "Review your bid", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest total takes #1. Top up any time to move up.", todayRanking: "Today’s leaders", latestActivity: "Latest activity", liveUpdates: "Latest updates", howItWorks: "How ranking works", searchPlaceholder: "Search products and categories…", close: "Close", seeAll: "See all", past24: "Past 24h", livePulse: "Live bids", refresh: "Refresh", rank: "Rank", listing: "Listing", bid: "Bid", clicks: "Clicks", sponsored: "Sponsored", rules: "Every listing is paid advertising. The highest settled total ranks first \u2014 no prizes, no draws, and no element of chance.", position: "Position", positionCopy: "Held until another listing's settled total passes it.", charge: "Charge", chargeCopy: "One payment after review.", reporting: "Reporting", reportingCopy: "Clicks shown for the selected timeframe.", readRules: "Read all rules →", askWhatIs: "What is a pay-to-rank leaderboard?", askHowWorks: "How does Rankoff ranking work?", askHowSponsor: "How can I sponsor a website or social profile?", rulesLink: "Rules", terms: "Terms", termsOfService: "Terms of Service", privacyLink: "Privacy", payments: "Payments", footerCredit: "A Brandup Marketing product", confirmRank: "Confirm this rank", confirmRankIntro: "Check the rank and price, then agree to the Terms of Service to continue.", chanceDisclaimer: "This is a one-time fee for advertising placement \u2014 not a wager, deposit, or contest entry. There are no prizes and no element of chance.", rankLabel: "Rank", priceLabel: "Price", dueNow: "Due now", confirmationCopy: "Your listing goes live at this rank after payment confirms. Someone else can still claim a higher rank. This is a one-time fee for advertising placement \u2014 not a wager, deposit, or contest entry. There are no prizes and no element of chance.", agreeTermsPrefix: "I understand this is a paid sponsored placement for a public link. It gives me no ownership or editing rights over that account, and the listed party may request removal. I agree to the ", agreeTermsSuffix: ".", cancel: "Cancel", continueCheckout: "Continue to checkout" },
-    zh: { navBoard: "榜单", navCategories: "分类", navAbout: "关于", heroCopy: "把产品放到最显眼的位置。只要没有更高的有效出价，你的介绍就会留在榜首。", totalBid: "你的总出价", productUrl: "网站或公开社交账号", productUrlPlaceholder: "example.com 或 instagram.com/yourname", invalidWebsite: "请输入网站或公开主页网址，例如 example.com 或 instagram.com/yourname。", chooseMarket: "选择市场", challengeCategory: "挑战类别", categoryRule: "必须与您要超越的条目类别相同。", reviewBid: "确认出价", markets: "市场", liveLeaderboard: "实时榜单", boardSummary: "累计出价最高者获得第 1 名。随时追加出价即可上升。", todayRanking: "今日领先", latestActivity: "最新动态", liveUpdates: "最新动态", howItWorks: "排名规则", searchPlaceholder: "搜索产品和分类…", close: "关闭", seeAll: "查看全部", past24: "近 24 小时", livePulse: "实时竞价", refresh: "刷新", rank: "排名", listing: "条目", bid: "出价", clicks: "点击", sponsored: "广告", rules: "每个条目都是付费广告。累计已结算付款最高者排名第一 —— 没有奖品、没有抽奖，也不涉及任何运气成分。", position: "排名位置", positionCopy: "保持到其他条目的累计出价超过为止。", charge: "费用", chargeCopy: "审核后一次性付款。", reporting: "数据", reportingCopy: "显示所选时间范围内的点击。", readRules: "查看完整规则 →", askWhatIs: "什么是付费排名榜？", askHowWorks: "Rankoff 排名怎么算？", askHowSponsor: "怎么赞助一个网站或社交账号？", rulesLink: "规则", terms: "条款", termsOfService: "服务条款", privacyLink: "隐私", payments: "付款", footerCredit: "Brandup Marketing 出品", confirmRank: "确认此排名", confirmRankIntro: "核对排名与价格，同意《服务条款》后继续。", chanceDisclaimer: "此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。", rankLabel: "排名", priceLabel: "价格", dueNow: "现在支付", confirmationCopy: "付款确认后，你的条目会以此排名上线。其他人仍可出价取得更高排名。此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。", agreeTermsPrefix: "我了解这是为一个公开链接购买的赞助展示，付款不会获得该账号的所有权或编辑权，被展示方可要求下架。我同意《", agreeTermsSuffix: "》。", cancel: "取消", continueCheckout: "继续付款" },
+    en: { navBoard: "Board", navCategories: "Categories", navAbout: "About", heroCopy: "Put your product in the spot people see first. Your listing stays at the top until someone pays more.", totalBid: "Your total bid", productUrl: "Website or public social profile", productUrlPlaceholder: "example.com or instagram.com/yourname", invalidWebsite: "Enter a website or a public profile address, such as example.com or instagram.com/yourname.", chooseMarket: "Choose a market", challengeCategory: "Challenge category", categoryRule: "Must match the listing you’ll outrank.", reviewBid: "Review your bid", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest total takes #1. Top up any time to move up.", todayRanking: "Today’s leaders", latestActivity: "Latest activity", liveUpdates: "Latest updates", howItWorks: "How ranking works", searchPlaceholder: "Search products and categories…", close: "Close", seeAll: "See all", past24: "Past 24h", livePulse: "Live bids", refresh: "Refresh", rank: "Rank", listing: "Listing", bid: "Bid", clicks: "Clicks", sponsored: "Sponsored", rules: "Every listing is paid advertising. The highest settled total ranks first \u2014 no prizes, no draws, and no element of chance.", position: "Position", positionCopy: "Held until another listing's settled total passes it.", charge: "Charge", chargeCopy: "One payment through secure hosted checkout.", reporting: "Reporting", reportingCopy: "Clicks shown for the selected timeframe.", readRules: "Read all rules →", askWhatIs: "What is a pay-to-rank leaderboard?", askHowWorks: "How does Rankoff ranking work?", askHowSponsor: "How can I sponsor a website or social profile?", rulesLink: "Rules", terms: "Terms", termsOfService: "Terms of Service", privacyLink: "Privacy", payments: "Payments", footerCredit: "A Brandup Marketing product", confirmRank: "Confirm this rank", confirmRankIntro: "Check the rank and price, then agree to the Terms of Service to continue.", chanceDisclaimer: "This is a one-time fee for advertising placement \u2014 not a wager, deposit, or contest entry. There are no prizes and no element of chance.", rankLabel: "Rank", priceLabel: "Price", dueNow: "Due now", confirmationCopy: "Your listing goes live at this rank after payment confirms. Someone else can still claim a higher rank. This is a one-time fee for advertising placement \u2014 not a wager, deposit, or contest entry. There are no prizes and no element of chance.", agreeTermsPrefix: "I understand this is a paid sponsored placement for a public link. It gives me no ownership or editing rights over that account, and the listed party may request removal. I agree to the ", agreeTermsSuffix: ".", cancel: "Cancel", continueCheckout: "Continue to checkout", skipLeaderboard: "Skip to leaderboard", brandHome: "RANKOFF home", brandLogoAlt: "RANKOFF — Bid your way to number one", rankingTimeframe: "Ranking timeframe", mainNavigation: "Main navigation", searchResults: "Search results", challengeLeaderboard: "Challenge the leaderboard", decreaseBid: "Decrease bid by ten", increaseBid: "Increase bid by ten", filterCategory: "Filter by category", topThree: "Top three sponsored listings", boardPulse: "Board pulse", boardListings: "Sponsored listings", pageNumbers: "Page numbers", answers: "Answers", closeDialog: "Close dialog", rankPrice: "Rank and price", savePreferencesError: "This browser could not save your preferences.", checkoutUnavailable: "Hosted checkout is unavailable. No payment was made.", checkoutOpening: "Opening secure checkout…", checkoutPreview: "Live checkout is not connected for this submission yet. No payment was made." },
+    zh: { navBoard: "榜单", navCategories: "分类", navAbout: "关于", heroCopy: "把产品放到最显眼的位置。只要没有更高的有效出价，你的介绍就会留在榜首。", totalBid: "你的总出价", productUrl: "网站或公开社交账号", productUrlPlaceholder: "example.com 或 instagram.com/yourname", invalidWebsite: "请输入网站或公开主页网址，例如 example.com 或 instagram.com/yourname。", chooseMarket: "选择市场", challengeCategory: "挑战类别", categoryRule: "必须与您要超越的条目类别相同。", reviewBid: "确认出价", markets: "市场", liveLeaderboard: "实时榜单", boardSummary: "累计出价最高者获得第 1 名。随时追加出价即可上升。", todayRanking: "今日领先", latestActivity: "最新动态", liveUpdates: "最新动态", howItWorks: "排名规则", searchPlaceholder: "搜索产品和分类…", close: "关闭", seeAll: "查看全部", past24: "近 24 小时", livePulse: "实时竞价", refresh: "刷新", rank: "排名", listing: "条目", bid: "出价", clicks: "点击", sponsored: "广告", rules: "每个条目都是付费广告。累计已结算付款最高者排名第一 —— 没有奖品、没有抽奖，也不涉及任何运气成分。", position: "排名位置", positionCopy: "保持到其他条目的累计出价超过为止。", charge: "费用", chargeCopy: "通过安全托管付款页面一次性付款。", reporting: "数据", reportingCopy: "显示所选时间范围内的点击。", readRules: "查看完整规则 →", askWhatIs: "什么是付费排名榜？", askHowWorks: "Rankoff 排名怎么算？", askHowSponsor: "怎么赞助一个网站或社交账号？", rulesLink: "规则", terms: "条款", termsOfService: "服务条款", privacyLink: "隐私", payments: "付款", footerCredit: "Brandup Marketing 出品", confirmRank: "确认此排名", confirmRankIntro: "核对排名与价格，同意《服务条款》后继续。", chanceDisclaimer: "此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。", rankLabel: "排名", priceLabel: "价格", dueNow: "现在支付", confirmationCopy: "付款确认后，你的条目会以此排名上线。其他人仍可出价取得更高排名。此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。", agreeTermsPrefix: "我了解这是为一个公开链接购买的赞助展示，付款不会获得该账号的所有权或编辑权，被展示方可要求下架。我同意《", agreeTermsSuffix: "》。", cancel: "取消", continueCheckout: "继续付款", skipLeaderboard: "跳到榜单", brandHome: "RANKOFF 首页", brandLogoAlt: "RANKOFF — 出价登上第一名", rankingTimeframe: "排名时间范围", mainNavigation: "主导航", searchResults: "搜索结果", challengeLeaderboard: "挑战排行榜", decreaseBid: "出价减少 10", increaseBid: "出价增加 10", filterCategory: "按类别筛选", topThree: "赞助榜单前三名", boardPulse: "榜单动态", boardListings: "赞助条目榜单", pageNumbers: "页码", answers: "常见问题", closeDialog: "关闭对话框", rankPrice: "排名与价格", savePreferencesError: "此浏览器无法保存你的偏好设置。", checkoutUnavailable: "托管付款页面暂时无法使用，未产生任何费用。", checkoutOpening: "正在打开安全付款页面…", checkoutPreview: "此预览暂未连接实时付款，未产生任何费用。" },
   };
+  const pageMetadata = Object.freeze({
+    en: Object.freeze({
+      title: "RANKOFF | Bid Your Way to #1",
+      description: "Start at RM5 on Rankoff and compete for visible sponsored rank. Settled totals and verified referral clicks remain public.",
+      socialTitle: "RANKOFF | Start at RM5, compete for #1",
+      socialDescription: "A public sponsored leaderboard for Malaysian businesses. Start at RM5; settled totals and verified clicks stay visible.",
+      schemaDescription: "Rankoff is a public sponsored leaderboard where products compete for visible attention through transparent settled bids.",
+      schemaAction: "Claim a sponsored rank",
+    }),
+    zh: Object.freeze({
+      title: "RANKOFF｜出价登上第 1 名",
+      description: "在 Rankoff 出价登上第 1 名。用公开透明的赞助出价，让你的产品出现在实时榜单最显眼的位置。",
+      socialTitle: "RANKOFF｜RM5 起，竞逐第 1 名",
+      socialDescription: "面向马来西亚商家的公开赞助榜单。RM5 起即可上榜；已结算累计金额和经验证点击公开可见。",
+      schemaDescription: "Rankoff 是公开的赞助排名榜，产品通过透明出价竞争最显眼的位置。",
+      schemaAction: "认领赞助排名",
+    }),
+  });
   const categoryLabels = { AI: "AI Tools & Agents", Creators: "Creators & Talent", Property: "Property & Agents", Interior: "Interior & Renovation", Beauty: "Beauty & Wellness", Health: "Health & Medical", Sports: "Sports & Fitness", Food: "Food & Beverage", Marketing: "Marketing & Advertising", Creative: "Creative & Production", Professional: "Professional Services", Education: "Education & Training", Finance: "Finance & Insurance", Electronics: "Electronics & Repair", Retail: "Retail & Ecommerce", Construction: "Hardware & Construction", Home: "Home Services", Automotive: "Automotive", Other: "Other" };
   const categoryTranslations = { AI: "AI 工具与智能体", Creators: "创作者与艺人", Property: "房产与经纪", Interior: "室内设计与装修", Beauty: "美容与养生", Health: "健康与医疗", Sports: "运动与健身", Food: "餐饮", Marketing: "营销与广告", Creative: "创意与制作", Professional: "专业服务", Education: "教育与培训", Finance: "金融与保险", Electronics: "电子与维修", Retail: "零售与电商", Construction: "五金与建筑", Home: "家居服务", Automotive: "汽车", Other: "其他" };
 
@@ -232,6 +250,8 @@
   let remoteRequestId = 0;
   let state = loadState();
   const sharedView = new URL(window.location.href);
+  const requestedLanguage = String(sharedView.searchParams.get("lang") || "").toLowerCase();
+  if (requestedLanguage === "zh" || requestedLanguage === "en") state.language = requestedLanguage;
   if (sharedView.searchParams.get("period") === "today") state.activeWindow = "today";
   if (sharedView.searchParams.get("period") === "all") state.activeWindow = "all";
   const sharedCategory = sharedView.searchParams.get("category");
@@ -288,10 +308,20 @@
     }
 
     try {
-      const saved = JSON.parse(window.localStorage.getItem(STORE_KEY));
-      if (!saved || !Array.isArray(saved.listings)) return fallback;
+      const parsed = JSON.parse(window.localStorage.getItem(STORE_KEY));
+      const saved = parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+      const restoredPreferences = {
+        activeWindow: saved.activeWindow === "today" ? "today" : "all",
+        category: saved.category === DEFAULT_CATEGORY ? DEFAULT_CATEGORY : canonicalCategory(saved.category) || DEFAULT_CATEGORY,
+        theme: saved.theme === "light" ? "light" : "dark",
+        language: saved.language === "zh" ? "zh" : "en",
+      };
       // A previous visit's demo listings are still demo listings.
-      if (servedFromWeb) return { ...fallback, activeWindow: saved.activeWindow === "today" ? "today" : "all", theme: saved.theme === "light" ? "light" : "dark", language: saved.language === "zh" ? "zh" : "en" };
+      // Production only restores preferences. It never treats saved or partial
+      // state from another page as the public board, and it never needs a
+      // `listings` array in order to remember language or theme.
+      if (servedFromWeb) return { ...fallback, ...restoredPreferences };
+      if (!Array.isArray(saved.listings)) return { ...fallback, ...restoredPreferences };
       const savedById = new Map(saved.listings.map((listing) => [listing?.id, listing]));
       const restored = seedListings.map((seed) => {
         const savedListing = savedById.get(seed.id);
@@ -333,10 +363,7 @@
         : [...seedActivity];
 
       return {
-        activeWindow: saved.activeWindow === "today" ? "today" : "all",
-        category: saved.category === DEFAULT_CATEGORY ? DEFAULT_CATEGORY : canonicalCategory(saved.category) || DEFAULT_CATEGORY,
-        theme: saved.theme === "light" ? "light" : "dark",
-        language: saved.language === "zh" ? "zh" : "en",
+        ...restoredPreferences,
         listings: restored,
         activity: restoredActivity,
       };
@@ -346,25 +373,116 @@
   }
 
   function saveState() {
-    if (boardSource !== "local") return;
     try {
+      const parsed = JSON.parse(window.localStorage.getItem(STORE_KEY));
+      const saved = parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+      const preferences = {
+        activeWindow: state.activeWindow,
+        category: state.category,
+        theme: state.theme,
+        language: state.language,
+      };
+      // index.html opened from disk is the only place where demo listings are
+      // state. A served page may briefly have boardSource="local" while the API
+      // loads; writing then would replace the production board with an empty
+      // client snapshot. On the web, merge preferences only.
+      const nextState = !servedFromWeb && boardSource === "local"
+        ? { ...saved, ...preferences, listings: state.listings, activity: state.activity.slice(0, 20) }
+        : { ...saved, ...preferences };
       window.localStorage.setItem(
         STORE_KEY,
-        JSON.stringify({
-          activeWindow: state.activeWindow,
-          category: state.category,
-          theme: state.theme,
-          language: state.language,
-          listings: state.listings,
-          activity: state.activity.slice(0, 20),
-        }),
+        JSON.stringify(nextState),
       );
     } catch {
-      showToast("This browser could not save demo changes for later.", "error");
+      showToast(languageText("savePreferencesError"), "error");
     }
   }
 
   function languageText(key) { return (translations[state.language] || translations.en)[key] || translations.en[key] || key; }
+
+  function languageCanonicalUrl(language) {
+    const url = new URL("https://rankoff.my/");
+    if (language === "zh") url.searchParams.set("lang", "zh");
+    return url.toString();
+  }
+
+  function syncLanguageUrl() {
+    const url = new URL(window.location.href);
+    if (state.language === "zh") url.searchParams.set("lang", "zh");
+    else url.searchParams.delete("lang");
+    const next = `${url.pathname}${url.search}${url.hash}`;
+    const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    if (next === current) return;
+    try {
+      window.history.replaceState(window.history.state, "", next);
+    } catch {
+      /* An embedded or file preview may forbid history writes. */
+    }
+  }
+
+  function syncLocalizedLinks() {
+    document.querySelectorAll("[data-language-link]").forEach((link) => {
+      const raw = link.getAttribute("href");
+      if (!raw) return;
+      const target = new URL(raw, window.location.href);
+      if (/^\/(?:legal|answers\/)/.test(target.pathname)) target.searchParams.delete("lang");
+      else if (state.language === "zh") target.searchParams.set("lang", "zh");
+      else target.searchParams.delete("lang");
+      link.setAttribute("href", `${target.pathname}${target.search}${target.hash}`);
+    });
+  }
+
+  function renderMetadata() {
+    const metadata = pageMetadata[state.language] || pageMetadata.en;
+    const canonical = languageCanonicalUrl(state.language);
+    document.title = metadata.title;
+    document.querySelector('meta[name="description"]')?.setAttribute("content", metadata.description);
+    document.querySelector('meta[property="og:title"]')?.setAttribute("content", metadata.socialTitle);
+    document.querySelector('meta[property="og:description"]')?.setAttribute("content", metadata.socialDescription);
+    document.querySelector('meta[property="og:url"]')?.setAttribute("content", canonical);
+    document.querySelector('meta[property="og:locale"]')?.setAttribute("content", state.language === "zh" ? "zh_MY" : "en_MY");
+    document.querySelector('meta[property="og:locale:alternate"]')?.setAttribute("content", state.language === "zh" ? "en_MY" : "zh_MY");
+    document.querySelector('meta[name="twitter:title"]')?.setAttribute("content", metadata.socialTitle);
+    document.querySelector('meta[name="twitter:description"]')?.setAttribute("content", metadata.socialDescription);
+    document.querySelector('link[rel="canonical"]')?.setAttribute("href", canonical);
+    document.querySelector('link[rel="alternate"][hreflang="en"]')?.setAttribute("href", languageCanonicalUrl("en"));
+    document.querySelector('link[rel="alternate"][hreflang="zh-Hans"]')?.setAttribute("href", languageCanonicalUrl("zh"));
+    document.querySelector('link[rel="alternate"][hreflang="x-default"]')?.setAttribute("href", languageCanonicalUrl("en"));
+
+    const schemaNode = document.querySelector("#website-schema");
+    if (schemaNode) {
+      try {
+        const schema = JSON.parse(schemaNode.textContent);
+        schema.url = canonical;
+        schema.description = metadata.schemaDescription;
+        schema.inLanguage = state.language === "zh" ? "zh-Hans" : "en-MY";
+        if (schema.potentialAction) {
+          schema.potentialAction.target = canonical;
+          schema.potentialAction.name = metadata.schemaAction;
+        }
+        schemaNode.textContent = JSON.stringify(schema);
+      } catch {
+        /* Static structured data remains valid if a browser extension changes it. */
+      }
+    }
+  }
+
+  function localizeServerBoard() {
+    document.querySelectorAll(".board-seo-note").forEach((node) => {
+      if (!node.dataset.englishCopy) node.dataset.englishCopy = node.textContent.trim();
+      if (state.language !== "zh") {
+        node.textContent = node.dataset.englishCopy;
+        return;
+      }
+      const match = node.dataset.englishCopy.match(/^Sponsored · (.+?) · (.+?) settled · ([\d,]+) verified clicks$/);
+      if (!match) {
+        node.textContent = "广告条目";
+        return;
+      }
+      const market = Object.keys(categoryLabels).find((key) => categoryLabels[key] === match[1]);
+      node.textContent = `广告 · ${market ? categoryTranslations[market] : match[1]} · ${match[2]} 已结算 · ${match[3]} 次已验证点击`;
+    });
+  }
 
   function canonicalCategory(category) {
     return categoryAliases[String(category || "").toLowerCase()] || "";
@@ -377,15 +495,16 @@
 
   // B2: on a phone the first screen used to be the whole entry form, so a
   // stranger had to scroll past four fields before seeing a single listing.
-  // The form collapses behind one button below 34rem; desktop is untouched.
+  // At tablet-narrow widths the form becomes one clear entry action so the
+  // live leaders stay near the first screen; wider layouts keep it open.
   const phoneQuery = typeof window.matchMedia === "function"
-    ? window.matchMedia("(max-width: 34rem)")
+    ? window.matchMedia("(max-width: 46rem)")
     : null;
   let phoneEntryOpen = false;
 
   function entryToggleText(expanded) {
-    if (state.language === "zh") return expanded ? "收起表单" : "上榜你的产品";
-    return expanded ? "Hide the form" : "List your product";
+    if (state.language === "zh") return expanded ? "收起表单" : "挑战第 1 名";
+    return expanded ? "Hide the form" : "Challenge #1";
   }
 
   function setEntryExpanded(expanded) {
@@ -407,7 +526,9 @@
   }
 
   function renderLanguage() {
-    document.documentElement.lang = state.language === "zh" ? "zh-CN" : "en";
+    document.documentElement.lang = state.language === "zh" ? "zh-Hans" : "en";
+    syncLanguageUrl();
+    renderMetadata();
     // The headline is reached again from renderLeader, but only once the board
     // has loaded. Without this it stays English on first paint, and stays
     // English for good if the board request fails.
@@ -415,10 +536,13 @@
     document.querySelectorAll("[data-i18n]").forEach((node) => { node.textContent = languageText(node.dataset.i18n); });
     document.querySelectorAll("[data-i18n-placeholder]").forEach((node) => { node.setAttribute("placeholder", languageText(node.dataset.i18nPlaceholder)); });
     document.querySelectorAll("[data-i18n-aria-label]").forEach((node) => { node.setAttribute("aria-label", languageText(node.dataset.i18nAriaLabel)); });
+    document.querySelectorAll("[data-i18n-alt]").forEach((node) => { node.setAttribute("alt", languageText(node.dataset.i18nAlt)); });
+    syncLocalizedLinks();
+    localizeServerBoard();
     if (elements.languageToggle) {
-      elements.languageToggle.textContent = state.language === "zh" ? "CN" : "EN";
+      elements.languageToggle.textContent = state.language === "zh" ? "EN" : "中文";
       elements.languageToggle.setAttribute("aria-pressed", String(state.language === "zh"));
-      elements.languageToggle.setAttribute("aria-label", state.language === "zh" ? "Switch to English" : "切换中文");
+      elements.languageToggle.setAttribute("aria-label", state.language === "zh" ? "切换到英文" : "Switch to Chinese");
     }
     updatePanelToggleLabels();
     syncEntryToggle();
@@ -433,7 +557,7 @@
       const labelNode = button.querySelector("[data-panel-toggle-label]");
       if (labelNode) labelNode.textContent = label;
       const title = state.language === "zh" ? button.dataset.panelTitleZh : button.dataset.panelTitle;
-      button.setAttribute("aria-label", `${label} ${title || "panel"}`);
+      button.setAttribute("aria-label", `${label} ${title || (state.language === "zh" ? "面板" : "panel")}`);
       const content = document.getElementById(button.getAttribute("aria-controls"));
       if (content) content.hidden = !expanded;
       const icon = button.querySelector(".panel-toggle-icon");
@@ -470,11 +594,11 @@
     return {
       id: String(listing.id || `remote-${index + 1}`),
       serverRank: Number.isFinite(Number(entry?.rank)) ? Number(entry.rank) : index + 1,
-      name: String(listing.title || listing.hostname || `Listing ${index + 1}`).slice(0, 96),
+      name: String(listing.title || listing.hostname || `RANKOFF #${index + 1}`).slice(0, 96),
       mark: initialsFor(String(listing.hostname || ""), url, String(listing.title || "")),
       url,
       iconUrl: typeof listing.favicon_url === "string" ? listing.favicon_url : "",
-      description: String(listing.description || "Sponsored listing on Rankoff.").slice(0, 240),
+      description: String(listing.description || "").slice(0, 240),
       category: String(listing.category || "Other"),
       identity: String(listing.hostname || ""),
       age: entry?.bid?.settled_at || previous?.age || "",
@@ -671,7 +795,8 @@
     overlay.href = listingVisitHref(listing, position);
     overlay.target = "_blank";
     overlay.rel = "noopener nofollow sponsored";
-    overlay.setAttribute("aria-label", state.language === "zh" ? `访问 ${listing.name} 的网站` : `Visit ${listing.name}'s website`);
+    overlay.tabIndex = -1;
+    overlay.setAttribute("aria-hidden", "true");
     return overlay;
   }
 
@@ -753,17 +878,51 @@
   // pasting a post instead of the profile. Both deserve an answer in their language.
   function submissionError(error) {
     const chinese = state.language === "zh";
-    if (error?.code === "unknown_tld") {
-      return chinese
-        ? "这不是一个网址。如果是 Instagram、Facebook 或 TikTok 账号，请贴上完整主页链接，例如 instagram.com/yourname。"
-        : error.message;
+    if (!chinese) return error?.message || "This website could not be listed. No payment was made.";
+    const messages = {
+      unknown_tld: "这不是一个网址。如果是 Instagram、Facebook 或 TikTok 账号，请贴上完整主页链接，例如 instagram.com/yourname。",
+      profile_required: "请贴上主页链接，而不是某一则贴文、Reel、限时动态或群组。",
+      invalid_url: "请输入有效的 HTTPS 网站或公开主页网址。",
+      invalid_category: "请选择支持的行业类别。",
+      listing_refused: "此网站不符合上榜条件，未产生任何费用。",
+      listing_unavailable: "此网站目前无法上榜，未产生任何费用。",
+      submission_limit: "目前提交数量过多，请稍后再试。",
+      production_only: "预览榜单不接受提交，未产生任何费用。",
+      invalid_field: "提交资料不完整或格式不正确，请检查后再试。",
+    };
+    return messages[error?.code] || "此网址无法上榜，未产生任何费用。";
+  }
+
+  function checkoutError(error) {
+    if (state.language !== "zh") return error?.message || languageText("checkoutUnavailable");
+    if (error?.code === "bid_too_low") {
+      const minimumMinor = Number(error?.details?.minimum_amount_minor);
+      const minimum = Number.isSafeInteger(minimumMinor) && minimumMinor > 0
+        ? dollarsFromMinor(minimumMinor, null)
+        : null;
+      return minimum ? `当前最低出价为 ${money(minimum)}。` : "当前出价过低，请刷新榜单后重试。";
     }
-    if (error?.code === "profile_required") {
-      return chinese
-        ? "请贴上主页链接，而不是某一则贴文、Reel、限时动态或群组。"
-        : error.message;
-    }
-    return error?.message || (chinese ? "此网址无法上榜，未产生任何费用。" : "This website could not be listed. No payment was made.");
+    const messages = {
+      checkout_disabled: "实时付款暂未启用，未产生任何费用。",
+      checkout_paused: "此榜单的付款目前暂停，未产生任何费用。",
+      checkout_provider_error: "托管付款页面暂时无法建立，未产生任何费用。",
+      terms_not_accepted: "请先同意《服务条款》，再继续付款。",
+      listing_not_eligible: "此条目目前不符合出价条件，未产生任何费用。",
+      listing_not_found: "找不到此条目，未产生任何费用。",
+      invalid_amount: "请输入有效的整数金额。",
+      invalid_currency: "付款货币无效，未产生任何费用。",
+      currency_mismatch: `此榜单只接受 ${remoteCurrency}。`,
+      idempotency_conflict: "这次付款请求与先前请求冲突，未产生重复费用。",
+      invalid_field: "付款资料不完整或格式不正确，请检查后再试。",
+      internal_error: "付款服务暂时无法完成请求，未产生任何费用。",
+    };
+    return messages[error?.code] || languageText("checkoutUnavailable");
+  }
+
+  function checkoutFailure(message) {
+    const failure = new Error(message);
+    failure.isRankoffMessage = true;
+    return failure;
   }
 
   const CHAT_HOSTS = ["wa.me", "api.whatsapp.com", "chat.whatsapp.com", "whatsapp.com", "t.me", "telegram.me", "telegram.dog"];
@@ -857,9 +1016,12 @@
   function listingDetailsHref(listing) {
     // Permanent, shareable address for a live listing; the id form still redirects here.
     const path = listingDetailPath(listing);
-    if (path) return new URL(path, window.location.origin).toString();
-    const detail = new URL("./listing.html", window.location.href);
-    detail.searchParams.set("id", listing.id);
+    const detail = path
+      ? new URL(path, window.location.origin)
+      : new URL("/listing", window.location.href);
+    if (!path) detail.searchParams.set("id", listing.id);
+    if (state.language === "zh") detail.searchParams.set("lang", "zh");
+    else detail.searchParams.delete("lang");
     return detail.toString();
   }
 
@@ -975,16 +1137,17 @@
     const production = boardSource === "production";
     const chinese = state.language === "zh";
     const ageLabel = listingAgeLabel(listing);
-    const clickLabel = listing.verified ? (chinese ? "已验证点击" : "Verified clicks") : (chinese ? "推荐点击" : "Referral clicks");
+    const clickLabel = chinese
+      ? `${compact.format(getClicks(listing))} 次${listing.verified ? "已验证" : "推荐"}点击`
+      : `${compact.format(getClicks(listing))} ${listing.verified ? "verified" : "referral"} ${getClicks(listing) === 1 ? "click" : "clicks"}`;
     meta.append(
       createElement("span", "sponsored-chip", chinese ? "广告" : "Sponsored"),
       createElement("span", "meta-item category-meta", categoryName(listing.category)),
-      createElement("span", "meta-item", ageLabel),
+      createElement("span", "meta-item listing-age", ageLabel),
       createElement("span", "meta-item", listingHostLabel(listing)),
     );
     if (production) {
-      meta.append(createElement("span", "meta-item listing-clicks", formatClicks(getClicks(listing), chinese)));
-      meta.append(createElement("span", listing.verified ? "verified-chip" : "estimated-chip", clickLabel));
+      meta.append(createElement("span", "meta-item listing-clicks", clickLabel));
     }
     // One-click visit, outbid-style — but through the tracked /go redirect so
     // the click still lands in the listing's verified-clicks count.
@@ -998,7 +1161,7 @@
     details.href = listingDetailsHref(listing);
     details.setAttribute("aria-label", chinese ? `查看 ${listing.name} 的详细信息` : `See details for ${listing.name}`);
     meta.append(details);
-    if (listing.isDemo) meta.append(createElement("span", "local-chip", "Local"));
+    if (listing.isDemo) meta.append(createElement("span", "local-chip", chinese ? "本地演示" : "Local"));
 
     const description = createElement(descriptionTag, "listing-description", listing.description);
     copy.append(listingLink(listing, position), description, meta);
@@ -1313,7 +1476,12 @@
     const rank = createElement("div", "featured-rank", `#${position}`);
     const evidence = createElement("div", "featured-evidence");
     const bid = createElement("div", "featured-metric featured-price");
-    bid.append(createElement("strong", "", money(getBid(listing))));
+    bid.append(
+      createElement("span", "", state.activeWindow === "today"
+        ? (state.language === "zh" ? "近 24 小时总额" : "Past 24h total")
+        : (state.language === "zh" ? "已结算总额" : "Settled total")),
+      createElement("strong", "", money(getBid(listing))),
+    );
     const bidStack = createElement("div", "featured-bid-stack");
     bidStack.append(bid, createShareControl(listing, position));
     evidence.append(bidStack);
@@ -1416,13 +1584,15 @@
       if (minutes < 1440) return `${Math.floor(minutes / 60)}h ago`;
       return `${Math.floor(minutes / 1440)}d ago`;
     }
-    if (state.language === "zh") return item.time === "just now" ? "刚刚" : item.time || "刚刚";
+    // The API's free-form fallback may be English. In Chinese mode use the
+    // neutral current-time label unless a timestamp or explicit timeZh exists.
+    if (state.language === "zh") return "刚刚";
     return item.time || "Just now";
   }
 
   function activityListing(item) {
     const id = String(item.listingId || item.listing_id || "");
-    const name = String(item.listingName || item.listing_name || "A listing");
+    const name = String(item.listingName || item.listing_name || (state.language === "zh" ? "一个条目" : "A listing"));
     const existing = state.listings.find((listing) => listing.id === id || listing.name === name);
     if (existing) return existing;
     return {
@@ -1530,7 +1700,7 @@
   function todayRankingRow(listing, position) {
     const item = createElement("li", "today-ranking-item");
     const rank = createElement("span", "today-ranking-position", `#${position}`);
-    rank.setAttribute("aria-label", `Today rank ${position}`);
+    rank.setAttribute("aria-label", state.language === "zh" ? `今日第 ${position} 名` : `Today rank ${position}`);
     const identity = productIdentity(listing);
     const bid = createElement("strong", "today-ranking-bid", money(getBid(listing, "today")));
     const clicks = createElement("span", "today-ranking-clicks", formatClicks(getClicks(listing, "today"), state.language === "zh"));
@@ -1617,9 +1787,14 @@
     elements.root.dataset.theme = state.theme === "light" ? "light" : "dark";
     document.querySelector('meta[name="theme-color"]')?.setAttribute("content", state.theme === "light" ? "#faf7f5" : "#090a0c");
     if (elements.themeToggle) {
-      elements.themeToggle.textContent = state.theme === "dark" ? "Light" : "Dark";
+      const toLight = state.theme === "dark";
+      elements.themeToggle.textContent = state.language === "zh"
+        ? (toLight ? "浅色" : "深色")
+        : (toLight ? "Light" : "Dark");
       elements.themeToggle.setAttribute("aria-pressed", String(state.theme === "dark"));
-      elements.themeToggle.setAttribute("aria-label", `Switch to ${state.theme === "dark" ? "light" : "dark"} theme`);
+      elements.themeToggle.setAttribute("aria-label", state.language === "zh"
+        ? (toLight ? "切换到浅色主题" : "切换到深色主题")
+        : (toLight ? "Switch to light theme" : "Switch to dark theme"));
     }
   }
 
@@ -1844,7 +2019,9 @@
       // The server screens the submission and returns the existing entry when
       // the hostname is already on the board, so payments always accumulate
       // onto one listing per website.
-      if (!pendingChallenge?.url) throw new Error("Enter your website first.");
+      if (!pendingChallenge?.url) {
+        throw checkoutFailure(state.language === "zh" ? "请先输入你的网站。" : "Enter your website first.");
+      }
       const created = await fetch("./api/v1/listings", {
         method: "POST",
         headers: { Accept: "application/json", "Content-Type": "application/json" },
@@ -1855,7 +2032,7 @@
       });
       const createdPayload = await created.json().catch(() => ({}));
       if (!created.ok || !createdPayload?.listing?.id) {
-        throw new Error(submissionError(createdPayload?.error));
+        throw checkoutFailure(submissionError(createdPayload?.error));
       }
       listingId = createdPayload.listing.id;
     }
@@ -1879,7 +2056,7 @@
     });
     const payload = await response.json().catch(() => ({}));
     if (!response.ok || !payload.checkout_url) {
-      throw new Error(payload?.error?.message || "Hosted checkout is temporarily unavailable. No payment was made.");
+      throw checkoutFailure(checkoutError(payload?.error));
     }
     window.location.assign(payload.checkout_url);
   }
@@ -1996,6 +2173,7 @@
     const detailPath = listingDetailPath({ identity: String(listing.hostname || "") });
     const shareUrl = new URL(detailPath || "/", "https://rankoff.my");
     if (!detailPath) shareUrl.hash = `listing-${String(listing.id || "")}`;
+    if (state.language === "zh") shareUrl.searchParams.set("lang", "zh");
 
     return {
       title: zh ? `${name} — RANKOFF 第 ${rank} 名` : `${name} — #${rank} on RANKOFF`,
@@ -2103,6 +2281,7 @@
       shareUrl.searchParams.set("period", state.activeWindow);
       shareUrl.hash = `listing-${listing.id}`;
     }
+    if (state.language === "zh") shareUrl.searchParams.set("lang", "zh");
 
     const shareData = {
       title: state.language === "zh"
@@ -2431,12 +2610,15 @@
 
     const amount = Number(elements.bidAmount.value);
     if (amount < boardMinimum()) {
-      showToast(`Bid at least ${money(boardMinimum())}.`, "error");
+      showToast(
+        state.language === "zh" ? `最低出价为 ${money(boardMinimum())}。` : `Bid at least ${money(boardMinimum())}.`,
+        "error",
+      );
       return;
     }
 
     if (boardSource === "api") {
-      showToast("Live checkout is not connected for this submission yet. No payment was made.", "error");
+      showToast(languageText("checkoutPreview"), "error");
       return;
     }
 
@@ -2444,12 +2626,12 @@
       const submitButton = elements.bidForm.querySelector('button[type="submit"]');
       if (submitButton) {
         submitButton.disabled = true;
-        submitButton.textContent = "Opening secure checkout…";
+        submitButton.textContent = languageText("checkoutOpening");
       }
       try {
         await startLiveCheckout(amount);
       } catch (error) {
-        showToast(error?.message || "Hosted checkout is unavailable. No payment was made.", "error");
+        showToast(error?.isRankoffMessage ? error.message : languageText("checkoutUnavailable"), "error");
         if (submitButton) {
           submitButton.disabled = false;
           submitButton.textContent = state.language === "zh" ? "继续付款" : "Continue to checkout";
@@ -2462,7 +2644,12 @@
     if (!result) return;
     pendingChallenge = null;
     closeBidDialog({ restoreFocus: false });
-    showToast(`${result.listing.name} is now #${result.rank}.`, "success");
+    showToast(
+      state.language === "zh"
+        ? `${result.listing.name} 目前位居第 ${result.rank} 名。`
+        : `${result.listing.name} is now #${result.rank}.`,
+      "success",
+    );
   });
 
   elements.dialog?.addEventListener("click", (event) => {
@@ -2486,6 +2673,7 @@
   }
 
   render();
+  if (requestedLanguage === "zh" || requestedLanguage === "en") saveState();
   void refreshBoardFromApi();
   {
     const returnLocation = new URL(window.location.href);

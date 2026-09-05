@@ -30,7 +30,7 @@
   // back to the homepage, which silently threw away the page they were reading.
   languageToggle?.addEventListener("click", () => {
     const summary = document.getElementById("zh-summary");
-    if (!summary) { window.location.href = "./index.html"; return; }
+    if (!summary) { window.location.href = "/"; return; }
     // Native anchor navigation is the reliable path: it honours the section's
     // scroll-margin-top and still lands where smooth scrolling is unavailable.
     // scrollIntoView on its own silently no-ops in some engines.
@@ -38,6 +38,11 @@
     summary.scrollIntoView({ block: "start" });
     summary.focus({ preventScroll: true });
   });
-  searchRedirect?.addEventListener("click", () => { window.location.href = "./index.html#search"; });
+  searchRedirect?.addEventListener("click", () => {
+    const target = new URL("/", window.location.origin);
+    if (new URL(window.location.href).searchParams.get("lang") === "zh") target.searchParams.set("lang", "zh");
+    target.hash = "search";
+    window.location.href = `${target.pathname}${target.search}${target.hash}`;
+  });
   syncTheme();
 })();

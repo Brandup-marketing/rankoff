@@ -18,7 +18,7 @@
   border-bottom: 1px solid var(--line);
 }
 
-.owner-brand { display: inline-flex; width: 2.5rem; }
+.owner-brand { display: inline-flex; width: 2.75rem; height: 2.75rem; }
 .owner-brand img { width: 100%; height: auto; }
 
 .owner-eyebrow {
@@ -46,6 +46,7 @@
 .owner-field { display: grid; gap: 0.4rem; max-width: 32rem; font-size: 0.85rem; color: var(--muted); }
 
 .owner-field input {
+  min-height: 2.75rem;
   padding: 0.6rem 0.7rem;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius);
@@ -62,6 +63,7 @@
 .owner-primary,
 .owner-secondary,
 .owner-action {
+  min-height: 2.75rem;
   padding: 0.5rem 0.9rem;
   border-radius: var(--radius);
   border: 1px solid var(--line-strong);
@@ -134,6 +136,8 @@
 .owner-footer { padding-top: 1rem; border-top: 1px solid var(--line); font-size: 0.85rem; }
 
 @media (max-width: 40rem) {
-  .owner-eyebrow { font-size: 0.7rem; letter-spacing: 0.1em; }
+  .owner-eyebrow { font-size: 0.75rem; letter-spacing: 0.1em; }
   .owner-auth { padding: 1rem; }
+  .owner-table th { font-size: 0.75rem; }
+  .owner-footer a { display: inline-flex; min-height: 2.75rem; align-items: center; }
 }

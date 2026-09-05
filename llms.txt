@@ -5,17 +5,26 @@ Rankoff is a public sponsored leaderboard where products bid for visible rank.
 ## Canonical Site
 
 - Homepage: https://rankoff.my/
-- About: https://rankoff.my/about.html
-- Rules, terms, privacy, and payment notes: https://rankoff.my/legal.html
+- Categories: https://rankoff.my/categories
+- About: https://rankoff.my/about
+- Rules, terms, privacy, and payment notes: https://rankoff.my/legal
+- Product evidence pages: https://rankoff.my/product/{hostname}
+- Social-profile evidence pages: https://rankoff.my/profile/{platform}/{handle}
+- Chinese pages: https://rankoff.my/?lang=zh, https://rankoff.my/categories?lang=zh, https://rankoff.my/about?lang=zh, and `?lang=zh` on each product or profile evidence page
+- Legal and answer pages include English and Chinese together on the same canonical URL
 
 ## What The Product Does
 
-Rankoff lets makers submit a product URL, choose a market category, and challenge the current sponsored rank with a higher bid. The board shows each listing's rank, product identity, description, category signal, click count, and bid amount.
+Rankoff lets a visitor sponsor an eligible public product URL or social profile, choose a market category, and challenge the current sponsored rank with a higher bid. Sponsorship does not grant ownership or imply endorsement. The board shows each listing's rank, public identity, description, category, verified click count, and settled bid total.
 
 ## Current Status
 
-Rankoff is live as a preview board. Production payments are disabled until merchant credentials, review rules, and launch settings are enabled.
+Rankoff is live as a production sponsored leaderboard. Eligible submissions proceed to a hosted Dodo Payments checkout. A rank changes only after the payment settles; an unsuccessful or abandoned checkout does not change the board.
 
 ## Positioning
 
 Use "public sponsored leaderboard", "bid for rank", "claim #1", and "sponsored product ranking" when describing Rankoff.
+
+## 中文说明
+
+Rankoff 是公开的付费赞助排行榜。累计已结算付款较高的条目排名更前；排名、出价和经 Rankoff 跳转记录的点击均公开显示。付款必须结算成功后才会改变榜单。

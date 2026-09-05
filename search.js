@@ -9,6 +9,12 @@
   if (!toggle || !search || !input || !results) return;
 
   function isChinese() { return document.documentElement.lang.toLowerCase().startsWith("zh"); }
+  function localizedHref(href) {
+    const target = new URL(href, window.location.href);
+    if (isChinese()) target.searchParams.set("lang", "zh");
+    else target.searchParams.delete("lang");
+    return `${target.pathname}${target.search}${target.hash}`;
+  }
   function copy() {
     return isChinese()
       ? { category: "分类", product: "产品", open: "打开此市场", sponsored: "赞助条目", empty: "没有找到匹配的产品或分类。", placeholder: "搜索产品和分类…", close: "关闭" }
@@ -28,7 +34,6 @@
     const link = document.createElement("a");
     link.className = "search-result";
     link.href = href;
-    link.setAttribute("role", "option");
     const badge = document.createElement("span");
     badge.className = "search-result-kind";
     badge.textContent = kind;
@@ -56,7 +61,7 @@
       const label = button.textContent.trim();
       if (!category || category === "all" || seenCategories.has(category) || !label.toLowerCase().includes(query)) return;
       seenCategories.add(category);
-      matches.push(result(labels.category, label, labels.open, `./index.html?category=${encodeURIComponent(category)}#board`));
+      matches.push(result(labels.category, label, labels.open, localizedHref(`/?category=${encodeURIComponent(category)}#board`)));
     });
     document.querySelectorAll(".category-card").forEach((card) => {
       const link = card.querySelector(".category-card-head a");
@@ -64,7 +69,7 @@
       const category = card.dataset.categoryId;
       if (!link || !heading || !category || seenCategories.has(category) || !heading.textContent.toLowerCase().includes(query)) return;
       seenCategories.add(category);
-      matches.push(result(labels.category, heading.textContent.trim(), labels.open, link.href));
+      matches.push(result(labels.category, heading.textContent.trim(), labels.open, localizedHref(link.href)));
     });
 
     const seenListings = new Set();
@@ -75,14 +80,14 @@
       const searchable = row.textContent.toLowerCase();
       if (!searchable.includes(query)) return;
       seenListings.add(id);
-      matches.push(result(labels.product, name.textContent.trim(), row.querySelector(".listing-description")?.textContent.trim() || labels.sponsored, name.href));
+      matches.push(result(labels.product, name.textContent.trim(), row.querySelector(".listing-description")?.textContent.trim() || labels.sponsored, localizedHref(name.href)));
     });
     document.querySelectorAll(".category-rank-row").forEach((row) => {
       const href = row.href;
       const name = row.querySelector(".category-rank-copy strong");
       if (!href || !name || seenListings.has(href) || !row.textContent.toLowerCase().includes(query)) return;
       seenListings.add(href);
-      matches.push(result(labels.product, name.textContent.trim(), row.querySelector(".category-rank-copy span")?.textContent.trim() || labels.sponsored, href));
+      matches.push(result(labels.product, name.textContent.trim(), row.querySelector(".category-rank-copy span")?.textContent.trim() || labels.sponsored, localizedHref(href)));
     });
 
     if (!matches.length) {

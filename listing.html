@@ -4,36 +4,46 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="View a sponsored product's current Rankoff position, bid, and measured clicks." />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
-    <link rel="canonical" href="https://rankoff.my/listing.html" />
+    <meta name="robots" content="noindex, follow" />
+    <link rel="canonical" href="https://rankoff.my/listing" />
     <meta property="og:site_name" content="RANKOFF" />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_MY" />
+    <meta property="og:locale:alternate" content="zh_MY" />
     <meta property="og:title" content="Sponsored listing | RANKOFF" />
     <meta property="og:description" content="See the bid, rank, and measured attention behind this sponsored listing." />
+    <meta property="og:url" content="https://rankoff.my/listing" />
     <meta property="og:image" content="https://rankoff.my/assets/rankoff-og-card.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Sponsored listing | RANKOFF" />
+    <meta name="twitter:description" content="See the bid, rank, and measured attention behind this sponsored listing." />
+    <meta name="twitter:image" content="https://rankoff.my/assets/rankoff-og-card.png" />
+    <link rel="alternate" hreflang="en" href="https://rankoff.my/listing" />
+    <link rel="alternate" hreflang="zh-Hans" href="https://rankoff.my/listing?lang=zh" />
+    <link rel="alternate" hreflang="x-default" href="https://rankoff.my/listing" />
     <meta name="theme-color" content="#090a0c" />
     <title>Sponsored listing | RANKOFF</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=46" />
-    <link rel="stylesheet" href="./listing.css?v=9" />
+    <link rel="stylesheet" href="./styles.css?v=51" />
+    <link rel="stylesheet" href="./listing.css?v=11" />
   </head>
   <body>
-    <a class="skip-link" href="#listing-detail">Skip to listing details</a>
+    <a class="skip-link" href="#listing-detail" data-copy="skipListing">Skip to listing details</a>
 
     <main class="app-shell listing-shell">
       <header class="topbar listing-topbar" aria-label="RANKOFF">
-        <a class="brand" href="./index.html" aria-label="RANKOFF home">
+        <a class="brand" href="/" aria-label="RANKOFF home">
           <img class="brand-final-logo" src="./assets/rankoff-final-logo.png?v=4" alt="RANKOFF — Bid your way to number one" width="1254" height="1254" />
         </a>
-        <nav class="site-nav" aria-label="Main navigation"><a href="./categories.html">Categories</a><a href="./about.html" data-copy="about">About</a></nav>
+        <nav class="site-nav" aria-label="Main navigation"><a href="/categories" data-copy="categories">Categories</a><a href="/about" data-copy="about">About</a></nav>
         <button class="search-toggle" type="button" data-search-redirect aria-label="Search products and categories"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.6 4.6"></path></svg></button>
         <button class="language-toggle" type="button" data-language-toggle aria-pressed="false">中文</button>
         <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch colour theme" aria-pressed="true">Light</button>
       </header>
 
-      <div class="listing-breadcrumb"><a href="./index.html" data-copy="back">← Back to leaderboard</a></div>
+      <div class="listing-breadcrumb"><a href="/" data-copy="back">← Back to leaderboard</a></div>
 
       <section id="listing-detail" class="listing-detail" aria-live="polite" aria-busy="true">
         <div class="listing-loading" data-loading>
@@ -44,7 +54,7 @@
         <div class="listing-error" data-error hidden>
           <h1 data-copy="notFoundTitle">Listing not found</h1>
           <p data-copy="notFoundCopy">This listing may have moved or is no longer on the public board.</p>
-          <a class="primary-action" href="./index.html" data-copy="returnBoard">Return to the board</a>
+          <a class="primary-action" href="/" data-copy="returnBoard">Return to the board</a>
         </div>
 
         <div class="listing-content" data-content hidden>
@@ -99,15 +109,15 @@
             <p class="claim-ticket-rule" data-copy="rule">Highest total takes #1</p>
             <h2 id="claim-heading"><span data-copy="claimNumberOne">Claim #1 for</span> <strong data-next-bid>—</strong></h2>
             <p data-claim-copy>Put your product above this listing. Your full business description stays visible until someone pays more.</p>
-            <a class="primary-action" href="./index.html#claim" data-claim><span data-copy="startClaim">Start your claim</span> →</a>
+            <a class="primary-action" href="/#claim" data-claim><span data-copy="startClaim">Start your claim</span> →</a>
             <p class="claim-disclosure" data-claim-disclosure>Submissions pass automated checks instantly; listings may be removed after publication if they break the rules.</p>
           </aside>
         </div>
       </section>
 
       <footer class="footer listing-footer">
-        <div class="footer-identity"><a class="footer-brand" href="./index.html" aria-label="RANKOFF home"><img class="footer-logo-image" src="./assets/rankoff-final-logo.png?v=4" alt="RANKOFF" width="1254" height="1254" /></a><span class="footer-credit"><strong>Rankoff</strong><a class="footer-parent" href="https://www.brandupdesignmarketing.com/">A Brandup Marketing product</a></span></div>
-        <span class="footer-links"><a href="./legal.html#rules">Rules</a><a href="./legal.html#terms">Terms</a><a href="./legal.html#privacy">Privacy</a><a href="./legal.html#payments">Payments</a></span>
+        <div class="footer-identity"><a class="footer-brand" href="/" aria-label="RANKOFF home"><img class="footer-logo-image" src="./assets/rankoff-final-logo.png?v=4" alt="RANKOFF" width="1254" height="1254" /></a><span class="footer-credit"><strong>Rankoff</strong><a class="footer-parent" href="https://www.brandupdesignmarketing.com/" data-copy="footerParent">A Brandup Marketing product</a></span></div>
+        <span class="footer-links"><a href="/legal#rules" data-copy="rules">Rules</a><a href="/legal#terms" data-copy="terms">Terms</a><a href="/legal#privacy" data-copy="privacy">Privacy</a><a href="/legal#payments" data-copy="payments">Payments</a></span>
       </footer>
     </main>
 
@@ -153,6 +163,6 @@
     <div class="toast" role="status" aria-live="polite" data-toast></div>
     <script src="./share-card.js?v=5" type="module"></script>
     <script src="./share.js?v=8" defer></script>
-    <script src="./listing.js?v=25" defer></script>
+    <script src="./listing.js?v=28" defer></script>
   </body>
 </html>

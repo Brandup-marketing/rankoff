@@ -197,8 +197,13 @@
 }
 
 @media (max-width: 46rem) {
-  .listing-topbar { grid-template-columns: minmax(0, 1fr) auto auto auto; }
-  .listing-topbar .site-nav { display: none; }
+  .listing-topbar { grid-template-areas: "brand search language theme" "nav nav nav nav"; grid-template-columns: minmax(0, 1fr) auto auto auto; padding-block: .35rem .55rem; }
+  .listing-topbar .brand { grid-area: brand; }
+  .listing-topbar .site-nav { grid-area: nav; display: flex; justify-self: stretch; justify-content: center; margin: 0; padding-top: .15rem; border-top: 1px solid var(--line); }
+  .listing-topbar .search-toggle { grid-area: search; }
+  .listing-topbar .language-toggle { grid-area: language; }
+  .listing-topbar .theme-toggle { grid-area: theme; }
+  .listing-breadcrumb a { display: inline-flex; min-height: 2.75rem; align-items: center; }
   .listing-loading { grid-template-columns: 3.75rem minmax(0, 1fr); }
   .listing-loading span:nth-child(3) { display: none; }
   .listing-loading p { grid-column: 2; margin: -9rem 0.75rem 0; }
@@ -208,13 +213,14 @@
   .listing-identity h1 { font-size: 1.8rem; }
   .listing-story { margin-top: 1.5rem; font-size: 1rem; }
   .evidence-heading { display: grid; gap: 0.75rem; }
-  .evidence-status { justify-self: start; }
+  .evidence-status { justify-self: start; font-size: 0.75rem; }
   .evidence-metrics { grid-template-columns: 1fr 1fr; }
   .evidence-metrics div:nth-child(2) { border-left: 1px solid var(--line); }
   .evidence-metrics div:nth-child(3) { grid-column: 1 / -1; padding-left: 0; border-top: 1px solid var(--line); border-left: 0; }
   .period-comparison { grid-template-columns: 1fr; gap: 0.55rem; }
   .period-comparison div { grid-template-columns: 1fr auto; }
   .period-comparison div + div { padding-left: 0; }
+  .listing-labels, .evidence-qualifier, .evidence-heading p, .evidence-status, .evidence-metrics dt, .period-comparison span, .claim-ticket-rule, .claim-disclosure, .listing-record span { font-size: 0.75rem; }
   .claim-ticket h2 strong { font-size: 2rem; }
 }
 
@@ -233,5 +239,5 @@
 }
 
 .listing-record li { display: flex; gap: 0.45rem; align-items: baseline; }
-.listing-record span { color: var(--ink-soft); font-size: 0.72rem; }
+.listing-record span { color: var(--ink-soft); font-size: 0.75rem; }
 .listing-record strong { font-size: 0.78rem; font-weight: 700; }

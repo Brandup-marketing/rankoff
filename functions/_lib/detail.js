@@ -1,5 +1,5 @@
 import { ApiError, defaultBoardSlug, isProduction, marketLabel, requireDatabase } from "./config.js";
-import { buildProductView, renderProductPage } from "./product.js";
+import { buildProductView, localizeProductShell, normalizeProductLanguage, renderProductPage } from "./product.js";
 import { loadBoard, loadListingRecord, loadPublicBoard } from "./repository.js";
 
 const PAGE_LIMIT = 100;
@@ -23,11 +23,19 @@ async function shell(context) {
   return response.text();
 }
 
-function notFound(html) {
-  const noindexed = html.replace(/<meta name="robots" content="[^"]*"\s*\/>/, '<meta name="robots" content="noindex, follow" />');
+function notFound(html, language = "en") {
+  const locale = normalizeProductLanguage(language);
+  let noindexed = localizeProductShell(String(html).replace(/(href|src)="\.\//g, '$1="/'), locale).replace(/<meta name="robots" content="[^"]*"\s*\/>/, '<meta name="robots" content="noindex, follow" />');
+  if (locale === "zh") {
+    noindexed = noindexed.replace(/<title>[\s\S]*?<\/title>/, "<title>找不到此条目 | RANKOFF</title>");
+    noindexed = noindexed.replace(/<meta name="description" content="[^"]*"\s*\/>/, '<meta name="description" content="此条目可能已移动，或已不在 Rankoff 公开榜单中。" />');
+  }
+  noindexed = noindexed.replace(/(<div class="listing-loading" data-loading)>/, "$1 hidden>");
+  noindexed = noindexed.replace(/(<div class="listing-error" data-error) hidden>/, "$1>");
+  noindexed = noindexed.replace(/(<section id="listing-detail"[^>]*)aria-busy="true"/, '$1aria-busy="false"');
   return new Response(noindexed, {
     status: 404,
-    headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "public, max-age=60, must-revalidate" },
+    headers: { "Content-Type": "text/html; charset=utf-8", "Content-Language": locale === "zh" ? "zh-Hans" : "en", "Cache-Control": "public, max-age=60, must-revalidate" },
   });
 }
 
@@ -35,12 +43,15 @@ function notFound(html) {
 // a website, /profile/<platform>/<handle> for a social account.
 export async function renderDetail(context, identity) {
   const template = await shell(context);
-  if (!identity || !isProduction(context.env)) return notFound(template);
+  // Language is explicit so each indexable representation has a stable URL and
+  // cache key. Unknown values keep the default English representation.
+  const language = normalizeProductLanguage(new URL(context.request.url).searchParams.get("lang"));
+  if (!identity || !isProduction(context.env)) return notFound(template, language);
 
   const db = requireDatabase(context.env);
   const board = await loadBoard(db, defaultBoardSlug(context.env));
   const { match, payload } = await findRanking(db, board, "all", identity);
-  if (!match) return notFound(template);
+  if (!match) return notFound(template, language);
 
   // A listing bought first place in its market; the board's own ordering is the
   // smaller story and the one a merchant would never share.
@@ -57,11 +68,14 @@ export async function renderDetail(context, identity) {
     record,
     marketRank: inMarket.match ? Number(inMarket.match.rank) : null,
     marketName: marketLabel(match.listing?.category),
+    language,
+    nextBidMinor: payload.next_bid_minor,
   });
 
   return new Response(renderProductPage(template, view), {
     headers: {
       "Content-Type": "text/html; charset=utf-8",
+      "Content-Language": language === "zh" ? "zh-Hans" : "en",
       "Cache-Control": "public, max-age=60, must-revalidate",
       Link: `<${view.canonical}>; rel="canonical"`,
     },

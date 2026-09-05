@@ -11,3 +11,10 @@
 .answer-links { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
 .answer-links a { color: var(--blue); font-size: 0.88rem; font-weight: 700; text-decoration: none; }
 .answer-links a:hover { text-decoration: underline; }
+
+@media (max-width: 46rem) {
+  .answers-shell > .topbar { grid-template-areas: "brand" "nav"; grid-template-columns: 1fr; padding-block: .35rem .55rem; }
+  .answers-shell > .topbar .brand { grid-area: brand; }
+  .answers-shell > .topbar .site-nav { grid-area: nav; display: flex; justify-self: stretch; justify-content: center; margin: 0; padding-top: .15rem; border-top: 1px solid var(--line); }
+  .answer-article .faq summary, .answer-links a { display: flex; min-height: 2.75rem; align-items: center; }
+}

@@ -32,6 +32,16 @@ export function buyerFrom(data) {
   };
 }
 
+export function indexNowUrls(origin, listingPath = "") {
+  return [
+    `${origin}/`,
+    `${origin}/?lang=zh`,
+    `${origin}/sitemap.xml`,
+    listingPath ? `${origin}${listingPath}` : "",
+    listingPath ? `${origin}${listingPath}?lang=zh` : "",
+  ];
+}
+
 export async function onRequestPost(context) {
   if (!isProduction(context.env)) throw new ApiError(503, "production_only", "Webhooks are disabled on the preview board.");
   const rawBody = await readText(context.request, {
@@ -107,7 +117,7 @@ export async function onRequestPost(context) {
     const origin = new URL(context.request.url).origin;
     const listingPath = bid.hostname ? profilePath(String(bid.hostname)) : "";
     context.waitUntil(
-      pingIndexNow(origin, [`${origin}/`, `${origin}/sitemap.xml`, listingPath ? `${origin}${listingPath}` : ""])
+      pingIndexNow(origin, indexNowUrls(origin, listingPath))
         .catch(() => false),
     );
   }

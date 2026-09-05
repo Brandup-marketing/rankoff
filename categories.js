@@ -2,6 +2,8 @@
   "use strict";
 
   const STORE_KEY = "rankoff-mvp-demo-v3";
+  const canonicalLink = document.querySelector('link[rel="canonical"]');
+  const initialCanonical = canonicalLink?.href || "https://rankoff.my/categories";
   const compact = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
   const boardCurrencyFormat = (code) => new Intl.NumberFormat(code === "MYR" ? "en-MY" : "en-US", { style: "currency", currency: code || "USD", maximumFractionDigits: 0 });
   let currency = boardCurrencyFormat("USD");
@@ -32,14 +34,14 @@
     return aliases;
   }, {}));
   const fallbackListings = [
-    { id: "model-harbor", title: "Model Harbor", description: "A release desk for production AI models, approvals, and customer notices.", url: "https://modelharbor.example", category: "Agents", bid: 2480, todayBid: 620, clicks: 2840, age: "18h" },
-    { id: "trackline", title: "Trackline", description: "Campaign reporting for teams that need a clean answer to what moved.", url: "https://trackline.example", category: "Marketing", bid: 2160, todayBid: 810, clicks: 1910, age: "7h" },
-    { id: "patchnote", title: "Patchnote", description: "Release notes that turn product changes into useful customer updates.", url: "https://patchnote.example", category: "Developer", bid: 1930, todayBid: 554, clicks: 2180, age: "1d" },
-    { id: "canvas-relay", title: "Canvas Relay", description: "Creative hand-offs, feedback, and approved files in one focused space.", url: "https://canvasrelay.example", category: "Design", bid: 1180, todayBid: 296, clicks: 1490, age: "2d" },
-    { id: "switchboard", title: "Switchboard", description: "A routing layer for the AI tools already inside an operator stack.", url: "https://switchboard.example", category: "Agents", bid: 940, todayBid: 735, clicks: 1210, age: "4h" },
-    { id: "focus-coda", title: "Focus Coda", description: "A launch-day workspace for teams shipping more often than once a quarter.", url: "https://focuscoda.example", category: "Productivity", bid: 860, todayBid: 241, clicks: 1080, age: "12h" },
-    { id: "sandbox-kit", title: "Sandbox Kit", description: "Disposable preview environments for showing work before it goes live.", url: "https://sandboxkit.example", category: "Developer", bid: 650, todayBid: 202, clicks: 920, age: "3d" },
-    { id: "palette-runner", title: "Palette Runner", description: "Brand-safe creative variants for small teams that need fast campaigns.", url: "https://paletterunner.example", category: "Design", bid: 520, todayBid: 188, clicks: 730, age: "9h" },
+    { id: "model-harbor", title: "Model Harbor", description: "A release desk for production AI models, approvals, and customer notices.", descriptionZh: "用于管理生产环境 AI 模型、审批与客户通知的发布工作台。", url: "https://modelharbor.example", category: "Agents", bid: 2480, todayBid: 620, clicks: 2840, age: "18h" },
+    { id: "trackline", title: "Trackline", description: "Campaign reporting for teams that need a clean answer to what moved.", descriptionZh: "为需要清楚判断成效来源的团队提供营销活动报告。", url: "https://trackline.example", category: "Marketing", bid: 2160, todayBid: 810, clicks: 1910, age: "7h" },
+    { id: "patchnote", title: "Patchnote", description: "Release notes that turn product changes into useful customer updates.", descriptionZh: "把产品更新变成实用客户通知的版本说明工具。", url: "https://patchnote.example", category: "Developer", bid: 1930, todayBid: 554, clicks: 2180, age: "1d" },
+    { id: "canvas-relay", title: "Canvas Relay", description: "Creative hand-offs, feedback, and approved files in one focused space.", descriptionZh: "在一个专注空间中完成创意交接、反馈与已批准文件管理。", url: "https://canvasrelay.example", category: "Design", bid: 1180, todayBid: 296, clicks: 1490, age: "2d" },
+    { id: "switchboard", title: "Switchboard", description: "A routing layer for the AI tools already inside an operator stack.", descriptionZh: "为运营工具栈中已有的 AI 工具提供统一路由层。", url: "https://switchboard.example", category: "Agents", bid: 940, todayBid: 735, clicks: 1210, age: "4h" },
+    { id: "focus-coda", title: "Focus Coda", description: "A launch-day workspace for teams shipping more often than once a quarter.", descriptionZh: "为高频发布团队打造的上线日工作空间。", url: "https://focuscoda.example", category: "Productivity", bid: 860, todayBid: 241, clicks: 1080, age: "12h" },
+    { id: "sandbox-kit", title: "Sandbox Kit", description: "Disposable preview environments for showing work before it goes live.", descriptionZh: "用于在正式上线前展示工作的临时预览环境。", url: "https://sandboxkit.example", category: "Developer", bid: 650, todayBid: 202, clicks: 920, age: "3d" },
+    { id: "palette-runner", title: "Palette Runner", description: "Brand-safe creative variants for small teams that need fast campaigns.", descriptionZh: "为需要快速制作营销素材的小团队生成符合品牌规范的创意版本。", url: "https://paletterunner.example", category: "Design", bid: 520, todayBid: 188, clicks: 730, age: "9h" },
   ];
 
   const elements = {
@@ -48,7 +50,7 @@
     todayRows: [],
     activeWindow: "all",
     language: "en",
-    mode: "preview",
+    mode: /^https?:$/.test(window.location.protocol) ? "loading" : "preview",
     status: document.querySelector("[data-category-status]"),
     count: document.querySelector("[data-category-count]"),
     active: document.querySelector("[data-active-categories]"),
@@ -59,16 +61,46 @@
   };
 
   const staticCopy = {
-    en: { skipCategories: "Skip to categories", board: "Board", categories: "Categories", about: "About", rules: "Rules", privacy: "Privacy", seeBoard: "See board", browseMarkets: "Browse the markets", heroCopy: "Every category has its own ranking. Choose one to see its leaders.", activeHeading: "Most active categories", allHeading: "All categories", allCopy: "Choose a market to view its live board." },
-    zh: { skipCategories: "跳至分类", board: "榜单", categories: "分类", about: "关于", rules: "规则", privacy: "隐私", seeBoard: "查看榜单", browseMarkets: "浏览市场", heroCopy: "每个类别都有自己的榜单。选择一个市场，看看谁在领先。", activeHeading: "最活跃的分类", allHeading: "全部分类", allCopy: "选择一个市场，查看其实时榜单。" },
+    en: { skipCategories: "Skip to categories", board: "Board", categories: "Categories", about: "About", footerParent: "A Brandup Marketing product", rules: "Rules", terms: "Terms", privacy: "Privacy", payments: "Payments", seeBoard: "See board", browseMarkets: "Browse the markets", heroCopy: "Every category has its own ranking. Choose one to see its leaders.", activeHeading: "Most active categories", allHeading: "All categories", allCopy: "Choose a market to view its live board." },
+    zh: { skipCategories: "跳至分类", board: "榜单", categories: "分类", about: "关于", footerParent: "Brandup Marketing 旗下产品", rules: "规则", terms: "条款", privacy: "隐私", payments: "付款", seeBoard: "查看榜单", browseMarkets: "浏览市场", heroCopy: "每个类别都有自己的榜单。选择一个市场，看看谁在领先。", activeHeading: "最活跃的分类", allHeading: "全部分类", allCopy: "选择一个市场，查看其实时榜单。" },
   };
+  const pageMetadata = {
+    en: {
+      title: "RANKOFF | Categories",
+      description: "Explore Rankoff categories and see which products lead each sponsored market.",
+      socialDescription: "Every category has its own public sponsored leaderboard.",
+    },
+    zh: {
+      title: "RANKOFF｜分类",
+      description: "浏览 Rankoff 分类，查看每个赞助市场中领先的产品。",
+      socialDescription: "每个分类都有自己的公开赞助榜单。",
+    },
+  };
+  const accessibilityCopy = {
+    en: {
+      home: "RANKOFF home", tagline: "RANKOFF — Bid your way to number one", navigation: "Main navigation", search: "Search products and categories",
+      boardStatus: "Board status", timeframe: "Category timeframe", allMarkets: "All market categories", switchChinese: "Switch to Chinese", switchLight: "Switch to light theme", switchDark: "Switch to dark theme",
+    },
+    zh: {
+      home: "RANKOFF 首页", tagline: "RANKOFF — 竞价登上第 1 名", navigation: "主导航", search: "搜索产品和分类",
+      boardStatus: "榜单状态", timeframe: "分类时间范围", allMarkets: "全部市场分类", switchChinese: "切换为中文", switchLight: "切换至浅色主题", switchDark: "切换至深色主题",
+    },
+  };
+
+  function languageFromUrl() {
+    try {
+      const value = new URL(window.location.href).searchParams.get("lang");
+      return value === "zh" || value === "en" ? value : "";
+    } catch { return ""; }
+  }
 
   function readPreferences() {
     try {
       const saved = JSON.parse(window.localStorage.getItem(STORE_KEY));
-      elements.language = saved?.language === "zh" ? "zh" : "en";
+      elements.language = languageFromUrl() || (saved?.language === "zh" ? "zh" : "en");
       elements.root.dataset.theme = saved?.theme === "light" ? "light" : "dark";
     } catch {
+      elements.language = languageFromUrl() || "en";
       elements.root.dataset.theme = "dark";
     }
   }
@@ -109,8 +141,9 @@
   function normalizeRows(payload, period) {
     return Array.isArray(payload?.rankings) ? payload.rankings.map((entry) => ({
       id: String(entry?.listing?.id || ""),
+      identity: String(entry?.listing?.hostname || ""),
       title: String(entry?.listing?.title || entry?.listing?.hostname || "Listing"),
-      description: String(entry?.listing?.description || "Sponsored listing on Rankoff."),
+      description: String(entry?.listing?.description || ""),
       url: String(entry?.listing?.url || "https://rankoff.my"),
       category: String(entry?.listing?.category || "Other"),
       bid: Math.max(1, Math.round(Number(entry?.bid?.amount_minor || 100) / 100)),
@@ -150,7 +183,29 @@
     return selectedRows().filter((row) => canonicalCategory(row.category) === id).sort((a, b) => b.bid - a.bid || a.title.localeCompare(b.title));
   }
 
-  function hrefFor(id) { return `./index.html?category=${encodeURIComponent(id)}#board`; }
+  function descriptionFor(row) {
+    if (elements.language === "zh" && row.descriptionZh) return row.descriptionZh;
+    if (row.description) return row.description;
+    return elements.language === "zh" ? "Rankoff 上的赞助条目。" : "Sponsored listing on Rankoff.";
+  }
+
+  function categoryListingHref(row) {
+    const identity = String(row?.identity || "");
+    const separator = identity.indexOf(":");
+    if (separator > 0) {
+      const platform = identity.slice(0, separator);
+      const handle = identity.slice(separator + 1);
+      if (/^(?:instagram|tiktok|facebook|x|linktree|youtube|linkedin|xiaohongshu)$/.test(platform)
+        && /^[a-z0-9](?:[a-z0-9._-]{0,58}[a-z0-9])?$/.test(handle)) {
+        return `/profile/${platform}/${handle}`;
+      }
+    } else if (/^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+$/.test(identity)) {
+      return `/product/${identity}`;
+    }
+    return `/listing?id=${encodeURIComponent(row.id)}`;
+  }
+
+  function hrefFor(id) { return `/?category=${encodeURIComponent(id)}#board`; }
 
   function iconFor(config, className = "category-icon") {
     const icon = document.createElement("span");
@@ -250,7 +305,7 @@
       rows.forEach((row, index) => {
         const link = document.createElement("a");
         link.className = "category-rank-row";
-        link.href = `./listing.html?id=${encodeURIComponent(row.id)}`;
+        link.href = categoryListingHref(row);
         const rank = document.createElement("span");
         rank.className = "category-rank";
         rank.textContent = `#${index + 1}`;
@@ -259,7 +314,7 @@
         const name = document.createElement("strong");
         name.textContent = row.title;
         const description = document.createElement("span");
-        description.textContent = row.description;
+        description.textContent = descriptionFor(row);
         copy.append(name, description);
         const bid = document.createElement("strong");
         bid.className = "category-rank-bid";
@@ -272,30 +327,90 @@
     return card;
   }
 
+  function urlWithLanguage(href, nextLanguage = elements.language) {
+    const url = new URL(href, window.location.href);
+    if (nextLanguage === "zh") url.searchParams.set("lang", "zh");
+    else url.searchParams.delete("lang");
+    return url;
+  }
+
+  function syncLanguageUrl() {
+    const url = urlWithLanguage(window.location.href);
+    if (url.href !== window.location.href && window.history?.replaceState) window.history.replaceState(window.history.state, "", url.href);
+  }
+
+  function syncInternalLinks() {
+    document.querySelectorAll("a[href]").forEach((anchor) => {
+      const raw = anchor.getAttribute("href");
+      if (!raw || raw.startsWith("#")) return;
+      try {
+        const url = new URL(raw, window.location.href);
+        if (url.origin !== window.location.origin) return;
+        anchor.href = /^\/(?:legal|answers\/)/.test(url.pathname) ? urlWithLanguage(url, "en").href : urlWithLanguage(url).href;
+      } catch { /* leave malformed or non-web links untouched */ }
+    });
+  }
+
+  function setMetaContent(selector, value) { document.querySelector(selector)?.setAttribute("content", value); }
+
+  function updateMetadata() {
+    const metadata = pageMetadata[elements.language];
+    const canonical = urlWithLanguage(initialCanonical);
+    document.title = metadata.title;
+    canonicalLink?.setAttribute("href", canonical.href);
+    setMetaContent('meta[name="description"]', metadata.description);
+    setMetaContent('meta[property="og:locale"]', elements.language === "zh" ? "zh_MY" : "en_MY");
+    setMetaContent('meta[property="og:title"]', metadata.title);
+    setMetaContent('meta[property="og:description"]', metadata.socialDescription);
+    setMetaContent('meta[property="og:url"]', canonical.href);
+    setMetaContent('meta[name="twitter:title"]', metadata.title);
+    setMetaContent('meta[name="twitter:description"]', metadata.socialDescription);
+    document.querySelector('link[rel="alternate"][hreflang="en"]')?.setAttribute("href", urlWithLanguage(initialCanonical, "en").href);
+    document.querySelector('link[rel="alternate"][hreflang="zh-Hans"]')?.setAttribute("href", urlWithLanguage(initialCanonical, "zh").href);
+    document.querySelector('link[rel="alternate"][hreflang="x-default"]')?.setAttribute("href", urlWithLanguage(initialCanonical, "en").href);
+  }
+
+  function updateAccessibility() {
+    const accessible = accessibilityCopy[elements.language];
+    document.querySelectorAll(".brand, .footer-brand").forEach((node) => node.setAttribute("aria-label", accessible.home));
+    document.querySelector(".brand-final-logo")?.setAttribute("alt", accessible.tagline);
+    document.querySelector(".categories-nav")?.setAttribute("aria-label", accessible.navigation);
+    document.querySelector(".search-toggle")?.setAttribute("aria-label", accessible.search);
+    document.querySelector(".category-status")?.setAttribute("aria-label", accessible.boardStatus);
+    document.querySelector(".time-tabs")?.setAttribute("aria-label", accessible.timeframe);
+    elements.grid?.setAttribute("aria-label", accessible.allMarkets);
+  }
+
   function render() {
     applyLanguageAttribute();
     const rows = selectedRows();
     const labels = staticCopy[elements.language];
     document.querySelectorAll("[data-copy]").forEach((node) => { if (labels[node.dataset.copy]) node.textContent = labels[node.dataset.copy]; });
-    elements.grid?.setAttribute("aria-label", elements.language === "zh" ? "全部市场分类" : "All market categories");
+    updateMetadata();
+    updateAccessibility();
     if (elements.status) elements.status.textContent = elements.language === "zh"
-      ? (elements.mode === "production" ? "实时榜单" : elements.mode === "api" ? "已连接预览" : "预览榜单")
-      : "Live board";
-    if (elements.count) elements.count.textContent = elements.language === "zh" ? `${rows.length} 个条目` : `${rows.length} ${rows.length === 1 ? "listing" : "listings"}`;
+      ? (elements.mode === "production" ? "实时榜单" : elements.mode === "api" ? "已连接预览" : elements.mode === "loading" ? "正在载入榜单" : elements.mode === "error" ? "榜单暂时无法读取" : "预览榜单")
+      : (elements.mode === "production" ? "Live board" : elements.mode === "api" ? "Connected preview" : elements.mode === "loading" ? "Loading board" : elements.mode === "error" ? "Board unavailable" : "Preview board");
+    if (elements.count) elements.count.textContent = elements.mode === "loading"
+      ? "—"
+      : elements.mode === "error"
+        ? (elements.language === "zh" ? "请稍后重试" : "Try again shortly")
+        : elements.language === "zh" ? `${rows.length} 个条目` : `${rows.length} ${rows.length === 1 ? "listing" : "listings"}`;
     elements.windowButtons.forEach((button) => {
       const active = button.dataset.categoryWindow === elements.activeWindow;
       button.setAttribute("aria-pressed", String(active));
       button.textContent = elements.language === "zh" ? (button.dataset.categoryWindow === "today" ? "今日" : "全部时间") : (button.dataset.categoryWindow === "today" ? "Today" : "All-time");
     });
     if (elements.languageToggle) {
-      elements.languageToggle.textContent = elements.language === "zh" ? "CN" : "EN";
-      elements.languageToggle.setAttribute("aria-label", elements.language === "zh" ? "Switch to English" : "切换中文");
+      elements.languageToggle.textContent = elements.language === "zh" ? "EN" : "中文";
+      elements.languageToggle.setAttribute("aria-label", elements.language === "zh" ? "切换为英文" : accessibilityCopy.en.switchChinese);
       elements.languageToggle.setAttribute("aria-pressed", String(elements.language === "zh"));
     }
     if (elements.themeToggle) {
       const dark = elements.root.dataset.theme !== "light";
-      elements.themeToggle.textContent = dark ? "Light" : "Dark";
-      elements.themeToggle.setAttribute("aria-label", `Switch to ${dark ? "light" : "dark"} theme`);
+      const accessible = accessibilityCopy[elements.language];
+      elements.themeToggle.textContent = elements.language === "zh" ? (dark ? "浅色" : "深色") : (dark ? "Light" : "Dark");
+      elements.themeToggle.setAttribute("aria-label", dark ? accessible.switchLight : accessible.switchDark);
       elements.themeToggle.setAttribute("aria-pressed", String(dark));
     }
     renderActive();
@@ -305,10 +420,11 @@
       return card;
     }));
     window.dispatchEvent(new CustomEvent("rankoff:content-updated"));
+    syncInternalLinks();
   }
 
   function applyLanguageAttribute() {
-    elements.root.lang = elements.language === "zh" ? "zh-CN" : "en";
+    elements.root.lang = elements.language === "zh" ? "zh-Hans" : "en";
   }
 
   function savePreferences() {
@@ -323,24 +439,40 @@
     elements.todayRows = fallbackRows().map((row) => ({ ...row, bid: row.todayBid, clicks: row.todayClicks || 0, period: "today" }));
     if (!/^https?:$/.test(window.location.protocol)) return;
     try {
-      const [allResponse, todayResponse] = await Promise.all([
-        fetch("./api/v1/board?board=global&period=all&limit=50", { headers: { Accept: "application/json" }, cache: "no-store" }),
-        fetch("./api/v1/board?board=global&period=today&limit=50", { headers: { Accept: "application/json" }, cache: "no-store" }),
+      const [allResult, todayResult] = await Promise.allSettled([
+        fetch("./api/v1/board?board=global&period=all&limit=50", { headers: { Accept: "application/json" }, cache: "no-store" }).then((response) => {
+          if (!response.ok) throw new Error(`all board ${response.status}`);
+          return response.json();
+        }),
+        fetch("./api/v1/board?board=global&period=today&limit=50", { headers: { Accept: "application/json" }, cache: "no-store" }).then((response) => {
+          if (!response.ok) throw new Error(`today board ${response.status}`);
+          return response.json();
+        }),
       ]);
-      if (!allResponse.ok || !todayResponse.ok) return;
-      const [allPayload, todayPayload] = await Promise.all([allResponse.json(), todayResponse.json()]);
+      if (allResult.status !== "fulfilled") {
+        elements.mode = "error";
+        render();
+        return;
+      }
+      const allPayload = allResult.value;
+      const todayPayload = todayResult.status === "fulfilled" ? todayResult.value : { rankings: [] };
       currency = boardCurrencyFormat(String(allPayload.board?.currency || "USD").toUpperCase());
       const allRows = normalizeRows(allPayload, "all");
       const todayRows = normalizeRows(todayPayload, "today");
       const productionBoard = allPayload.mode === "production";
-      if (productionBoard || allRows.length) elements.allRows = mergeRows(allRows, todayRows);
-      if (productionBoard || todayRows.length) elements.todayRows = todayRows;
+      elements.allRows = mergeRows(allRows, todayRows);
+      elements.todayRows = todayRows;
       elements.mode = productionBoard ? "production" : "api";
       render();
-    } catch { /* keep the local preview */ }
+    } catch {
+      elements.mode = "error";
+      render();
+    }
   }
 
   readPreferences();
+  savePreferences();
+  syncLanguageUrl();
   render();
   void loadBoard();
   elements.windowButtons.forEach((button) => button.addEventListener("click", () => {
@@ -350,6 +482,7 @@
   elements.languageToggle?.addEventListener("click", () => {
     elements.language = elements.language === "zh" ? "en" : "zh";
     savePreferences();
+    syncLanguageUrl();
     render();
   });
   elements.themeToggle?.addEventListener("click", () => {

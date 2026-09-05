@@ -1,5 +1,5 @@
 import { defaultBoardSlug, isProduction, requireDatabase } from "./_lib/config.js";
-import { SITE_ORIGIN, escapeHtml, normalizeSlug, productPath } from "./_lib/product.js";
+import { SITE_ORIGIN, canonicalDetailPath, escapeHtml } from "./_lib/product.js";
 import { loadBoard, loadPublicBoard } from "./_lib/repository.js";
 
 const PAGE_LIMIT = 100;
@@ -8,7 +8,7 @@ const MAX_PAGES = 10;
 // The owner view is noindex and shows real customer contact detail. It must
 // never be advertised to a crawler, so the assembled document is filtered
 // rather than trusted: a hand-edited sitemap.xml cannot leak it by accident.
-const PRIVATE_PATHS = Object.freeze(["/admin.html"]);
+const PRIVATE_PATHS = Object.freeze(["/admin", "/admin.html"]);
 
 export function stripPrivatePaths(xml) {
   return String(xml).replace(/[ \t]*<url>[\s\S]*?<\/url>\n?/g, (block) => {
@@ -26,13 +26,19 @@ export function stripPrivatePaths(xml) {
 export function productEntries(rankings) {
   return rankings
     .map((entry) => ({
-      hostname: normalizeSlug(entry.listing?.hostname),
+      path: canonicalDetailPath(entry.listing?.hostname),
       lastmod: String(entry.bid?.settled_at || "").slice(0, 10),
     }))
-    .filter((entry) => entry.hostname)
-    .map((entry) => `  <url>\n    <loc>${escapeHtml(`${SITE_ORIGIN}${productPath(entry.hostname)}`)}</loc>\n`
-      + (/^\d{4}-\d{2}-\d{2}$/.test(entry.lastmod) ? `    <lastmod>${entry.lastmod}</lastmod>\n` : "")
-      + `    <changefreq>daily</changefreq>\n    <priority>0.6</priority>\n  </url>`)
+    .filter((entry) => entry.path)
+    .map((entry) => {
+      const canonical = `${SITE_ORIGIN}${entry.path}`;
+      return [canonical, `${canonical}?lang=zh`].map((location) => `  <url>\n    <loc>${escapeHtml(location)}</loc>\n`
+        + `    <xhtml:link rel="alternate" hreflang="en" href="${escapeHtml(canonical)}" />\n`
+        + `    <xhtml:link rel="alternate" hreflang="zh-Hans" href="${escapeHtml(`${canonical}?lang=zh`)}" />\n`
+        + `    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeHtml(canonical)}" />\n`
+        + (/^\d{4}-\d{2}-\d{2}$/.test(entry.lastmod) ? `    <lastmod>${entry.lastmod}</lastmod>\n` : "")
+        + `    <changefreq>daily</changefreq>\n    <priority>0.6</priority>\n  </url>`).join("\n");
+    })
     .join("\n");
 }
 

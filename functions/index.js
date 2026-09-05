@@ -2,23 +2,23 @@ import { defaultBoardSlug, isProduction, marketLabel, requireDatabase } from "./
 import { escapeHtml, formatMoney } from "./_lib/product.js";
 import { displayName, profilePath } from "./_lib/platform.js";
 import { loadBoard, loadPublicBoard } from "./_lib/repository.js";
+import { localizeStaticPage } from "./_lib/static-localization.js";
 
 const LIMIT = 50;
 
 // The board is drawn by the page's own JavaScript, which a search engine or an
 // AI crawler may never run: rankoff.my read as a leaderboard with nothing on it.
 // The same rows are written into the HTML here, and the client replaces them.
-export function renderBoard(rankings, currency) {
+export function renderBoard(rankings, currency, language = "en") {
   if (!rankings.length) return "";
   const rows = rankings.map((entry) => {
     const listing = entry.listing || {};
     const identity = String(listing.hostname || "");
+    const englishBoardNote = `Sponsored · ${marketLabel(listing.category)} · ${formatMoney(entry.bid?.amount_minor, currency)} settled · ${Number(entry.clicks || 0)} verified clicks`;
     return `<li>`
       + `<span class="board-seo-rank">#${escapeHtml(entry.rank)}</span> `
-      + `<a href="${escapeHtml(profilePath(identity))}">${escapeHtml(listing.title || displayName(identity))}</a> `
-      + `<span class="board-seo-note">Sponsored · ${escapeHtml(marketLabel(listing.category))} · `
-      + `${escapeHtml(formatMoney(entry.bid?.amount_minor, currency))} settled · `
-      + `${escapeHtml(Number(entry.clicks || 0))} verified clicks</span>`
+      + `<a href="${escapeHtml(`${profilePath(identity)}${language === "zh" ? "?lang=zh" : ""}`)}">${escapeHtml(listing.title || displayName(identity))}</a> `
+      + `<span class="board-seo-note" data-english-copy="${escapeHtml(englishBoardNote)}">${escapeHtml(englishBoardNote)}</span>`
       + `</li>`;
   }).join("");
   return `<ol class="board-seo-list">${rows}</ol>`;
@@ -26,6 +26,7 @@ export function renderBoard(rankings, currency) {
 
 export async function onRequestGet(context) {
   const url = new URL(context.request.url);
+  const language = url.searchParams.get("lang") === "zh" ? "zh" : "en";
   // The home page must never depend on this function succeeding.
   if (!context.env.ASSETS?.fetch) return context.next();
   let html;
@@ -43,7 +44,7 @@ export async function onRequestGet(context) {
       const board = await loadBoard(db, defaultBoardSlug(context.env));
       const payload = await loadPublicBoard(db, board, { category: "all", period: "all", limit: LIMIT, page: 1 });
       const currency = String(payload.board?.currency || "MYR").toUpperCase();
-      const markup = renderBoard(payload.rankings, currency);
+      const markup = renderBoard(payload.rankings, currency, language);
       if (markup) {
         html = html.replace(
           /(<div class="board-list" data-board-list[^>]*>)(<\/div>)/,
@@ -63,7 +64,8 @@ export async function onRequestGet(context) {
     }
   }
 
+  html = localizeStaticPage(html, "home", language);
   return new Response(html, {
-    headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "public, max-age=60, must-revalidate" },
+    headers: { "Content-Type": "text/html; charset=utf-8", "Content-Language": language === "zh" ? "zh-Hans" : "en", "Cache-Control": "public, max-age=60, must-revalidate" },
   });
 }

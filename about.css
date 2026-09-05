@@ -44,9 +44,21 @@ h2 { margin: 0; font-size: clamp(1.8rem, 4vw, 3.2rem); letter-spacing: -0.03em; 
 .timeline { padding: 7rem 0 5rem; }
 .timeline-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2.5rem; }
 .timeline-grid div { padding-top: 1rem; border-top: 1px solid var(--line); }
-.timeline-grid span { color: var(--accent); font-size: 0.72rem; font-weight: 850; text-transform: uppercase; }
+.timeline-grid span { color: var(--accent); font-size: 0.75rem; font-weight: 850; text-transform: uppercase; }
 .timeline-grid h3 { margin: 1rem 0 0.4rem; font-size: 1.1rem; }
 .timeline-grid p { margin: 0; color: var(--muted); font-size: 0.86rem; }
 .about-footer { margin-top: 0; }
-@media (max-width: 44rem) { .about-shell { width: min(calc(100% - 1rem), 76rem); } .about-header { grid-template-columns: minmax(0,1fr) auto auto auto; gap: .3rem; } .about-header nav { display: none; } .about-hero { padding: 3.5rem 0 4rem; } .origin-grid, .live-state { grid-template-columns: 1fr; gap: 2.5rem; } .about-disclosure { grid-column: auto; margin: -1.5rem 0 0; } .timeline-grid { grid-template-columns: 1fr; gap: 2rem; } }
+@media (max-width: 44rem) {
+  .about-shell { width: min(calc(100% - 1rem), 76rem); }
+  .about-header { grid-template-areas: "brand search language theme" "nav nav nav nav"; grid-template-columns: minmax(0,1fr) auto auto auto; gap: .3rem; padding-block: .35rem .55rem; }
+  .about-header .brand { grid-area: brand; }
+  .about-header nav { grid-area: nav; display: flex; justify-self: stretch; justify-content: center; padding-top: .15rem; border-top: 1px solid var(--line); }
+  .about-header .search-toggle { grid-area: search; }
+  .about-header .language-toggle { grid-area: language; }
+  .about-header .theme-toggle { grid-area: theme; }
+  .about-hero { padding: 3.5rem 0 4rem; }
+  .origin-grid, .live-state { grid-template-columns: 1fr; gap: 2.5rem; }
+  .about-disclosure { grid-column: auto; margin: -1.5rem 0 0; }
+  .timeline-grid { grid-template-columns: 1fr; gap: 2rem; }
+}
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }

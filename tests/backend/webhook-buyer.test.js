@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buyerFrom } from "../../functions/api/webhooks/dodo.js";
+import { buyerFrom, indexNowUrls } from "../../functions/api/webhooks/dodo.js";
 
 test("the buyer is lifted out of a real payment.succeeded payload", () => {
   const buyer = buyerFrom({
@@ -30,4 +30,14 @@ test('the provider\'s literal "None" is not stored as contact detail', () => {
   const buyer = buyerFrom({ customer: { name: "None" }, card_last_four: "None" });
   assert.equal(buyer.name, null);
   assert.equal(buyer.cardLastFour, null);
+});
+
+test("a settled listing notifies both indexable languages", () => {
+  assert.deepEqual(indexNowUrls("https://rankoff.my", "/profile/instagram/agent_ali"), [
+    "https://rankoff.my/",
+    "https://rankoff.my/?lang=zh",
+    "https://rankoff.my/sitemap.xml",
+    "https://rankoff.my/profile/instagram/agent_ali",
+    "https://rankoff.my/profile/instagram/agent_ali?lang=zh",
+  ]);
 });

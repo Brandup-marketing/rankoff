@@ -5,33 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Explore Rankoff categories and see which products lead each sponsored market." />
     <meta name="robots" content="index, follow, max-image-preview:large" />
-    <link rel="canonical" href="https://rankoff.my/categories.html" />
+    <link rel="canonical" href="https://rankoff.my/categories" />
     <meta property="og:site_name" content="RANKOFF" />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_MY" />
+    <meta property="og:locale:alternate" content="zh_MY" />
     <meta property="og:title" content="RANKOFF | Categories" />
     <meta property="og:description" content="Every category has its own public sponsored leaderboard." />
-    <meta property="og:url" content="https://rankoff.my/categories.html" />
+    <meta property="og:url" content="https://rankoff.my/categories" />
     <meta property="og:image" content="https://rankoff.my/assets/rankoff-og-card.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="RANKOFF | Categories" />
+    <meta name="twitter:description" content="Every category has its own public sponsored leaderboard." />
+    <meta name="twitter:image" content="https://rankoff.my/assets/rankoff-og-card.png" />
+    <link rel="alternate" hreflang="en" href="https://rankoff.my/categories" />
+    <link rel="alternate" hreflang="zh-Hans" href="https://rankoff.my/categories?lang=zh" />
+    <link rel="alternate" hreflang="x-default" href="https://rankoff.my/categories" />
     <meta name="theme-color" content="#090a0c" />
     <title>RANKOFF | Categories</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=46" />
-    <link rel="stylesheet" href="./categories.css?v=6" />
+    <link rel="stylesheet" href="./styles.css?v=51" />
+    <link rel="stylesheet" href="./categories.css?v=8" />
   </head>
   <body>
     <a class="skip-link" href="#categories" data-copy="skipCategories">Skip to categories</a>
 
     <main class="categories-shell">
       <header class="topbar categories-topbar" aria-label="RANKOFF">
-        <a class="brand" href="./index.html" aria-label="RANKOFF home">
+        <a class="brand" href="/" aria-label="RANKOFF home">
           <img class="brand-final-logo" src="./assets/rankoff-final-logo.png?v=4" alt="RANKOFF — Bid your way to number one" width="1254" height="1254" />
         </a>
 
         <nav class="site-nav categories-nav" aria-label="Main navigation">
-          <a href="./categories.html" aria-current="page" data-copy="categories">Categories</a>
-          <a href="./about.html" data-copy="about">About</a>
+          <a href="/categories" aria-current="page" data-copy="categories">Categories</a>
+          <a href="/about" data-copy="about">About</a>
         </nav>
         <button class="search-toggle" type="button" data-search-toggle aria-expanded="false" aria-controls="site-search" aria-label="Search products and categories"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.6 4.6"></path></svg></button>
         <div class="category-actions">
@@ -47,16 +56,16 @@
           <input id="site-search-input" data-site-search-input type="search" autocomplete="off" placeholder="Search products and categories…" />
           <button class="search-close" type="button" data-search-close>Close</button>
         </div>
-        <div class="site-search-results" data-search-results role="listbox" aria-label="Search results" hidden></div>
+        <nav class="site-search-results" data-search-results aria-label="Search results" hidden></nav>
       </form>
 
       <section class="category-status" aria-label="Board status">
         <span class="status-indicator" aria-hidden="true"></span>
         <strong data-category-status>Live board</strong>
         <span>·</span>
-        <span data-category-count>8 listings</span>
+        <span data-category-count>Loading…</span>
         <span>·</span>
-        <a href="./index.html"><span data-copy="seeBoard">See board</span> <span aria-hidden="true">→</span></a>
+        <a href="/"><span data-copy="seeBoard">See board</span> <span aria-hidden="true">→</span></a>
       </section>
 
       <section class="category-hero" aria-labelledby="categories-title">
@@ -85,15 +94,39 @@
           </nav>
         </div>
         <div class="category-grid" data-category-grid></div>
+        <noscript>
+          <p class="category-noscript" data-copy="allCopy">Choose a market to view its live board.</p>
+          <ul class="category-seo-list">
+            <li><a href="/?category=AI#board">AI Tools &amp; Agents</a></li>
+            <li><a href="/?category=Creators#board">Creators &amp; Talent</a></li>
+            <li><a href="/?category=Property#board">Property &amp; Agents</a></li>
+            <li><a href="/?category=Interior#board">Interior &amp; Renovation</a></li>
+            <li><a href="/?category=Beauty#board">Beauty &amp; Wellness</a></li>
+            <li><a href="/?category=Health#board">Health &amp; Medical</a></li>
+            <li><a href="/?category=Sports#board">Sports &amp; Fitness</a></li>
+            <li><a href="/?category=Food#board">Food &amp; Beverage</a></li>
+            <li><a href="/?category=Marketing#board">Marketing &amp; Advertising</a></li>
+            <li><a href="/?category=Creative#board">Creative &amp; Production</a></li>
+            <li><a href="/?category=Professional#board">Professional Services</a></li>
+            <li><a href="/?category=Education#board">Education &amp; Training</a></li>
+            <li><a href="/?category=Finance#board">Finance &amp; Insurance</a></li>
+            <li><a href="/?category=Electronics#board">Electronics &amp; Repair</a></li>
+            <li><a href="/?category=Retail#board">Retail &amp; Ecommerce</a></li>
+            <li><a href="/?category=Construction#board">Hardware &amp; Construction</a></li>
+            <li><a href="/?category=Home#board">Home Services</a></li>
+            <li><a href="/?category=Automotive#board">Automotive</a></li>
+            <li><a href="/?category=Other#board">Other</a></li>
+          </ul>
+        </noscript>
       </section>
 
       <footer class="footer categories-footer">
-        <div class="footer-identity"><a class="footer-brand" href="./index.html" aria-label="RANKOFF home"><img class="footer-logo-image" src="./assets/rankoff-final-logo.png?v=4" alt="RANKOFF" width="1254" height="1254" /></a><span class="footer-credit"><strong>Rankoff</strong><a class="footer-parent" href="https://www.brandupdesignmarketing.com/">A Brandup Marketing product</a></span></div>
-        <span class="footer-links"><a href="./legal.html#rules" data-copy="rules">Rules</a><a href="./legal.html#terms">Terms</a><a href="./legal.html#privacy" data-copy="privacy">Privacy</a><a href="./legal.html#payments">Payments</a></span>
+        <div class="footer-identity"><a class="footer-brand" href="/" aria-label="RANKOFF home"><img class="footer-logo-image" src="./assets/rankoff-final-logo.png?v=4" alt="RANKOFF" width="1254" height="1254" /></a><span class="footer-credit"><strong>Rankoff</strong><a class="footer-parent" href="https://www.brandupdesignmarketing.com/" data-copy="footerParent">A Brandup Marketing product</a></span></div>
+        <span class="footer-links"><a href="/legal#rules" data-copy="rules">Rules</a><a href="/legal#terms" data-copy="terms">Terms</a><a href="/legal#privacy" data-copy="privacy">Privacy</a><a href="/legal#payments" data-copy="payments">Payments</a></span>
       </footer>
     </main>
 
-    <script src="./search.js?v=2" defer></script>
-    <script src="./categories.js?v=13" defer></script>
+    <script src="./search.js?v=4" defer></script>
+    <script src="./categories.js?v=15" defer></script>
   </body>
 </html>

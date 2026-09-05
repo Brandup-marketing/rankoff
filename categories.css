@@ -72,6 +72,10 @@
 /* Three columns from ~1000px. Two 646px cards holding one 64px row read as
    panels; at 397px they read as what they are — directory entries. */
 .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr)); gap: 0.75rem; }
+.category-noscript { color: var(--muted); }
+.category-seo-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: .6rem; margin: 1rem 0 0; padding: 0; list-style: none; }
+.category-seo-list a { display: flex; min-height: 2.75rem; align-items: center; padding: .65rem .8rem; border: 1px solid var(--line); border-radius: .55rem; background: var(--surface); color: var(--ink); font-weight: 750; text-decoration: none; }
+.category-seo-list a:hover { border-color: var(--accent); color: var(--accent-strong); }
 .category-card {
   min-width: 0;
   padding: 1.35rem 1.35rem 1rem;
@@ -95,9 +99,7 @@
 .category-logo img { width: 100%; height: 100%; object-fit: contain; padding: 0.12rem; background: #fff; }
 .category-rank-copy { min-width: 0; }
 .category-rank-copy strong { display: block; overflow: hidden; color: var(--ink); font-size: 0.9rem; text-overflow: ellipsis; white-space: nowrap; }
-/* Truncated to roughly 33 characters at every column width we ship, which is a
-   fragment, not information. The full description lives on the listing page. */
-.category-rank-copy span { display: none; }
+.category-rank-copy span { display: -webkit-box; overflow: hidden; margin-top: 0.12rem; color: var(--muted); font-size: 0.75rem; line-height: 1.3; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .category-rank-bid { color: var(--accent-strong); font-size: 0.88rem; font-weight: 850; font-variant-numeric: tabular-nums; white-space: nowrap; }
 /* Sized to its content. A 12rem floor wrapped 74px of text in 192px of nothing,
    fifteen times over. */
@@ -121,17 +123,19 @@ html[data-theme="light"] .categories-topbar .brand-emblem-image, html[data-theme
 @media (max-width: 48rem) {
   .categories-shell { width: min(calc(100% - 1rem), var(--content)); }
   .categories-topbar {
-    grid-template-areas: "brand search actions";
+    grid-template-areas: "brand search actions" "nav nav nav";
     grid-template-columns: minmax(0, 1fr) auto auto;
     min-height: 4.6rem;
     padding-block: .35rem .55rem;
   }
   .categories-topbar .brand { width: 3.75rem; height: 3.75rem; }
-  .categories-nav { display: none; }
+  .categories-nav { grid-area: nav; display: flex; justify-self: stretch; justify-content: center; margin: 0; padding-top: .15rem; border-top: 1px solid var(--line); }
   .categories-topbar .brand { grid-area: brand; }
   .categories-topbar .search-toggle { grid-area: search; }
   .category-actions { grid-area: actions; justify-self: end; }
-  .category-status { margin-top: 1.25rem; font-size: 0.73rem; }
+  .category-status { margin-top: 1.25rem; font-size: 0.75rem; }
+  .active-category time, .category-card-head a { font-size: 0.75rem; }
+  .category-status a, .category-card-head a, .category-empty a { display: inline-flex; min-height: 2.75rem; align-items: center; }
   .category-hero { margin: 2rem 0; }
   .category-hero h1 { font-size: 2.7rem; }
   .category-hero > p:last-child { margin-top: 0.9rem; font-size: 1.08rem; }
@@ -147,7 +151,7 @@ html[data-theme="light"] .categories-topbar .brand-emblem-image, html[data-theme
   .category-status { flex-wrap: wrap; justify-content: center; max-width: 100%; text-align: center; }
   /* The icon is 2.7rem; a 2.4rem track overflowed it into the gap at 375px. */
   .active-category { grid-template-columns: 2.75rem minmax(0, 1fr); gap: 0.7rem; }
-  .active-category time { grid-column: 2; margin-top: -0.5rem; }
+  .active-category time { grid-column: 2; margin-top: -0.5rem; font-size: 0.75rem; }
   .category-rank-row { grid-template-columns: 1.8rem 2.45rem minmax(0, 1fr) auto; gap: 0.45rem; }
   .category-card { padding-inline: 1rem; }
   /* Boilerplate repeated in fifteen cards; the bold line above already says it. */

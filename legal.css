@@ -20,7 +20,17 @@ h3 { margin: 2rem 0 0.55rem; font-size: 1.05rem; }
 .payment-flow b { display: grid; place-items: center; width: 1.5rem; height: 1.5rem; flex: 0 0 auto; border-radius: 50%; background: var(--ink); color: var(--surface); font-size: 0.75rem; }
 .legal-footer { margin-top: 2rem; padding-bottom: 3rem; }
 html[data-theme="light"] .payment-flow span { background: var(--surface-subtle); }
-@media (max-width: 640px) { .legal-shell { width: min(calc(100% - 1.25rem), 70rem); } .legal-header { grid-template-columns: minmax(0,1fr) auto auto auto; } .legal-header .site-nav { display: none; } .legal-intro { padding-top: 3rem; } .payment-flow { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px) {
+  .legal-shell { width: min(calc(100% - 1.25rem), 70rem); }
+  .legal-header { grid-template-areas: "brand search language theme" "nav nav nav nav"; grid-template-columns: minmax(0,1fr) auto auto auto; padding-block: .35rem .55rem; }
+  .legal-header .brand { grid-area: brand; }
+  .legal-header .site-nav { grid-area: nav; display: flex; justify-self: stretch; justify-content: center; margin: 0; padding-top: .15rem; border-top: 1px solid var(--line); }
+  .legal-header .search-toggle { grid-area: search; }
+  .legal-header .language-toggle { grid-area: language; }
+  .legal-header .theme-toggle { grid-area: theme; }
+  .legal-intro { padding-top: 3rem; }
+  .payment-flow { grid-template-columns: 1fr 1fr; }
+}
 
 .legal-zh { border-left: 3px solid var(--accent); }
 .legal-zh h2 { max-width: 24ch; font-size: clamp(1.4rem, 2.4vw, 1.9rem); }

@@ -2,6 +2,11 @@
   "use strict";
 
   const STORE_KEY = "rankoff-mvp-demo-v3";
+  const canonicalLink = document.querySelector('link[rel="canonical"]');
+  const initialCanonical = canonicalLink?.href || "https://rankoff.my/listing";
+  const initialTitle = document.title;
+  const initialDescription = document.querySelector('meta[name="description"]')?.getAttribute("content") || "";
+  const initialSocialDescription = document.querySelector('meta[property="og:description"]')?.getAttribute("content") || initialDescription;
   const categoryGroups = Object.freeze({ AI: ["AI", "Agents", "AIMedia"], Creators: ["Creators", "Attention", "People"], Property: ["Property", "RealEstate", "Travel"], Interior: ["Interior"], Beauty: ["Beauty"], Health: ["Health"], Sports: ["Sports"], Food: ["Food"], Marketing: ["Marketing", "SEO", "Social", "Sales", "Agencies"], Creative: ["Creative", "Design", "Writing", "Audio", "News"], Professional: ["Professional", "Business", "Careers", "Productivity"], Education: ["Education", "Training", "Academy"], Finance: ["Finance", "Insurance", "Banking", "Crypto"], Electronics: ["Electronics", "Repair"], Retail: ["Retail", "Ecommerce"], Construction: ["Construction", "Hardware"], Home: ["Home"], Automotive: ["Automotive", "Auto"], Other: ["Other", "Developer", "Security", "Games", "Domains", "Discovery"] });
   const categoryAliases = Object.freeze(Object.entries(categoryGroups).reduce((aliases, [market, members]) => {
     aliases[market.toLowerCase()] = market;
@@ -11,18 +16,18 @@
   const categoryLabels = { AI: "AI Tools & Agents", Creators: "Creators & Talent", Property: "Property & Agents", Interior: "Interior & Renovation", Beauty: "Beauty & Wellness", Health: "Health & Medical", Sports: "Sports & Fitness", Food: "Food & Beverage", Marketing: "Marketing & Advertising", Creative: "Creative & Production", Professional: "Professional Services", Education: "Education & Training", Finance: "Finance & Insurance", Electronics: "Electronics & Repair", Retail: "Retail & Ecommerce", Construction: "Hardware & Construction", Home: "Home Services", Automotive: "Automotive", Other: "Other" };
   const categoryTranslations = { AI: "AI 工具与智能体", Creators: "创作者与艺人", Property: "房产与经纪", Interior: "室内设计与装修", Beauty: "美容与养生", Health: "健康与医疗", Sports: "运动与健身", Food: "餐饮", Marketing: "营销与广告", Creative: "创意与制作", Professional: "专业服务", Education: "教育与培训", Finance: "金融与保险", Electronics: "电子与维修", Retail: "零售与电商", Construction: "五金与建筑", Home: "家居服务", Automotive: "汽车", Other: "其他" };
   const previewListings = [
-    ["model-harbor", "Model Harbor", "A release desk for production AI models, approvals, and customer notices.", "https://modelharbor.example/", "Agents", 2480, 2840],
-    ["trackline", "Trackline", "Campaign reporting for teams that need a clean answer to what moved.", "https://trackline.example/", "Marketing", 2160, 1910],
-    ["patchnote", "Patchnote", "Release notes that turn product changes into useful customer updates.", "https://patchnote.example/", "Developer", 1930, 2180],
-    ["canvas-relay", "Canvas Relay", "Creative hand-offs, feedback, and approved files in one focused space.", "https://canvasrelay.example/", "Design", 1180, 1490],
-    ["switchboard", "Switchboard", "A routing layer for the AI tools already inside an operator stack.", "https://switchboard.example/", "Agents", 940, 1210],
-  ].map(([id, title, description, url, category, bid, clicks], index) => ({
-    id, title, description, url, category, bid, clicks, rank: index + 1, icon: "",
+    ["model-harbor", "Model Harbor", "A release desk for production AI models, approvals, and customer notices.", "用于管理生产环境 AI 模型、审批与客户通知的发布工作台。", "https://modelharbor.example/", "Agents", 2480, 2840],
+    ["trackline", "Trackline", "Campaign reporting for teams that need a clean answer to what moved.", "为需要清楚判断成效来源的团队提供营销活动报告。", "https://trackline.example/", "Marketing", 2160, 1910],
+    ["patchnote", "Patchnote", "Release notes that turn product changes into useful customer updates.", "把产品更新变成实用客户通知的版本说明工具。", "https://patchnote.example/", "Developer", 1930, 2180],
+    ["canvas-relay", "Canvas Relay", "Creative hand-offs, feedback, and approved files in one focused space.", "在一个专注空间中完成创意交接、反馈与已批准文件管理。", "https://canvasrelay.example/", "Design", 1180, 1490],
+    ["switchboard", "Switchboard", "A routing layer for the AI tools already inside an operator stack.", "为运营工具栈中已有的 AI 工具提供统一路由层。", "https://switchboard.example/", "Agents", 940, 1210],
+  ].map(([id, title, description, descriptionZh, url, category, bid, clicks], index) => ({
+    id, title, description, descriptionZh, url, category, bid, clicks, rank: index + 1, icon: "",
   }));
 
   const copy = {
     en: {
-      board: "Board", about: "About", legal: "Legal", contact: "Contact", back: "← Back to leaderboard", loading: "Loading ranking details…",
+      board: "Board", categories: "Categories", about: "About", legal: "Legal", contact: "Contact", skipListing: "Skip to listing details", back: "← Back to leaderboard", loading: "Loading ranking details…",
       notFoundTitle: "Listing not found", notFoundCopy: "This listing may have moved or is no longer on the public board.", returnBoard: "Return to the board",
       sponsored: "Sponsored", visit: "Visit website", viewInstagram: "View Instagram", viewFacebook: "View Facebook Page", viewTiktok: "View TikTok", viewProfile: "View profile", share: "Share rank", evidence: "Public ranking record", rank: "Current rank", bid: "Bid", allTimeBid: "All-time total", past24Bid: "Past 24h total", duration: "Duration", past24: "Past 24h",
       rule: "Highest total takes #1", claimNumberOne: "Claim #1 for", startClaim: "Challenge this rank",
@@ -33,10 +38,12 @@
       verifiedEvidence: "Rank and bid come from settled placements. Clicks are first-party redirect events recorded by Rankoff.",
       claimCopy: "Put your product above this listing. Your full business description stays visible until someone pays more.",
       previewDisclosure: "Submissions pass automated checks instantly; listings may be removed after publication if they break the rules.", liveDisclosure: "Payment is confirmed only after secure hosted checkout settles.",
-      unavailable: "Website temporarily unavailable", copied: "Rank link copied.", shareText: "is ranked",
+      unavailable: "Website temporarily unavailable", copied: "Rank link copied.", shareText: "is ranked", listingFallback: "Listing", sponsoredDescription: "Sponsored listing on Rankoff.",
+      footerParent: "A Brandup Marketing product", rules: "Rules", terms: "Terms", privacy: "Privacy", payments: "Payments",
+      firstListed: "First listed", settledBids: "Settled bids", lastUpdated: "Last updated",
     },
     zh: {
-      board: "榜单", about: "关于", legal: "法律条款", contact: "联系", back: "← 返回榜单", loading: "正在加载排名信息…",
+      board: "榜单", categories: "分类", about: "关于", legal: "法律条款", contact: "联系", skipListing: "跳至条目详情", back: "← 返回榜单", loading: "正在加载排名信息…",
       notFoundTitle: "找不到此条目", notFoundCopy: "此条目可能已移动，或已不在公开榜单中。", returnBoard: "返回榜单",
       sponsored: "赞助", visit: "访问网站", viewInstagram: "查看 Instagram", viewFacebook: "查看 Facebook 专页", viewTiktok: "查看 TikTok", viewProfile: "查看主页", share: "分享排名", evidence: "公开排名记录", rank: "当前排名", bid: "出价", allTimeBid: "全时段累计出价", past24Bid: "近 24 小时累计出价", duration: "有效期", past24: "近 24 小时",
       rule: "累计出价最高者获得第 1 名", claimNumberOne: "以此价格争夺第 1 名", startClaim: "挑战此排名",
@@ -47,8 +54,26 @@
       verifiedEvidence: "排名与出价来自已结算展示；点击为 Rankoff 记录的第一方跳转事件。",
       claimCopy: "让你的产品排在这个条目之前。完整业务介绍会持续展示，直到有人出价更高。",
       previewDisclosure: "提交即通过自动筛查并发布；违反规则的条目可能在发布后被移除。", liveDisclosure: "付款会在安全的托管付款页面完成并确认。",
-      unavailable: "网站暂时无法访问", copied: "排名链接已复制。", shareText: "目前排名",
+      unavailable: "网站暂时无法访问", copied: "排名链接已复制。", shareText: "目前排名", listingFallback: "条目", sponsoredDescription: "Rankoff 上的赞助条目。",
+      footerParent: "Brandup Marketing 旗下产品", rules: "规则", terms: "条款", privacy: "隐私", payments: "付款",
+      firstListed: "首次上榜", settledBids: "已结算出价", lastUpdated: "最近更新",
     },
+  };
+  const pageMetadata = {
+    en: {
+      title: "Sponsored listing | RANKOFF",
+      description: "View a sponsored product's current Rankoff position, bid, and measured clicks.",
+      socialDescription: "See the bid, rank, and measured attention behind this sponsored listing.",
+    },
+    zh: {
+      title: "赞助条目 | RANKOFF",
+      description: "查看赞助产品当前在 Rankoff 的排名、出价和已统计点击。",
+      socialDescription: "查看此赞助条目背后的出价、排名与已统计关注度。",
+    },
+  };
+  const accessibilityCopy = {
+    en: { home: "RANKOFF home", tagline: "RANKOFF — Bid your way to number one", navigation: "Main navigation", search: "Search products and categories", switchChinese: "Switch to Chinese", switchLight: "Switch to light theme", switchDark: "Switch to dark theme" },
+    zh: { home: "RANKOFF 首页", tagline: "RANKOFF — 竞价登上第 1 名", navigation: "主导航", search: "搜索产品和分类", switchChinese: "切换为中文", switchLight: "切换至浅色主题", switchDark: "切换至深色主题" },
   };
 
   const elements = {
@@ -65,21 +90,40 @@
     nextBid: document.querySelector("[data-next-bid]"), claimCopy: document.querySelector("[data-claim-copy]"), claim: document.querySelector("[data-claim]"),
     disclosure: document.querySelector("[data-claim-disclosure]"), toast: document.querySelector("[data-toast]"),
   };
-  document.querySelector("[data-search-redirect]")?.addEventListener("click", () => { window.location.href = "/index.html#search"; });
+  document.querySelector("[data-search-redirect]")?.addEventListener("click", () => { window.location.href = urlWithLanguage("/#search").href; });
+
+  function readServerModel() {
+    const node = document.querySelector("#listing-hydration");
+    if (!node) return null;
+    try {
+      const value = JSON.parse(node.textContent || "null");
+      if (!value || String(value.id || "") !== String(document.body.dataset.listingId || "")) return null;
+      return value;
+    } catch {
+      return null;
+    }
+  }
 
   let preferences = loadPreferences();
-  let model = null;
+  let model = readServerModel();
   let toastTimer = null;
   const boardCurrencyFormat = (code) => new Intl.NumberFormat(code === "MYR" ? "en-MY" : "en-US", { style: "currency", currency: code || "USD", maximumFractionDigits: 0 });
-  let money = boardCurrencyFormat("USD");
+  let money = boardCurrencyFormat(model?.currency || "USD");
   const count = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
+
+  function languageFromUrl() {
+    try {
+      const value = new URL(window.location.href).searchParams.get("lang");
+      return value === "zh" || value === "en" ? value : "";
+    } catch { return ""; }
+  }
 
   function loadPreferences() {
     try {
       const saved = JSON.parse(localStorage.getItem(STORE_KEY));
-      return { theme: saved?.theme === "light" ? "light" : "dark", language: saved?.language === "zh" ? "zh" : "en", listings: saved?.listings || [] };
+      return { theme: saved?.theme === "light" ? "light" : "dark", language: languageFromUrl() || (saved?.language === "zh" ? "zh" : "en"), listings: Array.isArray(saved?.listings) ? saved.listings : [] };
     } catch {
-      return { theme: "dark", language: "en", listings: [] };
+      return { theme: "dark", language: languageFromUrl() || "en", listings: [] };
     }
   }
 
@@ -96,23 +140,121 @@
     return preferences.language === "zh" ? categoryTranslations[market] : categoryLabels[market];
   }
 
+  function urlWithLanguage(href, nextLanguage = preferences.language) {
+    const url = new URL(href, window.location.href);
+    if (nextLanguage === "zh") url.searchParams.set("lang", "zh");
+    else url.searchParams.delete("lang");
+    return url;
+  }
+
+  function syncLanguageUrl() {
+    const url = urlWithLanguage(window.location.href);
+    if (url.href !== window.location.href && window.history?.replaceState) window.history.replaceState(window.history.state, "", url.href);
+  }
+
+  function syncInternalLinks() {
+    document.querySelectorAll("a[href]").forEach((anchor) => {
+      const raw = anchor.getAttribute("href");
+      if (!raw || raw.startsWith("#") || anchor.matches("[data-visit]")) return;
+      try {
+        const url = new URL(raw, window.location.href);
+        if (url.origin !== window.location.origin) return;
+        anchor.href = /^\/(?:legal|answers\/)/.test(url.pathname) ? urlWithLanguage(url, "en").href : urlWithLanguage(url).href;
+      } catch { /* leave malformed or non-web links untouched */ }
+    });
+  }
+
+  function ensureAlternateLink(hreflang) {
+    let link = document.querySelector(`link[rel="alternate"][hreflang="${hreflang}"]`);
+    if (!link) {
+      link = document.createElement("link");
+      link.rel = "alternate";
+      link.hreflang = hreflang;
+      document.head.append(link);
+    }
+    return link;
+  }
+
+  function setMetaContent(selector, value) { document.querySelector(selector)?.setAttribute("content", value); }
+
+  function localizedModelDescription() {
+    if (preferences.language === "zh" && model?.descriptionZh) return model.descriptionZh;
+    return model?.description || text("sponsoredDescription");
+  }
+
+  function updateMetadata(titleOverride = "", descriptionOverride = "") {
+    const metadata = pageMetadata[preferences.language];
+    const staticShell = initialTitle === pageMetadata.en.title || initialTitle === pageMetadata.zh.title;
+    const staticDescription = initialDescription === pageMetadata.en.description || initialDescription === pageMetadata.zh.description;
+    const staticSocialDescription = initialSocialDescription === pageMetadata.en.socialDescription || initialSocialDescription === pageMetadata.zh.socialDescription;
+    const title = titleOverride || (staticShell ? metadata.title : initialTitle);
+    const description = descriptionOverride || (staticDescription ? metadata.description : initialDescription);
+    const socialDescription = descriptionOverride || (staticSocialDescription ? metadata.socialDescription : initialSocialDescription);
+    const canonical = urlWithLanguage(initialCanonical);
+    document.title = title;
+    canonicalLink?.setAttribute("href", canonical.href);
+    setMetaContent('meta[name="description"]', description);
+    setMetaContent('meta[property="og:locale"]', preferences.language === "zh" ? "zh_MY" : "en_MY");
+    setMetaContent('meta[property="og:title"]', title);
+    setMetaContent('meta[property="og:description"]', socialDescription);
+    setMetaContent('meta[property="og:url"]', canonical.href);
+    setMetaContent('meta[name="twitter:title"]', title);
+    setMetaContent('meta[name="twitter:description"]', socialDescription);
+    ensureAlternateLink("en").href = urlWithLanguage(initialCanonical, "en").href;
+    ensureAlternateLink("zh-Hans").href = urlWithLanguage(initialCanonical, "zh").href;
+    ensureAlternateLink("x-default").href = urlWithLanguage(initialCanonical, "en").href;
+  }
+
+  function formatRecordDate(raw) {
+    const date = new Date(raw);
+    if (!Number.isFinite(date.getTime())) return "";
+    return new Intl.DateTimeFormat(preferences.language === "zh" ? "zh-CN" : "en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }).format(date);
+  }
+
+  function syncRecordCopy() {
+    document.querySelectorAll("[data-record-key]").forEach((node) => {
+      const key = node.dataset.recordKey;
+      const label = node.matches("li") ? node.querySelector("span") : node;
+      if (label && copy.en[key]) label.textContent = text(key);
+      const date = node.querySelector?.("[data-record-date]") || (node.matches("[data-record-date]") ? node : null);
+      const formatted = date?.dataset.recordDate ? formatRecordDate(date.dataset.recordDate) : "";
+      if (date && formatted) date.textContent = formatted;
+    });
+  }
+
+  function updateAccessibility() {
+    const accessible = accessibilityCopy[preferences.language];
+    document.querySelectorAll(".brand, .footer-brand").forEach((node) => node.setAttribute("aria-label", accessible.home));
+    document.querySelector(".brand-final-logo")?.setAttribute("alt", accessible.tagline);
+    document.querySelector(".site-nav")?.setAttribute("aria-label", accessible.navigation);
+    document.querySelector(".search-toggle")?.setAttribute("aria-label", accessible.search);
+  }
+
   function applyPreferences() {
     elements.root.dataset.theme = preferences.theme;
-    elements.root.lang = preferences.language === "zh" ? "zh-CN" : "en";
+    elements.root.lang = preferences.language === "zh" ? "zh-Hans" : "en";
+    syncLanguageUrl();
     document.querySelector('meta[name="theme-color"]')?.setAttribute("content", preferences.theme === "light" ? "#faf7f5" : "#090a0c");
     document.querySelectorAll("[data-copy]").forEach((node) => { node.textContent = text(node.dataset.copy); });
-    elements.language.textContent = preferences.language === "zh" ? "CN" : "EN";
+    updateAccessibility();
+    elements.language.textContent = preferences.language === "zh" ? "EN" : "中文";
+    elements.language.setAttribute("aria-label", preferences.language === "zh" ? "切换为英文" : accessibilityCopy.en.switchChinese);
     elements.language.setAttribute("aria-pressed", String(preferences.language === "zh"));
-    elements.theme.textContent = preferences.theme === "dark" ? "Light" : "Dark";
+    const dark = preferences.theme === "dark";
+    const accessible = accessibilityCopy[preferences.language];
+    elements.theme.textContent = preferences.language === "zh" ? (dark ? "浅色" : "深色") : (dark ? "Light" : "Dark");
     elements.theme.setAttribute("aria-pressed", String(preferences.theme === "dark"));
-    elements.theme.setAttribute("aria-label", `Switch to ${preferences.theme === "dark" ? "light" : "dark"} theme`);
+    elements.theme.setAttribute("aria-label", dark ? accessible.switchLight : accessible.switchDark);
+    syncRecordCopy();
+    updateMetadata();
+    syncInternalLinks();
     if (model) renderModel();
   }
 
   function localListing(id) {
     const saved = preferences.listings.find((item) => String(item?.id) === id);
     if (saved) return {
-      id, title: String(saved.name || "Listing"), description: String(saved.description || "Sponsored listing on Rankoff."),
+      id, title: String(saved.name || "Listing"), description: String(saved.description || "Sponsored listing on Rankoff."), descriptionZh: String(saved.descriptionZh || ""),
       url: String(saved.url || ""), category: String(saved.category || "Other"), bid: Number(saved.bids?.all || 0), clicks: Number(saved.clicks || 0),
       rank: [...preferences.listings].sort((a, b) => Number(b?.bids?.all || 0) - Number(a?.bids?.all || 0)).findIndex((item) => String(item?.id) === id) + 1,
       icon: String(saved.iconUrl || ""), todayBid: Number(saved.bids?.today || 0), todayClicks: Number(saved.todayClicks || 0), isLocal: true,
@@ -133,6 +275,14 @@
     // /product/<hostname> renders on the server and hands the id down on <body>.
     const id = new URL(location.href).searchParams.get("id") || document.body.dataset.listingId || "";
     if (!id) return showError();
+    if (model && String(model.id) === id) {
+      renderModel();
+      elements.loading.hidden = true;
+      elements.error.hidden = true;
+      elements.detail.hidden = false;
+      document.querySelector("#listing-detail")?.setAttribute("aria-busy", "false");
+      return;
+    }
     let fallback = localListing(id);
     let productionBoard = false;
 
@@ -280,7 +430,7 @@
     const clickLabel = verified ? text("verifiedClicks") : text("sampleClicks");
     elements.title.textContent = model.title;
     elements.category.textContent = categoryName(model.category);
-    elements.description.textContent = model.description;
+    elements.description.textContent = localizedModelDescription();
     const frame = rankFrame();
     elements.rankLabel.textContent = frame.label;
     elements.rank.textContent = frame.value;
@@ -303,7 +453,7 @@
     elements.nextBid.textContent = money.format(model.nextBid || model.bid + 1);
     elements.claimCopy.textContent = text("claimCopy");
     elements.disclosure.textContent = verified ? text("liveDisclosure") : text("previewDisclosure");
-    elements.claim.href = `/index.html#claim`;
+    elements.claim.href = urlWithLanguage("/#claim").href;
     let host = model.url;
     try {
       const parsed = new URL(model.url);
@@ -328,9 +478,8 @@
     setIcon();
     // The server already wrote the better of the two true positions into the
     // title; hydration must not quietly demote it to the whole-board number.
-    document.title = shareHeadline().pageTitle;
-    document.querySelector('meta[property="og:title"]')?.setAttribute("content", document.title);
-    document.querySelector('meta[name="description"]')?.setAttribute("content", model.description);
+    updateMetadata(shareHeadline().pageTitle, localizedModelDescription());
+    syncInternalLinks();
   }
 
   function showError() {
@@ -347,13 +496,21 @@
   }
 
   elements.theme.addEventListener("click", () => { preferences.theme = preferences.theme === "dark" ? "light" : "dark"; savePreferences(); applyPreferences(); });
-  elements.language.addEventListener("click", () => { preferences.language = preferences.language === "zh" ? "en" : "zh"; savePreferences(); applyPreferences(); });
+  elements.language.addEventListener("click", () => {
+    preferences.language = preferences.language === "zh" ? "en" : "zh";
+    savePreferences();
+    if (/^\/(?:product|profile)\//.test(window.location.pathname)) {
+      window.location.assign(urlWithLanguage(window.location.href).href);
+      return;
+    }
+    applyPreferences();
+  });
   elements.share.addEventListener("click", async () => {
     const share = {
       ...shareHeadline(),
       url: location.href,
       image: model.icon,
-      description: model.description,
+      description: localizedModelDescription(),
       card: { period: "all", capturedAt: cardStamp() },
     };
     if (window.RankoffShare?.open) {

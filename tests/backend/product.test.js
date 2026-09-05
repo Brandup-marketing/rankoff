@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-import { buildProductView, escapeHtml, formatDate, formatMoney, normalizeSlug, productPath, renderProductPage } from "../../functions/_lib/product.js";
+import { buildProductView, canonicalDetailPath, escapeHtml, formatDate, formatMoney, normalizeProductLanguage, normalizeSlug, productPath, renderProductPage } from "../../functions/_lib/product.js";
+import { renderDetail } from "../../functions/_lib/detail.js";
 import { discoverShareImage, verifyImage } from "../../functions/og/[slug].js";
 import { productEntries } from "../../functions/sitemap.xml.js";
 
@@ -31,11 +32,17 @@ test("a listing slug is a hostname, never a path or an injection", () => {
   assert.equal(normalizeSlug("localhost"), "");
   assert.equal(normalizeSlug(""), "");
   assert.equal(productPath("Example.COM"), "/product/example.com");
+  assert.equal(canonicalDetailPath("instagram:agent_ali"), "/profile/instagram/agent_ali");
+  assert.equal(canonicalDetailPath("instagram:not/valid"), "");
+  assert.equal(canonicalDetailPath("not a domain"), "");
 });
 
 test("money follows the board currency", () => {
   assert.equal(formatMoney(500, "MYR"), "RM 5");
   assert.equal(formatMoney(1250, "USD"), "USD 13");
+  assert.equal(formatDate("2026-08-31T23:59:59.000Z", "zh"), "2026年8月31日");
+  assert.equal(normalizeProductLanguage("zh-Hans"), "zh");
+  assert.equal(normalizeProductLanguage("de"), "en");
 });
 
 test("the rendered page carries this listing's own title, description and canonical", () => {
@@ -45,10 +52,16 @@ test("the rendered page carries this listing's own title, description and canoni
   assert.match(html, /<title>BrandUp Design Marketing — #1 on RANKOFF<\/title>/);
   assert.match(html, /<link rel="canonical" href="https:\/\/rankoff\.my\/product\/brandupdesignmarketing\.com" \/>/);
   assert.match(html, /<meta property="og:title" content="BrandUp Design Marketing — #1 on RANKOFF" \/>/);
+  assert.match(html, /<meta name="robots" content="index, follow, max-image-preview:large" \/>/);
   assert.match(html, /<meta property="og:url" content="https:\/\/rankoff\.my\/product\/brandupdesignmarketing\.com" \/>/);
+  assert.equal(html.match(/<meta property="og:url"/g)?.length, 1, "a share crawler must see one authoritative URL");
   assert.match(html, /<meta name="twitter:card" content="summary_large_image" \/>/);
   assert.match(html, /"@type": ?"WebPage"/);
   assert.ok(!html.includes("Sponsored listing | RANKOFF"), "the generic shell title must be gone");
+});
+
+test("the generic listing shell is not an indexable empty result", () => {
+  assert.match(shell, /<meta name="robots" content="noindex, follow" \/>/);
 });
 
 test("a reader without JavaScript sees the record itself", () => {
@@ -66,6 +79,29 @@ test("a reader without JavaScript sees the record itself", () => {
   assert.match(html, /<link rel="stylesheet" href="\/styles\.css/);
   assert.match(html, /<div class="listing-loading" data-loading hidden>/);
   assert.match(html, /<body data-listing-id="listing-1">/);
+  const hydration = html.match(/<script id="listing-hydration" type="application\/json">([\s\S]*?)<\/script>/);
+  assert.ok(hydration, "the client must receive the exact record used for SSR");
+  assert.deepEqual(JSON.parse(hydration[1]), {
+    id: "listing-1",
+    identity: "brandupdesignmarketing.com",
+    title: "BrandUp Design Marketing",
+    description: "AI-powered lead-generation infrastructure.",
+    descriptionZh: "",
+    url: "https://brandupdesignmarketing.com/",
+    category: "Marketing",
+    icon: "",
+    rank: 1,
+    bid: 5,
+    clicks: 41,
+    todayRank: null,
+    todayBid: null,
+    todayClicks: null,
+    nextBid: null,
+    marketRank: null,
+    snapshot: "",
+    mode: "production",
+    currency: "MYR",
+  });
 });
 
 test("merchant text cannot inject markup into the page", () => {
@@ -83,8 +119,10 @@ test("merchant text cannot inject markup into the page", () => {
   );
 
   const jsonLd = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1];
+  const hydration = html.match(/<script id="listing-hydration" type="application\/json">([\s\S]*?)<\/script>/)[1];
   assert.ok(!jsonLd.includes("<"), "structured data must not carry a raw < that could close the block");
-  const markup = html.replace(jsonLd, "");
+  assert.ok(!hydration.includes("<"), "hydration data must not carry a raw < that could close the block");
+  const markup = html.replace(jsonLd, "").replace(hydration, "");
   assert.ok(!markup.includes("<script>alert(1)</script>"), "script tags must not survive");
   assert.ok(!markup.includes("<img src=x"), "injected tags must not survive");
   assert.ok(!markup.includes("</title><script>"), "the title must not be closed early");
@@ -95,10 +133,17 @@ test("merchant text cannot inject markup into the page", () => {
 });
 
 test("the sitemap lists one entry per live listing, dated by its settled bid", () => {
-  const xml = productEntries([entry, { ...entry, listing: { ...entry.listing, hostname: "not a domain" } }]);
+  const xml = productEntries([
+    entry,
+    { ...entry, listing: { ...entry.listing, hostname: "instagram:agent_ali" } },
+    { ...entry, listing: { ...entry.listing, hostname: "not a domain" } },
+  ]);
   assert.match(xml, /<loc>https:\/\/rankoff\.my\/product\/brandupdesignmarketing\.com<\/loc>/);
+  assert.match(xml, /<loc>https:\/\/rankoff\.my\/profile\/instagram\/agent_ali<\/loc>/);
+  assert.match(xml, /hreflang="zh-Hans" href="https:\/\/rankoff\.my\/product\/brandupdesignmarketing\.com\?lang=zh"/);
   assert.match(xml, /<lastmod>2026-08-31<\/lastmod>/);
-  assert.equal(xml.match(/<url>/g).length, 1, "an unusable hostname must not reach the sitemap");
+  assert.match(xml, /<loc>https:\/\/rankoff\.my\/profile\/instagram\/agent_ali\?lang=zh<\/loc>/);
+  assert.equal(xml.match(/<url>/g).length, 4, "each usable identity needs separate English and Chinese URL entries");
 });
 
 test("the record block shows only what the board itself recorded", () => {
@@ -108,10 +153,87 @@ test("the record block shows only what the board itself recorded", () => {
     buildProductView({ entry, todayEntry: null, board: { currency: "MYR" }, snapshotId: "", record }),
   );
 
-  assert.match(html, /<span>First listed<\/span><strong>31 Aug 2026<\/strong>/);
-  assert.match(html, /<span>Settled bids<\/span><strong>3<\/strong>/);
-  assert.match(html, /<span>Last updated<\/span><strong>2 Sep 2026<\/strong>/);
+  assert.match(html, /data-record-key="firstListed"><span>First listed<\/span><strong data-record-date="2026-08-31T11:04:27.190Z">31 Aug 2026<\/strong>/);
+  assert.match(html, /data-record-key="settledBids"><span>Settled bids<\/span><strong>3<\/strong>/);
+  assert.match(html, /data-record-key="lastUpdated"><span>Last updated<\/span><strong data-record-date="2026-09-02T04:00:00.000Z">2 Sep 2026<\/strong>/);
   assert.equal(formatDate("not a date"), "");
+});
+
+test("an explicit Chinese product locale renders indexable Chinese metadata and true record dates", () => {
+  const record = { bid_count: 3, first_settled_at: "2026-08-31T23:59:59.000Z", last_settled_at: "2026-09-02T04:00:00.000Z" };
+  const view = buildProductView({
+    entry: { ...entry, rank: 3 },
+    todayEntry: null,
+    board: { currency: "MYR" },
+    snapshotId: "snap-zh",
+    record,
+    marketRank: 1,
+    marketName: "Marketing & Advertising",
+    language: "zh",
+    nextBidMinor: 600,
+  });
+  const html = renderProductPage(shell, view);
+
+  assert.equal(view.pageTitle, "BrandUp Design Marketing — 营销与广告第 1 名 | RANKOFF");
+  assert.match(view.metaDescription, /RM 5 已结算出价.*营销与广告第 1 名.*41 次已验证点击/);
+  assert.equal(view.canonical, "https://rankoff.my/product/brandupdesignmarketing.com?lang=zh");
+  assert.match(html, /<html lang="zh-Hans"/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/rankoff\.my\/product\/brandupdesignmarketing\.com\?lang=zh"/);
+  assert.match(html, /hreflang="en" href="https:\/\/rankoff\.my\/product\/brandupdesignmarketing\.com"/);
+  assert.match(html, /hreflang="zh-Hans" href="https:\/\/rankoff\.my\/product\/brandupdesignmarketing\.com\?lang=zh"/);
+  assert.match(html, /hreflang="x-default" href="https:\/\/rankoff\.my\/product\/brandupdesignmarketing\.com"/);
+  assert.match(html, /<meta property="og:locale" content="zh_MY"/);
+  assert.equal(html.match(/<meta property="og:url"/g)?.length, 1, "the Chinese page must not retain the generic shell URL");
+  assert.match(html, /"inLanguage":"zh-Hans"/);
+  assert.match(html, /alt="RANKOFF — 竞价登上第 1 名"/);
+  assert.match(html, /data-category>营销与广告<\/span>/);
+  assert.match(html, /data-rank-label>营销与广告排名<\/dt>/);
+  assert.match(html, /data-rank-note>全站第 3 名<\/p>/);
+  assert.match(html, /data-placement-label>已验证展示<\/span>/);
+  assert.match(html, /data-click-label>已验证点击<\/dt>/);
+  assert.match(html, /data-copy="sponsored">赞助<\/span>/);
+  assert.match(html, /data-copy="share">分享排名<\/button>/);
+  assert.match(html, /data-copy="evidence">公开排名记录<\/h2>/);
+  assert.match(html, /data-evidence-note>排名与出价来自已结算展示/);
+  assert.match(html, /data-copy="allTimeBid">全时段累计出价<\/dt>/);
+  assert.match(html, /data-copy="startClaim">挑战此排名<\/span>/);
+  assert.match(html, /data-next-bid>RM 6<\/strong>/);
+  assert.match(html, /href="\/categories\?lang=zh"/);
+  assert.match(html, /href="\/\?lang=zh#claim"/);
+  assert.match(html, /data-record-key="firstListed"><span>首次上榜<\/span><strong data-record-date="2026-08-31T23:59:59.000Z">2026年8月31日<\/strong>/);
+  assert.match(html, /data-record-key="settledBids"><span>已结算出价<\/span><strong>3<\/strong>/);
+  assert.match(html, /data-record-key="lastUpdated"><span>最近更新<\/span><strong data-record-date="2026-09-02T04:00:00.000Z">2026年9月2日<\/strong>/);
+});
+
+test("a localized missing detail keeps root assets and language headers", async () => {
+  const response = await renderDetail({
+    request: new Request("https://rankoff.my/profile/instagram/missing?lang=zh"),
+    env: { RANKOFF_MODE: "demo", ASSETS: { fetch: async () => new Response(shell) } },
+  }, "instagram:missing");
+  const html = await response.text();
+
+  assert.equal(response.status, 404);
+  assert.equal(response.headers.get("content-language"), "zh-Hans");
+  assert.ok(!html.includes('href="./'), "404 styles must resolve from the site root");
+  assert.ok(!html.includes('src="./'), "404 scripts and images must resolve from the site root");
+  assert.match(html, /alt="RANKOFF — 竞价登上第 1 名"/);
+});
+
+test("a Chinese social profile keeps its permanent profile URL and localized action", () => {
+  const social = {
+    ...entry,
+    listing: {
+      ...entry.listing,
+      hostname: "instagram:agent_ali",
+      url: "https://www.instagram.com/agent_ali/",
+    },
+  };
+  const view = buildProductView({ entry: social, board: { currency: "MYR" }, language: "zh" });
+  const html = renderProductPage(shell, view);
+  assert.equal(view.canonical, "https://rankoff.my/profile/instagram/agent_ali?lang=zh");
+  assert.match(html, /hreflang="en" href="https:\/\/rankoff\.my\/profile\/instagram\/agent_ali"/);
+  assert.match(html, /<span data-copy="viewInstagram">查看 Instagram<\/span>/);
+  assert.match(html, /"@type":"ProfilePage"/);
 });
 
 test("a listing with no settled history renders no record block at all", () => {

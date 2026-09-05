@@ -74,6 +74,13 @@
       notRecorded: "Not recorded",
       pageOf: "Page {page} of {pages}",
       settledUnknown: "Settlement time not recorded",
+      homeLabel: "RANKOFF home",
+      languageEnglish: "Switch to English",
+      languageChinese: "Switch to Chinese",
+      themeLight: "Light",
+      themeDark: "Dark",
+      switchLight: "Switch to light theme",
+      switchDark: "Switch to dark theme",
     },
     zh: {
       pageKicker: "站主视图",
@@ -118,8 +125,34 @@
       notRecorded: "未记录",
       pageOf: "第 {page} 页，共 {pages} 页",
       settledUnknown: "未记录结算时间",
+      homeLabel: "RANKOFF 首页",
+      languageEnglish: "切换至英文",
+      languageChinese: "切换至中文",
+      themeLight: "浅色",
+      themeDark: "深色",
+      switchLight: "切换至浅色主题",
+      switchDark: "切换至深色主题",
     },
   };
+
+  const OWNER_CATEGORY_GROUPS = Object.freeze({
+    AI: ["AI", "Agents", "AIMedia"], Creators: ["Creators", "Attention", "People"], Property: ["Property", "RealEstate", "Travel"],
+    Interior: ["Interior"], Beauty: ["Beauty"], Health: ["Health"], Sports: ["Sports"], Food: ["Food"],
+    Marketing: ["Marketing", "SEO", "Social", "Sales", "Agencies"], Creative: ["Creative", "Design", "Writing", "Audio", "News"],
+    Professional: ["Professional", "Business", "Careers", "Productivity"], Education: ["Education", "Training", "Academy"],
+    Finance: ["Finance", "Insurance", "Banking", "Crypto"], Electronics: ["Electronics", "Repair"], Retail: ["Retail", "Ecommerce"],
+    Construction: ["Construction", "Hardware"], Home: ["Home"], Automotive: ["Automotive", "Auto"],
+    Other: ["Other", "Developer", "Security", "Games", "Domains", "Discovery"],
+  });
+  const OWNER_CATEGORY_ALIASES = Object.freeze(Object.entries(OWNER_CATEGORY_GROUPS).reduce((aliases, [market, members]) => {
+    aliases[market.toLowerCase()] = market;
+    members.forEach((member) => { aliases[member.toLowerCase()] = market; });
+    return aliases;
+  }, {}));
+  const OWNER_CATEGORY_NAMES = Object.freeze({
+    en: Object.freeze({ AI: "AI Tools & Agents", Creators: "Creators & Talent", Property: "Property & Agents", Interior: "Interior & Renovation", Beauty: "Beauty & Wellness", Health: "Health & Medical", Sports: "Sports & Fitness", Food: "Food & Beverage", Marketing: "Marketing & Advertising", Creative: "Creative & Production", Professional: "Professional Services", Education: "Education & Training", Finance: "Finance & Insurance", Electronics: "Electronics & Repair", Retail: "Retail & Ecommerce", Construction: "Hardware & Construction", Home: "Home Services", Automotive: "Automotive", Other: "Other" }),
+    zh: Object.freeze({ AI: "AI 工具与智能体", Creators: "创作者与艺人", Property: "房产与经纪", Interior: "室内设计与装修", Beauty: "美容与养生", Health: "健康与医疗", Sports: "运动与健身", Food: "餐饮", Marketing: "营销与广告", Creative: "创意与制作", Professional: "专业服务", Education: "教育与培训", Finance: "金融与保险", Electronics: "电子与维修", Retail: "零售与电商", Construction: "五金与建筑", Home: "家居服务", Automotive: "汽车", Other: "其他" }),
+  });
 
   const state = { language: "en", page: 1, pages: 1, currency: "MYR" };
   let token = "";
@@ -141,8 +174,33 @@
     }
   }
 
+  function ownerLanguageFromUrl() {
+    try {
+      const language = new URL(window.location.href).searchParams.get("lang");
+      return language === "zh" || language === "en" ? language : "";
+    } catch {
+      return "";
+    }
+  }
+
+  function syncOwnerLanguageUrl() {
+    const url = new URL(window.location.href);
+    if (state.language === "zh") url.searchParams.set("lang", "zh");
+    else url.searchParams.delete("lang");
+    if (url.href !== window.location.href && window.history?.replaceState) window.history.replaceState(window.history.state, "", url.href);
+  }
+
+  function ownerCategoryName(category) {
+    const market = OWNER_CATEGORY_ALIASES[String(category || "").toLowerCase()] || "Other";
+    return OWNER_CATEGORY_NAMES[state.language][market];
+  }
+
   // Theme and language only. The token is deliberately absent from this call.
   function savePreference(change) {
+    if (change.language === "zh" || change.language === "en") {
+      state.language = change.language;
+      syncOwnerLanguageUrl();
+    }
     try {
       localStorage.setItem(PREFERENCE_KEY, JSON.stringify({ ...readPreferences(), ...change }));
     } catch {
@@ -153,7 +211,7 @@
 
   function applyPreferences() {
     const saved = readPreferences();
-    state.language = saved.language === "zh" ? "zh" : "en";
+    state.language = ownerLanguageFromUrl() || (saved.language === "zh" ? "zh" : "en");
     root.dataset.theme = saved.theme === "light" ? "light" : "dark";
     root.lang = state.language === "zh" ? "zh-Hans" : "en";
     document.title = `${text("pageKicker")} · ${text("pageTitle")}`;
@@ -162,12 +220,19 @@
     if (elements.languageToggle) {
       elements.languageToggle.textContent = state.language === "zh" ? "EN" : "中文";
       elements.languageToggle.setAttribute("aria-pressed", String(state.language === "zh"));
+      elements.languageToggle.setAttribute("aria-label", text(state.language === "zh" ? "languageEnglish" : "languageChinese"));
     }
     if (elements.themeToggle) {
       const dark = root.dataset.theme !== "light";
-      elements.themeToggle.textContent = dark ? "Light" : "Dark";
+      elements.themeToggle.textContent = text(dark ? "themeLight" : "themeDark");
       elements.themeToggle.setAttribute("aria-pressed", String(dark));
+      elements.themeToggle.setAttribute("aria-label", text(dark ? "switchLight" : "switchDark"));
     }
+    const ownerBrand = document.querySelector(".owner-brand");
+    ownerBrand?.setAttribute("aria-label", text("homeLabel"));
+    if (ownerBrand) ownerBrand.href = state.language === "zh" ? "/?lang=zh" : "/";
+    const boardLink = document.querySelector(".owner-footer a");
+    if (boardLink) boardLink.href = state.language === "zh" ? "/?lang=zh" : "/";
     if (lastPayload) render(lastPayload);
   }
 
@@ -294,7 +359,7 @@
     const listing = document.createElement("td");
     line(listing, payment.listing?.title || text("notRecorded"), "owner-strong");
     if (payment.listing?.hostname) line(listing, payment.listing.hostname, "owner-muted");
-    if (payment.listing?.category) line(listing, payment.listing.category, "owner-muted");
+    if (payment.listing?.category) line(listing, ownerCategoryName(payment.listing.category), "owner-muted");
     row.append(listing);
 
     const amount = document.createElement("td");
