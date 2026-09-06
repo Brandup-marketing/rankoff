@@ -626,7 +626,7 @@
     if (elements.boardState) {
       elements.boardState.lastChild.textContent = chinese ? " 实时榜单" : " Live board";
     }
-    if (elements.boardHeading) elements.boardHeading.textContent = chinese ? "实时广告榜单" : "Live sponsored leaderboard";
+    if (elements.boardHeading) elements.boardHeading.textContent = chinese ? "赞助榜单" : "Sponsored leaderboard";
     if (elements.liveDot) elements.liveDot.hidden = !production;
     if (elements.measurementSummary) {
       elements.measurementSummary.textContent = chinese ? "点击如何统计" : "How clicks are measured";

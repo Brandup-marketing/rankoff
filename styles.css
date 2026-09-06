@@ -1325,3 +1325,37 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .top-three-hero .featured-listing, .top-three-hero .featured-1 { padding-bottom: .95rem; }
   .audience-strip { margin-top: 1.1rem; }
 }
+
+/* ---- Phone home review, pass 2 ---- */
+
+/* The audience strip was a 10px grey footnote wedged 6px under the third
+   claim pill. It is evidence, so it gets the shape evidence has on this
+   site: three figures in a framed row, with room above it. */
+.audience-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem .75rem; margin: 1.6rem 0 0; padding: .75rem .85rem .6rem; border: 1px solid var(--line); border-radius: .65rem; background: var(--surface); font-size: .68rem; }
+.audience-strip > span { display: grid; gap: .12rem; min-width: 0; }
+.audience-strip > span > strong { display: block; font-size: 1.15rem; line-height: 1.05; }
+.audience-strip > span > span { line-height: 1.3; }
+.audience-strip-note { grid-column: 1 / -1; padding-top: .35rem; border-top: 1px solid var(--line); font-size: .6rem; }
+@media (max-width: 46rem) {
+  .audience-strip { margin-top: 1.6rem; gap: .4rem .5rem; padding: .65rem .7rem .5rem; font-size: .62rem; }
+  .audience-strip > span > strong { font-size: 1.05rem; }
+  .audience-strip-note { flex-basis: auto; margin-left: 0; }
+}
+@media (min-width: 46.01rem) { .audience-strip-note { margin-left: 0; } }
+
+/* The market rail clipped a chip hard against the › button; a fade says
+   "more this way" instead. */
+.category-rail { -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 1.1rem), transparent 100%); mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 1.1rem), transparent 100%); }
+
+/* "Read all rules →" inherited body size once it moved into the lead. */
+.rules-lead a { color: var(--blue); font-size: .72rem; font-weight: 750; white-space: nowrap; text-underline-offset: .16em; }
+@media (max-width: 46rem) {
+  .rules-lead a { display: inline-flex; min-height: 2.5rem; align-items: center; font-size: .75rem; }
+  .section-heading-line h2, .board-toolbar-lead h2 { font-size: 1rem; }
+}
+
+/* Beside the time tabs the heading has ~180px on a phone; it must not wrap. */
+@media (max-width: 46rem) {
+  .board-toolbar-lead h2 { min-width: 0; font-size: .95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .board-toolbar-lead .time-tabs { flex: 0 0 auto; }
+}
