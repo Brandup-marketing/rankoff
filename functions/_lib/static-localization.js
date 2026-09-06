@@ -164,7 +164,7 @@ export function localizeStaticPage(shell, page, language = "en") {
     html = html.replace(/<h1 id="page-title">[\s\S]*?<\/h1>/, `<h1 id="page-title"><strong data-hero-next-price>${price}</strong><span class="hero-word" data-hero-join> 拿下</span><span data-hero-market></span><span data-hero-rank>第 1 名</span><span class="hero-word" data-hero-lead></span></h1>`);
     html = html.replace(/>All-time<\/button>/g, ">全部时间</button>").replace(/>Past 24h<\/button>/g, ">近 24 小时</button>");
     html = html.replace(/(<span class="demo-state"[^>]*>\s*<i[^>]*><\/i>\s*)Live board(<\/span>)/, "$1实时榜单$2");
-    html = html.replace(/(<span data-entry-toggle-label>)Claim #1(<\/span>)/, "$1拿下第 1 名$2");
+    html = html.replace(/(<span data-entry-toggle-label>)Enter your website(<\/span>)/, "$1输入你的网站$2");
     html = html.replace(/(<span data-panel-toggle-label>)Minimize(<\/span>)/g, "$1收起$2");
     html = html.replace(/href="\/\?period=today#board"/, 'href="/?lang=zh&amp;period=today#board"');
     html = html.replace(/>Sponsored leaderboard<\/h2>/, ">实时赞助榜单</h2>");

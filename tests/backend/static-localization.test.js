@@ -31,7 +31,7 @@ test("the Chinese home page is indexable before JavaScript runs", () => {
   assert.match(html, /data-i18n="heroCopy">把产品放到最显眼的位置/);
   assert.match(html, /data-i18n-placeholder="searchPlaceholder"[^>]*placeholder="搜索产品和分类…"/);
   assert.match(html, /data-i18n-aria-label="rankingTimeframe"[^>]*aria-label="排名时间范围"/);
-  assert.match(html, /data-entry-toggle-label>拿下第 1 名<\/span>/);
+  assert.match(html, /data-entry-toggle-label>输入你的网站<\/span>/);
   assert.match(html, /data-share-heading>分享此排名<\/h2>/);
   assert.match(html, /href="\/categories\?lang=zh"/);
   assert.match(html, /href="\/\?lang=zh&amp;period=today#board"/);

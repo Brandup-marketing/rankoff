@@ -514,8 +514,10 @@
   function entryToggleText(expanded) {
     // One verb for one action. The headline says Claim, the card said Claim,
     // and this button alone said Challenge.
-    if (state.language === "zh") return expanded ? "收起表单" : "拿下第 1 名";
-    return expanded ? "Hide the form" : "Claim #1";
+    // The headline already makes the offer ("Claim #1 for RM 15"); the bar
+    // under it names the next step instead of echoing the offer.
+    if (state.language === "zh") return expanded ? "收起表单" : "输入你的网站";
+    return expanded ? "Hide the form" : "Enter your website";
   }
 
   function setEntryExpanded(expanded) {
@@ -523,7 +525,7 @@
     elements.marketEntry.dataset.entryCollapsed = String(!expanded);
     elements.entryToggle.setAttribute("aria-expanded", String(expanded));
     if (elements.entryToggleLabel) elements.entryToggleLabel.textContent = entryToggleText(expanded);
-    if (elements.entryToggleIcon) elements.entryToggleIcon.textContent = expanded ? "\u2212" : "+";
+    if (elements.entryToggleIcon) elements.entryToggleIcon.textContent = expanded ? "\u2212" : "\u2192";
   }
 
   function syncEntryToggle() {
