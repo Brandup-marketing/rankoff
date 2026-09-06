@@ -59,18 +59,18 @@ const CATEGORIES_STATIC_COPY = Object.freeze({
 const ABOUT_STATIC_COPY = Object.freeze({
   Board: "榜单", Categories: "分类", About: "关于", "The story behind the board": "榜单背后的故事",
   "Attention has a price.": "注意力有价格", "Make it visible.": "让价值被看见",
-  "RANKOFF is the public market for visible attention. Products bid for sponsored rank, show what they do, and stay in position until someone pays more. One board, one clear rule: the highest total paid takes #1.": "RANKOFF 是公开的注意力市场。产品通过竞价获得赞助排名，展示自身价值，并保持位置，直到有人出价更高。一个榜单，一条清晰规则：累计付款金额最高者登上第 1 名。",
+  "RANKOFF is the public leaderboard for Malaysian businesses. A business pays to hold a position, shows what it does, and stays there until someone pays more. One board, one clear rule: the highest total paid takes #1.": "RANKOFF 是面向马来西亚商家的公开榜单。商家付费持有排名，展示自己的业务，并保持位置，直到有人付更多。一个榜单，一条清晰规则：累计付款最高者登上第 1 名。",
   "Why it exists": "为什么创立 Rankoff", "Rankoff started with one question.": "Rankoff 始于一个问题。",
-  "What if a product launch had a visible market instead of a hidden ad slot? What if anyone could see who was winning, what #1 costs, and which products are earning attention?": "如果产品发布面对的是一个透明市场，而不是隐藏的广告位，会怎样？如果任何人都能看见谁在领先、第 1 名值多少钱，以及哪些产品正在赢得关注，会怎样？",
+  "What if a business could buy the top spot in public, instead of a hidden ad slot? What if anyone could see who is winning, what #1 costs, and which businesses are getting attention?": "如果商家能公开买下最显眼的位置，而不是隐藏的广告位，会怎样？如果任何人都能看见谁在领先、第 1 名值多少钱、哪些商家正在获得关注，会怎样？",
   "Rankoff turns that question into a public place to compete. Listings are clear, totals paid are visible, and sponsored placement is labelled as sponsored.": "Rankoff 把这个问题变成一个公开竞争的平台。条目信息清晰、累计付款金额公开，赞助展示也会明确标注。",
-  Visible: "可见", "Public by default": "默认公开", "Every listing shows its current rank, total paid, and product description.": "每个条目都会显示当前排名、累计付款金额和产品介绍。",
+  Visible: "可见", "Public by default": "默认公开", "Every listing shows its current rank, total paid, and business description.": "每个条目都会显示当前排名、累计付款金额和业务介绍。",
   Simple: "简明", "One clear rule": "一条明确规则", "A higher total paid moves a listing higher on the board.": "累计付款金额越高，条目在榜单上的位置就越靠前。",
-  Measured: "可衡量", "Evidence over promises": "数据胜于承诺", "Referral clicks are labelled by how they were measured.": "推荐点击会注明统计方式。",
-  "The board today": "今日榜单", "A live market, in public.": "公开、实时的注意力市场。", "live listings": "实时条目", "tracked clicks": "追踪点击", "current top bid": "当前最高价",
-  "Live board values, updated continuously.": "榜单实时数值，持续更新。", "What happens next": "接下来会发生什么", "The board keeps moving.": "榜单持续变化。",
-  Now: "现在", "Submit a listing": "提交条目", "Enter a URL, choose a market, and set the bid that feels worth the position.": "输入网址、选择市场，并为你认为值得的位置设定出价。",
+  Measured: "可衡量", "Evidence over promises": "数据胜于承诺", "Clicks are tracked redirects, and every count says so.": "点击是追踪跳转记录，每个数字都会注明。",
+  "The board today": "今日榜单", "A live market, in public.": "公开、实时的注意力市场。", "live listings": "实时条目", "tracked clicks": "追踪点击", "current top total": "当前最高累计",
+  "Live board values, updated continuously.": "榜单实时数值，持续更新。", "Claim your place →": "拿下你的位置 →", "What happens next": "接下来会发生什么", "The board keeps moving.": "榜单持续变化。",
+  Now: "现在", "Submit a listing": "提交条目", "Enter your website, choose a market, and pay from RM5.": "输入你的网站、选择市场，RM5 起付款。",
   Then: "随后", "Compete in public": "公开竞争", "Your public identity, description, total paid, and position appear on the board after payment settles.": "付款结算后，你的公开身份、介绍、累计付款金额和位置会显示在榜单上。",
-  Next: "接下来", "Measure the outcome": "衡量结果", "Tracked clicks and public activity make the market legible over time.": "追踪点击和公开活动，让市场表现随时间清晰可见。",
+  Next: "接下来", "Measure the outcome": "衡量结果", "Tracked clicks and public activity show what the position earns over time.": "追踪点击和公开动态，让你随时看到这个位置带来了什么。",
   "A Brandup Marketing product": "Brandup Marketing 旗下产品", Rules: "规则", Terms: "条款", Privacy: "隐私", Payments: "付款",
 });
 
@@ -217,7 +217,7 @@ export function localizeStaticPage(shell, page, language = "en") {
     html = html.replace(/(<strong data-category-status>)Live board(<\/strong>)/, "$1实时榜单$2");
     html = html.replace(/aria-label="Category timeframe"/, 'aria-label="分类时间范围"');
     html = html.replace(/>Loading…<\/span>/, ">正在载入…</span>");
-    html = html.replace(/>All-time<\/button>/g, ">全部时间</button>").replace(/>Today<\/button>/g, ">今日</button>");
+    html = html.replace(/>All-time<\/button>/g, ">全部时间</button>").replace(/>Past 24h<\/button>/g, ">近 24 小时</button>");
   } else if (page === "about") {
     for (const [english, chinese] of Object.entries(ABOUT_STATIC_COPY)) html = html.split(`>${english}<`).join(`>${escapeHtml(chinese)}<`);
     html = html.replace(/aria-label="Rankoff origin"/, 'aria-label="Rankoff 起源"').replace(/aria-label="Rankoff principles"/, 'aria-label="Rankoff 原则"');

@@ -59,3 +59,19 @@ h2 { margin: 0; font-size: clamp(1.8rem, 4vw, 3.2rem); letter-spacing: -0.03em; 
   .timeline-grid { grid-template-columns: 1fr; gap: 2rem; }
 }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+
+/* ---- Phone review ---- */
+/* One red kicker — the hero's. The rest are section labels, not alarms. */
+.section-intro { color: var(--muted); }
+.about-hero .section-intro { color: var(--accent); }
+.about-actions { margin: 1.6rem 0 0; }
+.about-cta { text-decoration: none; }
+.timeline .about-actions { margin-top: 2rem; }
+@media (max-width: 48rem) {
+  .about-hero { padding: 2rem 0 2.5rem; }
+  .about-lede { margin-top: 1.1rem; font-size: 1rem; }
+  .origin-grid, .live-state { gap: 1.75rem; padding: 2.5rem 0; }
+  .timeline { padding: 2.5rem 0 2rem; }
+  .timeline-grid { gap: 1.25rem; margin-top: 1.5rem; }
+  .about-actions .primary-action { width: 100%; }
+}
