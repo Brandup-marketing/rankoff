@@ -414,13 +414,46 @@
       elements.themeToggle.setAttribute("aria-pressed", String(dark));
     }
     renderActive();
-    elements.grid?.replaceChildren(...categoryConfig.map((config) => {
+    renderGrid();
+    window.dispatchEvent(new CustomEvent("rankoff:content-updated"));
+    syncInternalLinks();
+  }
+
+  // Four listings across nineteen markets: a page that opens on a wall of
+  // "Waiting for the first listing" cards buries the markets that actually
+  // rank. Populated markets come first, most listings then highest bid; the
+  // empty ones fold under one disclosure so they stay reachable for whoever
+  // wants to take a first place. With nothing populated, the grid shows all.
+  function renderGrid() {
+    if (!elements.grid) return;
+    const cards = (config) => {
       const card = renderCard(config);
       card.dataset.categoryId = config.id;
       return card;
-    }));
-    window.dispatchEvent(new CustomEvent("rankoff:content-updated"));
-    syncInternalLinks();
+    };
+    const scored = categoryConfig.map((config, index) => ({ config, rows: categoryRows(config.id), index }));
+    const populated = scored.filter(({ rows }) => rows.length)
+      .sort((a, b) => b.rows.length - a.rows.length || b.rows[0].bid - a.rows[0].bid || a.index - b.index);
+    const empty = scored.filter(({ rows }) => !rows.length);
+    if (!populated.length || !empty.length) {
+      elements.grid.replaceChildren(...categoryConfig.map(cards));
+      elements.moreMarkets?.remove();
+      elements.moreMarkets = null;
+      return;
+    }
+    elements.grid.replaceChildren(...populated.map(({ config }) => cards(config)));
+    const details = elements.moreMarkets || document.createElement("details");
+    details.className = "category-more";
+    const summary = document.createElement("summary");
+    summary.textContent = elements.language === "zh"
+      ? `查看另外 ${empty.length} 个尚未有条目的市场`
+      : `Explore ${empty.length} more markets waiting for a first listing`;
+    const grid = document.createElement("div");
+    grid.className = "category-grid";
+    grid.append(...empty.map(({ config }) => cards(config)));
+    details.replaceChildren(summary, grid);
+    if (!elements.moreMarkets) elements.grid.after(details);
+    elements.moreMarkets = details;
   }
 
   function applyLanguageAttribute() {

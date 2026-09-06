@@ -154,7 +154,7 @@ test("the record block shows only what the board itself recorded", () => {
   );
 
   assert.match(html, /data-record-key="firstListed"><span>First listed<\/span><strong data-record-date="2026-08-31T11:04:27.190Z">31 Aug 2026<\/strong>/);
-  assert.match(html, /data-record-key="settledBids"><span>Settled bids<\/span><strong>3<\/strong>/);
+  assert.match(html, /data-record-key="settledBids"><span>Payments<\/span><strong>3<\/strong>/);
   assert.match(html, /data-record-key="lastUpdated"><span>Last updated<\/span><strong data-record-date="2026-09-02T04:00:00.000Z">2 Sep 2026<\/strong>/);
   assert.equal(formatDate("not a date"), "");
 });
@@ -175,7 +175,7 @@ test("an explicit Chinese product locale renders indexable Chinese metadata and 
   const html = renderProductPage(shell, view);
 
   assert.equal(view.pageTitle, "BrandUp Design Marketing — 营销与广告第 1 名 | RANKOFF");
-  assert.match(view.metaDescription, /RM 5 已结算出价.*营销与广告第 1 名.*41 次已验证点击/);
+  assert.match(view.metaDescription, /RM 5 累计付款.*营销与广告第 1 名.*41 次已验证点击/);
   assert.equal(view.canonical, "https://rankoff.my/product/brandupdesignmarketing.com?lang=zh");
   assert.match(html, /<html lang="zh-Hans"/);
   assert.match(html, /<link rel="canonical" href="https:\/\/rankoff\.my\/product\/brandupdesignmarketing\.com\?lang=zh"/);
@@ -201,7 +201,7 @@ test("an explicit Chinese product locale renders indexable Chinese metadata and 
   assert.match(html, /href="\/categories\?lang=zh"/);
   assert.match(html, /href="\/\?lang=zh#claim"/);
   assert.match(html, /data-record-key="firstListed"><span>首次上榜<\/span><strong data-record-date="2026-08-31T23:59:59.000Z">2026年8月31日<\/strong>/);
-  assert.match(html, /data-record-key="settledBids"><span>已结算出价<\/span><strong>3<\/strong>/);
+  assert.match(html, /data-record-key="settledBids"><span>付款次数<\/span><strong>3<\/strong>/);
   assert.match(html, /data-record-key="lastUpdated"><span>最近更新<\/span><strong data-record-date="2026-09-02T04:00:00.000Z">2026年9月2日<\/strong>/);
 });
 

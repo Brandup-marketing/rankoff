@@ -37,7 +37,7 @@ const FONT_STACK = 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", 
 const LOGO_TIMEOUT_MS = 4000;
 
 export const CARD_STRINGS = Object.freeze({
-  en: Object.freeze({ total: "Settled total", todayTotal: "Past 24h total", footer: "Sponsored ranking", board: "on RANKOFF", allTime: "All-time", today: "Past 24h", challenge: "OUTRANK ME" }),
+  en: Object.freeze({ total: "Total paid", todayTotal: "Past 24h total", footer: "Sponsored ranking", board: "on RANKOFF", allTime: "All-time", today: "Past 24h", challenge: "OUTRANK ME" }),
   zh: Object.freeze({ total: "累计出价", todayTotal: "近 24 小时累计", footer: "赞助排名", board: "RANKOFF 全站", allTime: "全部时间", today: "近 24 小时", challenge: "来超越我" }),
 });
 

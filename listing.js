@@ -44,7 +44,7 @@
       previewDisclosure: "Submissions pass automated checks instantly; listings may be removed after publication if they break the rules.", liveDisclosure: "Payment is confirmed only after secure hosted checkout settles.",
       unavailable: "Website temporarily unavailable", copied: "Rank link copied.", shareText: "is ranked", listingFallback: "Listing", sponsoredDescription: "Sponsored listing on Rankoff.",
       footerParent: "A Brandup Marketing product", rules: "Rules", terms: "Terms", privacy: "Privacy", payments: "Payments",
-      firstListed: "First listed", settledBids: "Settled bids", lastUpdated: "Last updated",
+      firstListed: "First listed", settledBids: "Payments", lastUpdated: "Last updated",
     },
     zh: {
       board: "榜单", categories: "分类", about: "关于", legal: "法律条款", contact: "联系", skipListing: "跳至条目详情", back: "← 返回榜单", loading: "正在加载排名信息…",
@@ -64,7 +64,7 @@
       previewDisclosure: "提交即通过自动筛查并发布；违反规则的条目可能在发布后被移除。", liveDisclosure: "付款会在安全的托管付款页面完成并确认。",
       unavailable: "网站暂时无法访问", copied: "排名链接已复制。", shareText: "目前排名", listingFallback: "条目", sponsoredDescription: "Rankoff 上的赞助条目。",
       footerParent: "Brandup Marketing 旗下产品", rules: "规则", terms: "条款", privacy: "隐私", payments: "付款",
-      firstListed: "首次上榜", settledBids: "已结算出价", lastUpdated: "最近更新",
+      firstListed: "首次上榜", settledBids: "付款次数", lastUpdated: "最近更新",
     },
   };
   const pageMetadata = {

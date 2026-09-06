@@ -1178,3 +1178,26 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
    phrase, not a number: it wraps like the words around it instead of running
    off a phone screen. "#1" and the price keep their no-break. */
 .claim-panel h1 [data-hero-market] { white-space: normal; }
+
+/* Desktop podium: #2 and #3 were half-width cards beside each other, which
+   squeezed "BrandUp Design Marketing" to "BrandUp Design M…" and its pitch to
+   one clipped line. They are full-width rows now, like #1 but lighter — a
+   visitor can read what each business does before deciding whether to outbid
+   it. Names wrap instead of clipping; every podium card gets two lines of
+   description. */
+@media (min-width: 64rem) {
+  .top-three-hero { grid-template-columns: minmax(0, 1fr); }
+  .top-three-hero .featured-listing .product-name, .top-three-hero .featured-1 .product-name { white-space: normal; overflow: visible; text-overflow: clip; }
+  .top-three-hero .featured-listing .listing-description { -webkit-line-clamp: 2; }
+}
+
+/* Less red competing with the one red that matters (the #1 frame and its
+   claim): the market tag is a neutral chip and the #2/#3 claims are quiet
+   outlines until the cursor reaches them. */
+.category-meta { background: var(--surface-subtle); color: var(--ink); }
+.top-three-hero .featured-2 .claim-rank-pill, .top-three-hero .featured-3 .claim-rank-pill { border-color: var(--line-strong); background: var(--surface); color: var(--muted); }
+.top-three-hero .featured-2 .claim-rank-pill:hover, .top-three-hero .featured-3 .claim-rank-pill:hover,
+.top-three-hero .featured-2 .claim-rank-pill:focus-visible, .top-three-hero .featured-3 .claim-rank-pill:focus-visible { border-color: var(--accent); background: var(--accent); color: #fff; }
+@media (max-width: 34rem) {
+  .top-three-hero .featured-2 .claim-rank-pill, .top-three-hero .featured-3 .claim-rank-pill { border-color: var(--accent); color: var(--ink); }
+}

@@ -20,7 +20,7 @@ const PRODUCT_COPY = Object.freeze({
     liveDisclosure: "Payment is confirmed only after secure hosted checkout settles.",
     currentRank: "Current rank",
     firstListed: "First listed",
-    settledBids: "Settled bids",
+    settledBids: "Payments",
     lastUpdated: "Last updated",
     verifiedPlacement: "Verified placement",
     verifiedClicks: "Verified clicks",
@@ -37,7 +37,7 @@ const PRODUCT_COPY = Object.freeze({
     liveDisclosure: "付款会在安全的托管付款页面完成并确认。",
     currentRank: "当前排名",
     firstListed: "首次上榜",
-    settledBids: "已结算出价",
+    settledBids: "付款次数",
     lastUpdated: "最近更新",
     verifiedPlacement: "已验证展示",
     verifiedClicks: "已验证点击",
@@ -237,8 +237,8 @@ export function buildProductView({ entry, todayEntry, board, snapshotId, record,
     // board is large the overall number wins this comparison on its own.
     pageTitle: `${title} — ${headline}`,
     metaDescription: clamp(locale === "zh"
-      ? `${title}以 ${bid} 已结算出价位列 Rankoff ${position}，获得 ${clicks} 次已验证点击。`
-      : `${title} holds ${position} on Rankoff with ${bid} in settled bids and ${clicks} verified clicks. ${description}`,
+      ? `${title}以 ${bid} 累计付款位列 Rankoff ${position}，获得 ${clicks} 次已验证点击。`
+      : `${title} holds ${position} on Rankoff with ${bid} paid and ${clicks} verified clicks. ${description}`,
     200),
   };
 }

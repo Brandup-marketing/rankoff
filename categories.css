@@ -168,3 +168,12 @@ html[data-theme="light"] .categories-topbar .brand-emblem-image, html[data-theme
   .categories-topbar .search-toggle { grid-area: search; }
   .category-actions { grid-area: actions; }
 }
+
+/* Empty markets fold under one line below the populated grid. */
+.category-more { margin-top: .75rem; }
+.category-more summary { display: inline-flex; min-height: 2.75rem; align-items: center; gap: .4rem; padding: .5rem .9rem; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); font-size: .82rem; font-weight: 800; cursor: pointer; list-style: none; }
+.category-more summary::-webkit-details-marker { display: none; }
+.category-more summary::after { content: "›"; transform: rotate(90deg); transition: transform 160ms var(--ease); }
+.category-more[open] summary::after { transform: rotate(-90deg); }
+.category-more summary:hover { border-color: var(--accent); }
+.category-more > .category-grid { margin-top: .75rem; }
