@@ -11,13 +11,13 @@
   const pageMetadata = {
     en: {
       title: "About RANKOFF",
-      description: "Learn how Rankoff turns sponsored attention into a public bidding board where products compete for visible rank.",
-      socialDescription: "How Rankoff works: products compete for sponsored rank while totals paid and tracked clicks remain public.",
+      description: "How Rankoff works: Malaysian businesses pay to hold a spot on a public board, and every total and click stays visible.",
+      socialDescription: "How Rankoff works: Malaysian businesses pay to hold a spot on a public board, and every total and click stays visible.",
     },
     zh: {
       title: "关于 RANKOFF",
-      description: "了解 Rankoff 如何把赞助注意力变成公开竞价榜单，让产品为清晰可见的排名展开竞争。",
-      socialDescription: "了解 Rankoff 的运作方式：产品竞逐赞助排名，累计付款金额和追踪点击公开可见。",
+      description: "Rankoff 怎么运作：马来西亚商家付费占据公开榜单的位置，每一笔付款和点击都公开可见。",
+      socialDescription: "Rankoff 怎么运作：马来西亚商家付费占据公开榜单的位置，每一笔付款和点击都公开可见。",
     },
   };
   const accessibilityCopy = {
@@ -34,23 +34,23 @@
   };
   const translations = new Map([
     ["Board", "榜单"], ["Categories", "分类"], ["About", "关于"],
-    ["The story behind the board", "榜单背后的故事"], ["Attention has a price.", "注意力有价格"], ["Make it visible.", "让价值被看见"],
-    ["RANKOFF is the public leaderboard for Malaysian businesses. A business pays to hold a position, shows what it does, and stays there until someone pays more. One board, one clear rule: the highest total paid takes #1.", "RANKOFF 是面向马来西亚商家的公开榜单。商家付费持有排名，展示自己的业务，并保持位置，直到有人付更多。一个榜单，一条清晰规则：累计付款最高者登上第 1 名。"],
-    ["Why it exists", "为什么创立 Rankoff"], ["Rankoff started with one question.", "Rankoff 始于一个问题。"],
-    ["What if a business could buy the top spot in public, instead of a hidden ad slot? What if anyone could see who is winning, what #1 costs, and which businesses are getting attention?", "如果商家能公开买下最显眼的位置，而不是隐藏的广告位，会怎样？如果任何人都能看见谁在领先、第 1 名值多少钱、哪些商家正在获得关注，会怎样？"],
-    ["Rankoff turns that question into a public place to compete. Listings are clear, totals paid are visible, and sponsored placement is labelled as sponsored.", "Rankoff 把这个问题变成一个公开竞争的平台。条目信息清晰、累计付款金额公开，赞助展示也会明确标注。"],
-    ["Visible", "可见"], ["Public by default", "默认公开"], ["Every listing shows its current rank, total paid, and business description.", "每个条目都会显示当前排名、累计付款金额和业务介绍。"],
-    ["Simple", "简明"], ["One clear rule", "一条明确规则"], ["A higher total paid moves a listing higher on the board.", "累计付款金额越高，条目在榜单上的位置就越靠前。"],
-    ["Measured", "可衡量"], ["Evidence over promises", "数据胜于承诺"], ["Clicks are tracked redirects, and every count says so.", "点击是追踪跳转记录，每个数字都会注明。"],
-    ["The board today", "今日榜单"], ["A live market, in public.", "公开、实时的注意力市场。"],
-    ["live listings", "实时条目"], ["tracked clicks", "追踪点击"], ["current top total", "当前最高累计"],
-    ["What happens next", "接下来会发生什么"], ["The board keeps moving.", "榜单持续变化。"],
-    ["Submit a listing", "提交条目"], ["Compete in public", "公开竞争"], ["Measure the outcome", "衡量结果"],
-    ["Now", "现在"], ["Enter your website, choose a market, and pay from RM5.", "输入你的网站、选择市场，RM5 起付款。"],
-    ["Then", "随后"], ["Your public identity, description, total paid, and position appear on the board after payment settles.", "付款结算后，你的公开身份、介绍、累计付款金额和位置会显示在榜单上。"],
-    ["Next", "接下来"], ["Tracked clicks and public activity show what the position earns over time.", "追踪点击和公开动态，让你随时看到这个位置带来了什么。"],
-    ["Live board values, updated continuously.", "榜单实时数值，持续更新。"],
-    ["Claim your place →", "拿下你的位置 →"],
+    ["The story behind the board", "榜单背后的故事"], ["Attention has a price.", "注意力，明码标价。"], ["Make it visible.", "让它公开可见。"],
+    ["RANKOFF is the public leaderboard for Malaysian businesses. Pay to hold a spot, show customers what you do, and keep it until someone pays more. One board, one rule: the highest total paid takes #1.", "RANKOFF 是马来西亚商家的公开榜单。付费占一个位置，把你的生意展示给顾客，直到有人付得更多。一个榜单，一条规则：累计付款最高者，就是第 1 名。"],
+    ["Why it exists", "为什么有 Rankoff"], ["Rankoff started with one question.", "Rankoff 始于一个问题。"],
+    ["What if a business could buy the top spot in the open, not in a hidden ad auction? What if everyone could see who is on top, what it cost, and who is getting the clicks?", "如果商家可以光明正大买下最显眼的位置，而不是在看不见的广告竞价里？如果每个人都能看到谁在榜首、花了多少钱、谁拿到了点击？"],
+    ["Rankoff is the answer: a public board where the price, the position and the clicks are all on show, and every listing is labelled as sponsored.", "Rankoff 就是答案：一个公开榜单，价格、排名、点击全部公开，每个条目都标明是赞助。"],
+    ["Visible", "可见"], ["Public by default", "默认公开"], ["Every listing shows its rank, its total paid, and what the business does.", "每个条目都显示排名、累计付款，以及这家生意是做什么的。"],
+    ["Simple", "简明"], ["One clear rule", "一条规则"], ["Pay more than the listing above you and you move up. That is the whole rule.", "付得比上面那家多，你就往上走。规则就这么简单。"],
+    ["Measured", "可衡量"], ["Evidence over promises", "数据胜于承诺"], ["Clicks are tracked redirects, counted by Rankoff and shown in public. No promises, just the number.", "点击是 Rankoff 记录的跳转次数，公开显示。不承诺效果，只给你数字。"],
+    ["The board today", "榜单现况"], ["The board, right now.", "此刻的榜单。"],
+    ["live listings", "上榜条目"], ["tracked clicks", "追踪点击"], ["top total paid", "最高累计付款"],
+    ["How it works", "运作方式"], ["The board keeps moving.", "榜单一直在动。"],
+    ["List your business", "让生意上榜"], ["Compete in public", "公开竞争"], ["See what it earns", "看看回报"],
+    ["Now", "现在"], ["Enter your website, choose a market, and pay from RM5.", "输入网站、选择市场，RM5 起付款。"],
+    ["Then", "随后"], ["Once payment settles, your business, your total and your position are on the board for everyone to see.", "付款确认后，你的生意、累计付款和排名就公开在榜单上，人人可见。"],
+    ["Next", "接下来"], ["Tracked clicks show how many people went from the board to your website.", "追踪点击告诉你，有多少人从榜单点进了你的网站。"],
+    ["Real numbers from the board, updated live.", "榜单真实数据，实时更新。"],
+    ["Claim your spot →", "拿下你的位置 →"],
     ["Live values are unavailable right now.", "实时数值暂时无法读取。"],
     ["A Brandup Marketing product", "Brandup Marketing 旗下产品"], ["Rules", "规则"], ["Terms", "条款"], ["Privacy", "隐私"], ["Payments", "付款"],
   ]);
@@ -192,6 +192,6 @@
     if (listingCount) listingCount.textContent = compact.format(board.rankings?.length || 0);
     if (clickCount) clickCount.textContent = compact.format(Number(stats.total_clicks || 0));
     if (topBid) topBid.textContent = currency.format(Number(board.rankings?.[0]?.bid?.amount_minor || 0) / 100);
-    setCopy(disclosure, "Live board values, updated continuously.");
+    setCopy(disclosure, "Real numbers from the board, updated live.");
   }).catch(showUnavailable);
 })();

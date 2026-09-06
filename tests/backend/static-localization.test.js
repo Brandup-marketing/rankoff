@@ -83,7 +83,7 @@ test("the Chinese about page has no English-only story shell", () => {
 
   assert.match(html, /<title>关于 RANKOFF<\/title>/);
   assert.match(html, /<link rel="canonical" href="https:\/\/rankoff\.my\/about\?lang=zh" \/>/);
-  assert.match(html, /<span class="hero-line">注意力有价格<\/span>/);
+  assert.match(html, /<span class="hero-line">注意力，明码标价。<\/span>/);
   assert.match(html, /<h2>Rankoff 始于一个问题。<\/h2>/);
   assert.match(html, /aria-label="Rankoff 原则"/);
   assert.doesNotMatch(html, />Attention has a price\.</);
