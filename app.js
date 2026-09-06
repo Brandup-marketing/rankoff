@@ -2711,6 +2711,13 @@
     activeBid = null;
   });
 
+  // A "Take #1" link from the categories page lands on /#claim. On a phone
+  // the form is folded, so the link opens it and puts the cursor in the field.
+  if (window.location.hash === "#claim" && phoneQuery?.matches) {
+    openEntryForm();
+    window.setTimeout(() => elements.inlineUrl?.focus({ preventScroll: true }), 160);
+  }
+
   elements.entryToggle?.addEventListener("click", () => {
     phoneEntryOpen = elements.entryToggle?.getAttribute("aria-expanded") !== "true";
     syncEntryToggle();

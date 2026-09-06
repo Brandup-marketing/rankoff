@@ -179,3 +179,31 @@ html[data-theme="light"] .categories-topbar .brand-emblem-image, html[data-theme
 .category-more[open] summary::after { transform: rotate(-90deg); }
 .category-more summary:hover { border-color: var(--accent); }
 .category-more > .category-grid { margin-top: .75rem; }
+
+/* ---- Categories, phone review ---- */
+
+/* The whole card opens its market; the head link stretches over the card and
+   the rows and the claim line sit above that layer with their own targets. */
+.category-card { position: relative; }
+.category-card-head a::after { content: ""; position: absolute; inset: 0; }
+.category-rankings, .category-claim { position: relative; z-index: 1; }
+
+/* First place has a price in every market that has a leader. */
+.category-claim { display: inline-flex; min-height: 2.5rem; align-items: center; margin-top: .6rem; padding: .35rem .8rem; border: 1px solid var(--accent); border-radius: 999px; color: var(--ink); font-size: .76rem; font-weight: 800; text-decoration: none; }
+.category-claim:hover { background: var(--accent-fill, var(--accent)); border-color: var(--accent-fill, var(--accent)); color: #fff; }
+
+/* Four markets fit one row on a wide screen instead of three plus an orphan. */
+@media (min-width: 64rem) { .category-grid { grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr)); } }
+
+/* Phone: the first market at ~250px, not ~460px. The status pill repeated the
+   nav ("Board") and the count the grid shows; the title comes down a size. */
+@media (max-width: 48rem) {
+  .category-status { display: none; }
+  .category-hero { margin: 1.1rem 0 1rem; }
+  .category-hero h1 { font-size: 2.1rem; }
+  .category-hero > p:last-child { margin-top: .45rem; font-size: .92rem; }
+  .section-heading-spread { margin-bottom: .5rem; }
+  .category-card { padding-top: 1rem; }
+  .category-card-head { margin-bottom: .7rem; }
+  .category-card-head h3 { font-size: 1.05rem; }
+}

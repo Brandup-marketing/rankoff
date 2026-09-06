@@ -48,6 +48,7 @@
     root: document.documentElement,
     allRows: [],
     todayRows: [],
+    incrementUnits: 0,
     activeWindow: "all",
     language: "en",
     mode: /^https?:$/.test(window.location.protocol) ? "loading" : "preview",
@@ -207,6 +208,7 @@
   }
 
   function hrefFor(id) { return `/?category=${encodeURIComponent(id)}#board`; }
+  function claimHrefFor(id) { return `/?category=${encodeURIComponent(id)}#claim`; }
 
   function iconFor(config, className = "category-icon") {
     const icon = document.createElement("span");
@@ -349,6 +351,17 @@
       });
     }
     card.append(head, rankings);
+    // The price of first place in this market: the current top total plus the
+    // board's increment, the server's own next_bid rule. Only where both the
+    // top total and the increment are known.
+    if (rows.length && elements.incrementUnits > 0) {
+      const claim = document.createElement("a");
+      claim.className = "category-claim";
+      claim.href = claimHrefFor(config.id);
+      const price = currency.format(rows[0].bid + elements.incrementUnits);
+      claim.textContent = elements.language === "zh" ? `${price} 起拿下第 1 名 →` : `Take #1 from ${price} →`;
+      card.append(claim);
+    }
     return card;
   }
 
@@ -515,6 +528,10 @@
       const allPayload = allResult.value;
       const todayPayload = todayResult.status === "fulfilled" ? todayResult.value : { rankings: [] };
       currency = boardCurrencyFormat(String(allPayload.board?.currency || "USD").toUpperCase());
+      // The board's own increment: the price of first place is the top total
+      // plus this, exactly as the server computes next_bid_minor. Absent, no
+      // price is shown — never a guessed step.
+      elements.incrementUnits = Number(allPayload.board?.min_increment_minor) > 0 ? Number(allPayload.board.min_increment_minor) / 100 : 0;
       const allRows = normalizeRows(allPayload, "all");
       const todayRows = normalizeRows(todayPayload, "today");
       const productionBoard = allPayload.mode === "production";
