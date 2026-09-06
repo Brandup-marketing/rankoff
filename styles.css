@@ -1373,3 +1373,30 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .board-list .standard-listing .product-copy { display: contents; }
   .board-list .standard-listing .listing-description { grid-area: desc; display: -webkit-box; font-size: .72rem; }
 }
+
+/* ---- Bottom of the home page, one pass ---- */
+
+/* 1. On a phone the heading sits directly on the flow; the paragraph
+   between them said what the flow says. */
+@media (max-width: 46rem) {
+  .rules-lead p { display: none; }
+  .rules-lead { gap: .2rem; margin-bottom: .2rem; }
+}
+
+/* 2. One tile carries the rule. */
+.rules-flow li:nth-child(2) { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+.rules-flow li:nth-child(2) .rules-glyph { background: var(--accent-fill); color: #fff; }
+
+/* 3. The click caveat is a footnote to the flow, not a section of its own. */
+.rules-note { padding-top: .45rem; border-top: 0; font-size: .64rem; line-height: 1.4; }
+
+/* 4. The three questions are a list on a phone, not filter chips. */
+@media (max-width: 46rem) {
+  .board-answers { flex-direction: column; gap: .35rem; }
+  .board-answers a { display: flex; justify-content: space-between; align-items: center; gap: .6rem; width: 100%; min-height: 2.75rem; padding: .55rem .8rem; border-radius: .55rem; }
+  .board-answers a::after { content: "›"; color: var(--muted); font-size: 1rem; font-weight: 800; }
+}
+
+/* 5. One wordmark in the footer, not two. */
+.footer-brand { width: 3.5rem; height: 3.5rem; }
+.footer-credit strong { display: none; }
