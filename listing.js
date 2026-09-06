@@ -121,6 +121,9 @@
   // The server-rendered page hands the currency down with the model and never
   // reaches the board fetch below, so the code has to start from the model too.
   let boardCurrency = String(model?.currency || "USD").toUpperCase();
+  // The board's minimum single payment (RM 5 — the gateway's floor too).
+  // Arrives with the board payload; until then the target total alone rules.
+  let boardFloor = 0;
   let claimAmountTouched = false;
   // The whole all-time board, for the claim preview: which position a total
   // would land at, in this listing's market and overall.
@@ -314,6 +317,7 @@
           const [allPayload, todayPayload] = await Promise.all([allResponse.json(), todayResponse.json()]);
           productionBoard = allPayload.mode === "production";
           boardCurrency = String(allPayload.board?.currency || "USD").toUpperCase();
+          boardFloor = Number(allPayload.board?.min_increment_minor) > 0 ? Number(allPayload.board.min_increment_minor) / 100 : 0;
           boardRankings = rankingsForPreview(allPayload);
           money = boardCurrencyFormat(boardCurrency);
           const allEntry = allPayload.rankings?.find((entry) => String(entry.listing?.id) === id);
@@ -537,9 +541,27 @@
     try {
       const response = await fetch(new URL("/api/v1/board?board=global&period=all&limit=100", location.origin), { cache: "no-store" });
       if (!response.ok) return;
-      boardRankings = rankingsForPreview(await response.json());
+      const payload = await response.json();
+      boardRankings = rankingsForPreview(payload);
+      if (!boardFloor && Number(payload.board?.min_increment_minor) > 0) boardFloor = Number(payload.board.min_increment_minor) / 100;
       renderClaimPreview();
     } catch { /* The preview simply stays quiet without the board. */ }
+  }
+
+  // What this website must pay now: the gap to the target total for a website
+  // already on the board (payments accumulate), the whole target for a new
+  // one — and never less than the board's floor, which is also the smallest
+  // charge the gateway accepts.
+  function claimRequired(existing) {
+    const target = model?.nextBid || (model?.bid || 0) + 1;
+    const gap = existing ? target - existing.bid : target;
+    return Math.max(boardFloor || 1, gap);
+  }
+
+  function existingForTypedUrl() {
+    let hostname = "";
+    try { hostname = parseClaimUrl(elements.claimUrl.value).hostname.toLowerCase().replace(/^(?:www|m)\./, ""); } catch { /* not typed yet */ }
+    return hostname ? boardRankings.find((row) => row.hostname === hostname) || null : null;
   }
 
   // "#1 in Hardware & Construction · #2 overall · Already paid RM 5 · Total
@@ -550,11 +572,14 @@
     const node = elements.claimPreview;
     if (!node || !model || elements.claimForm?.hidden) return;
     if (!boardRankings.length) return void (node.hidden = true);
+    const existing = existingForTypedUrl();
+    // The field's floor follows the website typed: a returning customer owes
+    // the gap, a new one the target, nobody less than the minimum payment.
+    const required = claimRequired(existing);
+    elements.claimAmount.min = String(required);
+    if (!claimAmountTouched || Number(elements.claimAmount.value) < required) elements.claimAmount.value = String(required);
     const amount = Number(elements.claimAmount.value);
     if (!Number.isSafeInteger(amount) || amount <= 0) return void (node.hidden = true);
-    let hostname = "";
-    try { hostname = parseClaimUrl(elements.claimUrl.value).hostname.toLowerCase().replace(/^(?:www|m)\./, ""); } catch { /* not typed yet */ }
-    const existing = hostname ? boardRankings.find((row) => row.hostname === hostname) : null;
     const previous = existing ? existing.bid : 0;
     const total = previous + amount;
     // A website already on the board keeps its own market: the payment lands
@@ -571,7 +596,11 @@
     const paid = existing
       ? (zh ? `已付 ${money.format(previous)} · 付款后累计 <strong>${money.format(total)}</strong>` : `Already paid ${money.format(previous)} · Total after <strong>${money.format(total)}</strong>`)
       : (zh ? "新条目" : "New listing");
-    node.innerHTML = `${zh ? "预计：" : "Expected: "}${position} · ${paid}`;
+    // Say so when the minimum payment, not the gap, is what sets the amount.
+    const floorNote = boardFloor && existing && (model.nextBid || model.bid + 1) - existing.bid < boardFloor
+      ? (zh ? ` · 最低付款 ${money.format(boardFloor)}` : ` · Minimum payment ${money.format(boardFloor)}`)
+      : "";
+    node.innerHTML = `${zh ? "预计：" : "Expected: "}${position} · ${paid}${floorNote}`;
     node.hidden = false;
   }
 
@@ -664,7 +693,7 @@
       elements.claimUrl.focus();
       return;
     }
-    const minimum = model.nextBid || model.bid + 1;
+    const minimum = claimRequired(existingForTypedUrl());
     const amount = Number(elements.claimAmount.value);
     if (!Number.isSafeInteger(amount) || amount < minimum) {
       showToast(text("claimTooLow").replace("{min}", money.format(minimum)));
