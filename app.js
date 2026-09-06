@@ -1484,7 +1484,9 @@
     // leader's price, so taking #2 off a RM 5 listing was advertised at the
     // RM 15 it costs to take #1. A position is taken by exceeding the total
     // that holds it, and a tie loses because it settles later.
-    const ownPrice = getBid(listing) + boardMinimum();
+    // The price of this listing's place: one ringgit more than it holds,
+    // never below the floor. For #1 the server's own next bid wins if higher.
+    const ownPrice = Math.max(boardMinimum(), getBid(listing) + 1);
     const minimum = position === 1 && boardSource !== "local" && remoteNextBid
       ? Math.max(remoteNextBid, ownPrice)
       : ownPrice;
