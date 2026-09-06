@@ -64,7 +64,7 @@
 
         <span class="demo-state" data-board-state><i aria-hidden="true"></i> Live board</span>
         <nav class="site-nav" data-i18n-aria-label="mainNavigation" aria-label="Main navigation"><a href="/" data-language-link data-i18n="navBoard" aria-current="page">Board</a><a href="/categories" data-language-link data-i18n="navCategories">Categories</a><a href="/about" data-language-link data-i18n="navAbout">About</a></nav>
-        <button class="search-toggle" type="button" data-search-toggle aria-expanded="false" aria-controls="site-search" data-i18n-aria-label="searchPlaceholder" aria-label="Search products and categories"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.6 4.6"></path></svg></button>
+        <button class="search-toggle" type="button" data-search-toggle aria-expanded="false" aria-controls="site-search" data-i18n-aria-label="searchPlaceholder" aria-label="Search businesses and markets"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.6 4.6"></path></svg></button>
         <button class="language-toggle" type="button" data-language-toggle aria-pressed="false">中文</button>
         <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch colour theme" aria-pressed="true">Light</button>
       </header>
@@ -72,8 +72,8 @@
       <form class="site-search" id="site-search" data-site-search role="search" hidden>
         <div class="site-search-field">
           <span class="site-search-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.6 4.6"></path></svg></span>
-          <label class="visually-hidden" for="site-search-input" data-i18n="searchPlaceholder">Search products and categories…</label>
-          <input id="site-search-input" data-site-search-input data-i18n-placeholder="searchPlaceholder" type="search" autocomplete="off" placeholder="Search products and categories…" />
+          <label class="visually-hidden" for="site-search-input" data-i18n="searchPlaceholder">Search businesses and markets…</label>
+          <input id="site-search-input" data-site-search-input data-i18n-placeholder="searchPlaceholder" type="search" autocomplete="off" placeholder="Search businesses and markets…" />
           <button class="search-close" type="button" data-search-close data-i18n="close">Close</button>
         </div>
         <nav class="site-search-results" data-search-results data-i18n-aria-label="searchResults" aria-label="Search results" hidden></nav>
@@ -82,7 +82,7 @@
       <section class="claim-stage" id="claim" aria-labelledby="page-title">
         <div class="claim-panel">
           <h1 id="page-title"><span class="hero-word" data-hero-lead>Claim </span><span data-hero-rank>#1</span><span data-hero-market></span><span class="hero-word" data-hero-join> for </span><strong data-hero-next-price>RM 5</strong></h1>
-          <p class="claim-copy" data-hero-context data-i18n="heroCopy">Put your product where people look first. Your listing stays at the top until someone pays more.</p>
+          <p class="claim-copy" data-hero-context data-i18n="heroCopy">Put your business where customers look first. It stays at the top until someone pays more.</p>
 
           <div class="market-entry" data-market-entry data-entry-collapsed="true">
             <!-- B2 (agent/post-payment): phone-only entry-form toggle. Hidden on
@@ -92,7 +92,7 @@
               <div class="amount-control">
                 <button type="button" data-inline-adjust="-10" data-i18n-aria-label="decreaseBid" aria-label="Decrease bid by ten">−</button>
                 <label>
-                  <span data-i18n="totalBid">Your total bid</span>
+                  <span data-i18n="totalBid">Your payment</span>
                   <span class="money-field">
                     <b aria-hidden="true" data-currency-symbol>$</b>
                     <input name="challengeAmount" type="number" inputmode="numeric" min="1" max="1000000" step="1" required data-inline-bid />
@@ -102,18 +102,18 @@
               </div>
 
               <label class="field field-wide">
-                <span data-i18n="productUrl">Your product URL or @handle</span>
+                <span data-i18n="productUrl">Your website or social profile</span>
                 <input name="productUrl" type="text" data-i18n-placeholder="productUrlPlaceholder" placeholder="example.com or instagram.com/yourname" autocomplete="url" required data-inline-url />
               </label>
 
               <label class="field">
-                <span data-i18n="challengeCategory">Challenge category</span>
+                <span data-i18n="challengeCategory">Market</span>
                 <select name="productCategory" required data-category-select>
                   <option value="" data-i18n="chooseMarket">Choose a market</option>
                 </select>
               </label>
 
-              <button class="primary-action" type="submit" data-inline-submit data-i18n="reviewBid">Review your bid</button>
+              <button class="primary-action" type="submit" data-inline-submit data-i18n="reviewBid">Review &amp; pay</button>
             </form>
 
           </div>
@@ -318,9 +318,9 @@
     </dialog>
 
     <div class="toast" data-toast role="status" aria-live="polite" aria-atomic="true"></div>
-    <script src="./search.js?v=4" defer></script>
+    <script src="./search.js?v=6" defer></script>
     <script src="./share-card.js?v=7" type="module"></script>
     <script src="./share.js?v=8" defer></script>
-    <script src="./app.js?v=99" defer></script>
+    <script src="./app.js?v=100" defer></script>
   </body>
 </html>

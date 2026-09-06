@@ -62,8 +62,8 @@
   };
 
   const staticCopy = {
-    en: { skipCategories: "Skip to categories", board: "Board", categories: "Categories", about: "About", footerParent: "A Brandup Marketing product", rules: "Rules", terms: "Terms", privacy: "Privacy", payments: "Payments", seeBoard: "See board", browseMarkets: "Browse the markets", heroCopy: "Every category has its own ranking. Choose one to see its leaders.", activeHeading: "Most active categories", allHeading: "All categories", allCopy: "Choose a market to view its live board." },
-    zh: { skipCategories: "跳至分类", board: "榜单", categories: "分类", about: "关于", footerParent: "Brandup Marketing 旗下产品", rules: "规则", terms: "条款", privacy: "隐私", payments: "付款", seeBoard: "查看榜单", browseMarkets: "浏览市场", heroCopy: "每个类别都有自己的榜单。选择一个市场，看看谁在领先。", activeHeading: "最活跃的分类", allHeading: "全部分类", allCopy: "选择一个市场，查看其实时榜单。" },
+    en: { skipCategories: "Skip to categories", board: "Board", categories: "Categories", about: "About", footerParent: "A Brandup Marketing product", rules: "Rules", terms: "Terms", privacy: "Privacy", payments: "Payments", seeBoard: "See board", browseMarkets: "Browse the markets", heroCopy: "Every market has its own board. Pick yours and see who is on top.", activeHeading: "Most active categories", allHeading: "All categories", allCopy: "Choose a market to view its live board." },
+    zh: { skipCategories: "跳至分类", board: "榜单", categories: "分类", about: "关于", footerParent: "Brandup Marketing 旗下产品", rules: "规则", terms: "条款", privacy: "隐私", payments: "付款", seeBoard: "查看榜单", browseMarkets: "浏览市场", heroCopy: "每个市场都有自己的榜单。选你的行业，看看谁在榜首。", activeHeading: "最活跃的分类", allHeading: "全部分类", allCopy: "选择一个市场，查看其实时榜单。" },
   };
   const pageMetadata = {
     en: {
@@ -79,11 +79,11 @@
   };
   const accessibilityCopy = {
     en: {
-      home: "RANKOFF home", tagline: "RANKOFF — Bid your way to number one", navigation: "Main navigation", search: "Search products and categories",
+      home: "RANKOFF home", tagline: "RANKOFF — Bid your way to number one", navigation: "Main navigation", search: "Search businesses and markets",
       boardStatus: "Board status", timeframe: "Category timeframe", allMarkets: "All market categories", switchChinese: "Switch to Chinese", switchLight: "Switch to light theme", switchDark: "Switch to dark theme",
     },
     zh: {
-      home: "RANKOFF 首页", tagline: "RANKOFF — 竞价登上第 1 名", navigation: "主导航", search: "搜索产品和分类",
+      home: "RANKOFF 首页", tagline: "RANKOFF — 竞价登上第 1 名", navigation: "主导航", search: "搜索商家和市场",
       boardStatus: "榜单状态", timeframe: "分类时间范围", allMarkets: "全部市场分类", switchChinese: "切换为中文", switchLight: "切换至浅色主题", switchDark: "切换至深色主题",
     },
   };
@@ -293,7 +293,7 @@
       const heading = document.createElement("h3");
       heading.textContent = label(config);
       const detail = document.createElement("p");
-      detail.textContent = elements.language === "zh" ? `${rows.length} 个上榜产品 · 最高出价 ${currency.format(rows[0].bid)}` : `${rows.length} ${rows.length === 1 ? "listing" : "listings"} · highest bid ${currency.format(rows[0].bid)}`;
+      detail.textContent = elements.language === "zh" ? `${rows.length} 家商家上榜 · 最高累计 ${currency.format(rows[0].bid)}` : `${rows.length} ${rows.length === 1 ? "listing" : "listings"} · top total ${currency.format(rows[0].bid)}`;
       copy.append(heading, detail);
       const time = document.createElement("time");
       time.textContent = ageLabel(rows[0].age);
@@ -324,11 +324,11 @@
       const today = elements.activeWindow === "today";
       strong.textContent = today
         ? (elements.language === "zh" ? "近 24 小时没有付款" : "No payment in the past 24 hours")
-        : (elements.language === "zh" ? "等待首个条目" : "Waiting for the first listing");
+        : (elements.language === "zh" ? "还没有商家上榜" : "No business here yet");
       const copy = document.createElement("span");
       copy.textContent = today
         ? (elements.language === "zh" ? "切换到全部时间可查看这个市场的榜单。" : "Switch to All-time to see this market's board.")
-        : (elements.language === "zh" ? "这个市场将在首个有效出价后开始排名。" : "This market starts ranking after its first valid bid.");
+        : (elements.language === "zh" ? "第一个上榜的商家就是第 1 名。" : "The first business to list takes #1.");
       // "View board →" already sits in this card's header pointing at the same
       // URL. Two calls to action, one destination, fifteen cards.
       empty.append(strong, copy);

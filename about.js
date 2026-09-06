@@ -23,12 +23,12 @@
   const accessibilityCopy = {
     en: {
       home: "RANKOFF home", tagline: "RANKOFF — Bid your way to number one", navigation: "Main navigation",
-      search: "Search products and categories", switchChinese: "Switch to Chinese", switchLight: "Switch to light theme", switchDark: "Switch to dark theme",
+      search: "Search businesses and markets", switchChinese: "Switch to Chinese", switchLight: "Switch to light theme", switchDark: "Switch to dark theme",
       origin: "Rankoff origin", principles: "Rankoff principles",
     },
     zh: {
       home: "RANKOFF 首页", tagline: "RANKOFF — 竞价登上第 1 名", navigation: "主导航",
-      search: "搜索产品和分类", switchChinese: "切换为中文", switchLight: "切换至浅色主题", switchDark: "切换至深色主题",
+      search: "搜索商家和市场", switchChinese: "切换为中文", switchLight: "切换至浅色主题", switchDark: "切换至深色主题",
       origin: "Rankoff 起源", principles: "Rankoff 原则",
     },
   };

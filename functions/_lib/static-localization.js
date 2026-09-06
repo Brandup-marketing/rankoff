@@ -30,20 +30,20 @@ const STATIC_LOCALIZED_METADATA = Object.freeze({
 
 const HOME_STATIC_COPY = Object.freeze({
   skipLeaderboard: "跳到榜单", navBoard: "榜单", navCategories: "分类", navAbout: "关于",
-  heroCopy: "把产品放到最显眼的位置。只要没有更高的有效出价，你的介绍就会留在榜首。",
-  totalBid: "你的总出价", productUrl: "网站或公开社交账号", productUrlPlaceholder: "example.com 或 instagram.com/yourname",
-  challengeCategory: "挑战类别", chooseMarket: "选择市场", reviewBid: "确认出价", markets: "市场",
+  heroCopy: "把你的生意放在顾客第一眼看到的位置。直到有人付得更多，它都留在榜首。",
+  totalBid: "付款金额", productUrl: "你的网站或社交账号", productUrlPlaceholder: "example.com 或 instagram.com/yourname",
+  challengeCategory: "市场", chooseMarket: "选择市场", reviewBid: "确认并付款", markets: "市场",
   todayRanking: "今日领先", seeAll: "查看全部", livePulse: "实时竞价", latestActivity: "最新动态", refresh: "刷新",
-  boardSummary: "累计出价最高者获得第 1 名。随时追加出价即可上升。", howItWorks: "排名规则",
-  rules: "每个条目都是付费广告。累计已结算付款最高者排名第一 —— 没有奖品、没有抽奖，也不涉及任何运气成分。",
-  position: "排名位置", positionCopy: "保持到其他条目的累计出价超过为止。", charge: "费用", chargeCopy: "通过安全托管付款页面一次性付款。",
+  boardSummary: "累计付款最高者第 1 名。随时追加付款即可上升。", howItWorks: "排名规则",
+  rules: "每个条目都是付费广告。累计付款最高者排第一——没有奖品、没有抽奖，也不涉及任何运气成分。",
+  position: "排名位置", positionCopy: "直到别的条目累计付款超过你为止。", charge: "费用", chargeCopy: "通过安全托管付款页面一次性付款。",
   reporting: "数据", reportingCopy: "所选时间范围内的追踪点击。重复与自动化流量未经过滤——一次点击不等于一位客户。", readRules: "查看完整规则 →",
   askWhatIs: "什么是付费排名榜？", askHowWorks: "Rankoff 排名怎么算？", askHowSponsor: "怎么赞助一个网站或社交账号？",
   rulesLink: "规则", terms: "条款", termsOfService: "服务条款", privacyLink: "隐私", payments: "付款", footerCredit: "Brandup Marketing 出品",
-  confirmRank: "确认此排名", confirmRankIntro: "核对排名与价格，同意《服务条款》后继续。", rankLabel: "排名", priceLabel: "价格", dueNow: "现在支付", stepPay: "付款", stepPayCopy: "一次付清，RM5 起。", stepRank: "排名", stepRankCopy: "累计付款最高者拿下第 1 名。", stepHold: "保持", stepHoldCopy: "直到有人出价更高。随时可追加。", statVisitors: "访客会话", statClicks: "次跳转商家", statPaid: "商家已付", statWindow: "全时段，由 Rankoff 统计", alreadyPaid: "已付金额", payNow: "本次支付", totalAfter: "付款后累计",
-  confirmationCopy: "付款确认后，你的条目会以此排名上线。其他人仍可出价取得更高排名。此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。",
+  confirmRank: "确认此排名", confirmRankIntro: "核对排名与价格，同意《服务条款》后继续。", rankLabel: "排名", priceLabel: "价格", dueNow: "现在支付", stepPay: "付款", stepPayCopy: "一次付清，RM5 起。", stepRank: "排名", stepRankCopy: "累计付款最高者拿下第 1 名。", stepHold: "保持", stepHoldCopy: "直到有人付得更多。随时可追加。", statVisitors: "访问人次", statClicks: "次点进商家", statPaid: "商家已付", statWindow: "全时段，由 Rankoff 统计", alreadyPaid: "已付金额", payNow: "本次支付", totalAfter: "付款后累计",
+  confirmationCopy: "付款确认后，你的条目会以此排名上线。其他人仍可付更多取得更高排名。此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。",
   agreeTermsPrefix: "我了解这是为一个公开链接购买的赞助展示，付款不会获得该账号的所有权或编辑权，被展示方可要求下架。我同意《",
-  agreeTermsSuffix: "》。", cancel: "取消", continueCheckout: "继续付款", close: "关闭", searchPlaceholder: "搜索产品和分类…",
+  agreeTermsSuffix: "》。", cancel: "取消", continueCheckout: "继续付款", close: "关闭", searchPlaceholder: "搜索商家和市场…",
   brandHome: "RANKOFF 首页", brandLogoAlt: "RANKOFF — 出价登上第一名", rankingTimeframe: "排名时间范围", mainNavigation: "主导航",
   searchResults: "搜索结果", challengeLeaderboard: "挑战排行榜", decreaseBid: "出价减少 10", increaseBid: "出价增加 10",
   filterCategory: "按类别筛选", topThree: "赞助榜单前三名", boardPulse: "榜单动态", boardListings: "赞助条目榜单",
@@ -53,7 +53,7 @@ const HOME_STATIC_COPY = Object.freeze({
 const CATEGORIES_STATIC_COPY = Object.freeze({
   skipCategories: "跳至分类", board: "榜单", categories: "分类", about: "关于", footerParent: "Brandup Marketing 旗下产品",
   rules: "规则", terms: "条款", privacy: "隐私", payments: "付款", seeBoard: "查看榜单", browseMarkets: "浏览市场",
-  heroCopy: "每个类别都有自己的榜单。选择一个市场，看看谁在领先。", activeHeading: "最活跃的分类", allHeading: "全部分类", allCopy: "选择一个市场，查看其实时榜单。",
+  heroCopy: "每个市场都有自己的榜单。选你的行业，看看谁在榜首。", activeHeading: "最活跃的分类", allHeading: "全部分类", allCopy: "选择一个市场，查看其实时榜单。",
 });
 
 const ABOUT_STATIC_COPY = Object.freeze({
@@ -120,7 +120,7 @@ function localizeCommon(html) {
   let output = html.replace(/<html lang="[^"]*"/, '<html lang="zh-Hans"');
   output = output.replace(/aria-label="RANKOFF home"/g, 'aria-label="RANKOFF 首页"');
   output = output.replace(/aria-label="Main navigation"/g, 'aria-label="主导航"');
-  output = output.replace(/aria-label="Search products and categories"/g, 'aria-label="搜索产品和分类"');
+  output = output.replace(/aria-label="Search businesses and markets"/g, 'aria-label="搜索商家和市场"');
   output = output.replace(/alt="RANKOFF — Bid your way to number one"/g, 'alt="RANKOFF — 竞价登上第 1 名"');
   output = output.replace(/(<button class="language-toggle"[^>]*)(>)[\s\S]*?(<\/button>)/, (match, open, close, end) => {
     const labelled = /aria-label="[^"]*"/.test(open)
@@ -209,8 +209,8 @@ export function localizeStaticPage(shell, page, language = "en") {
     html = replaceStaticCopy(html, "data-copy", CATEGORIES_STATIC_COPY);
     for (const [english, chinese] of Object.entries(MARKET_TRANSLATIONS)) html = html.split(`>${english.replaceAll("&", "&amp;")}<`).join(`>${escapeHtml(chinese)}<`);
     html = html.replace(/href="\/\?category=([^"#]+)#board"/g, 'href="/?lang=zh&amp;category=$1#board"');
-    html = html.replace(/(<label[^>]*for="site-search-input"[^>]*>)[\s\S]*?(<\/label>)/, "$1搜索产品和分类$2");
-    html = html.replace(/(<input[^>]*data-site-search-input[^>]*placeholder=")[^"]*(")/, "$1搜索产品和分类…$2");
+    html = html.replace(/(<label[^>]*for="site-search-input"[^>]*>)[\s\S]*?(<\/label>)/, "$1搜索商家和市场$2");
+    html = html.replace(/(<input[^>]*data-site-search-input[^>]*placeholder=")[^"]*(")/, "$1搜索商家和市场…$2");
     html = html.replace(/(<button[^>]*data-search-close[^>]*>)[\s\S]*?(<\/button>)/, "$1关闭$2");
     html = html.replace(/aria-label="Search results"/, 'aria-label="搜索结果"');
     html = html.replace(/aria-label="Board status"/, 'aria-label="榜单状态"');

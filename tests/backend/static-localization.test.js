@@ -28,8 +28,8 @@ test("the Chinese home page is indexable before JavaScript runs", () => {
   assert.match(html, /<meta property="og:locale" content="zh_MY" \/>/);
   assert.match(html, /<meta property="og:locale:alternate" content="en_MY" \/>/);
   assert.match(html, /<h1 id="page-title"><strong data-hero-next-price>RM 5<\/strong>.*拿下.*data-hero-rank>第 1 名<\/span>.*<\/h1>/);
-  assert.match(html, /data-i18n="heroCopy">把产品放到最显眼的位置/);
-  assert.match(html, /data-i18n-placeholder="searchPlaceholder"[^>]*placeholder="搜索产品和分类…"/);
+  assert.match(html, /data-i18n="heroCopy">把你的生意放在顾客第一眼看到的位置/);
+  assert.match(html, /data-i18n-placeholder="searchPlaceholder"[^>]*placeholder="搜索商家和市场…"/);
   assert.match(html, /data-i18n-aria-label="rankingTimeframe"[^>]*aria-label="排名时间范围"/);
   assert.match(html, /data-entry-toggle-label>输入你的网站<\/span>/);
   assert.match(html, /data-share-heading>分享此排名<\/h2>/);
@@ -69,11 +69,11 @@ test("the Chinese category page has localized metadata, controls and loading tru
 
   assert.match(html, /<title>RANKOFF｜分类<\/title>/);
   assert.match(html, /<link rel="canonical" href="https:\/\/rankoff\.my\/categories\?lang=zh" \/>/);
-  assert.match(html, /data-copy="heroCopy">每个类别都有自己的榜单/);
+  assert.match(html, /data-copy="heroCopy">每个市场都有自己的榜单/);
   assert.match(html, /aria-label="榜单状态"/);
   assert.match(html, /data-category-status>实时榜单<\/strong>/);
   assert.match(html, /data-category-count>正在载入…<\/span>/);
-  assert.match(html, /placeholder="搜索产品和分类…"/);
+  assert.match(html, /placeholder="搜索商家和市场…"/);
   assert.match(html, /href="\/\?lang=zh&amp;category=Property#board">房产与经纪<\/a>/);
   assert.doesNotMatch(html, /data-category-count>0 listings<\/span>/);
 });

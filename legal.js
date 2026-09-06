@@ -42,7 +42,7 @@
     });
     document.querySelector(".site-nav")?.setAttribute("aria-label", "主导航");
     document.querySelector(".legal-nav")?.setAttribute("aria-label", "法律页面");
-    searchRedirect?.setAttribute("aria-label", "搜索产品和分类");
+    searchRedirect?.setAttribute("aria-label", "搜索商家和市场");
     const footer = { "#rules": "规则", "#terms": "条款", "#privacy": "隐私", "#payments": "付款" };
     document.querySelectorAll(".footer-links a").forEach((link) => {
       const hash = new URL(link.getAttribute("href"), window.location.origin).hash;

@@ -13,10 +13,10 @@ const PRODUCT_COPY = Object.freeze({
     loading: "Loading ranking details…", notFoundTitle: "Listing not found", notFoundCopy: "This listing may have moved or is no longer on the public board.", returnBoard: "Return to the board",
     sponsored: "Sponsored", share: "Share rank", evidence: "Public ranking record", allTimeBid: "All-time total", past24: "Past 24h", past24Bid: "Past 24h total",
     board: "Board", rule: "Highest total takes #1", claimNumberOne: "Claim #1 for", startClaim: "Claim this rank", footerParent: "A Brandup Marketing product",
-    claimUrl: "Your website or public profile", claimAmount: "Your bid", claimAgree: "I understand this is a paid sponsored placement for a public link. It gives me no rights over that account, and the listed party may request removal. I agree to the ", termsOfService: "Terms of Service", claimAgreeSuffix: ".", payClaim: "Pay & claim #1",
+    claimUrl: "Your website or public profile", claimAmount: "Your payment", claimAgree: "I understand this is a paid sponsored placement for a public link. It gives me no rights over that account, and the listed party may request removal. I agree to the ", termsOfService: "Terms of Service", claimAgreeSuffix: ".", payClaim: "Pay & claim #1",
     rules: "Rules", terms: "Terms", privacy: "Privacy", payments: "Payments", verifiedData: "Live data", past24Clicks: "Past 24h clicks",
-    verifiedEvidence: "Rank and bid come from settled placements. Clicks are first-party redirect events recorded by Rankoff. Repeat clicks count and automated traffic is not filtered, so a click is not a unique visitor, enquiry or sale.",
-    claimCopy: "Put your product above this listing. Your full business description stays visible until someone pays more.",
+    verifiedEvidence: "Rank and total come from settled payments. Clicks are redirects recorded by Rankoff; repeats and automated traffic are not filtered, so a click is not a unique visitor, enquiry or sale.",
+    claimCopy: "Put your business above this one. Your full description stays on the board until someone pays more.",
     liveDisclosure: "Payment is confirmed only after secure hosted checkout settles.",
     currentRank: "Current rank",
     firstListed: "First listed",
@@ -28,12 +28,12 @@ const PRODUCT_COPY = Object.freeze({
   zh: Object.freeze({
     skipListing: "跳至条目详情", categories: "分类", about: "关于", back: "← 返回榜单",
     loading: "正在加载排名信息…", notFoundTitle: "找不到此条目", notFoundCopy: "此条目可能已移动，或已不在公开榜单中。", returnBoard: "返回榜单",
-    sponsored: "赞助", share: "分享排名", evidence: "公开排名记录", allTimeBid: "全时段累计出价", past24: "近 24 小时", past24Bid: "近 24 小时累计出价",
-    board: "榜单", rule: "累计出价最高者获得第 1 名", claimNumberOne: "拿下第 1 名，只需", startClaim: "拿下此排名", footerParent: "Brandup Marketing 旗下产品",
-    claimUrl: "你的网站或公开主页", claimAmount: "你的出价", claimAgree: "我了解这是针对公开链接的付费赞助展示，不赋予我对该账号的任何权利，被列出的一方可要求移除。我同意", termsOfService: "《服务条款》", claimAgreeSuffix: "。", payClaim: "付款并拿下第 1 名",
+    sponsored: "赞助", share: "分享排名", evidence: "公开排名记录", allTimeBid: "累计付款", past24: "近 24 小时", past24Bid: "近 24 小时付款",
+    board: "榜单", rule: "累计付款最高者第 1 名", claimNumberOne: "拿下第 1 名，只需", startClaim: "拿下此排名", footerParent: "Brandup Marketing 旗下产品",
+    claimUrl: "你的网站或公开主页", claimAmount: "付款金额", claimAgree: "我了解这是针对公开链接的付费赞助展示，不赋予我对该账号的任何权利，被列出的一方可要求移除。我同意", termsOfService: "《服务条款》", claimAgreeSuffix: "。", payClaim: "付款并拿下第 1 名",
     rules: "规则", terms: "条款", privacy: "隐私", payments: "付款", verifiedData: "实时数据", past24Clicks: "近 24 小时点击",
-    verifiedEvidence: "排名与出价来自已结算展示；点击为 Rankoff 记录的第一方跳转事件。重复点击会计入，自动化流量未经过滤，因此一次点击不等于一位独立访客、一条询问或一笔成交。",
-    claimCopy: "让你的产品排在这个条目之前。完整业务介绍会持续展示，直到有人出价更高。",
+    verifiedEvidence: "排名与金额来自已结算的付款。点击是 Rankoff 记录的跳转次数；重复与自动化流量未过滤，所以一次点击不等于一位访客、一条询问或一笔成交。",
+    claimCopy: "把你的生意排在这家之上。完整介绍会一直留在榜单上，直到有人付得更多。",
     liveDisclosure: "付款会在安全的托管付款页面完成并确认。",
     currentRank: "当前排名",
     firstListed: "首次上榜",
@@ -261,7 +261,7 @@ export function localizeProductShell(shell, language = "en") {
   html = html.replace(/aria-label="RANKOFF home"/g, 'aria-label="RANKOFF 首页"');
   html = html.replace(/alt="RANKOFF — Bid your way to number one"/g, 'alt="RANKOFF — 竞价登上第 1 名"');
   html = html.replace(/aria-label="Main navigation"/g, 'aria-label="主导航"');
-  html = html.replace(/aria-label="Search products and categories"/g, 'aria-label="搜索产品和分类"');
+  html = html.replace(/aria-label="Search businesses and markets"/g, 'aria-label="搜索商家和市场"');
   html = html.replace(/(<button class="language-toggle"[^>]*>)[\s\S]*?(<\/button>)/, "$1EN$2");
   html = html.replace(/(<button class="theme-toggle"[^>]*aria-label=")[^"]*("[^>]*>)[\s\S]*?(<\/button>)/, "$1切换至浅色主题$2浅色$3");
   html = html.replace(/href="\/categories"/g, 'href="/categories?lang=zh"');
