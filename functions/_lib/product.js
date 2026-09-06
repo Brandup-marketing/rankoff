@@ -15,7 +15,7 @@ const PRODUCT_COPY = Object.freeze({
     board: "Board", rule: "Highest total takes #1", claimNumberOne: "Claim #1 for", startClaim: "Claim this rank", footerParent: "A Brandup Marketing product",
     claimUrl: "Your website or public profile", claimAmount: "Your bid", claimAgree: "I understand this is a paid sponsored placement for a public link. It gives me no rights over that account, and the listed party may request removal. I agree to the ", termsOfService: "Terms of Service", claimAgreeSuffix: ".", payClaim: "Pay & claim #1",
     rules: "Rules", terms: "Terms", privacy: "Privacy", payments: "Payments", verifiedData: "Live data", past24Clicks: "Past 24h clicks",
-    verifiedEvidence: "Rank and bid come from settled placements. Clicks are first-party redirect events recorded by Rankoff.",
+    verifiedEvidence: "Rank and bid come from settled placements. Clicks are first-party redirect events recorded by Rankoff. Repeat clicks count and automated traffic is not filtered, so a click is not a unique visitor, enquiry or sale.",
     claimCopy: "Put your product above this listing. Your full business description stays visible until someone pays more.",
     liveDisclosure: "Payment is confirmed only after secure hosted checkout settles.",
     currentRank: "Current rank",
@@ -23,7 +23,7 @@ const PRODUCT_COPY = Object.freeze({
     settledBids: "Payments",
     lastUpdated: "Last updated",
     verifiedPlacement: "Verified placement",
-    verifiedClicks: "Verified clicks",
+    verifiedClicks: "Tracked clicks",
   }),
   zh: Object.freeze({
     skipListing: "跳至条目详情", categories: "分类", about: "关于", back: "← 返回榜单",
@@ -32,7 +32,7 @@ const PRODUCT_COPY = Object.freeze({
     board: "榜单", rule: "累计出价最高者获得第 1 名", claimNumberOne: "拿下第 1 名，只需", startClaim: "拿下此排名", footerParent: "Brandup Marketing 旗下产品",
     claimUrl: "你的网站或公开主页", claimAmount: "你的出价", claimAgree: "我了解这是针对公开链接的付费赞助展示，不赋予我对该账号的任何权利，被列出的一方可要求移除。我同意", termsOfService: "《服务条款》", claimAgreeSuffix: "。", payClaim: "付款并拿下第 1 名",
     rules: "规则", terms: "条款", privacy: "隐私", payments: "付款", verifiedData: "实时数据", past24Clicks: "近 24 小时点击",
-    verifiedEvidence: "排名与出价来自已结算展示；点击为 Rankoff 记录的第一方跳转事件。",
+    verifiedEvidence: "排名与出价来自已结算展示；点击为 Rankoff 记录的第一方跳转事件。重复点击会计入，自动化流量未经过滤，因此一次点击不等于一位独立访客、一条询问或一笔成交。",
     claimCopy: "让你的产品排在这个条目之前。完整业务介绍会持续展示，直到有人出价更高。",
     liveDisclosure: "付款会在安全的托管付款页面完成并确认。",
     currentRank: "当前排名",
@@ -40,7 +40,7 @@ const PRODUCT_COPY = Object.freeze({
     settledBids: "付款次数",
     lastUpdated: "最近更新",
     verifiedPlacement: "已验证展示",
-    verifiedClicks: "已验证点击",
+    verifiedClicks: "追踪点击",
   }),
 });
 
@@ -237,8 +237,8 @@ export function buildProductView({ entry, todayEntry, board, snapshotId, record,
     // board is large the overall number wins this comparison on its own.
     pageTitle: `${title} — ${headline}`,
     metaDescription: clamp(locale === "zh"
-      ? `${title}以 ${bid} 累计付款位列 Rankoff ${position}，获得 ${clicks} 次已验证点击。`
-      : `${title} holds ${position} on Rankoff with ${bid} paid and ${clicks} verified clicks. ${description}`,
+      ? `${title}以 ${bid} 累计付款位列 Rankoff ${position}，获得 ${clicks} 次追踪点击。`
+      : `${title} holds ${position} on Rankoff with ${bid} paid and ${clicks} tracked clicks. ${description}`,
     200),
   };
 }

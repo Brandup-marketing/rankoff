@@ -10,7 +10,7 @@ const STATIC_LOCALIZED_METADATA = Object.freeze({
     title: "RANKOFF｜出价登上第 1 名",
     description: "在 Rankoff 出价登上第 1 名。用公开透明的赞助出价，让你的产品出现在实时榜单最显眼的位置。",
     socialTitle: "RANKOFF｜RM5 拿下第 1 名",
-    socialDescription: "面向马来西亚商家的公开赞助榜单。RM5 起即可上榜；累计付款金额和经验证点击公开可见。",
+    socialDescription: "面向马来西亚商家的公开赞助榜单。RM5 起即可上榜；累计付款金额和追踪点击公开可见。",
   }),
   categories: Object.freeze({
     path: "/categories",
@@ -37,10 +37,10 @@ const HOME_STATIC_COPY = Object.freeze({
   boardSummary: "累计出价最高者获得第 1 名。随时追加出价即可上升。", howItWorks: "排名规则",
   rules: "每个条目都是付费广告。累计已结算付款最高者排名第一 —— 没有奖品、没有抽奖，也不涉及任何运气成分。",
   position: "排名位置", positionCopy: "保持到其他条目的累计出价超过为止。", charge: "费用", chargeCopy: "通过安全托管付款页面一次性付款。",
-  reporting: "数据", reportingCopy: "显示所选时间范围内的点击。", readRules: "查看完整规则 →",
+  reporting: "数据", reportingCopy: "所选时间范围内的追踪点击。重复与自动化流量未经过滤——一次点击不等于一位客户。", readRules: "查看完整规则 →",
   askWhatIs: "什么是付费排名榜？", askHowWorks: "Rankoff 排名怎么算？", askHowSponsor: "怎么赞助一个网站或社交账号？",
   rulesLink: "规则", terms: "条款", termsOfService: "服务条款", privacyLink: "隐私", payments: "付款", footerCredit: "Brandup Marketing 出品",
-  confirmRank: "确认此排名", confirmRankIntro: "核对排名与价格，同意《服务条款》后继续。", rankLabel: "排名", priceLabel: "价格", dueNow: "现在支付", alreadyPaid: "已付金额", payNow: "本次支付", totalAfter: "付款后累计",
+  confirmRank: "确认此排名", confirmRankIntro: "核对排名与价格，同意《服务条款》后继续。", rankLabel: "排名", priceLabel: "价格", dueNow: "现在支付", statVisitors: "访客会话", statClicks: "次跳转到商家", statPaid: "商家累计付款", statWindow: "全时段，由 Rankoff 统计", alreadyPaid: "已付金额", payNow: "本次支付", totalAfter: "付款后累计",
   confirmationCopy: "付款确认后，你的条目会以此排名上线。其他人仍可出价取得更高排名。此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。",
   agreeTermsPrefix: "我了解这是为一个公开链接购买的赞助展示，付款不会获得该账号的所有权或编辑权，被展示方可要求下架。我同意《",
   agreeTermsSuffix: "》。", cancel: "取消", continueCheckout: "继续付款", close: "关闭", searchPlaceholder: "搜索产品和分类…",
@@ -70,7 +70,7 @@ const ABOUT_STATIC_COPY = Object.freeze({
   "Live board values, updated continuously.": "榜单实时数值，持续更新。", "What happens next": "接下来会发生什么", "The board keeps moving.": "榜单持续变化。",
   Now: "现在", "Submit a listing": "提交条目", "Enter a URL, choose a market, and set the bid that feels worth the position.": "输入网址、选择市场，并为你认为值得的位置设定出价。",
   Then: "随后", "Compete in public": "公开竞争", "Your public identity, description, total paid, and position appear on the board after payment settles.": "付款结算后，你的公开身份、介绍、累计付款金额和位置会显示在榜单上。",
-  Next: "接下来", "Measure the outcome": "衡量结果", "Verified referral clicks and public activity make the market legible over time.": "经验证的推荐点击和公开活动，让市场表现随时间清晰可见。",
+  Next: "接下来", "Measure the outcome": "衡量结果", "Tracked clicks and public activity make the market legible over time.": "追踪点击和公开活动，让市场表现随时间清晰可见。",
   "A Brandup Marketing product": "Brandup Marketing 旗下产品", Rules: "规则", Terms: "条款", Privacy: "隐私", Payments: "付款",
 });
 
@@ -188,7 +188,7 @@ export function localizeStaticPage(shell, page, language = "en") {
     html = html.replace(/>Post with your rank<\/small>/, ">附上排名发布</small>");
     html = html.replace(/(<span data-share-native-label>)Share…(<\/span>)/, "$1分享…$2");
     html = html.replace(/>Messenger and more apps<\/small>/, ">Messenger 及更多应用</small>");
-    html = html.replace(/(<span class="board-seo-note"[^>]*>)Sponsored · ([^·<]+) · ([^·<]+) settled · ([\d,]+) verified clicks<\/span>/g, (match, open, market, total, clicks) => `${open}广告 · ${escapeHtml(MARKET_TRANSLATIONS[market.trim().replaceAll("&amp;", "&")] || market.trim().replaceAll("&amp;", "&"))} · ${total.trim()} 已结算 · ${clicks} 次已验证点击</span>`);
+    html = html.replace(/(<span class="board-seo-note"[^>]*>)Sponsored · ([^·<]+) · ([^·<]+) settled · ([\d,]+) tracked clicks<\/span>/g, (match, open, market, total, clicks) => `${open}广告 · ${escapeHtml(MARKET_TRANSLATIONS[market.trim().replaceAll("&amp;", "&")] || market.trim().replaceAll("&amp;", "&"))} · ${total.trim()} 已结算 · ${clicks} 次追踪点击</span>`);
     const schemaMatch = /<script id="website-schema" type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(html);
     if (schemaMatch) {
       try {

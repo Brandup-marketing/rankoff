@@ -1209,3 +1209,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .bid-breakdown dt { color: var(--muted); font-size: .64rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
 .bid-breakdown dd { margin: 0; color: var(--ink); font-size: 1rem; font-weight: 850; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .bid-breakdown > div:last-child dd { color: var(--accent-strong); }
+
+/* Audience strip under the entry form: the board's own counters, shown only
+   once they have loaded. */
+.audience-strip { display: flex; flex-wrap: wrap; align-items: baseline; gap: .35rem 1.1rem; margin: .7rem 0 0; color: var(--muted); font-size: .74rem; font-weight: 700; }
+.audience-strip strong { color: var(--ink); font-size: .95rem; font-weight: 850; font-variant-numeric: tabular-nums; }
+.audience-strip-note { flex-basis: 100%; font-size: .66rem; font-weight: 650; }
+@media (min-width: 46.01rem) { .audience-strip-note { flex-basis: auto; margin-left: auto; } }
+.audience-strip[hidden] { display: none; }

@@ -175,7 +175,7 @@ test("an explicit Chinese product locale renders indexable Chinese metadata and 
   const html = renderProductPage(shell, view);
 
   assert.equal(view.pageTitle, "BrandUp Design Marketing — 营销与广告第 1 名 | RANKOFF");
-  assert.match(view.metaDescription, /RM 5 累计付款.*营销与广告第 1 名.*41 次已验证点击/);
+  assert.match(view.metaDescription, /RM 5 累计付款.*营销与广告第 1 名.*41 次追踪点击/);
   assert.equal(view.canonical, "https://rankoff.my/product/brandupdesignmarketing.com?lang=zh");
   assert.match(html, /<html lang="zh-Hans"/);
   assert.match(html, /<link rel="canonical" href="https:\/\/rankoff\.my\/product\/brandupdesignmarketing\.com\?lang=zh"/);
@@ -190,7 +190,7 @@ test("an explicit Chinese product locale renders indexable Chinese metadata and 
   assert.match(html, /data-rank-label>营销与广告排名<\/dt>/);
   assert.match(html, /data-rank-note>全站第 3 名<\/p>/);
   assert.match(html, /data-placement-label>已验证展示<\/span>/);
-  assert.match(html, /data-click-label>已验证点击<\/dt>/);
+  assert.match(html, /data-click-label>追踪点击<\/dt>/);
   assert.match(html, /data-copy="sponsored">赞助<\/span>/);
   assert.match(html, /data-copy="share">分享排名<\/button>/);
   assert.match(html, /data-copy="evidence">公开排名记录<\/h2>/);

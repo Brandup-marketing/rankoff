@@ -53,8 +53,8 @@ test("server-rendered board links stay in the requested language", () => {
     "home",
     "zh",
   );
-  assert.match(html, /data-english-copy="Sponsored · Property &amp; Agents · RM 5 settled · 4 verified clicks"/);
-  assert.match(html, />广告 · 房产与经纪 · RM 5 已结算 · 4 次已验证点击<\/span>/);
+  assert.match(html, /data-english-copy="Sponsored · Property &amp; Agents · RM 5 settled · 4 tracked clicks"/);
+  assert.match(html, />广告 · 房产与经纪 · RM 5 已结算 · 4 次追踪点击<\/span>/);
   assert.doesNotMatch(html, /&amp;amp;/);
 });
 

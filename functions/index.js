@@ -14,7 +14,7 @@ export function renderBoard(rankings, currency, language = "en") {
   const rows = rankings.map((entry) => {
     const listing = entry.listing || {};
     const identity = String(listing.hostname || "");
-    const englishBoardNote = `Sponsored · ${marketLabel(listing.category)} · ${formatMoney(entry.bid?.amount_minor, currency)} settled · ${Number(entry.clicks || 0)} verified clicks`;
+    const englishBoardNote = `Sponsored · ${marketLabel(listing.category)} · ${formatMoney(entry.bid?.amount_minor, currency)} settled · ${Number(entry.clicks || 0)} tracked clicks`;
     return `<li>`
       + `<span class="board-seo-rank">#${escapeHtml(entry.rank)}</span> `
       + `<a href="${escapeHtml(`${profilePath(identity)}${language === "zh" ? "?lang=zh" : ""}`)}">${escapeHtml(listing.title || displayName(identity))}</a> `

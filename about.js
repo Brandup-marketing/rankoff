@@ -12,12 +12,12 @@
     en: {
       title: "About RANKOFF",
       description: "Learn how Rankoff turns sponsored attention into a public bidding board where products compete for visible rank.",
-      socialDescription: "How Rankoff works: products compete for sponsored rank while totals paid and verified clicks remain public.",
+      socialDescription: "How Rankoff works: products compete for sponsored rank while totals paid and tracked clicks remain public.",
     },
     zh: {
       title: "关于 RANKOFF",
       description: "了解 Rankoff 如何把赞助注意力变成公开竞价榜单，让产品为清晰可见的排名展开竞争。",
-      socialDescription: "了解 Rankoff 的运作方式：产品竞逐赞助排名，累计付款金额和经验证点击公开可见。",
+      socialDescription: "了解 Rankoff 的运作方式：产品竞逐赞助排名，累计付款金额和追踪点击公开可见。",
     },
   };
   const accessibilityCopy = {
@@ -48,7 +48,7 @@
     ["Submit a listing", "提交条目"], ["Compete in public", "公开竞争"], ["Measure the outcome", "衡量结果"],
     ["Now", "现在"], ["Enter a URL, choose a market, and set the bid that feels worth the position.", "输入网址、选择市场，并为你认为值得的位置设定出价。"],
     ["Then", "随后"], ["Your public identity, description, total paid, and position appear on the board after payment settles.", "付款结算后，你的公开身份、介绍、累计付款金额和位置会显示在榜单上。"],
-    ["Next", "接下来"], ["Verified referral clicks and public activity make the market legible over time.", "经验证的推荐点击和公开活动，让市场表现随时间清晰可见。"],
+    ["Next", "接下来"], ["Tracked clicks and public activity make the market legible over time.", "追踪点击和公开活动，让市场表现随时间清晰可见。"],
     ["Live board values, updated continuously.", "榜单实时数值，持续更新。"],
     ["Live values are unavailable right now.", "实时数值暂时无法读取。"],
     ["A Brandup Marketing product", "Brandup Marketing 旗下产品"], ["Rules", "规则"], ["Terms", "条款"], ["Privacy", "隐私"], ["Payments", "付款"],
