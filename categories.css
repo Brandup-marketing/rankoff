@@ -250,3 +250,24 @@ html[data-theme="light"] .categories-topbar .brand-emblem-image, html[data-theme
   .category-card { padding: .9rem .9rem .8rem; }
   .category-card-head h3 { font-size: 1rem; }
 }
+
+/* ---- After the owner's phone screenshot ---- */
+
+/* Two red numbers 60px apart read as two prices. The leader's total is a
+   fact and sits in ink; only the price of first place stays red. */
+.category-rank-bid { color: var(--ink); }
+
+/* The heading row on this page matches the board's: title left, time tabs
+   right, one row — instead of the tabs dropping under the title. */
+.section-heading-spread, .section-heading-spread.section-heading { display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center; justify-content: space-between; gap: .75rem; text-align: left; }
+.section-heading-spread > div { flex: 1 1 auto; justify-content: flex-start; }
+.section-heading-spread .time-tabs { flex: 0 0 auto; }
+
+/* The red kicker was the loudest thing above the fold and said what the
+   title says. On a phone the title stands on its own. */
+@media (max-width: 48rem) {
+  .category-hero .section-kicker { display: none; }
+  .category-hero { margin-top: .9rem; }
+  .category-card-head { margin-bottom: .55rem; padding-bottom: .55rem; }
+  .category-rank-row { border-top: 0; padding-top: .2rem; }
+}
