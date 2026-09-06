@@ -1255,14 +1255,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .board-list .standard-listing .listing-details { display: inline-flex; min-height: 2rem; align-items: center; padding: 0; color: var(--muted); font-size: inherit; font-weight: 750; text-decoration: underline; text-underline-offset: .16em; }
   .board-list .standard-listing .claim-rank-pill { position: absolute; left: 50%; bottom: -.8rem; grid-area: auto; width: auto; min-height: 2rem; margin: 0; padding: .3rem .85rem; border: 1px solid var(--accent); border-radius: 999px; background: var(--surface); color: var(--ink); font-size: .7rem; white-space: nowrap; transform: translateX(-50%); justify-self: auto; }
 
-  /* B. Latest activity: the marquee sliced cards mid-word on a 375px screen.
-     On the phone it is a swipeable row, one card per snap, no duplicates. */
-  .activity-ticker-viewport { overflow: visible; }
-  .activity-tape { width: auto; overflow-x: auto; animation: none; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding-bottom: .3rem; scrollbar-width: none; }
-  .activity-tape::-webkit-scrollbar { display: none; }
-  .activity-tape li { flex: 0 0 auto; scroll-snap-align: start; }
-  .activity-tape li.is-duplicate { display: none; }
-  .activity-event { width: min(82vw, 20rem); min-width: 0; }
+  /* B. Latest activity keeps moving on the phone — the motion is what says
+     "live". Cards are one uniform width so the tape reads as a ticker rather
+     than a row cut at random points, and it pauses under a finger. */
+  .activity-event { width: min(78vw, 19rem); min-width: 0; }
+  .activity-ticker-viewport:active .activity-tape { animation-play-state: paused; }
 }
 
 /* "How ranking works" as a three-step flow instead of three paragraphs:
