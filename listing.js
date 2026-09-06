@@ -716,11 +716,6 @@
     }
     const minimum = claimRequired();
     const amount = Number(elements.claimAmount.value);
-    if (Number.isSafeInteger(amount) && amount >= minimum && amount % minimum !== 0) {
-      showToast(text("claimStep").replace("{min}", money.format(minimum)));
-      elements.claimAmount.focus();
-      return;
-    }
     if (!Number.isSafeInteger(amount) || amount < minimum) {
       showToast(text("claimTooLow").replace("{min}", money.format(minimum)));
       elements.claimAmount.focus();

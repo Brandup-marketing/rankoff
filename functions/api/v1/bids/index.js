@@ -24,9 +24,10 @@ export async function onRequestPost(context) {
   if (currency !== listing.currency) throw new ApiError(422, "currency_mismatch", `This board accepts ${listing.currency} only.`);
   const minimum = await loadMinimumBid(db, listing);
   if (amountMinor < minimum) throw new ApiError(409, "bid_too_low", `The current minimum is ${minimum} minor units.`, { minimum_amount_minor: minimum });
-  // Every payment is a whole number of steps — RM 5, 10, 15 — so every total
-  // on the board stays a round figure and a rank is never a fraction apart.
-  if (amountMinor % minimum !== 0) throw new ApiError(409, "bid_not_a_step", `Payments move in steps of ${minimum} minor units.`, { step_minor: minimum });
+  // Above the floor any whole amount is accepted: a refusal at the payment
+  // step costs more than a total that is not a round figure. The quoted
+  // prices move in steps of the floor; what a customer chooses to pay is
+  // theirs to choose.
 
   const fingerprint = await sha256Hex(JSON.stringify({ listingId, amountMinor, currency }));
   const existing = await findIdempotentBid(db, listingId, idempotencyKey);

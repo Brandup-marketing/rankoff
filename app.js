@@ -2640,10 +2640,6 @@
     // buyer had typed, which made a small first listing impossible.
     const min = boardMinimum();
     const amount = Number(formData.get("challengeAmount"));
-    if (Number.isSafeInteger(amount) && amount >= min && amount % min !== 0) {
-      showToast(state.language === "zh" ? `付款以 ${money(min)} 为一档：${money(min)}、${money(min * 2)}、${money(min * 3)}…` : `Payments go in steps of ${money(min)}: ${money(min)}, ${money(min * 2)}, ${money(min * 3)}…`, "error");
-      return;
-    }
     if (!Number.isSafeInteger(amount) || amount < min) {
       showToast(
         state.language === "zh"
@@ -2669,10 +2665,6 @@
     }
 
     const amount = Number(elements.bidAmount.value);
-    if (amount % boardMinimum() !== 0) {
-      showToast(state.language === "zh" ? `付款以 ${money(boardMinimum())} 为一档。` : `Payments go in steps of ${money(boardMinimum())}.`, "error");
-      return;
-    }
     if (amount < boardMinimum()) {
       showToast(
         state.language === "zh" ? `最低出价为 ${money(boardMinimum())}。` : `Bid at least ${money(boardMinimum())}.`,
