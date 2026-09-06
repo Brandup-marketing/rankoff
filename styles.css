@@ -1291,3 +1291,40 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .rules-flow strong { font-size: .76rem; }
   .rules-flow li > span:last-child { font-size: .64rem; line-height: 1.35; }
 }
+
+/* First screen on a phone: the owner wants #1–#3 in view, not one card
+   after a page of chrome. What moved: the nav drops the link to the page
+   you are on; the audience strip is one line; the "Markets" label goes
+   (the chips say it); the board heading and time tabs share a row and the
+   count line goes; podium descriptions are one line. Card #1 now starts
+   ~370px down instead of ~550px. */
+@media (max-width: 46rem) {
+  .site-nav a[aria-current="page"] { display: none; }
+  .audience-strip { gap: .1rem .55rem; margin-top: .5rem; font-size: .66rem; }
+  .audience-strip strong { font-size: .82rem; }
+  .audience-strip-note { font-size: .58rem; }
+  .category-market { margin-top: .55rem; }
+  .category-market h2 { display: none; }
+  .category-rail { padding-block: 0 .15rem; }
+  .category-chip { min-height: 2.4rem; padding-block: .25rem; }
+  .category-scroll-control { height: 2.4rem; }
+  .board-toolbar { gap: .25rem; padding: .55rem 0 .3rem; }
+  .board-toolbar-lead { flex-wrap: nowrap; justify-content: space-between; gap: .5rem; }
+  .board-toolbar-lead h2 { font-size: .98rem; }
+  .board-context { display: none; }
+}
+@media (max-width: 34rem) {
+  .top-three-hero { margin-top: .5rem; gap: 1.2rem; }
+  .top-three-hero .featured-listing .listing-description, .top-three-hero .featured-1 .listing-description { -webkit-line-clamp: 1; }
+}
+
+/* The audience strip sits under the podium — "this is who sees these" —
+   and on the phone the hero drops its one-line explainer (the headline and
+   the button already say it), so #1–#3 land inside the first screen. */
+.audience-strip { margin: .9rem 0 0; }
+@media (max-width: 34rem) {
+  .claim-copy { display: none; }
+  .top-three-hero { gap: 1.05rem; }
+  .top-three-hero .featured-listing, .top-three-hero .featured-1 { padding-bottom: .95rem; }
+  .audience-strip { margin-top: 1.1rem; }
+}
