@@ -66,7 +66,7 @@ const ABOUT_STATIC_COPY = Object.freeze({
   Visible: "可见", "Public by default": "默认公开", "Every listing shows its current rank, total paid, and product description.": "每个条目都会显示当前排名、累计付款金额和产品介绍。",
   Simple: "简明", "One clear rule": "一条明确规则", "A higher total paid moves a listing higher on the board.": "累计付款金额越高，条目在榜单上的位置就越靠前。",
   Measured: "可衡量", "Evidence over promises": "数据胜于承诺", "Referral clicks are labelled by how they were measured.": "推荐点击会注明统计方式。",
-  "The board today": "今日榜单", "A live market, in public.": "公开、实时的注意力市场。", "live listings": "实时条目", "measured clicks": "已统计点击", "current top bid": "当前最高价",
+  "The board today": "今日榜单", "A live market, in public.": "公开、实时的注意力市场。", "live listings": "实时条目", "tracked clicks": "追踪点击", "current top bid": "当前最高价",
   "Live board values, updated continuously.": "榜单实时数值，持续更新。", "What happens next": "接下来会发生什么", "The board keeps moving.": "榜单持续变化。",
   Now: "现在", "Submit a listing": "提交条目", "Enter a URL, choose a market, and set the bid that feels worth the position.": "输入网址、选择市场，并为你认为值得的位置设定出价。",
   Then: "随后", "Compete in public": "公开竞争", "Your public identity, description, total paid, and position appear on the board after payment settles.": "付款结算后，你的公开身份、介绍、累计付款金额和位置会显示在榜单上。",

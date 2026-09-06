@@ -241,8 +241,9 @@
 
 .claim-sticky { display: none; }
 @media (max-width: 46rem) {
-  .claim-sticky { position: fixed; right: .75rem; bottom: max(.75rem, env(safe-area-inset-bottom)); left: .75rem; z-index: 20; display: flex; min-height: 3rem; align-items: center; justify-content: center; gap: .4rem; padding: .6rem 1rem; border-radius: 999px; background: var(--accent); color: #fff; font-size: .9rem; font-weight: 850; text-decoration: none; box-shadow: 0 8px 24px rgba(0, 0, 0, .35); }
+  .claim-sticky { position: fixed; right: .75rem; bottom: max(.75rem, env(safe-area-inset-bottom)); left: .75rem; z-index: 20; display: flex; min-height: 3rem; align-items: center; justify-content: center; gap: .4rem; padding: .6rem 1rem; border-radius: 999px; background: var(--accent-fill, var(--accent)); color: #fff; font-size: .9rem; font-weight: 850; text-decoration: none; transition: opacity 160ms var(--ease), transform 160ms var(--ease); box-shadow: 0 8px 24px rgba(0, 0, 0, .35); }
   .claim-sticky[hidden] { display: none; }
+  .claim-sticky.is-yielding { opacity: 0; pointer-events: none; transform: translateY(1rem); transition: opacity 160ms var(--ease), transform 160ms var(--ease); }
   .listing-shell { padding-bottom: 5.5rem; }
 }
 

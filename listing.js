@@ -689,6 +689,16 @@
     }
   });
 
+  // The bar exists to bring the buyer to the form; once the form is on screen
+  // it would only cover the bid field and the pay button, so it steps aside.
+  if (elements.claimSticky && elements.claimForm && "IntersectionObserver" in window) {
+    const watcher = new IntersectionObserver((entries) => {
+      const visible = entries.some((entry) => entry.isIntersecting);
+      elements.claimSticky.classList.toggle("is-yielding", visible);
+    }, { threshold: 0.25 });
+    watcher.observe(elements.claimForm);
+  }
+
   // The phone's bottom bar lands the buyer in the form, cursor in the website
   // field, rather than at the heading with the bar still covering the button.
   elements.claimSticky?.addEventListener("click", (event) => {

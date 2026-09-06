@@ -43,7 +43,7 @@
     ["Simple", "简明"], ["One clear rule", "一条明确规则"], ["A higher total paid moves a listing higher on the board.", "累计付款金额越高，条目在榜单上的位置就越靠前。"],
     ["Measured", "可衡量"], ["Evidence over promises", "数据胜于承诺"], ["Referral clicks are labelled by how they were measured.", "推荐点击会注明统计方式。"],
     ["The board today", "今日榜单"], ["A live market, in public.", "公开、实时的注意力市场。"],
-    ["live listings", "实时条目"], ["measured clicks", "已统计点击"], ["current top bid", "当前最高价"],
+    ["live listings", "实时条目"], ["tracked clicks", "追踪点击"], ["current top bid", "当前最高价"],
     ["What happens next", "接下来会发生什么"], ["The board keeps moving.", "榜单持续变化。"],
     ["Submit a listing", "提交条目"], ["Compete in public", "公开竞争"], ["Measure the outcome", "衡量结果"],
     ["Now", "现在"], ["Enter a URL, choose a market, and set the bid that feels worth the position.", "输入网址、选择市场，并为你认为值得的位置设定出价。"],

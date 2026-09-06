@@ -12,6 +12,9 @@
   /* For small text — chips, eyebrows. Bright enough on dark, deepened in light. */
   --accent-ink: var(--accent-strong);
   --accent-soft: oklch(21% 0.055 28);
+  /* White 11–14px text on the brand red measures 3.74:1. Filled controls use
+     this slightly deeper red so the label clears 4.5:1 in both themes. */
+  --accent-fill: oklch(55% 0.21 28);
   --up: oklch(74% 0.145 160);
   --up-soft: oklch(22% 0.035 160);
   --blue: oklch(72% 0.15 255);
@@ -38,6 +41,8 @@ html[data-theme="light"] {
   --blue: oklch(52% 0.17 255);
   /* --accent-strong is 3.0:1 on white; small text needs 4.5:1. */
   --accent-ink: oklch(52% 0.2 28);
+  /* 70% red on the #1 card's pink tint measured 2.46:1; this one clears 4.5. */
+  --accent-strong: oklch(50% 0.2 28);
 }
 
 html[data-theme="light"] .brand { background: transparent; }
@@ -1217,3 +1222,45 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .audience-strip-note { flex-basis: 100%; font-size: .66rem; font-weight: 650; }
 @media (min-width: 46.01rem) { .audience-strip-note { flex-basis: auto; margin-left: auto; } }
 .audience-strip[hidden] { display: none; }
+
+/* ---- Phone review, 2026-09-06 ---- */
+
+/* Filled red controls carry white text at small sizes: deeper red for those. */
+.primary-action, .entry-toggle, .top-three-hero .featured-1 .claim-rank-pill,
+.top-three-hero .featured-2 .claim-rank-pill:hover, .top-three-hero .featured-3 .claim-rank-pill:hover,
+.board-list .standard-listing:hover .claim-rank-pill, .board-list .standard-listing .claim-rank-pill:hover { background: var(--accent-fill); border-color: var(--accent-fill); }
+.primary-action:hover { background: var(--accent); }
+
+/* D. The wordmark sat 7px from "Board" on a phone. */
+@media (max-width: 46rem) { .topbar { column-gap: .75rem; } }
+
+/* A. List rows on the phone take the podium's shape — rank, logo, name, price
+   on one line; a muted meta line; the claim hanging off the bottom — instead
+   of a floating logo beside a stack of chips. One card grammar on the board. */
+@media (max-width: 34rem) {
+  .board-list { gap: 1.25rem; }
+  .board-list .standard-listing { position: relative; grid-template-areas: "rank mark name evidence" "rank meta meta meta"; grid-template-columns: 2.25rem 2rem minmax(0, 1fr) auto; grid-template-rows: auto auto; align-items: start; gap: .3rem .55rem; padding: .65rem .7rem .95rem; }
+  .board-list .standard-listing .product-cell, .board-list .standard-listing .product-copy { display: contents; }
+  .board-list .standard-listing .featured-rank { grid-area: rank; align-self: start; margin: 0; }
+  .board-list .standard-listing .product-mark-link { grid-area: mark; display: block; }
+  .board-list .standard-listing .product-mark { width: 2rem; height: 2rem; flex-basis: 2rem; }
+  .board-list .standard-listing .product-name { grid-area: name; display: block; min-height: 0; align-self: center; overflow: hidden; white-space: normal; text-overflow: clip; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-height: 1.15; font-size: .92rem; }
+  .board-list .standard-listing .listing-description { display: none; }
+  .board-list .standard-listing .featured-evidence { grid-area: evidence; align-self: center; justify-self: end; margin: 0; gap: .35rem; }
+  .board-list .standard-listing .product-meta { grid-area: meta; display: flex; flex-wrap: wrap; align-items: center; gap: .1rem .5rem; margin: 0; max-width: 100%; color: var(--muted); font-size: .68rem; }
+  .board-list .standard-listing .sponsored-chip, .board-list .standard-listing .category-meta { display: inline; padding: 0; border: 0; background: transparent; font-size: inherit; letter-spacing: 0; text-transform: none; white-space: normal; }
+  .board-list .standard-listing .sponsored-chip { color: var(--muted); font-weight: 700; }
+  .board-list .standard-listing .category-meta { color: var(--ink); font-weight: 750; }
+  .board-list .standard-listing .listing-clicks { display: inline; color: var(--muted); font-weight: 650; }
+  .board-list .standard-listing .listing-details { display: inline-flex; min-height: 2rem; align-items: center; padding: 0; color: var(--muted); font-size: inherit; font-weight: 750; text-decoration: underline; text-underline-offset: .16em; }
+  .board-list .standard-listing .claim-rank-pill { position: absolute; left: 50%; bottom: -.8rem; grid-area: auto; width: auto; min-height: 2rem; margin: 0; padding: .3rem .85rem; border: 1px solid var(--accent); border-radius: 999px; background: var(--surface); color: var(--ink); font-size: .7rem; white-space: nowrap; transform: translateX(-50%); justify-self: auto; }
+
+  /* B. Latest activity: the marquee sliced cards mid-word on a 375px screen.
+     On the phone it is a swipeable row, one card per snap, no duplicates. */
+  .activity-ticker-viewport { overflow: visible; }
+  .activity-tape { width: auto; overflow-x: auto; animation: none; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding-bottom: .3rem; scrollbar-width: none; }
+  .activity-tape::-webkit-scrollbar { display: none; }
+  .activity-tape li { flex: 0 0 auto; scroll-snap-align: start; }
+  .activity-tape li.is-duplicate { display: none; }
+  .activity-event { width: min(82vw, 20rem); min-width: 0; }
+}
