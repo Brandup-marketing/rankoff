@@ -321,9 +321,14 @@
       const empty = document.createElement("div");
       empty.className = "category-empty";
       const strong = document.createElement("strong");
-      strong.textContent = elements.language === "zh" ? "等待首个条目" : "Waiting for the first listing";
+      const today = elements.activeWindow === "today";
+      strong.textContent = today
+        ? (elements.language === "zh" ? "近 24 小时没有付款" : "No payment in the past 24 hours")
+        : (elements.language === "zh" ? "等待首个条目" : "Waiting for the first listing");
       const copy = document.createElement("span");
-      copy.textContent = elements.language === "zh" ? "这个市场将在首个有效出价后开始排名。" : "This market starts ranking after its first valid bid.";
+      copy.textContent = today
+        ? (elements.language === "zh" ? "切换到全部时间可查看这个市场的榜单。" : "Switch to All-time to see this market's board.")
+        : (elements.language === "zh" ? "这个市场将在首个有效出价后开始排名。" : "This market starts ranking after its first valid bid.");
       // "View board →" already sits in this card's header pointing at the same
       // URL. Two calls to action, one destination, fifteen cards.
       empty.append(strong, copy);
@@ -448,7 +453,7 @@
     elements.windowButtons.forEach((button) => {
       const active = button.dataset.categoryWindow === elements.activeWindow;
       button.setAttribute("aria-pressed", String(active));
-      button.textContent = elements.language === "zh" ? (button.dataset.categoryWindow === "today" ? "今日" : "全部时间") : (button.dataset.categoryWindow === "today" ? "Today" : "All-time");
+      button.textContent = elements.language === "zh" ? (button.dataset.categoryWindow === "today" ? "近 24 小时" : "全部时间") : (button.dataset.categoryWindow === "today" ? "Past 24h" : "All-time");
     });
     if (elements.languageToggle) {
       elements.languageToggle.textContent = elements.language === "zh" ? "EN" : "中文";
@@ -484,19 +489,31 @@
     const populated = scored.filter(({ rows }) => rows.length)
       .sort((a, b) => b.rows.length - a.rows.length || b.rows[0].bid - a.rows[0].bid || a.index - b.index);
     const empty = scored.filter(({ rows }) => !rows.length);
-    if (!populated.length || !empty.length) {
+    const today = elements.activeWindow === "today";
+    if (!empty.length || (!populated.length && !today)) {
       elements.grid.replaceChildren(...categoryConfig.map(cards));
       elements.moreMarkets?.remove();
       elements.moreMarkets = null;
       return;
     }
-    elements.grid.replaceChildren(...populated.map(({ config }) => cards(config)));
+    // A 24-hour window with no payment at all is one sentence, not nineteen
+    // "waiting" cards; every market stays reachable under the fold.
+    const lead = [];
+    if (!populated.length) {
+      const notice = document.createElement("p");
+      notice.className = "category-notice";
+      notice.textContent = elements.language === "zh"
+        ? "近 24 小时还没有付款。切换到全部时间可查看每个市场的榜单。"
+        : "No payment in the past 24 hours yet. Switch to All-time to see every market's board.";
+      lead.push(notice);
+    }
+    elements.grid.replaceChildren(...lead, ...populated.map(({ config }) => cards(config)));
     const details = elements.moreMarkets || document.createElement("details");
     details.className = "category-more";
     const summary = document.createElement("summary");
-    summary.textContent = elements.language === "zh"
-      ? `查看另外 ${empty.length} 个尚未有条目的市场`
-      : `Explore ${empty.length} more markets waiting for a first listing`;
+    summary.textContent = today
+      ? (elements.language === "zh" ? `另外 ${empty.length} 个市场近 24 小时没有付款` : `${empty.length} more markets with no payment in the past 24 hours`)
+      : (elements.language === "zh" ? `查看另外 ${empty.length} 个尚未有条目的市场` : `Explore ${empty.length} more markets waiting for a first listing`);
     const grid = document.createElement("div");
     grid.className = "category-grid";
     grid.append(...empty.map(({ config }) => cards(config)));

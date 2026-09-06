@@ -271,3 +271,8 @@ html[data-theme="light"] .categories-topbar .brand-emblem-image, html[data-theme
   .category-card-head { margin-bottom: .55rem; padding-bottom: .55rem; }
   .category-rank-row { border-top: 0; padding-top: .2rem; }
 }
+.category-notice { grid-column: 1 / -1; margin: 0; padding: .85rem 1rem; border: 1px dashed var(--line-strong); border-radius: .65rem; color: var(--muted); font-size: .82rem; line-height: 1.45; }
+/* The time toggle is the board's toggle: same height, same side padding,
+   same type — one component on two pages, not two pills. */
+.section-heading-spread .time-tabs { padding: .12rem; }
+.section-heading-spread .time-tabs button { min-width: 0; min-height: 2.25rem; padding: .42rem .7rem; font-size: .72rem; }
