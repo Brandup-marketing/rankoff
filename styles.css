@@ -1454,3 +1454,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .board-toolbar { padding: .55rem 0 .35rem; }
   .board-context { gap: .2rem; }
 }
+
+/* The search field is red-bordered; a blue focus ring over it read as two
+   outlines. The ring takes the accent, softly. */
+.site-search-field:focus-within { box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent); }

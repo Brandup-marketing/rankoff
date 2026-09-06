@@ -17,8 +17,8 @@
   }
   function copy() {
     return isChinese()
-      ? { category: "分类", product: "产品", open: "打开此市场", sponsored: "赞助条目", empty: "没有找到匹配的产品或分类。", placeholder: "搜索商家和市场…", close: "关闭" }
-      : { category: "Category", product: "Product", open: "Open this market", sponsored: "Sponsored listing", empty: "No products or categories found.", placeholder: "Search businesses and markets…", close: "Close" };
+      ? { category: "市场", product: "商家", open: "打开这个市场", sponsored: "赞助条目", empty: "没有找到匹配的商家或市场。", placeholder: "搜索商家和市场…", close: "关闭" }
+      : { category: "Market", product: "Business", open: "Open this market", sponsored: "Sponsored listing", empty: "No businesses or markets found.", placeholder: "Search businesses and markets…", close: "Close" };
   }
 
   function syncCopy() {
@@ -80,7 +80,7 @@
       const searchable = row.textContent.toLowerCase();
       if (!searchable.includes(query)) return;
       seenListings.add(id);
-      matches.push(result(labels.product, name.textContent.trim(), row.querySelector(".listing-description")?.textContent.trim() || labels.sponsored, localizedHref(name.href)));
+      matches.push(result(labels.product, name.textContent.trim(), row.querySelector(".listing-description")?.textContent.trim() || labels.sponsored, localizedHref(row.querySelector(".listing-details")?.href || name.href)));
     });
     document.querySelectorAll(".category-rank-row").forEach((row) => {
       const href = row.href;
