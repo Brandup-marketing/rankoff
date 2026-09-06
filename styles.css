@@ -1264,3 +1264,22 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .activity-tape li.is-duplicate { display: none; }
   .activity-event { width: min(82vw, 20rem); min-width: 0; }
 }
+
+/* "How ranking works" as a three-step flow instead of three paragraphs:
+   pay → rank → hold, each with a glyph, arrows between on wide screens. */
+.ranking-rules { grid-template-columns: minmax(12rem, 1fr) minmax(0, 2.6fr); align-items: start; gap: 1.25rem 2rem; }
+.rules-lead { display: grid; gap: .3rem; }
+.rules-lead a { justify-self: start; }
+.rules-flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.4rem; margin: 0; padding: 0; list-style: none; counter-reset: step; }
+.rules-flow li { position: relative; display: grid; gap: .3rem; min-width: 0; padding: .85rem .9rem; border: 1px solid var(--line); border-radius: .65rem; background: var(--surface); }
+.rules-flow li + li::before { content: "→"; position: absolute; top: 1rem; left: -1.15rem; color: var(--line-strong); font-size: 1rem; font-weight: 900; }
+.rules-glyph { display: grid; width: 2.4rem; height: 2.4rem; place-items: center; margin-bottom: .2rem; border-radius: .55rem; background: var(--accent-soft); color: var(--accent-ink); font-size: .85rem; font-weight: 900; letter-spacing: -.02em; }
+.rules-flow strong { color: var(--ink); font-size: .84rem; font-weight: 850; }
+.rules-flow strong::before { counter-increment: step; content: counter(step) ". "; color: var(--muted); font-weight: 750; }
+.rules-flow li > span:last-child { color: var(--muted); font-size: .72rem; line-height: 1.4; }
+.rules-note { grid-column: 1 / -1; margin: 0; padding-top: .9rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .7rem; line-height: 1.4; }
+@media (max-width: 64rem) {
+  .ranking-rules { grid-template-columns: 1fr; }
+  .rules-flow { grid-template-columns: 1fr; gap: 1.2rem; }
+  .rules-flow li + li::before { content: "↓"; top: -1.05rem; left: 1rem; }
+}

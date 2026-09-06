@@ -145,6 +145,7 @@
       title: String(entry?.listing?.title || entry?.listing?.hostname || "Listing"),
       description: String(entry?.listing?.description || ""),
       url: String(entry?.listing?.url || "https://rankoff.my"),
+      icon: String(entry?.listing?.favicon_url || ""),
       category: String(entry?.listing?.category || "Other"),
       bid: Math.max(1, Math.round(Number(entry?.bid?.amount_minor || 100) / 100)),
       clicks: Math.max(0, Math.round(Number(entry?.clicks || 0))),
@@ -215,20 +216,44 @@
     return icon;
   }
 
+  // Same mark as the board: the stored icon first, then the sharp sources
+  // (touch icon, Google's 128px service), favicon.ico last. A 16px favicon.ico
+  // alone was what turned most marks into mush or initials here.
   function logoFor(row) {
     const logo = document.createElement("span");
     logo.className = "category-logo";
-    logo.textContent = initials(row.title);
+    const mark = document.createElement("span");
+    mark.className = "category-initials";
+    mark.textContent = initials(row.title);
+    logo.append(mark);
     try {
       const url = new URL(row.url);
-      if (!url.hostname.endsWith(".example")) {
-        const image = document.createElement("img");
-        image.alt = "";
-        image.loading = "lazy";
-        image.src = `${url.origin}/favicon.ico`;
-        image.addEventListener("error", () => image.remove(), { once: true });
-        logo.append(image);
-      }
+      if (url.hostname.endsWith(".example") && !row.icon) return logo;
+      const sources = [...new Set([
+        row.icon,
+        `${url.origin}/apple-touch-icon.png`,
+        `https://www.google.com/s2/favicons?domain=${encodeURIComponent(url.hostname)}&sz=128`,
+        `${url.origin}/favicon.ico`,
+        `https://icons.duckduckgo.com/ip3/${encodeURIComponent(url.hostname)}.ico`,
+      ].filter(Boolean))];
+      const image = document.createElement("img");
+      image.alt = "";
+      image.decoding = "async";
+      image.referrerPolicy = "no-referrer";
+      let index = 0;
+      const next = () => {
+        if (index >= sources.length) return void image.remove();
+        image.src = sources[index];
+        index += 1;
+      };
+      image.addEventListener("load", () => {
+        const ratio = image.naturalWidth / Math.max(1, image.naturalHeight);
+        if (ratio > 3.5 || ratio < 0.3) return void image.remove();
+        logo.classList.add("has-icon");
+      }, { once: true });
+      image.addEventListener("error", next);
+      next();
+      logo.append(image);
     } catch { /* keep initials */ }
     return logo;
   }

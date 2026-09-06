@@ -96,7 +96,9 @@
 .category-logo { display: grid; place-items: center; width: 2.45rem; height: 2.45rem; overflow: hidden; border: 1px solid var(--line); border-radius: 0.4rem; background: var(--surface-subtle); color: var(--ink); font-size: 0.68rem; font-weight: 850; }
 /* Cut-out logos are drawn for a light page; dark lettering vanishes on a dark
    tile. styles.css forces #fff behind .product-mark img for exactly this. */
-.category-logo img { width: 100%; height: 100%; object-fit: contain; padding: 0.12rem; background: #fff; }
+.category-logo { position: relative; }
+.category-logo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 0.12rem; background: #fff; }
+.category-logo.has-icon .category-initials { visibility: hidden; }
 .category-rank-copy { min-width: 0; }
 .category-rank-copy strong { display: block; overflow: hidden; color: var(--ink); font-size: 0.9rem; text-overflow: ellipsis; white-space: nowrap; }
 .category-rank-copy span { display: -webkit-box; overflow: hidden; margin-top: 0.12rem; color: var(--muted); font-size: 0.75rem; line-height: 1.3; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
