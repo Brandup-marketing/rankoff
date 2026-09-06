@@ -268,3 +268,6 @@
 .claim-form .primary-action { width: 100%; margin-top: .2rem; }
 .claim-form .primary-action:disabled { opacity: .7; cursor: wait; }
 .claim-link[hidden] { display: none; }
+.claim-preview { margin: 0; padding: .55rem .7rem; border-radius: .5rem; background: var(--surface); color: var(--muted); font-size: .72rem; font-weight: 700; line-height: 1.45; }
+.claim-preview strong { color: var(--ink); font-variant-numeric: tabular-nums; }
+.claim-preview[hidden] { display: none; }

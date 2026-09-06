@@ -96,7 +96,7 @@
     bid: document.querySelector("[data-bid]"), clicks: document.querySelector("[data-clicks]"), clickLabels: document.querySelectorAll("[data-click-label]"), clickLabelToday: document.querySelector("[data-click-label-today]"),
     todayRank: document.querySelector("[data-today-rank]"), todayBid: document.querySelector("[data-today-bid]"), todayClicks: document.querySelector("[data-today-clicks]"),
     nextBid: document.querySelector("[data-next-bid]"), nextBidSticky: document.querySelector("[data-next-bid-sticky]"), claimSticky: document.querySelector("[data-claim-sticky]"), claimCopy: document.querySelector("[data-claim-copy]"), claim: document.querySelector("[data-claim]"),
-    claimForm: document.querySelector("[data-claim-form]"), claimUrl: document.querySelector("[data-claim-url]"), claimAmount: document.querySelector("[data-claim-amount]"), claimAgree: document.querySelector("[data-claim-agree]"), claimSubmit: document.querySelector("[data-claim-submit]"), claimCurrency: document.querySelector("[data-claim-currency]"),
+    claimForm: document.querySelector("[data-claim-form]"), claimUrl: document.querySelector("[data-claim-url]"), claimAmount: document.querySelector("[data-claim-amount]"), claimAgree: document.querySelector("[data-claim-agree]"), claimSubmit: document.querySelector("[data-claim-submit]"), claimCurrency: document.querySelector("[data-claim-currency]"), claimPreview: document.querySelector("[data-claim-preview]"),
     disclosure: document.querySelector("[data-claim-disclosure]"), toast: document.querySelector("[data-toast]"),
   };
   document.querySelector("[data-search-redirect]")?.addEventListener("click", () => { window.location.href = urlWithLanguage("/#search").href; });
@@ -122,6 +122,9 @@
   // reaches the board fetch below, so the code has to start from the model too.
   let boardCurrency = String(model?.currency || "USD").toUpperCase();
   let claimAmountTouched = false;
+  // The whole all-time board, for the claim preview: which position a total
+  // would land at, in this listing's market and overall.
+  let boardRankings = [];
   const TERMS_VERSION = "2026-09-02";
   const count = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
 
@@ -291,6 +294,7 @@
     const id = new URL(location.href).searchParams.get("id") || document.body.dataset.listingId || "";
     if (!id) return showError();
     if (model && String(model.id) === id) {
+      void loadBoardRankings();
       renderModel();
       elements.loading.hidden = true;
       elements.error.hidden = true;
@@ -310,6 +314,7 @@
           const [allPayload, todayPayload] = await Promise.all([allResponse.json(), todayResponse.json()]);
           productionBoard = allPayload.mode === "production";
           boardCurrency = String(allPayload.board?.currency || "USD").toUpperCase();
+          boardRankings = rankingsForPreview(allPayload);
           money = boardCurrencyFormat(boardCurrency);
           const allEntry = allPayload.rankings?.find((entry) => String(entry.listing?.id) === id);
           const todayEntry = todayPayload.rankings?.find((entry) => String(entry.listing?.id) === id);
@@ -482,6 +487,7 @@
       elements.claimAmount.min = String(minimum);
       if (!claimAmountTouched || Number(elements.claimAmount.value) < minimum) elements.claimAmount.value = String(minimum);
       elements.claimCurrency.textContent = boardCurrency === "MYR" ? "RM" : boardCurrency;
+      renderClaimPreview();
     }
     let host = model.url;
     try {
@@ -512,6 +518,65 @@
   }
 
   elements.claimAmount?.addEventListener("input", () => { claimAmountTouched = true; });
+
+  function rankingsForPreview(payload) {
+    return (payload?.rankings || []).map((entry) => {
+      let hostname = String(entry.listing?.hostname || "");
+      try { hostname = hostname || new URL(entry.listing?.url).hostname; } catch { /* keep */ }
+      return {
+        id: String(entry.listing?.id || ""),
+        hostname: hostname.toLowerCase().replace(/^(?:www|m)\./, ""),
+        market: categoryAliases[String(entry.listing?.category || "").toLowerCase()] || "Other",
+        bid: Math.ceil(Number(entry.bid?.amount_minor || 0) / 100),
+      };
+    });
+  }
+
+  async function loadBoardRankings() {
+    if (boardRankings.length || !/^https?:$/.test(location.protocol)) return;
+    try {
+      const response = await fetch(new URL("/api/v1/board?board=global&period=all&limit=100", location.origin), { cache: "no-store" });
+      if (!response.ok) return;
+      boardRankings = rankingsForPreview(await response.json());
+      renderClaimPreview();
+    } catch { /* The preview simply stays quiet without the board. */ }
+  }
+
+  // "#1 in Hardware & Construction · #2 overall · Already paid RM 5 · Total
+  // after RM 20": the position this payment buys and the total it is judged
+  // on, before the buyer types a card number. Ties go to the earlier payment,
+  // so an equal total ranks below it.
+  function renderClaimPreview() {
+    const node = elements.claimPreview;
+    if (!node || !model || elements.claimForm?.hidden) return;
+    if (!boardRankings.length) return void (node.hidden = true);
+    const amount = Number(elements.claimAmount.value);
+    if (!Number.isSafeInteger(amount) || amount <= 0) return void (node.hidden = true);
+    let hostname = "";
+    try { hostname = parseClaimUrl(elements.claimUrl.value).hostname.toLowerCase().replace(/^(?:www|m)\./, ""); } catch { /* not typed yet */ }
+    const existing = hostname ? boardRankings.find((row) => row.hostname === hostname) : null;
+    const previous = existing ? existing.bid : 0;
+    const total = previous + amount;
+    // A website already on the board keeps its own market: the payment lands
+    // there, not on this listing's board, so the preview names that market.
+    const market = existing ? existing.market : (categoryAliases[String(model.category || "").toLowerCase()] || "Other");
+    const others = boardRankings.filter((row) => row.id !== existing?.id);
+    const marketRank = others.filter((row) => row.market === market && row.bid >= total).length + 1;
+    const overall = others.filter((row) => row.bid >= total).length + 1;
+    const zh = preferences.language === "zh";
+    const marketName = categoryName(market);
+    const position = zh
+      ? `${marketName}第 <strong>${marketRank}</strong> 名${overall !== marketRank ? ` · 全站第 ${overall} 名` : ""}`
+      : `<strong>#${marketRank}</strong> in ${marketName}${overall !== marketRank ? ` · #${overall} overall` : ""}`;
+    const paid = existing
+      ? (zh ? `已付 ${money.format(previous)} · 付款后累计 <strong>${money.format(total)}</strong>` : `Already paid ${money.format(previous)} · Total after <strong>${money.format(total)}</strong>`)
+      : (zh ? "新条目" : "New listing");
+    node.innerHTML = `${zh ? "预计：" : "Expected: "}${position} · ${paid}`;
+    node.hidden = false;
+  }
+
+  elements.claimUrl?.addEventListener("input", renderClaimPreview);
+  elements.claimAmount?.addEventListener("input", renderClaimPreview);
 
   function claimFailure(message) {
     const failure = new Error(message);

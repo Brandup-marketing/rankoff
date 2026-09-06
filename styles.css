@@ -1201,3 +1201,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 @media (max-width: 34rem) {
   .top-three-hero .featured-2 .claim-rank-pill, .top-three-hero .featured-3 .claim-rank-pill { border-color: var(--accent); color: var(--ink); }
 }
+
+/* Bid dialog: what the board already holds for this website, what this
+   payment adds, and the total the rank is computed from. */
+.bid-breakdown { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; margin: 0; padding: .7rem .9rem; border: 1px solid var(--line); border-radius: .6rem; }
+.bid-breakdown > div { display: grid; gap: .15rem; min-width: 0; }
+.bid-breakdown dt { color: var(--muted); font-size: .64rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+.bid-breakdown dd { margin: 0; color: var(--ink); font-size: 1rem; font-weight: 850; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.bid-breakdown > div:last-child dd { color: var(--accent-strong); }

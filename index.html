@@ -29,7 +29,7 @@
     <meta name="theme-color" content="#090a0c" />
     <title>RANKOFF | Bid Your Way to #1</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=70" />
+    <link rel="stylesheet" href="./styles.css?v=71" />
     <link rel="stylesheet" href="./answers.css?v=2" />
     <script id="website-schema" type="application/ld+json">
       {
@@ -248,6 +248,12 @@
           </div>
         </section>
 
+        <dl class="bid-breakdown" data-dialog-breakdown>
+          <div><dt data-i18n="alreadyPaid">Already paid</dt><dd data-dialog-previous>RM 0</dd></div>
+          <div><dt data-i18n="payNow">Pay now</dt><dd data-dialog-now>RM 0</dd></div>
+          <div><dt data-i18n="totalAfter">Total after</dt><dd data-dialog-after>RM 0</dd></div>
+        </dl>
+
         <input id="bid-amount" name="bidAmount" type="hidden" />
         <p class="confirmation-copy" data-dialog-explanation data-i18n="confirmationCopy">Your listing will publish at this rank after payment settles. Someone else can take a higher position.</p>
 
@@ -308,6 +314,6 @@
     <script src="./search.js?v=4" defer></script>
     <script src="./share-card.js?v=6" type="module"></script>
     <script src="./share.js?v=8" defer></script>
-    <script src="./app.js?v=88" defer></script>
+    <script src="./app.js?v=89" defer></script>
   </body>
 </html>
