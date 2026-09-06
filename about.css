@@ -75,3 +75,47 @@ h2 { margin: 0; font-size: clamp(1.8rem, 4vw, 3.2rem); letter-spacing: -0.03em; 
   .timeline-grid { gap: 1.25rem; margin-top: 1.5rem; }
   .about-actions .primary-action { width: 100%; }
 }
+
+/* ---- Designer pass: pictures where the page only had type ---- */
+
+/* Desktop: the hero sat in the left half of a 1216px stage with nothing on
+   the right and 176px of dead air above it. Centred, like the board's hero,
+   with the air taken out. */
+.about-hero { margin: 0 auto; padding: clamp(2.5rem, 6vw, 4.5rem) 0 clamp(2.5rem, 5vw, 4rem); text-align: center; }
+.about-hero .about-lede { margin-inline: auto; }
+.about-hero .about-actions { display: flex; justify-content: center; }
+.about-hero .primary-action { min-width: 14rem; }
+
+/* Each principle gets a glyph tile in the board's idiom. */
+.principles div { grid-template-areas: "glyph label" "glyph title" "glyph copy"; grid-template-columns: 2.6rem minmax(0, 1fr); gap: .15rem .8rem; align-items: start; }
+.principle-glyph { grid-area: glyph; display: grid; width: 2.6rem; height: 2.6rem; place-items: center; border: 1px solid var(--line); border-radius: .55rem; background: var(--surface-subtle); color: var(--accent-strong); font-size: .82rem; font-weight: 900; }
+.principles strong { grid-area: label; grid-row: auto; color: var(--muted); font-size: .68rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+.principles span:not(.principle-glyph) { grid-area: title; font-size: 1rem; }
+.principles p { grid-area: copy; grid-column: auto; }
+
+/* The three steps are the board's flow — same tiles, same arrows — not
+   three columns of small caps. */
+.about-flow { margin-top: 2rem; }
+.about-flow strong { font-size: .92rem; }
+.about-flow li > span:last-child { font-size: .78rem; }
+.timeline .about-actions { display: flex; }
+.timeline .about-actions .primary-action { min-width: 14rem; }
+@media (max-width: 48rem) {
+  .about-hero { padding: 1.75rem 0 2rem; text-align: left; }
+  .about-hero .about-actions { display: block; }
+  .about-flow { margin-top: 1.25rem; }
+  .timeline .about-actions .primary-action { width: 100%; }
+}
+/* This flow tells a story, not a rule: no emphasised middle tile. */
+.about-flow li:nth-child(2) { border-color: var(--line); background: var(--surface); }
+.about-flow li:nth-child(2) .rules-glyph { background: var(--accent-soft); color: var(--accent-ink); }
+/* The sentences here are longer than the board's, so on a phone the steps
+   stack as rows — glyph beside the words — instead of three narrow columns. */
+@media (max-width: 34rem) {
+  .about-flow { grid-template-columns: 1fr; gap: .55rem; }
+  .about-flow li { display: grid; grid-template-areas: "glyph title" "glyph copy"; grid-template-columns: 2.4rem minmax(0, 1fr); align-items: start; gap: .1rem .75rem; padding: .75rem .85rem; }
+  .about-flow li + li::before { display: none; }
+  .about-flow .rules-glyph { grid-area: glyph; width: 2.4rem; height: 2.4rem; margin: 0; }
+  .about-flow strong { grid-area: title; font-size: .9rem; }
+  .about-flow li > span:last-child { grid-area: copy; font-size: .76rem; }
+}
