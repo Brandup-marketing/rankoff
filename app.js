@@ -1189,8 +1189,8 @@
   function getMinimumForPosition(position, ranked = rankedListings()) {
     if (!ranked.length) return 1;
     const index = Math.max(0, position - 1);
-    if (index <= 0) return getBid(ranked[0]) + 1;
-    return getBid(ranked[index - 1]) + 1;
+    if (index <= 0) return getBid(ranked[0]) + boardMinimum();
+    return getBid(ranked[index - 1]) + boardMinimum();
   }
 
   document.addEventListener("input", (event) => {
@@ -1231,13 +1231,13 @@
     if (activeBid?.type === "new") {
       const existing = existingListingForPending();
       const leader = ranked[0];
-      // Above the floor every whole ringgit counts: first place is one more
-      // than the leader's total, not a step of the floor above it.
+      // Every place costs the board's step more than the one holding it, and
+      // the step is the minimum payment, so every figure stays a round one.
       if (existing && leader && existing.id !== leader.id) {
-        return Math.max(boardMinimum(), getBid(leader) - getBid(existing) + 1);
+        return Math.max(boardMinimum(), getBid(leader) - getBid(existing) + boardMinimum());
       }
       if (existing && leader && existing.id === leader.id) return boardMinimum();
-      return Math.max(boardMinimum(), getBid(leader) + 1);
+      return getBid(leader) + boardMinimum();
     }
 
     const listing = state.listings.find((item) => item.id === activeBid?.listingId);
@@ -1247,7 +1247,7 @@
     // gap to close — not the rival's total. Suggesting the rival's total
     // overcharged every returning customer by everything they had already paid.
     if (index <= 0) return boardMinimum();
-    const gap = getBid(ranked[index - 1]) - getBid(listing) + 1;
+    const gap = getBid(ranked[index - 1]) - getBid(listing) + boardMinimum();
     return Math.max(boardMinimum(), gap);
   }
 
@@ -1484,9 +1484,9 @@
     // leader's price, so taking #2 off a RM 5 listing was advertised at the
     // RM 15 it costs to take #1. A position is taken by exceeding the total
     // that holds it, and a tie loses because it settles later.
-    // The price of this listing's place: one ringgit more than it holds,
-    // never below the floor. For #1 the server's own next bid wins if higher.
-    const ownPrice = Math.max(boardMinimum(), getBid(listing) + 1);
+    // The price of this listing's place: the board's step above what it
+    // holds. For #1 the server's own next bid wins if higher.
+    const ownPrice = getBid(listing) + boardMinimum();
     const minimum = position === 1 && boardSource !== "local" && remoteNextBid
       ? Math.max(remoteNextBid, ownPrice)
       : ownPrice;

@@ -351,13 +351,13 @@
       });
     }
     card.append(head, rankings);
-    // The price of first place in this market: one whole unit above the
-    // leader, never below the board's floor — the server's next_bid rule.
+    // The price of first place in this market: the board's step above the
+    // leader — the server's next_bid rule.
     if (rows.length && elements.floorUnits > 0) {
       const claim = document.createElement("a");
       claim.className = "category-claim";
       claim.href = claimHrefFor(config.id);
-      const price = currency.format(Math.max(rows[0].bid + 1, elements.floorUnits));
+      const price = currency.format(rows[0].bid + elements.floorUnits);
       const label = document.createElement("span");
       const amount = document.createElement("strong");
       amount.textContent = price;
@@ -539,9 +539,9 @@
       const allPayload = allResult.value;
       const todayPayload = todayResult.status === "fulfilled" ? todayResult.value : { rankings: [] };
       currency = boardCurrencyFormat(String(allPayload.board?.currency || "USD").toUpperCase());
-      // The board's floor. First place costs one whole unit more than the
-      // market's leader, never less than the floor — the server's next_bid
-      // rule. Without a floor in the payload no price is shown.
+      // The board's step, which is also its floor: first place costs this
+      // much more than the market's leader — the server's next_bid rule.
+      // Without it in the payload no price is shown.
       elements.floorUnits = Number(allPayload.board?.min_increment_minor) > 0 ? Number(allPayload.board.min_increment_minor) / 100 : 0;
       const allRows = normalizeRows(allPayload, "all");
       const todayRows = normalizeRows(todayPayload, "today");
