@@ -285,3 +285,10 @@
 @media (max-width: 46rem) {
   .listing-topbar .site-nav a[data-copy="board"] { display: none; }
 }
+/* One rule above the footer, not two: the detail block's bottom border and
+   the footer's top border sat 40px apart as a pair of lines. */
+.listing-detail { border-bottom: 0; }
+/* The breadcrumb had ~90px of air on a phone before anything happened. */
+@media (max-width: 46rem) {
+  .listing-breadcrumb { padding: .55rem 0 .5rem; }
+}
