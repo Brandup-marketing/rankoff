@@ -9,7 +9,7 @@ const STATIC_LOCALIZED_METADATA = Object.freeze({
     path: "/",
     title: "RANKOFF｜出价登上第 1 名",
     description: "在 Rankoff 出价登上第 1 名。用公开透明的赞助出价，让你的产品出现在实时榜单最显眼的位置。",
-    socialTitle: "RANKOFF｜RM5 起，竞逐第 1 名",
+    socialTitle: "RANKOFF｜RM5 拿下第 1 名",
     socialDescription: "面向马来西亚商家的公开赞助榜单。RM5 起即可上榜；已结算累计金额和经验证点击公开可见。",
   }),
   categories: Object.freeze({
@@ -24,7 +24,7 @@ const STATIC_LOCALIZED_METADATA = Object.freeze({
     title: "关于 RANKOFF",
     description: "了解 Rankoff 如何把赞助注意力变成公开竞价榜单，让产品为清晰可见的排名展开竞争。",
     socialTitle: "关于 RANKOFF",
-    socialDescription: "了解 Rankoff 的运作方式：产品竞逐赞助排名，已结算累计金额和经验证点击公开可见。",
+    socialDescription: "了解 Rankoff 的运作方式：马来西亚商家付费持有排名，每一笔付款都公开可见。",
   }),
 });
 
