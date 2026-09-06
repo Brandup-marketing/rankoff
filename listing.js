@@ -34,7 +34,7 @@
       claimUrl: "Your website or public profile", claimUrlPlaceholder: "example.com or instagram.com/yourname", claimAmount: "Your payment",
       claimAgree: "I understand this is a paid sponsored placement for a public link. It gives me no rights over that account, and the listed party may request removal. I agree to the ", termsOfService: "Terms of Service", claimAgreeSuffix: ".",
       payClaim: "Pay & claim #1", claimOpening: "Opening checkout…", claimInvalidUrl: "Enter a valid website or public profile address.", claimHandle: "Paste the full profile address, not a bare @handle.",
-      claimTooLow: "Pay at least {min} to take #1.", claimAgreeFirst: "Please accept the Terms of Service first.", claimListingFailed: "This website could not be listed. No payment was made.", claimUnavailable: "Checkout is unavailable right now. No payment was made.",
+      claimTooLow: "The minimum payment is {min}.", claimAgreeFirst: "Please accept the Terms of Service first.", claimListingFailed: "This website could not be listed. No payment was made.", claimUnavailable: "Checkout is unavailable right now. No payment was made.",
       footer: "Transparent sponsored ranking. Every position has a visible price.",
       previewListing: "Public listing", verifiedPlacement: "Verified placement", previewData: "Public data", verifiedData: "Live data",
       sampleClicks: "Referral clicks", verifiedClicks: "Tracked clicks", estimatedClicks: "Referral clicks", past24Clicks: "Past 24h clicks",
@@ -54,7 +54,7 @@
       claimUrl: "你的网站或公开主页", claimUrlPlaceholder: "example.com 或 instagram.com/yourname", claimAmount: "付款金额",
       claimAgree: "我了解这是针对公开链接的付费赞助展示，不赋予我对该账号的任何权利，被列出的一方可要求移除。我同意", termsOfService: "《服务条款》", claimAgreeSuffix: "。",
       payClaim: "付款并拿下第 1 名", claimOpening: "正在打开付款页面…", claimInvalidUrl: "请输入有效的网站或公开主页网址。", claimHandle: "请贴上完整主页链接，而不是单独的 @账号。",
-      claimTooLow: "至少付 {min} 才能拿下第 1 名。", claimAgreeFirst: "请先同意《服务条款》。", claimListingFailed: "此网址无法上榜，未产生任何费用。", claimUnavailable: "目前无法打开付款页面，未产生任何费用。",
+      claimTooLow: "最低付款 {min}。", claimAgreeFirst: "请先同意《服务条款》。", claimListingFailed: "此网址无法上榜，未产生任何费用。", claimUnavailable: "目前无法打开付款页面，未产生任何费用。",
       footer: "透明的赞助排名。每个位置都有公开价格。",
       previewListing: "公开条目", verifiedPlacement: "已验证展示", previewData: "公开数据", verifiedData: "实时数据",
       sampleClicks: "推荐点击", verifiedClicks: "追踪点击", estimatedClicks: "推荐点击", past24Clicks: "近 24 小时点击",
@@ -562,7 +562,14 @@
   // already on the board (payments accumulate), the whole target for a new
   // one — and never less than the board's floor, which is also the smallest
   // charge the gateway accepts.
-  function claimRequired(existing) {
+  // Any payment from the board's floor is valid — it lands at whatever rank
+  // the resulting total earns, and the preview says which. The price of #1
+  // is a suggestion, not a gate.
+  function claimRequired() {
+    return boardFloor || 1;
+  }
+
+  function claimSuggested(existing) {
     const target = model?.nextBid || (model?.bid || 0) + (boardFloor || 1);
     const gap = existing ? target - existing.bid : target;
     return Math.max(boardFloor || 1, gap);
@@ -583,11 +590,14 @@
     if (!node || !model || elements.claimForm?.hidden) return;
     if (!boardRankings.length) return void (node.hidden = true);
     const existing = existingForTypedUrl();
-    // The field's floor follows the website typed: a returning customer owes
-    // the gap, a new one the target, nobody less than the minimum payment.
-    const required = claimRequired(existing);
+    // The floor is the minimum payment. The suggested amount follows the
+    // website typed — the gap for a returning customer, the #1 price for a
+    // new one — until the buyer types their own.
+    const required = claimRequired();
+    const suggested = claimSuggested(existing);
     elements.claimAmount.min = String(required);
-    if (!claimAmountTouched || Number(elements.claimAmount.value) < required) elements.claimAmount.value = String(required);
+    if (!claimAmountTouched) elements.claimAmount.value = String(suggested);
+    else if (Number(elements.claimAmount.value) < required) elements.claimAmount.value = String(required);
     const amount = Number(elements.claimAmount.value);
     if (!Number.isSafeInteger(amount) || amount <= 0) return void (node.hidden = true);
     const previous = existing ? existing.bid : 0;
@@ -607,7 +617,7 @@
       ? (zh ? `已付 ${money.format(previous)} · 付款后累计 <strong>${money.format(total)}</strong>` : `Already paid ${money.format(previous)} · Total after <strong>${money.format(total)}</strong>`)
       : (zh ? "新条目" : "New listing");
     // Say so when the minimum payment, not the gap, is what sets the amount.
-    const floorNote = boardFloor && existing && (model.nextBid || model.bid + boardFloor) - existing.bid < boardFloor
+    const floorNote = boardFloor && existing && (model.nextBid || model.bid + boardFloor) - existing.bid < boardFloor && amount <= boardFloor
       ? (zh ? ` · 最低付款 ${money.format(boardFloor)}` : ` · Minimum payment ${money.format(boardFloor)}`)
       : "";
     node.innerHTML = `${zh ? "预计：" : "Expected: "}${position} · ${paid}${floorNote}`;
@@ -703,7 +713,7 @@
       elements.claimUrl.focus();
       return;
     }
-    const minimum = claimRequired(existingForTypedUrl());
+    const minimum = claimRequired();
     const amount = Number(elements.claimAmount.value);
     if (!Number.isSafeInteger(amount) || amount < minimum) {
       showToast(text("claimTooLow").replace("{min}", money.format(minimum)));
