@@ -1280,6 +1280,14 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .rules-note { grid-column: 1 / -1; margin: 0; padding-top: .9rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .7rem; line-height: 1.4; }
 @media (max-width: 64rem) {
   .ranking-rules { grid-template-columns: 1fr; }
-  .rules-flow { grid-template-columns: 1fr; gap: 1.2rem; }
-  .rules-flow li + li::before { content: "↓"; top: -1.05rem; left: 1rem; }
+}
+/* The flow stays a row on the phone — pay → rank → hold reads as one line of
+   thought, not three stacked cards. Tighter tiles, the copy kept short. */
+@media (max-width: 34rem) {
+  .rules-flow { gap: .9rem; }
+  .rules-flow li { padding: .6rem .55rem; gap: .2rem; }
+  .rules-flow li + li::before { top: .75rem; left: -.85rem; font-size: .85rem; }
+  .rules-glyph { width: 2rem; height: 2rem; font-size: .74rem; }
+  .rules-flow strong { font-size: .76rem; }
+  .rules-flow li > span:last-child { font-size: .64rem; line-height: 1.35; }
 }

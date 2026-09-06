@@ -40,7 +40,7 @@ const HOME_STATIC_COPY = Object.freeze({
   reporting: "数据", reportingCopy: "所选时间范围内的追踪点击。重复与自动化流量未经过滤——一次点击不等于一位客户。", readRules: "查看完整规则 →",
   askWhatIs: "什么是付费排名榜？", askHowWorks: "Rankoff 排名怎么算？", askHowSponsor: "怎么赞助一个网站或社交账号？",
   rulesLink: "规则", terms: "条款", termsOfService: "服务条款", privacyLink: "隐私", payments: "付款", footerCredit: "Brandup Marketing 出品",
-  confirmRank: "确认此排名", confirmRankIntro: "核对排名与价格，同意《服务条款》后继续。", rankLabel: "排名", priceLabel: "价格", dueNow: "现在支付", stepPay: "付款", stepPayCopy: "在安全的托管付款页一次付清，RM5 起。", stepRank: "排名", stepRankCopy: "累计付款最高者拿下第 1 名，每个价格都公开。", stepHold: "保持", stepHoldCopy: "直到有人出价更高为止。随时追加即可回到上方。", statVisitors: "访客会话", statClicks: "次跳转到商家", statPaid: "商家累计付款", statWindow: "全时段，由 Rankoff 统计", alreadyPaid: "已付金额", payNow: "本次支付", totalAfter: "付款后累计",
+  confirmRank: "确认此排名", confirmRankIntro: "核对排名与价格，同意《服务条款》后继续。", rankLabel: "排名", priceLabel: "价格", dueNow: "现在支付", stepPay: "付款", stepPayCopy: "一次付清，RM5 起。", stepRank: "排名", stepRankCopy: "累计付款最高者拿下第 1 名。", stepHold: "保持", stepHoldCopy: "直到有人出价更高。随时可追加。", statVisitors: "访客会话", statClicks: "次跳转到商家", statPaid: "商家累计付款", statWindow: "全时段，由 Rankoff 统计", alreadyPaid: "已付金额", payNow: "本次支付", totalAfter: "付款后累计",
   confirmationCopy: "付款确认后，你的条目会以此排名上线。其他人仍可出价取得更高排名。此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。",
   agreeTermsPrefix: "我了解这是为一个公开链接购买的赞助展示，付款不会获得该账号的所有权或编辑权，被展示方可要求下架。我同意《",
   agreeTermsSuffix: "》。", cancel: "取消", continueCheckout: "继续付款", close: "关闭", searchPlaceholder: "搜索产品和分类…",
