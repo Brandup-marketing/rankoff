@@ -46,7 +46,7 @@
       board: "榜单", categories: "分类", about: "关于", legal: "法律条款", contact: "联系", skipListing: "跳至条目详情", back: "← 返回榜单", loading: "正在加载排名信息…",
       notFoundTitle: "找不到此条目", notFoundCopy: "此条目可能已移动，或已不在公开榜单中。", returnBoard: "返回榜单",
       sponsored: "赞助", visit: "访问网站", viewInstagram: "查看 Instagram", viewFacebook: "查看 Facebook 专页", viewTiktok: "查看 TikTok", viewProfile: "查看主页", share: "分享排名", evidence: "公开排名记录", rank: "当前排名", bid: "出价", allTimeBid: "全时段累计出价", past24Bid: "近 24 小时累计出价", duration: "有效期", past24: "近 24 小时",
-      rule: "累计出价最高者获得第 1 名", claimNumberOne: "以此价格争夺第 1 名", startClaim: "拿下此排名",
+      rule: "累计出价最高者获得第 1 名", claimNumberOne: "拿下第 1 名，只需", startClaim: "拿下此排名",
       footer: "透明的赞助排名。每个位置都有公开价格。",
       previewListing: "公开条目", verifiedPlacement: "已验证展示", previewData: "公开数据", verifiedData: "实时数据",
       sampleClicks: "推荐点击", verifiedClicks: "已验证点击", estimatedClicks: "推荐点击", past24Clicks: "近 24 小时点击",
@@ -87,7 +87,7 @@
     rankLabel: document.querySelector("[data-rank-label]"), rankNote: document.querySelector("[data-rank-note]"),
     bid: document.querySelector("[data-bid]"), clicks: document.querySelector("[data-clicks]"), clickLabels: document.querySelectorAll("[data-click-label]"), clickLabelToday: document.querySelector("[data-click-label-today]"),
     todayRank: document.querySelector("[data-today-rank]"), todayBid: document.querySelector("[data-today-bid]"), todayClicks: document.querySelector("[data-today-clicks]"),
-    nextBid: document.querySelector("[data-next-bid]"), claimCopy: document.querySelector("[data-claim-copy]"), claim: document.querySelector("[data-claim]"),
+    nextBid: document.querySelector("[data-next-bid]"), nextBidSticky: document.querySelector("[data-next-bid-sticky]"), claimSticky: document.querySelector("[data-claim-sticky]"), claimCopy: document.querySelector("[data-claim-copy]"), claim: document.querySelector("[data-claim]"),
     disclosure: document.querySelector("[data-claim-disclosure]"), toast: document.querySelector("[data-toast]"),
   };
   document.querySelector("[data-search-redirect]")?.addEventListener("click", () => { window.location.href = urlWithLanguage("/#search").href; });
@@ -451,6 +451,8 @@
     elements.mode.classList.toggle("is-verified", verified);
     elements.evidenceNote.textContent = verified ? text("verifiedEvidence") : text("previewEvidence");
     elements.nextBid.textContent = money.format(model.nextBid || model.bid + 1);
+    if (elements.nextBidSticky) elements.nextBidSticky.textContent = elements.nextBid.textContent;
+    if (elements.claimSticky) elements.claimSticky.hidden = false;
     elements.claimCopy.textContent = text("claimCopy");
     elements.disclosure.textContent = verified ? text("liveDisclosure") : text("previewDisclosure");
     elements.claim.href = urlWithLanguage("/#claim").href;

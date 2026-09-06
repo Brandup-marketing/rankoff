@@ -238,3 +238,10 @@
 .listing-record li { display: flex; gap: 0.45rem; align-items: baseline; }
 .listing-record span { color: var(--ink-soft); font-size: 0.75rem; }
 .listing-record strong { font-size: 0.78rem; font-weight: 700; }
+
+.claim-sticky { display: none; }
+@media (max-width: 46rem) {
+  .claim-sticky { position: fixed; right: .75rem; bottom: max(.75rem, env(safe-area-inset-bottom)); left: .75rem; z-index: 20; display: flex; min-height: 3rem; align-items: center; justify-content: center; gap: .4rem; padding: .6rem 1rem; border-radius: 999px; background: var(--accent); color: #fff; font-size: .9rem; font-weight: 850; text-decoration: none; box-shadow: 0 8px 24px rgba(0, 0, 0, .35); }
+  .claim-sticky[hidden] { display: none; }
+  .listing-shell { padding-bottom: 5.5rem; }
+}

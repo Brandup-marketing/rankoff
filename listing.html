@@ -26,8 +26,8 @@
     <meta name="theme-color" content="#090a0c" />
     <title>Sponsored listing | RANKOFF</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=66" />
-    <link rel="stylesheet" href="./listing.css?v=13" />
+    <link rel="stylesheet" href="./styles.css?v=68" />
+    <link rel="stylesheet" href="./listing.css?v=14" />
   </head>
   <body>
     <a class="skip-link" href="#listing-detail" data-copy="skipListing">Skip to listing details</a>
@@ -119,6 +119,9 @@
         <div class="footer-identity"><a class="footer-brand" href="/" aria-label="RANKOFF home"><img class="footer-logo-image" src="./assets/rankoff-final-logo.png?v=4" alt="RANKOFF" width="1254" height="1254" /></a><span class="footer-credit"><strong>Rankoff</strong><a class="footer-parent" href="https://www.brandupdesignmarketing.com/" data-copy="footerParent">A Brandup Marketing product</a></span></div>
         <span class="footer-links"><a href="/legal#rules" data-copy="rules">Rules</a><a href="/legal#terms" data-copy="terms">Terms</a><a href="/legal#privacy" data-copy="privacy">Privacy</a><a href="/legal#payments" data-copy="payments">Payments</a></span>
       </footer>
+      <!-- The share card lands people here and the claim ticket sits ~1000px down
+           on a phone. This stays on screen; it only jumps to the ticket. -->
+      <a class="claim-sticky" href="#claim-heading" data-claim-sticky hidden><span data-copy="claimNumberOne">Claim #1 for</span> <strong data-next-bid-sticky>—</strong> →</a>
     </main>
 
     <dialog class="dialog share-dialog" data-share-dialog aria-labelledby="share-dialog-title">
@@ -163,6 +166,6 @@
     <div class="toast" role="status" aria-live="polite" data-toast></div>
     <script src="./share-card.js?v=5" type="module"></script>
     <script src="./share.js?v=8" defer></script>
-    <script src="./listing.js?v=29" defer></script>
+    <script src="./listing.js?v=30" defer></script>
   </body>
 </html>

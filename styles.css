@@ -1105,3 +1105,66 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .topbar .language-toggle { grid-area: language; }
   .topbar .theme-toggle { grid-area: theme; }
 }
+
+/* Desktop and tablet: the per-card claim below the podium is quiet until the
+   cursor (or keyboard focus) reaches it. Hidden would cost the revenue action
+   and every keyboard user; muted keeps it findable without a red pill per row. */
+@media (min-width: 34.01rem) {
+  .board-list .standard-listing .claim-rank-pill { border: 1px solid var(--line-strong); background: var(--surface); color: var(--muted); }
+  .board-list .standard-listing:hover .claim-rank-pill,
+  .board-list .standard-listing .claim-rank-pill:hover,
+  .board-list .standard-listing .claim-rank-pill:focus-visible { border-color: var(--accent); background: var(--accent); color: #fff; }
+}
+
+@media (max-width: 34rem) {
+  /* Podium cards on the phone, restructured after the reference the owner sent:
+     price on the first line, meta as one muted line instead of chips, and the
+     claim as a small pill hanging off the bottom edge — the desktop pattern.
+     ~270px → ~170px per card without shrinking the type. */
+  .top-three-hero { gap: 1.35rem; }
+  /* The logo, name, description and meta become grid items of the card itself
+     (display: contents on their two wrappers) so the name runs to the price and
+     the meta line gets the full card width instead of the sliver left between
+     logo and price — that sliver is what stacked the meta four lines deep. */
+  .top-three-hero .featured-listing, .top-three-hero .featured-1 { grid-template-areas: "rank mark name evidence" "rank desc desc desc" "rank meta meta meta"; grid-template-columns: 2.6rem 2.5rem minmax(0, 1fr) auto; grid-template-rows: auto auto auto; align-items: start; gap: .35rem .6rem; padding: .75rem .75rem 1.05rem; }
+  .top-three-hero .featured-listing .product-cell, .top-three-hero .featured-listing .product-copy { display: contents; }
+  .top-three-hero .featured-listing .featured-rank { align-self: start; }
+  .top-three-hero .featured-listing .product-mark-link { grid-area: mark; display: block; }
+  .top-three-hero .featured-listing .product-name { grid-area: name; align-self: center; }
+  .top-three-hero .featured-listing .listing-description { grid-area: desc; margin: 0; }
+  .top-three-hero .featured-listing .product-meta { grid-area: meta; }
+  .top-three-hero .featured-listing .featured-evidence { grid-area: evidence; display: flex; align-self: center; justify-self: end; width: auto; margin: 0; padding: 0; border: 0; gap: .4rem; }
+  .top-three-hero .featured-listing .featured-bid-stack { flex-direction: row; align-items: center; gap: .4rem; }
+  .top-three-hero .featured-listing .featured-price { min-width: 0; }
+  .top-three-hero .featured-listing .featured-price span { display: none; }
+  .top-three-hero .featured-listing .featured-price strong { font-size: 1.05rem; }
+  .top-three-hero .featured-1 .featured-price strong { font-size: 1.2rem; }
+  .top-three-hero .featured-listing .rank-share-label { display: none; }
+  .top-three-hero .featured-listing .product-name, .top-three-hero .featured-1 .product-name { display: -webkit-box; overflow: hidden; white-space: normal; -webkit-box-orient: vertical; -webkit-line-clamp: 2; text-overflow: clip; line-height: 1.15; }
+  .top-three-hero .featured-listing .product-mark, .top-three-hero .featured-1 .product-mark { width: 2.5rem; height: 2.5rem; flex-basis: 2.5rem; }
+  .top-three-hero .featured-listing .rank-share-control { min-width: 2rem; min-height: 2rem; margin: 0; padding: 0; }
+  .top-three-hero .featured-listing .product-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .1rem .4rem; margin-top: .3rem; color: var(--muted); font-size: .7rem; }
+  .top-three-hero .featured-listing .sponsored-chip, .top-three-hero .featured-listing .category-meta { display: inline; padding: 0; border: 0; background: transparent; font-size: inherit; letter-spacing: 0; text-transform: none; }
+  .top-three-hero .featured-listing .sponsored-chip { color: var(--muted); font-weight: 700; }
+  .top-three-hero .featured-listing .category-meta { color: var(--ink); font-weight: 750; }
+  .top-three-hero .featured-listing .listing-clicks { color: var(--muted); font-weight: 650; }
+  .top-three-hero .featured-listing .listing-details { display: inline-flex; min-height: 2rem; align-items: center; padding: 0; color: var(--muted); font-size: inherit; font-weight: 750; text-decoration: underline; text-underline-offset: .16em; }
+  .top-three-hero .featured-listing .product-meta { gap: .15rem .55rem; }
+  .top-three-hero .featured-listing .claim-rank-pill, .top-three-hero .featured-2 .claim-rank-pill, .top-three-hero .featured-3 .claim-rank-pill { position: absolute; left: 50%; bottom: -.8rem; grid-area: auto; width: auto; min-height: 2rem; margin: 0; padding: .3rem .85rem; border: 1px solid var(--accent); border-radius: 999px; background: var(--surface); color: var(--ink); font-size: .7rem; white-space: nowrap; transform: translateX(-50%); }
+  .top-three-hero .featured-1 .claim-rank-pill { border-color: var(--accent); background: var(--accent); color: #fff; }
+  /* The list rows get their logo back, small: a merchant looks for their mark. */
+  .board-list .standard-listing .product-mark-link { display: block; }
+  .board-list .standard-listing .product-mark { width: 2rem; height: 2rem; flex-basis: 2rem; }
+}
+
+@media (max-width: 22.5rem) {
+  /* 320px: the name column between logo and price is ~60px, so the name
+     clipped. Tighter rank/logo/price and a third line give it ~95px. */
+  .top-three-hero .featured-listing, .top-three-hero .featured-1 { grid-template-columns: 2.25rem 2.25rem minmax(0, 1fr) auto; gap: .35rem .45rem; padding: .65rem .6rem 1rem; }
+  .top-three-hero .featured-listing .featured-rank { width: 2.25rem; height: 2.25rem; font-size: .95rem; }
+  .top-three-hero .featured-listing .product-mark, .top-three-hero .featured-1 .product-mark { width: 2.25rem; height: 2.25rem; flex-basis: 2.25rem; }
+  .top-three-hero .featured-listing .product-name, .top-three-hero .featured-1 .product-name { -webkit-line-clamp: 3; font-size: .92rem; }
+  .top-three-hero .featured-listing .featured-price strong { font-size: .95rem; }
+  .top-three-hero .featured-1 .featured-price strong { font-size: 1.05rem; }
+  .top-three-hero .featured-listing .rank-share-control { min-width: 1.75rem; min-height: 1.75rem; }
+}
