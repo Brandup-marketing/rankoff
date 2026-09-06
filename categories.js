@@ -48,7 +48,7 @@
     root: document.documentElement,
     allRows: [],
     todayRows: [],
-    incrementUnits: 0,
+    floorUnits: 0,
     activeWindow: "all",
     language: "en",
     mode: /^https?:$/.test(window.location.protocol) ? "loading" : "preview",
@@ -351,15 +351,26 @@
       });
     }
     card.append(head, rankings);
-    // The price of first place in this market: the current top total plus the
-    // board's increment, the server's own next_bid rule. Only where both the
-    // top total and the increment are known.
-    if (rows.length && elements.incrementUnits > 0) {
+    // The price of first place in this market: one whole unit above the
+    // leader, never below the board's floor — the server's next_bid rule.
+    if (rows.length && elements.floorUnits > 0) {
       const claim = document.createElement("a");
       claim.className = "category-claim";
       claim.href = claimHrefFor(config.id);
-      const price = currency.format(rows[0].bid + elements.incrementUnits);
-      claim.textContent = elements.language === "zh" ? `${price} 起拿下第 1 名 →` : `Take #1 from ${price} →`;
+      const price = currency.format(Math.max(rows[0].bid + 1, elements.floorUnits));
+      const label = document.createElement("span");
+      const amount = document.createElement("strong");
+      amount.textContent = price;
+      const arrow = document.createElement("span");
+      arrow.className = "category-claim-arrow";
+      arrow.setAttribute("aria-hidden", "true");
+      arrow.textContent = "→";
+      if (elements.language === "zh") {
+        label.append(amount, document.createTextNode(" 起拿下第 1 名"));
+      } else {
+        label.append(document.createTextNode("Take #1 from "), amount);
+      }
+      claim.append(label, arrow);
       card.append(claim);
     }
     return card;
@@ -528,10 +539,10 @@
       const allPayload = allResult.value;
       const todayPayload = todayResult.status === "fulfilled" ? todayResult.value : { rankings: [] };
       currency = boardCurrencyFormat(String(allPayload.board?.currency || "USD").toUpperCase());
-      // The board's own increment: the price of first place is the top total
-      // plus this, exactly as the server computes next_bid_minor. Absent, no
-      // price is shown — never a guessed step.
-      elements.incrementUnits = Number(allPayload.board?.min_increment_minor) > 0 ? Number(allPayload.board.min_increment_minor) / 100 : 0;
+      // The board's floor. First place costs one whole unit more than the
+      // market's leader, never less than the floor — the server's next_bid
+      // rule. Without a floor in the payload no price is shown.
+      elements.floorUnits = Number(allPayload.board?.min_increment_minor) > 0 ? Number(allPayload.board.min_increment_minor) / 100 : 0;
       const allRows = normalizeRows(allPayload, "all");
       const todayRows = normalizeRows(todayPayload, "today");
       const productionBoard = allPayload.mode === "production";

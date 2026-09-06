@@ -207,3 +207,46 @@ html[data-theme="light"] .categories-topbar .brand-emblem-image, html[data-theme
   .category-card-head { margin-bottom: .7rem; }
   .category-card-head h3 { font-size: 1.05rem; }
 }
+
+/* ---- Design pass: the market card takes the board's card grammar ---- */
+.category-hero h1 { font-size: 2.6rem; }
+.category-hero > p:last-child { font-size: .95rem; }
+.all-categories-section { margin-top: 1.75rem; }
+.section-heading h2 { font-size: 1rem; }
+
+.category-card { padding: 1rem 1rem .9rem; }
+.category-card:hover { transform: none; background: var(--surface); }
+.category-card-head { gap: .7rem; margin-bottom: .75rem; }
+.category-card-head h3 { font-size: 1.02rem; font-weight: 850; letter-spacing: -.01em; }
+/* The icon is a tile like the rank tile on the board, not a pink coin. */
+.category-card-head .category-icon { width: 2.25rem; height: 2.25rem; border: 1px solid var(--line); border-radius: .5rem; background: var(--surface-subtle); color: var(--accent-strong); font-size: 1rem; }
+/* The corner link is the whole card's target; it shows as a chevron. */
+.category-card-head a { font-size: 0; line-height: 0; color: var(--muted); }
+.category-card-head a::before { content: "›"; font-size: 1.25rem; font-weight: 800; line-height: 1; }
+.category-card-head a:hover { text-decoration: none; color: var(--ink); }
+.category-card:hover .category-card-head a { color: var(--ink); }
+
+.category-rank-row { grid-template-columns: 1.5rem 2.25rem minmax(0, 1fr) auto; gap: .55rem; min-height: 3.1rem; padding: .45rem 0 .55rem; }
+.category-rank { font-size: .78rem; }
+.category-logo { width: 2.25rem; height: 2.25rem; font-size: .62rem; }
+.category-rank-copy strong { font-size: .9rem; font-weight: 800; }
+.category-rank-copy span { margin-top: .08rem; font-size: .72rem; -webkit-line-clamp: 1; }
+.category-rank-bid { font-size: .92rem; }
+
+/* First place has a price: one full-width control, the price in red. */
+.category-claim { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: .6rem; min-height: 2.75rem; margin-top: .5rem; padding: .5rem .85rem; border: 1px solid var(--line-strong); border-radius: .55rem; background: var(--surface-subtle); color: var(--ink); font-size: .82rem; font-weight: 800; text-decoration: none; transition: border-color 160ms var(--ease), background 160ms var(--ease), color 160ms var(--ease); }
+.category-claim strong { color: var(--accent-strong); font-variant-numeric: tabular-nums; }
+.category-claim-arrow { color: var(--muted); font-weight: 900; }
+.category-claim:hover { border-color: var(--accent-fill, var(--accent)); background: var(--accent-fill, var(--accent)); color: #fff; }
+.category-claim:hover strong, .category-claim:hover .category-claim-arrow { color: #fff; }
+
+.category-empty { padding-top: .6rem; font-size: .76rem; }
+.category-empty strong { font-size: .86rem; }
+.category-more summary { font-size: .8rem; }
+
+@media (max-width: 48rem) {
+  .category-hero h1 { font-size: 2rem; }
+  .category-hero > p:last-child { font-size: .9rem; }
+  .category-card { padding: .9rem .9rem .8rem; }
+  .category-card-head h3 { font-size: 1rem; }
+}

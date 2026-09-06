@@ -1,5 +1,8 @@
 import { ApiError, marketCategoryMembers } from "./config.js";
 
+// One whole unit of the board currency in minor units (RM 1 = 100 sen).
+const BID_STEP_MINOR = 100;
+
 export async function loadBoard(db, slug) {
   const board = await db
     .prepare(
@@ -201,7 +204,10 @@ export async function loadPublicBoard(db, board, { category, period, limit, page
       has_previous: page > 1,
       has_next: page * limit < total,
     },
-    next_bid_minor: topAmount + Number(board.min_increment_minor),
+    // The floor is the board's minimum payment; above it, any whole unit of
+    // the currency counts. Taking first place means one unit more than the
+    // leader — RM 11 over RM 10 — not a step of the floor.
+    next_bid_minor: Math.max(topAmount + BID_STEP_MINOR, Number(board.min_increment_minor)),
   };
 }
 

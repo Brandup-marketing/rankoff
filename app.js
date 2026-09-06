@@ -1231,11 +1231,13 @@
     if (activeBid?.type === "new") {
       const existing = existingListingForPending();
       const leader = ranked[0];
+      // Above the floor every whole ringgit counts: first place is one more
+      // than the leader's total, not a step of the floor above it.
       if (existing && leader && existing.id !== leader.id) {
-        return Math.max(boardMinimum(), getBid(leader) - getBid(existing) + boardMinimum());
+        return Math.max(boardMinimum(), getBid(leader) - getBid(existing) + 1);
       }
       if (existing && leader && existing.id === leader.id) return boardMinimum();
-      return getBid(leader) + boardMinimum();
+      return Math.max(boardMinimum(), getBid(leader) + 1);
     }
 
     const listing = state.listings.find((item) => item.id === activeBid?.listingId);
@@ -1245,7 +1247,7 @@
     // gap to close — not the rival's total. Suggesting the rival's total
     // overcharged every returning customer by everything they had already paid.
     if (index <= 0) return boardMinimum();
-    const gap = getBid(ranked[index - 1]) - getBid(listing) + boardMinimum();
+    const gap = getBid(ranked[index - 1]) - getBid(listing) + 1;
     return Math.max(boardMinimum(), gap);
   }
 
