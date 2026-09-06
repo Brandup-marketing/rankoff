@@ -13,6 +13,7 @@ const PRODUCT_COPY = Object.freeze({
     loading: "Loading ranking details…", notFoundTitle: "Listing not found", notFoundCopy: "This listing may have moved or is no longer on the public board.", returnBoard: "Return to the board",
     sponsored: "Sponsored", share: "Share rank", evidence: "Public ranking record", allTimeBid: "All-time total", past24: "Past 24h", past24Bid: "Past 24h total",
     board: "Board", rule: "Highest total takes #1", claimNumberOne: "Claim #1 for", startClaim: "Claim this rank", footerParent: "A Brandup Marketing product",
+    claimUrl: "Your website or public profile", claimAmount: "Your bid", claimAgree: "I understand this is a paid sponsored placement for a public link. It gives me no rights over that account, and the listed party may request removal. I agree to the ", termsOfService: "Terms of Service", claimAgreeSuffix: ".", payClaim: "Pay & claim #1",
     rules: "Rules", terms: "Terms", privacy: "Privacy", payments: "Payments", verifiedData: "Live data", past24Clicks: "Past 24h clicks",
     verifiedEvidence: "Rank and bid come from settled placements. Clicks are first-party redirect events recorded by Rankoff.",
     claimCopy: "Put your product above this listing. Your full business description stays visible until someone pays more.",
@@ -29,6 +30,7 @@ const PRODUCT_COPY = Object.freeze({
     loading: "正在加载排名信息…", notFoundTitle: "找不到此条目", notFoundCopy: "此条目可能已移动，或已不在公开榜单中。", returnBoard: "返回榜单",
     sponsored: "赞助", share: "分享排名", evidence: "公开排名记录", allTimeBid: "全时段累计出价", past24: "近 24 小时", past24Bid: "近 24 小时累计出价",
     board: "榜单", rule: "累计出价最高者获得第 1 名", claimNumberOne: "拿下第 1 名，只需", startClaim: "拿下此排名", footerParent: "Brandup Marketing 旗下产品",
+    claimUrl: "你的网站或公开主页", claimAmount: "你的出价", claimAgree: "我了解这是针对公开链接的付费赞助展示，不赋予我对该账号的任何权利，被列出的一方可要求移除。我同意", termsOfService: "《服务条款》", claimAgreeSuffix: "。", payClaim: "付款并拿下第 1 名",
     rules: "规则", terms: "条款", privacy: "隐私", payments: "付款", verifiedData: "实时数据", past24Clicks: "近 24 小时点击",
     verifiedEvidence: "排名与出价来自已结算展示；点击为 Rankoff 记录的第一方跳转事件。",
     claimCopy: "让你的产品排在这个条目之前。完整业务介绍会持续展示，直到有人出价更高。",
@@ -266,6 +268,7 @@ export function localizeProductShell(shell, language = "en") {
   html = html.replace(/href="\/about"/g, 'href="/about?lang=zh"');
   html = html.replace(/href="\/"/g, 'href="/?lang=zh"');
   html = html.replace(/href="\/#claim"/g, 'href="/?lang=zh#claim"');
+  html = html.replace(/placeholder="example\.com or instagram\.com\/yourname"/g, 'placeholder="example.com 或 instagram.com/yourname"');
   return html;
 }
 

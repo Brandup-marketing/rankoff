@@ -26,8 +26,8 @@
     <meta name="theme-color" content="#090a0c" />
     <title>Sponsored listing | RANKOFF</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=68" />
-    <link rel="stylesheet" href="./listing.css?v=14" />
+    <link rel="stylesheet" href="./styles.css?v=69" />
+    <link rel="stylesheet" href="./listing.css?v=15" />
   </head>
   <body>
     <a class="skip-link" href="#listing-detail" data-copy="skipListing">Skip to listing details</a>
@@ -109,7 +109,22 @@
             <p class="claim-ticket-rule" data-copy="rule">Highest total takes #1</p>
             <h2 id="claim-heading"><span data-copy="claimNumberOne">Claim #1 for</span> <strong data-next-bid>—</strong></h2>
             <p data-claim-copy>Put your product above this listing. Your full business description stays visible until someone pays more.</p>
-            <a class="primary-action" href="/#claim" data-claim><span data-copy="startClaim">Start your claim</span> →</a>
+            <form class="claim-form" data-claim-form novalidate>
+              <label class="field">
+                <span data-copy="claimUrl">Your website or public profile</span>
+                <input name="claimUrl" type="text" inputmode="url" autocomplete="url" autocapitalize="off" spellcheck="false" required data-claim-url data-copy-placeholder="claimUrlPlaceholder" placeholder="example.com or instagram.com/yourname" />
+              </label>
+              <label class="field">
+                <span data-copy="claimAmount">Your bid</span>
+                <span class="claim-money"><b aria-hidden="true" data-claim-currency>RM</b><input name="claimAmount" type="number" inputmode="numeric" min="1" max="1000000" step="1" required data-claim-amount /></span>
+              </label>
+              <label class="claim-consent">
+                <input type="checkbox" required data-claim-agree />
+                <span><span data-copy="claimAgree">I understand this is a paid sponsored placement for a public link. It gives me no rights over that account, and the listed party may request removal. I agree to the </span><a href="/legal#terms" target="_blank" rel="noopener" data-copy="termsOfService">Terms of Service</a><span data-copy="claimAgreeSuffix">.</span></span>
+              </label>
+              <button class="primary-action" type="submit" data-claim-submit><span data-copy="payClaim">Pay &amp; claim #1</span><span aria-hidden="true">&nbsp;→</span></button>
+            </form>
+            <a class="primary-action claim-link" href="/#claim" data-claim hidden><span data-copy="startClaim">Start your claim</span> →</a>
             <p class="claim-disclosure" data-claim-disclosure>Submissions pass automated checks instantly; listings may be removed after publication if they break the rules.</p>
           </aside>
         </div>
@@ -166,6 +181,6 @@
     <div class="toast" role="status" aria-live="polite" data-toast></div>
     <script src="./share-card.js?v=5" type="module"></script>
     <script src="./share.js?v=8" defer></script>
-    <script src="./listing.js?v=30" defer></script>
+    <script src="./listing.js?v=31" defer></script>
   </body>
 </html>

@@ -31,6 +31,10 @@
       notFoundTitle: "Listing not found", notFoundCopy: "This listing may have moved or is no longer on the public board.", returnBoard: "Return to the board",
       sponsored: "Sponsored", visit: "Visit website", viewInstagram: "View Instagram", viewFacebook: "View Facebook Page", viewTiktok: "View TikTok", viewProfile: "View profile", share: "Share rank", evidence: "Public ranking record", rank: "Current rank", bid: "Bid", allTimeBid: "All-time total", past24Bid: "Past 24h total", duration: "Duration", past24: "Past 24h",
       rule: "Highest total takes #1", claimNumberOne: "Claim #1 for", startClaim: "Claim this rank",
+      claimUrl: "Your website or public profile", claimUrlPlaceholder: "example.com or instagram.com/yourname", claimAmount: "Your bid",
+      claimAgree: "I understand this is a paid sponsored placement for a public link. It gives me no rights over that account, and the listed party may request removal. I agree to the ", termsOfService: "Terms of Service", claimAgreeSuffix: ".",
+      payClaim: "Pay & claim #1", claimOpening: "Opening checkout…", claimInvalidUrl: "Enter a valid website or public profile address.", claimHandle: "Paste the full profile address, not a bare @handle.",
+      claimTooLow: "Bid at least {min} to take #1.", claimAgreeFirst: "Please accept the Terms of Service first.", claimListingFailed: "This website could not be listed. No payment was made.", claimUnavailable: "Checkout is unavailable right now. No payment was made.",
       footer: "Transparent sponsored ranking. Every position has a visible price.",
       previewListing: "Public listing", verifiedPlacement: "Verified placement", previewData: "Public data", verifiedData: "Live data",
       sampleClicks: "Referral clicks", verifiedClicks: "Verified clicks", estimatedClicks: "Referral clicks", past24Clicks: "Past 24h clicks",
@@ -47,6 +51,10 @@
       notFoundTitle: "找不到此条目", notFoundCopy: "此条目可能已移动，或已不在公开榜单中。", returnBoard: "返回榜单",
       sponsored: "赞助", visit: "访问网站", viewInstagram: "查看 Instagram", viewFacebook: "查看 Facebook 专页", viewTiktok: "查看 TikTok", viewProfile: "查看主页", share: "分享排名", evidence: "公开排名记录", rank: "当前排名", bid: "出价", allTimeBid: "全时段累计出价", past24Bid: "近 24 小时累计出价", duration: "有效期", past24: "近 24 小时",
       rule: "累计出价最高者获得第 1 名", claimNumberOne: "拿下第 1 名，只需", startClaim: "拿下此排名",
+      claimUrl: "你的网站或公开主页", claimUrlPlaceholder: "example.com 或 instagram.com/yourname", claimAmount: "你的出价",
+      claimAgree: "我了解这是针对公开链接的付费赞助展示，不赋予我对该账号的任何权利，被列出的一方可要求移除。我同意", termsOfService: "《服务条款》", claimAgreeSuffix: "。",
+      payClaim: "付款并拿下第 1 名", claimOpening: "正在打开付款页面…", claimInvalidUrl: "请输入有效的网站或公开主页网址。", claimHandle: "请贴上完整主页链接，而不是单独的 @账号。",
+      claimTooLow: "至少出价 {min} 才能拿下第 1 名。", claimAgreeFirst: "请先同意《服务条款》。", claimListingFailed: "此网址无法上榜，未产生任何费用。", claimUnavailable: "目前无法打开付款页面，未产生任何费用。",
       footer: "透明的赞助排名。每个位置都有公开价格。",
       previewListing: "公开条目", verifiedPlacement: "已验证展示", previewData: "公开数据", verifiedData: "实时数据",
       sampleClicks: "推荐点击", verifiedClicks: "已验证点击", estimatedClicks: "推荐点击", past24Clicks: "近 24 小时点击",
@@ -88,6 +96,7 @@
     bid: document.querySelector("[data-bid]"), clicks: document.querySelector("[data-clicks]"), clickLabels: document.querySelectorAll("[data-click-label]"), clickLabelToday: document.querySelector("[data-click-label-today]"),
     todayRank: document.querySelector("[data-today-rank]"), todayBid: document.querySelector("[data-today-bid]"), todayClicks: document.querySelector("[data-today-clicks]"),
     nextBid: document.querySelector("[data-next-bid]"), nextBidSticky: document.querySelector("[data-next-bid-sticky]"), claimSticky: document.querySelector("[data-claim-sticky]"), claimCopy: document.querySelector("[data-claim-copy]"), claim: document.querySelector("[data-claim]"),
+    claimForm: document.querySelector("[data-claim-form]"), claimUrl: document.querySelector("[data-claim-url]"), claimAmount: document.querySelector("[data-claim-amount]"), claimAgree: document.querySelector("[data-claim-agree]"), claimSubmit: document.querySelector("[data-claim-submit]"), claimCurrency: document.querySelector("[data-claim-currency]"),
     disclosure: document.querySelector("[data-claim-disclosure]"), toast: document.querySelector("[data-toast]"),
   };
   document.querySelector("[data-search-redirect]")?.addEventListener("click", () => { window.location.href = urlWithLanguage("/#search").href; });
@@ -109,6 +118,9 @@
   let toastTimer = null;
   const boardCurrencyFormat = (code) => new Intl.NumberFormat(code === "MYR" ? "en-MY" : "en-US", { style: "currency", currency: code || "USD", maximumFractionDigits: 0 });
   let money = boardCurrencyFormat(model?.currency || "USD");
+  let boardCurrency = "USD";
+  let claimAmountTouched = false;
+  const TERMS_VERSION = "2026-09-02";
   const count = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
 
   function languageFromUrl() {
@@ -236,6 +248,7 @@
     syncLanguageUrl();
     document.querySelector('meta[name="theme-color"]')?.setAttribute("content", preferences.theme === "light" ? "#faf7f5" : "#090a0c");
     document.querySelectorAll("[data-copy]").forEach((node) => { node.textContent = text(node.dataset.copy); });
+    document.querySelectorAll("[data-copy-placeholder]").forEach((node) => { node.placeholder = text(node.dataset.copyPlaceholder); });
     updateAccessibility();
     elements.language.textContent = preferences.language === "zh" ? "EN" : "中文";
     elements.language.setAttribute("aria-label", preferences.language === "zh" ? "切换为英文" : accessibilityCopy.en.switchChinese);
@@ -294,7 +307,8 @@
         if (allResponse.ok && todayResponse.ok) {
           const [allPayload, todayPayload] = await Promise.all([allResponse.json(), todayResponse.json()]);
           productionBoard = allPayload.mode === "production";
-          money = boardCurrencyFormat(String(allPayload.board?.currency || "USD").toUpperCase());
+          boardCurrency = String(allPayload.board?.currency || "USD").toUpperCase();
+          money = boardCurrencyFormat(boardCurrency);
           const allEntry = allPayload.rankings?.find((entry) => String(entry.listing?.id) === id);
           const todayEntry = todayPayload.rankings?.find((entry) => String(entry.listing?.id) === id);
           if (allEntry) {
@@ -456,6 +470,16 @@
     elements.claimCopy.textContent = text("claimCopy");
     elements.disclosure.textContent = verified ? text("liveDisclosure") : text("previewDisclosure");
     elements.claim.href = urlWithLanguage("/#claim").href;
+    // The inline form only exists where a payment can actually be taken; the
+    // preview board keeps the link to the home form.
+    if (elements.claimForm) {
+      elements.claimForm.hidden = !verified;
+      elements.claim.hidden = verified;
+      const minimum = model.nextBid || model.bid + 1;
+      elements.claimAmount.min = String(minimum);
+      if (!claimAmountTouched || Number(elements.claimAmount.value) < minimum) elements.claimAmount.value = String(minimum);
+      elements.claimCurrency.textContent = boardCurrency === "MYR" ? "RM" : boardCurrency;
+    }
     let host = model.url;
     try {
       const parsed = new URL(model.url);
@@ -483,6 +507,128 @@
     updateMetadata(shareHeadline().pageTitle, localizedModelDescription());
     syncInternalLinks();
   }
+
+  elements.claimAmount?.addEventListener("input", () => { claimAmountTouched = true; });
+
+  function claimFailure(message) {
+    const failure = new Error(message);
+    failure.isRankoffMessage = true;
+    return failure;
+  }
+
+  function parseClaimUrl(value) {
+    const raw = String(value || "").trim();
+    if (!raw) throw new TypeError("required");
+    if (raw.startsWith("@")) throw claimFailure(text("claimHandle"));
+    const parsed = new URL(/^[a-z][a-z\d+.-]*:\/\//i.test(raw) ? raw : `https://${raw}`);
+    if (!/^https?:$/.test(parsed.protocol) || !parsed.hostname.includes(".")) throw new TypeError("invalid");
+    return parsed;
+  }
+
+  // The API's error codes, in the reader's language. English keeps the server's
+  // own message; Chinese maps the code, as the home page does.
+  function claimErrorMessage(error, fallback) {
+    if (preferences.language !== "zh") return error?.message || fallback;
+    if (error?.code === "bid_too_low") {
+      const minimumMinor = Number(error?.details?.minimum_amount_minor);
+      return Number.isSafeInteger(minimumMinor) && minimumMinor > 0
+        ? text("claimTooLow").replace("{min}", money.format(Math.ceil(minimumMinor / 100)))
+        : "当前出价过低，请刷新页面后重试。";
+    }
+    const messages = {
+      unknown_tld: "这不是一个网址。如果是 Instagram、Facebook 或 TikTok 账号，请贴上完整主页链接。",
+      profile_required: "请贴上主页链接，而不是某一则贴文、Reel、限时动态或群组。",
+      invalid_url: "请输入有效的 HTTPS 网站或公开主页网址。",
+      listing_refused: "此网站不符合上榜条件，未产生任何费用。",
+      listing_unavailable: "此网站目前无法上榜，未产生任何费用。",
+      submission_limit: "目前提交数量过多，请稍后再试。",
+      checkout_disabled: "实时付款暂未启用，未产生任何费用。",
+      checkout_paused: "此榜单的付款目前暂停，未产生任何费用。",
+      checkout_provider_error: "托管付款页面暂时无法建立，未产生任何费用。",
+      terms_not_accepted: "请先同意《服务条款》，再继续付款。",
+      listing_not_eligible: "此条目目前不符合出价条件，未产生任何费用。",
+    };
+    return messages[error?.code] || fallback;
+  }
+
+  // Same two calls the home form makes: create (or find) the listing for this
+  // website, then open a bid on it and hand the buyer to hosted checkout.
+  async function startClaimCheckout(parsedUrl, amount) {
+    const created = await fetch("/api/v1/listings", {
+      method: "POST",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify({ url: parsedUrl.href, category: model.category }),
+    });
+    const createdPayload = await created.json().catch(() => ({}));
+    if (!created.ok || !createdPayload?.listing?.id) {
+      throw claimFailure(claimErrorMessage(createdPayload?.error, text("claimListingFailed")));
+    }
+    const response = await fetch("/api/v1/bids", {
+      method: "POST",
+      headers: { Accept: "application/json", "Content-Type": "application/json", "Idempotency-Key": crypto.randomUUID() },
+      body: JSON.stringify({
+        listing_id: createdPayload.listing.id,
+        amount_minor: amount * 100,
+        currency: boardCurrency,
+        snapshot_id: model.snapshot || null,
+        agreed_terms: elements.claimAgree.checked === true,
+        terms_version: TERMS_VERSION,
+      }),
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || !payload.checkout_url) {
+      throw claimFailure(claimErrorMessage(payload?.error, text("claimUnavailable")));
+    }
+    window.location.assign(payload.checkout_url);
+  }
+
+  elements.claimForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!model || model.mode !== "production") {
+      window.location.assign(urlWithLanguage("/#claim").href);
+      return;
+    }
+    let parsedUrl;
+    try {
+      parsedUrl = parseClaimUrl(elements.claimUrl.value);
+    } catch (error) {
+      showToast(error?.isRankoffMessage ? error.message : text("claimInvalidUrl"));
+      elements.claimUrl.focus();
+      return;
+    }
+    const minimum = model.nextBid || model.bid + 1;
+    const amount = Number(elements.claimAmount.value);
+    if (!Number.isSafeInteger(amount) || amount < minimum) {
+      showToast(text("claimTooLow").replace("{min}", money.format(minimum)));
+      elements.claimAmount.focus();
+      return;
+    }
+    if (!elements.claimAgree.checked) {
+      showToast(text("claimAgreeFirst"));
+      elements.claimAgree.focus();
+      return;
+    }
+    const button = elements.claimSubmit;
+    const label = button.innerHTML;
+    button.disabled = true;
+    button.textContent = text("claimOpening");
+    try {
+      await startClaimCheckout(parsedUrl, amount);
+    } catch (error) {
+      showToast(error?.isRankoffMessage ? error.message : text("claimUnavailable"));
+      button.disabled = false;
+      button.innerHTML = label;
+    }
+  });
+
+  // The phone's bottom bar lands the buyer in the form, cursor in the website
+  // field, rather than at the heading with the bar still covering the button.
+  elements.claimSticky?.addEventListener("click", (event) => {
+    if (!elements.claimForm || elements.claimForm.hidden) return;
+    event.preventDefault();
+    elements.claimForm.scrollIntoView({ behavior: "smooth", block: "center" });
+    elements.claimUrl.focus({ preventScroll: true });
+  });
 
   function showError() {
     elements.loading.hidden = true;

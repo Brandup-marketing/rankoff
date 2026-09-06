@@ -1168,3 +1168,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .top-three-hero .featured-1 .featured-price strong { font-size: 1.05rem; }
   .top-three-hero .featured-listing .rank-share-control { min-width: 1.75rem; min-height: 1.75rem; }
 }
+
+/* The list rows and the rules band ran to the shell's full 76rem while the
+   hero, podium and activity strip stop at 68rem, so #4 stuck out past #3 on a
+   wide screen. One column width for everything on the board page. */
+.board-section, .ranking-rules { width: min(100%, 68rem); margin-inline: auto; }
+
+/* The market name in the headline ("#1 in Hardware & Construction") is a
+   phrase, not a number: it wraps like the words around it instead of running
+   off a phone screen. "#1" and the price keep their no-break. */
+.claim-panel h1 [data-hero-market] { white-space: normal; }
