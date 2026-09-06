@@ -276,3 +276,25 @@ html[data-theme="light"] .categories-topbar .brand-emblem-image, html[data-theme
    same type — one component on two pages, not two pills. */
 .section-heading-spread .time-tabs { padding: .12rem; }
 .section-heading-spread .time-tabs button { min-width: 0; min-height: 2.25rem; padding: .42rem .7rem; font-size: .72rem; }
+
+/* ---- Desktop, designer pass ---- */
+/* ~500px of chrome before the first market: a status pill repeating the
+   nav and the count, a red kicker, a 3rem title, a subtitle. On a wide
+   screen the pill goes, the title comes down and sits centred like the
+   other pages' heroes, and the markets start ~250px down. */
+@media (min-width: 48.01rem) {
+  .category-status { display: none; }
+  .category-hero { max-width: 40rem; margin: 1.5rem auto 1.5rem; text-align: center; }
+  .category-hero h1 { font-size: 2.4rem; }
+  .category-hero > p:last-child { margin: .5rem auto 0; font-size: .95rem; }
+  .all-categories-section { margin-top: 1.25rem; }
+}
+/* Four cards across leave ~330px each; the leader's name was cut to
+   "Rakan Jaya Har…" beside a two-word description. The name wraps to two
+   lines and the description steps aside; the card heads line up. */
+@media (min-width: 64rem) {
+  .category-card-head { min-height: 3.4rem; }
+  .category-rank-row { grid-template-columns: 1.5rem 2.25rem minmax(0, 1fr) auto; align-items: center; }
+  .category-rank-copy strong { display: -webkit-box; overflow: hidden; white-space: normal; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-height: 1.2; text-overflow: clip; }
+  .category-rank-copy span { display: none; }
+}
