@@ -1400,3 +1400,14 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 /* 5. One wordmark in the footer, not two. */
 .footer-brand { width: 3.5rem; height: 3.5rem; }
 .footer-credit strong { display: none; }
+
+/* Phone header on the pages that list all three nav links: the nav was wider
+   than its column and slid over the wordmark. A notch smaller on the utility
+   cluster and the logo, and the row fits at 375px. */
+@media (max-width: 46rem) {
+  .topbar .brand { width: 2.9rem; height: 2.9rem; max-width: 2.9rem; flex-basis: 2.9rem; }
+  .topbar .search-toggle { width: 2.5rem; height: 2.5rem; }
+  .topbar .language-toggle, .topbar .theme-toggle { min-width: 2.5rem; min-height: 2.5rem; width: 2.5rem; height: 2.5rem; padding-inline: .3rem; }
+  .topbar .site-nav { gap: .4rem; min-width: 0; }
+  .topbar .site-nav a { padding-inline: .15rem; font-size: .74rem; }
+}

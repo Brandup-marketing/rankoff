@@ -272,3 +272,16 @@
 .claim-preview { margin: 0; padding: .55rem .7rem; border-radius: .5rem; background: var(--surface); color: var(--muted); font-size: .72rem; font-weight: 700; line-height: 1.45; }
 .claim-preview strong { color: var(--ink); font-variant-numeric: tabular-nums; }
 .claim-preview[hidden] { display: none; }
+
+/* ---- Designer pass ---- */
+/* Numbers first; the note on how they are counted is a footnote to them. */
+.evidence-note { margin: .6rem 0 0; color: var(--muted); font-size: .7rem; line-height: 1.45; }
+/* A count is not a direction: the click figure sits in ink like the others. */
+.evidence-metrics div:last-child dd { color: var(--ink); }
+.period-quiet { margin: .75rem 0 0; color: var(--muted); font-size: .74rem; }
+/* At phone width the listing page's nav does not fit beside the logo and
+   the three utilities; "Board" gives way — the logo and the breadcrumb
+   under it both go to the board. */
+@media (max-width: 46rem) {
+  .listing-topbar .site-nav a[data-copy="board"] { display: none; }
+}

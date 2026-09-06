@@ -394,7 +394,7 @@ export function renderProductPage(shell, view) {
 `$1${escapeHtml(view.placementLabel || PRODUCT_COPY.en.verifiedPlacement)}</span>`,
   );
   html = html.replace(
-    /(<p data-evidence-note>)[\s\S]*?<\/p>/,
+    /(<p[^>]*data-evidence-note[^>]*>)[\s\S]*?<\/p>/,
     `$1${escapeHtml(PRODUCT_COPY[view.language].verifiedEvidence)}</p>`,
   );
   html = html.replace(

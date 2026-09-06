@@ -467,6 +467,16 @@
     elements.todayRank.textContent = model.todayRank ? `#${model.todayRank}` : "—";
     elements.todayBid.textContent = model.todayBid ? money.format(model.todayBid) : "—";
     elements.todayClicks.textContent = Number.isFinite(model.todayClicks) ? count.format(model.todayClicks) : "—";
+    // Three rows of dashes say less than one sentence. When the 24-hour
+    // window holds nothing, the rows fold into a line that says so.
+    const quietToday = !model.todayRank && !model.todayBid && !(Number.isFinite(model.todayClicks) && model.todayClicks > 0);
+    const todayRow = document.querySelector("[data-today-row]");
+    const todayQuiet = document.querySelector("[data-today-quiet]");
+    if (todayRow) todayRow.hidden = quietToday;
+    if (todayQuiet) {
+      todayQuiet.hidden = !quietToday;
+      todayQuiet.textContent = preferences.language === "zh" ? "近 24 小时没有付款或点击。" : "No payment or click in the past 24 hours.";
+    }
     elements.clickLabels.forEach((node) => { node.textContent = clickLabel; });
     // The 24h row carries its own scope, like the two rows above it. Sharing the
     // all-time label made the same metric read twice with two different values.

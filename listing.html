@@ -26,8 +26,8 @@
     <meta name="theme-color" content="#090a0c" />
     <title>Sponsored listing | RANKOFF</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=81" />
-    <link rel="stylesheet" href="./listing.css?v=17" />
+    <link rel="stylesheet" href="./styles.css?v=82" />
+    <link rel="stylesheet" href="./listing.css?v=19" />
   </head>
   <body>
     <a class="skip-link" href="#listing-detail" data-copy="skipListing">Skip to listing details</a>
@@ -83,7 +83,6 @@
               <div class="evidence-heading">
                 <div>
                   <h2 id="evidence-heading" data-copy="evidence">Public ranking evidence</h2>
-                  <p data-evidence-note>Rank, price, and referral clicks update from the public board.</p>
                 </div>
                 <span class="evidence-status is-verified" data-mode>Live data</span>
               </div>
@@ -94,6 +93,8 @@
                 <div><dt data-click-label>Referral clicks</dt><dd data-clicks>—</dd></div>
               </dl>
               <p class="evidence-qualifier" data-rank-note hidden></p>
+              <p class="evidence-note" data-evidence-note>Rank, price, and referral clicks update from the public board.</p>
+              <p class="period-quiet" data-today-quiet hidden></p>
 
               <div class="period-comparison" data-today-row>
                 <div><span data-copy="past24">Past 24h</span><strong data-today-rank>—</strong></div>
@@ -182,6 +183,6 @@
     <div class="toast" role="status" aria-live="polite" data-toast></div>
     <script src="./share-card.js?v=7" type="module"></script>
     <script src="./share.js?v=8" defer></script>
-    <script src="./listing.js?v=39" defer></script>
+    <script src="./listing.js?v=40" defer></script>
   </body>
 </html>
