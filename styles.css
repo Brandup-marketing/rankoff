@@ -1411,3 +1411,46 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .topbar .site-nav { gap: .4rem; min-width: 0; }
   .topbar .site-nav a { padding-inline: .15rem; font-size: .74rem; }
 }
+
+/* ---- Desktop first screen: #1–#3 in view, like the phone ---- */
+/* Card #1 started ~720px down a 785px-tall window. The chrome above it is
+   trimmed — smaller wordmark, tighter headline, one-line explainer, a
+   shallower form row, no "MARKETS" label, a tighter toolbar — and the
+   podium cards drop their spare height and second description line. */
+@media (min-width: 64rem) {
+  .topbar { min-height: 0; padding-block: .55rem; }
+  .topbar .brand { width: 3.5rem; height: 3.5rem; max-width: 3.5rem; flex-basis: 3.5rem; }
+  .claim-stage { padding-top: .6rem; }
+  .claim-panel h1 { font-size: 2.5rem; }
+  .claim-copy { margin-top: .4rem; font-size: .88rem; }
+  .market-entry { margin-top: .6rem; }
+  .bid-console { padding: .5rem; }
+  .field input, .field select, .money-field input { min-height: 2.6rem; }
+  .bid-console > .primary-action { min-height: 2.6rem; }
+  .category-market { margin-top: .5rem; }
+  .category-market h2 { display: none; }
+  .category-rail { padding-block: 0 .1rem; }
+  .category-chip { min-height: 2.4rem; padding-block: .25rem; }
+  .category-scroll-control { height: 2.4rem; }
+  .board-toolbar { padding: .7rem 0 .45rem; }
+  .top-three-hero { gap: .5rem; margin-top: .5rem; }
+  .top-three-hero .featured-listing { min-height: 0; padding: .7rem .9rem; gap: .35rem .9rem; }
+  .top-three-hero .featured-1 { min-height: 0; grid-template-columns: 3.75rem minmax(0, 1fr) auto; }
+  .top-three-hero .featured-rank { width: 3rem; height: 3rem; font-size: 1.05rem; }
+  .top-three-hero .featured-1 .featured-rank { width: 3.5rem; height: 3.5rem; font-size: 1.4rem; }
+  .top-three-hero .featured-listing .product-mark { width: 3rem; height: 3rem; flex-basis: 3rem; }
+  .top-three-hero .featured-1 .product-mark { width: 3.25rem; height: 3.25rem; flex-basis: 3.25rem; }
+  .top-three-hero .featured-1 .product-name { font-size: 1.15rem; }
+  .top-three-hero .featured-listing .listing-description, .top-three-hero .featured-1 .listing-description { -webkit-line-clamp: 1; }
+  .top-three-hero .featured-1 .featured-price strong { font-size: 1.7rem; }
+  .top-three-hero .featured-price strong { font-size: 1.3rem; }
+  .top-three-hero .claim-rank-pill { min-height: 2.4rem; padding: .4rem .7rem; }
+}
+@media (min-width: 64rem) {
+  /* The headline makes the offer; the explainer under it repeated it and
+     cost the third podium card its place on a 785px-tall window. */
+  .claim-copy { display: none; }
+  .market-entry { margin-top: .75rem; }
+  .board-toolbar { padding: .55rem 0 .35rem; }
+  .board-context { gap: .2rem; }
+}

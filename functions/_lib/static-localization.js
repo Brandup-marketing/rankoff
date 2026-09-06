@@ -45,7 +45,7 @@ const HOME_STATIC_COPY = Object.freeze({
   agreeTermsPrefix: "我了解这是为一个公开链接购买的赞助展示，付款不会获得该账号的所有权或编辑权，被展示方可要求下架。我同意《",
   agreeTermsSuffix: "》。", cancel: "取消", continueCheckout: "继续付款", close: "关闭", searchPlaceholder: "搜索商家和市场…",
   brandHome: "RANKOFF 首页", brandLogoAlt: "RANKOFF — 出价登上第一名", rankingTimeframe: "排名时间范围", mainNavigation: "主导航",
-  searchResults: "搜索结果", challengeLeaderboard: "挑战排行榜", decreaseBid: "出价减少 10", increaseBid: "出价增加 10",
+  searchResults: "搜索结果", challengeLeaderboard: "挑战排行榜", decreaseBid: "减少 RM5", increaseBid: "增加 RM5",
   filterCategory: "按类别筛选", topThree: "赞助榜单前三名", boardPulse: "榜单动态", boardListings: "赞助条目榜单",
   pageNumbers: "页码", answers: "常见问题", closeDialog: "关闭对话框", rankPrice: "排名与价格",
 });

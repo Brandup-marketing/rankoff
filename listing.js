@@ -34,7 +34,7 @@
       claimUrl: "Your website or public profile", claimUrlPlaceholder: "example.com or instagram.com/yourname", claimAmount: "Your payment",
       claimAgree: "I understand this is a paid sponsored placement for a public link. It gives me no rights over that account, and the listed party may request removal. I agree to the ", termsOfService: "Terms of Service", claimAgreeSuffix: ".",
       payClaim: "Pay & claim #1", claimOpening: "Opening checkout…", claimInvalidUrl: "Enter a valid website or public profile address.", claimHandle: "Paste the full profile address, not a bare @handle.",
-      claimTooLow: "The minimum payment is {min}.", claimAgreeFirst: "Please accept the Terms of Service first.", claimListingFailed: "This website could not be listed. No payment was made.", claimUnavailable: "Checkout is unavailable right now. No payment was made.",
+      claimTooLow: "The minimum payment is {min}.", claimStep: "Payments go in steps of {min}.", claimAgreeFirst: "Please accept the Terms of Service first.", claimListingFailed: "This website could not be listed. No payment was made.", claimUnavailable: "Checkout is unavailable right now. No payment was made.",
       footer: "Transparent sponsored ranking. Every position has a visible price.",
       previewListing: "Public listing", verifiedPlacement: "Verified placement", previewData: "Public data", verifiedData: "Live data",
       sampleClicks: "Referral clicks", verifiedClicks: "Tracked clicks", estimatedClicks: "Referral clicks", past24Clicks: "Past 24h clicks",
@@ -54,7 +54,7 @@
       claimUrl: "你的网站或公开主页", claimUrlPlaceholder: "example.com 或 instagram.com/yourname", claimAmount: "付款金额",
       claimAgree: "我了解这是针对公开链接的付费赞助展示，不赋予我对该账号的任何权利，被列出的一方可要求移除。我同意", termsOfService: "《服务条款》", claimAgreeSuffix: "。",
       payClaim: "付款并拿下第 1 名", claimOpening: "正在打开付款页面…", claimInvalidUrl: "请输入有效的网站或公开主页网址。", claimHandle: "请贴上完整主页链接，而不是单独的 @账号。",
-      claimTooLow: "最低付款 {min}。", claimAgreeFirst: "请先同意《服务条款》。", claimListingFailed: "此网址无法上榜，未产生任何费用。", claimUnavailable: "目前无法打开付款页面，未产生任何费用。",
+      claimTooLow: "最低付款 {min}。", claimStep: "付款以 {min} 为一档。", claimAgreeFirst: "请先同意《服务条款》。", claimListingFailed: "此网址无法上榜，未产生任何费用。", claimUnavailable: "目前无法打开付款页面，未产生任何费用。",
       footer: "透明的赞助排名。每个位置都有公开价格。",
       previewListing: "公开条目", verifiedPlacement: "已验证展示", previewData: "公开数据", verifiedData: "实时数据",
       sampleClicks: "推荐点击", verifiedClicks: "追踪点击", estimatedClicks: "推荐点击", past24Clicks: "近 24 小时点击",
@@ -659,6 +659,7 @@
       listing_refused: "此网站不符合上榜条件，未产生任何费用。",
       listing_unavailable: "此网站目前无法上榜，未产生任何费用。",
       submission_limit: "目前提交数量过多，请稍后再试。",
+      bid_not_a_step: "付款以 RM 5 为一档，未产生任何费用。",
       checkout_disabled: "实时付款暂未启用，未产生任何费用。",
       checkout_paused: "此榜单的付款目前暂停，未产生任何费用。",
       checkout_provider_error: "托管付款页面暂时无法建立，未产生任何费用。",
@@ -715,6 +716,11 @@
     }
     const minimum = claimRequired();
     const amount = Number(elements.claimAmount.value);
+    if (Number.isSafeInteger(amount) && amount >= minimum && amount % minimum !== 0) {
+      showToast(text("claimStep").replace("{min}", money.format(minimum)));
+      elements.claimAmount.focus();
+      return;
+    }
     if (!Number.isSafeInteger(amount) || amount < minimum) {
       showToast(text("claimTooLow").replace("{min}", money.format(minimum)));
       elements.claimAmount.focus();
