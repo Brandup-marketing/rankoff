@@ -118,7 +118,9 @@
   let toastTimer = null;
   const boardCurrencyFormat = (code) => new Intl.NumberFormat(code === "MYR" ? "en-MY" : "en-US", { style: "currency", currency: code || "USD", maximumFractionDigits: 0 });
   let money = boardCurrencyFormat(model?.currency || "USD");
-  let boardCurrency = "USD";
+  // The server-rendered page hands the currency down with the model and never
+  // reaches the board fetch below, so the code has to start from the model too.
+  let boardCurrency = String(model?.currency || "USD").toUpperCase();
   let claimAmountTouched = false;
   const TERMS_VERSION = "2026-09-02";
   const count = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
@@ -313,6 +315,7 @@
           const todayEntry = todayPayload.rankings?.find((entry) => String(entry.listing?.id) === id);
           if (allEntry) {
             model = fromRanking(allEntry);
+            model.currency = boardCurrency;
             model.mode = allPayload.mode === "production" ? "production" : "preview";
             model.snapshot = allPayload.snapshot_id || "";
             model.nextBid = Math.ceil(Number(allPayload.next_bid_minor || 100) / 100);
