@@ -534,6 +534,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .topbar { grid-template-columns: auto minmax(0, 1fr) auto auto auto; gap: 0.45rem; }
   .site-nav { justify-self: end; }
   .brand { width: 4.75rem; height: 4.75rem; flex-basis: 4.75rem; }
+  .demo-state { display: none; }
   .site-nav { gap: 0.65rem; margin-right: 0; }
 }
 
@@ -548,6 +549,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .brand-wordmark-crop { height: 1.7rem; }
   .time-tabs { justify-self: end; }
   .time-tabs button { min-width: 2.75rem; min-height: 2.75rem; padding-inline: 0.45rem; font-size: 0.75rem; }
+  .demo-state { display: none; }
   .site-nav { display: none; }
 
   /* One row, as on the desktop: identity, the three links, the controls. The
@@ -1418,36 +1420,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .topbar .site-nav a { padding-inline: .15rem; font-size: .74rem; }
 }
 
-/* Below 75rem there is no room for the "Live board" label, but the signal
-   itself should survive — a board nobody can see updating looks dead. The
-   dot keeps the desktop composition (immediately right of the wordmark,
-   vertically centred) minus the label, and shares the brand's grid cell so
-   it costs the row no width: in normal flow it was a sixth item in a
-   five-column grid and pushed the theme toggle onto a second line at 375px.
-   The gap is deliberately tight — further out it stops reading as part of
-   the wordmark and starts reading as a stray artifact. The label stays in
-   the DOM at font-size 0, so it is still announced. Both items are placed
-   explicitly: an auto-placed brand would skip the cell the dot occupies. */
-@media (max-width: 75rem) {
-  .topbar .brand { grid-column: 1; grid-row: 1; }
-  .topbar .demo-state {
-    z-index: 1;
-    grid-column: 1;
-    grid-row: 1;
-    align-self: center;
-    justify-self: start;
-    /* brand (4.75rem) + a .6rem gap */
-    margin-left: 5.35rem;
-    gap: 0;
-    font-size: 0;
-    pointer-events: none;
-  }
-}
-
-@media (max-width: 46rem) {
-  /* the phone header shrinks the wordmark to 2.9rem */
-  .topbar .demo-state { margin-left: 3.3rem; }
-}
+/* The "Live board" dot and its label travel together and are hidden below
+   75rem (see the two breakpoints above). The dot alone was tried and
+   reverted: it is the bullet for the label, so without it the mark reads as
+   an artifact rather than a status, and a mobile header at capacity has
+   nowhere to put the words. Phones are not left without the signal — the
+   activity panel carries its own .live-dot, where the surrounding copy
+   labels it. */
 
 /* ---- Desktop first screen: #1–#3 in view, like the phone ---- */
 /* Card #1 started ~720px down a 785px-tall window. The chrome above it is
