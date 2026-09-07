@@ -308,6 +308,27 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
    transparent background, so dark lettering vanishes on a dark tile. */
 .product-mark img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 0.12rem; background: #fff; }
 .product-mark.has-icon .product-initials { visibility: hidden; }
+
+/* A listing with no logo sat in the same grey tile as every other listing with
+   no logo, so a board of social profiles read as a column of blanks rather than
+   as businesses. Instagram will not serve its profile pictures to a datacentre
+   IP, so there is no logo to fetch; the tile earns its own colour instead,
+   derived from the listing's identity so an account keeps the same one
+   everywhere it appears. Only the hue varies — lightness and chroma are fixed
+   per theme, so every tile clears contrast no matter which hue it lands on. */
+.product-mark:not(.has-icon), .listing-mark:not(.has-icon), .category-logo:not(.has-icon) {
+  border-color: oklch(38% 0.05 var(--mark-hue, 250));
+  background: oklch(28% 0.055 var(--mark-hue, 250));
+  color: oklch(93% 0.06 var(--mark-hue, 250));
+}
+
+html[data-theme="light"] .product-mark:not(.has-icon),
+html[data-theme="light"] .listing-mark:not(.has-icon),
+html[data-theme="light"] .category-logo:not(.has-icon) {
+  border-color: oklch(84% 0.05 var(--mark-hue, 250));
+  background: oklch(94% 0.04 var(--mark-hue, 250));
+  color: oklch(38% 0.11 var(--mark-hue, 250));
+}
 .product-copy { min-width: 0; max-width: 100%; }
 .product-name { position: relative; z-index: 2; display: block; overflow: hidden; padding-block: 0.2rem; color: var(--ink); font-size: 0.9rem; font-weight: 800; line-height: 1.2; text-overflow: ellipsis; text-decoration: none; white-space: nowrap; }
 .product-name:hover { color: var(--blue); }

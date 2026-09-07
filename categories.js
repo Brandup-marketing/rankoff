@@ -219,12 +219,24 @@
     return icon;
   }
 
+
+  // Mirrors markHue in functions/_lib/product.js: a stable hue per listing.
+  function markHue(seed) {
+    const value = String(seed || "");
+    let hash = 0;
+    for (let index = 0; index < value.length; index += 1) {
+      hash = (hash * 31 + value.charCodeAt(index)) % 360;
+    }
+    return hash;
+  }
+
   // Same mark as the board: the stored icon first, then the sharp sources
   // (touch icon, Google's 128px service), favicon.ico last. A 16px favicon.ico
   // alone was what turned most marks into mush or initials here.
   function logoFor(row) {
     const logo = document.createElement("span");
     logo.className = "category-logo";
+    logo.style.setProperty("--mark-hue", String(markHue(row.identity || row.url || row.title)));
     const mark = document.createElement("span");
     mark.className = "category-initials";
     mark.textContent = initials(row.title);

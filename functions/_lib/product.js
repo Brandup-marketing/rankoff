@@ -143,6 +143,21 @@ const ACTION_LABELS_ZH = Object.freeze({
   viewProfile: "查看主页",
 });
 
+// The colour behind those letters. Seeded from the listing's identity so an
+// account keeps the same tile on the board, on its own page and on the rank
+// card, and so two listings side by side are rarely the same colour. Only a hue
+// is produced; the stylesheet fixes lightness and chroma per theme, so contrast
+// cannot depend on which number comes out. Mirrored in app.js, listing.js,
+// categories.js and share-card.js — a test asserts they agree.
+export function markHue(seed) {
+  const value = String(seed || "");
+  let hash = 0;
+  for (let index = 0; index < value.length; index += 1) {
+    hash = (hash * 31 + value.charCodeAt(index)) % 360;
+  }
+  return hash;
+}
+
 // The mark falls back to letters when a merchant publishes no logo. A CJK name
 // gets one character; a latin one gets its initials.
 export function initialsFor(title, fallback) {
@@ -232,6 +247,7 @@ export function buildProductView({ entry, todayEntry, board, snapshotId, record,
     actionLabel: locale === "zh" ? (ACTION_LABELS_ZH[action] || ACTION_LABELS_ZH.visit) : (ACTION_LABELS[action] || ACTION_LABELS.visit),
     logo: String(listing.favicon_url || ""),
     initials: initialsFor(title, label),
+    markHue: markHue(listing.hostname || label),
     // Both positions are true; a merchant shares the one worth sharing. #3 of a
     // young board says nothing, #1 of a market says something — and once the
     // board is large the overall number wins this comparison on its own.
@@ -381,7 +397,7 @@ export function renderProductPage(shell, view) {
       : "");
   html = html.replace(
     /<span class="listing-mark" data-mark aria-hidden="true">[\s\S]*?<\/span>\s*<\/span>/,
-    `<span class="listing-mark${view.logo ? " has-icon" : ""}" data-mark aria-hidden="true">${markInner}</span>`,
+    `<span class="listing-mark${view.logo ? " has-icon" : ""}" data-mark aria-hidden="true" style="--mark-hue:${Number(view.markHue) || 0}">${markInner}</span>`,
   );
   html = html.replace(/(<h1 data-title)>[\s\S]*?<\/h1>/, `$1>${escapeHtml(view.title)}</h1>`);
   html = html.replace(/(<p class="listing-host" data-host)>[\s\S]*?<\/p>/, `$1>${escapeHtml(view.hostname)}</p>`);

@@ -855,6 +855,18 @@
     return element;
   }
 
+
+  // Mirrors markHue in functions/_lib/product.js: a stable hue per listing, so a
+  // logo-less tile is coloured by who it is rather than left grey.
+  function markHue(seed) {
+    const value = String(seed || "");
+    let hash = 0;
+    for (let index = 0; index < value.length; index += 1) {
+      hash = (hash * 31 + value.charCodeAt(index)) % 360;
+    }
+    return hash;
+  }
+
   // Mirrors functions/_lib/product.js initialsFor: one character for a CJK name,
   // initials for a latin one, and punctuation is not a letter.
   function initialsFromName(source) {
@@ -1136,6 +1148,7 @@
     markLink.setAttribute("aria-label", state.language === "zh" ? `访问 ${listing.name} 的网站` : `Visit ${listing.name}'s website`);
     const mark = createElement("span", "product-mark");
     mark.setAttribute("aria-hidden", "true");
+    mark.style.setProperty("--mark-hue", String(markHue(listing.identity || listing.hostname || listing.name)));
     const initials = createElement("span", "product-initials", listing.mark);
     mark.append(initials);
     const iconSources = faviconCandidates(listing);

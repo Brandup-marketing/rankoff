@@ -370,6 +370,18 @@
     catch { return String(title).split(/\s+/).map((part) => part[0]).join("").slice(0, 3).toUpperCase(); }
   }
 
+
+  // Mirrors markHue in functions/_lib/product.js: a stable hue per listing, so a
+  // logo-less tile is coloured by who it is rather than left grey.
+  function markHue(seed) {
+    const value = String(seed || "");
+    let hash = 0;
+    for (let index = 0; index < value.length; index += 1) {
+      hash = (hash * 31 + value.charCodeAt(index)) % 360;
+    }
+    return hash;
+  }
+
   // Mirrors functions/_lib/product.js initialsFor. A social title is "@handle",
   // one word starting with punctuation, so first-letter-of-each-word rendered
   // "@" on every profile and repainted the server's correct letter to match.
@@ -385,6 +397,7 @@
   function setIcon() {
     elements.mark.querySelector("img")?.remove();
     elements.mark.classList.remove("has-icon");
+    elements.mark.style.setProperty("--mark-hue", String(markHue(model?.identity || model?.url || model?.title)));
     elements.initials.textContent = modelPlatform()
       ? (initialsFromName(model.title) || initialsFromName(String(model?.identity || "").split(":")[1]) || "YOU")
       : initials(model.url, model.title);

@@ -3,7 +3,7 @@ import test from "node:test";
 
 import { MARKET_GROUPS, VISIBLE_CATEGORIES } from "../../functions/_lib/config.js";
 import { accountFrom, destinationAction, displayName, isUsableHandle, listingIdentity, profilePath } from "../../functions/_lib/platform.js";
-import { canonicalDetailPath } from "../../functions/_lib/product.js";
+import { canonicalDetailPath, markHue } from "../../functions/_lib/product.js";
 import { normalizeDestinationUrl } from "../../functions/_lib/validation.js";
 
 const identityOf = (url) => normalizeDestinationUrl(url).identity;
@@ -52,6 +52,28 @@ test("every path that judges a handle agrees with every other", () => {
     assert.equal(isUsableHandle(handle), false, `${handle} should be refused`);
     assert.equal(canonicalDetailPath(`instagram:${handle}`), "");
   }
+});
+
+test("every copy of the mark hue agrees with the server's", async () => {
+  const { readFileSync } = await import("node:fs");
+  // The hue decides a listing's tile colour on the board, on its own page and in
+  // categories. If a copy drifts, one listing wears two colours.
+  for (const file of ["app.js", "listing.js", "categories.js"]) {
+    const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8");
+    const body = source.match(/function markHue\(seed\) \{([\s\S]*?)\n {2}\}/);
+    assert.ok(body, `${file} has no markHue`);
+    const copy = new Function("seed", body[1]);
+    for (const seed of ["instagram:_umidesign_", "rakanjayahardware.com", "中华健康", "", "x"]) {
+      assert.equal(copy(seed), markHue(seed), `${file} disagrees on ${seed}`);
+    }
+  }
+  // A hue is always a usable angle, whatever the seed.
+  for (const seed of ["", "a", "instagram:_umidesign_", "z".repeat(200)]) {
+    const hue = markHue(seed);
+    assert.ok(Number.isInteger(hue) && hue >= 0 && hue < 360, `${seed} produced ${hue}`);
+  }
+  // The same listing must not change colour between renders.
+  assert.equal(markHue("instagram:_umidesign_"), markHue("instagram:_umidesign_"));
 });
 
 test("a share token is not the merchant's public destination", () => {
