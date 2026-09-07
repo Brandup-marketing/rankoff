@@ -379,7 +379,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .activity-tape li.activity-empty strong { display: block; margin-bottom: .18rem; color: var(--ink); font-size: .76rem; }
 .activity-tape li.activity-empty span { color: var(--muted); }
 @keyframes live-pulse { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 38%, transparent); } 55% { box-shadow: 0 0 0 .35rem transparent; } }
-@keyframes live-pulse-signal { 0%, 100% { box-shadow: 0 0 0 0 var(--up-soft); } 55% { box-shadow: 0 0 0 .3rem transparent; } }
+@keyframes live-pulse-signal { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--up) 55%, transparent); } 55% { box-shadow: 0 0 0 .38rem transparent; } }
 @keyframes activity-in { from { opacity: .45; transform: translateX(-.5rem); } to { opacity: 1; transform: translateX(0); } }
 @keyframes market-ticker { to { transform: translateX(calc(-50% - .275rem)); } }
 @media (prefers-reduced-motion: reduce) {
@@ -528,7 +528,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .topbar { grid-template-columns: auto minmax(0, 1fr) auto auto auto; gap: 0.45rem; }
   .site-nav { justify-self: end; }
   .brand { width: 4.75rem; height: 4.75rem; flex-basis: 4.75rem; }
-  .demo-state { display: none; }
+  .demo-state { min-width: 0; gap: 0; font-size: 0; }
   .site-nav { gap: 0.65rem; margin-right: 0; }
 }
 
@@ -543,7 +543,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .brand-wordmark-crop { height: 1.7rem; }
   .time-tabs { justify-self: end; }
   .time-tabs button { min-width: 2.75rem; min-height: 2.75rem; padding-inline: 0.45rem; font-size: 0.75rem; }
-  .demo-state { display: none; }
+  .demo-state { min-width: 0; gap: 0; font-size: 0; }
   .site-nav { display: none; }
 
   /* One row, as on the desktop: identity, the three links, the controls. The
@@ -1107,6 +1107,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
      second row — the same two-row shape every page used before. */
   .topbar { grid-template-areas: "brand search language theme" "nav nav nav nav"; grid-template-columns: minmax(0, 1fr) auto auto auto; row-gap: .3rem; }
   .topbar .brand { grid-area: brand; }
+  .topbar .demo-state { grid-area: brand; z-index: 1; align-self: end; justify-self: start; margin: 0 0 .1rem .05rem; pointer-events: none; }
   .topbar .site-nav, .about-header nav { grid-area: nav; justify-self: stretch; justify-content: flex-end; }
   .topbar .search-toggle { grid-area: search; }
   .topbar .language-toggle { grid-area: language; }
