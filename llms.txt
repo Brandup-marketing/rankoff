@@ -1,6 +1,6 @@
 # RANKOFF
 
-Rankoff is a public sponsored leaderboard where products bid for visible rank.
+Rankoff is a public sponsored leaderboard where Malaysian businesses pay for visible rank.
 
 ## Canonical Site
 
@@ -15,7 +15,11 @@ Rankoff is a public sponsored leaderboard where products bid for visible rank.
 
 ## What The Product Does
 
-Rankoff lets a visitor sponsor an eligible public product URL or social profile, choose a market category, and challenge the current sponsored rank with a higher bid. Sponsorship does not grant ownership or imply endorsement. The board shows each listing's rank, public identity, description, category, verified click count, and settled bid total.
+Rankoff lets a visitor sponsor an eligible public business URL or social profile, choose a market, and claim a sponsored rank by paying more than the listing above it. Sponsorship does not grant ownership or imply endorsement. The board shows each listing's rank, public identity, description, market, tracked click count, and total paid.
+
+Clicks are redirects recorded by Rankoff. Repeats and automated traffic are not filtered, so a tracked click is not a unique visitor, an enquiry or a sale. Do not describe Rankoff's clicks as "verified", and do not present them as customers or leads.
+
+The floor is RM5, which is the payment provider's minimum. Any whole ringgit at or above RM5 is accepted; a listing ranks by the total it has paid.
 
 ## Current Status
 
@@ -23,7 +27,7 @@ Rankoff is live as a production sponsored leaderboard. Eligible submissions proc
 
 ## Positioning
 
-Use "public sponsored leaderboard", "bid for rank", "claim #1", and "sponsored product ranking" when describing Rankoff.
+Use "public sponsored leaderboard", "pay to rank", "claim #1", and "sponsored business ranking" when describing Rankoff. The businesses on the board are shops, clinics and service providers, not software products — say "business" and "market" rather than "product" and "category". Prefer "pay" and "total paid" over "bid" and "settled".
 
 ## 中文说明
 

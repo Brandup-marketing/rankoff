@@ -14,7 +14,7 @@ export function renderBoard(rankings, currency, language = "en") {
   const rows = rankings.map((entry) => {
     const listing = entry.listing || {};
     const identity = String(listing.hostname || "");
-    const englishBoardNote = `Sponsored · ${marketLabel(listing.category)} · ${formatMoney(entry.bid?.amount_minor, currency)} settled · ${Number(entry.clicks || 0)} tracked clicks`;
+    const englishBoardNote = `Sponsored · ${marketLabel(listing.category)} · ${formatMoney(entry.bid?.amount_minor, currency)} paid · ${Number(entry.clicks || 0)} tracked clicks`;
     return `<li>`
       + `<span class="board-seo-rank">#${escapeHtml(entry.rank)}</span> `
       + `<a href="${escapeHtml(`${profilePath(identity)}${language === "zh" ? "?lang=zh" : ""}`)}">${escapeHtml(listing.title || displayName(identity))}</a> `
@@ -22,6 +22,40 @@ export function renderBoard(rankings, currency, language = "en") {
       + `</li>`;
   }).join("");
   return `<ol class="board-seo-list">${rows}</ol>`;
+}
+
+// A leaderboard whose ranking exists only as styled <div>s is not legible as a
+// ranking to a search engine or an AI answering "who is #1 on Rankoff". The
+// same rows the function above writes are also declared as an ItemList. Every
+// value comes from the board payload — position, public name, evidence page —
+// so the structured data cannot drift from what the page shows.
+export function renderRankingSchema(rankings, origin, language = "en") {
+  if (!rankings.length) return "";
+  const items = rankings.slice(0, 10).map((entry) => {
+    const listing = entry.listing || {};
+    const identity = String(listing.hostname || "");
+    const suffix = language === "zh" ? "?lang=zh" : "";
+    return {
+      "@type": "ListItem",
+      position: Number(entry.rank),
+      name: listing.title || displayName(identity),
+      url: `${origin}${profilePath(identity)}${suffix}`,
+    };
+  });
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: language === "zh" ? "实时赞助榜单" : "Sponsored leaderboard",
+    description: language === "zh"
+      ? "按累计已结算付款排序的公开赞助榜单。"
+      : "Public sponsored leaderboard, ordered by the total each listing has paid.",
+    url: `${origin}/${language === "zh" ? "?lang=zh" : ""}`,
+    numberOfItems: items.length,
+    itemListOrder: "https://schema.org/ItemListOrderAscending",
+    itemListElement: items,
+  };
+  // </script> inside JSON would close the tag early.
+  return `<script type="application/ld+json">${JSON.stringify(schema).replace(/</g, "\\u003c")}</script>`;
 }
 
 export async function onRequestGet(context) {
@@ -51,6 +85,9 @@ export async function onRequestGet(context) {
           (match, open, close) => `${open}${markup}${close}`,
         );
       }
+
+      const rankingSchema = renderRankingSchema(payload.rankings, url.origin, language);
+      if (rankingSchema) html = html.replace("</head>", `${rankingSchema}</head>`);
 
       // The headline price too: before the API answered the page briefly offered
       // #1 at the board floor, which is not what taking #1 costs.

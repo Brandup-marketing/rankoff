@@ -5,7 +5,7 @@ import test from "node:test";
 import { localizeStaticPage, serveLocalizedAsset } from "../../functions/_lib/static-localization.js";
 import { onRequestGet as renderAbout } from "../../functions/about.js";
 import { onRequestGet as renderCategories } from "../../functions/categories.js";
-import { renderBoard } from "../../functions/index.js";
+import { renderBoard, renderRankingSchema } from "../../functions/index.js";
 
 const homeShell = readFileSync(new URL("../../index.html", import.meta.url), "utf8");
 const categoryShell = readFileSync(new URL("../../categories.html", import.meta.url), "utf8");
@@ -53,9 +53,37 @@ test("server-rendered board links stay in the requested language", () => {
     "home",
     "zh",
   );
-  assert.match(html, /data-english-copy="Sponsored · Property &amp; Agents · RM 5 settled · 4 tracked clicks"/);
-  assert.match(html, />广告 · 房产与经纪 · RM 5 已结算 · 4 次追踪点击<\/span>/);
+  assert.match(html, /data-english-copy="Sponsored · Property &amp; Agents · RM 5 paid · 4 tracked clicks"/);
+  assert.match(html, />广告 · 房产与经纪 · 已付 RM 5 · 4 次追踪点击<\/span>/);
   assert.doesNotMatch(html, /&amp;amp;/);
+});
+
+test("the ranking is declared as an ItemList that matches the rendered rows", () => {
+  const rankings = [
+    { rank: 1, listing: { hostname: "instagram:agent_ali", title: "Ali Property KL", category: "Property" }, bid: { amount_minor: 500 }, clicks: 4 },
+    { rank: 2, listing: { hostname: "rakanjayahardware.com", title: "Rakan Jaya Hardware", category: "Construction" }, bid: { amount_minor: 300 }, clicks: 9 },
+  ];
+  const parse = (markup) => JSON.parse(markup.replace(/^<script[^>]*>/, "").replace(/<\/script>$/, "").replaceAll("\\u003c", "<"));
+
+  const en = parse(renderRankingSchema(rankings, "https://rankoff.my", "en"));
+  assert.equal(en["@type"], "ItemList");
+  assert.equal(en.numberOfItems, 2);
+  assert.deepEqual(en.itemListElement.map((i) => i.position), [1, 2]);
+  assert.deepEqual(en.itemListElement.map((i) => i.name), ["Ali Property KL", "Rakan Jaya Hardware"]);
+
+  // The structured data must point where the crawler-facing rows point, or the
+  // two descriptions of the same board disagree.
+  const rows = renderBoard(rankings, "MYR", "en");
+  for (const item of en.itemListElement) {
+    assert.match(rows, new RegExp(`href="${item.url.replace("https://rankoff.my", "")}"`));
+  }
+
+  const zh = parse(renderRankingSchema(rankings, "https://rankoff.my", "zh"));
+  assert.equal(zh.url, "https://rankoff.my/?lang=zh");
+  for (const item of zh.itemListElement) assert.match(item.url, /\?lang=zh$/);
+
+  // An empty board must not claim to be a ranking of nothing.
+  assert.equal(renderRankingSchema([], "https://rankoff.my", "en"), "");
 });
 
 test("search results keep native link navigation semantics", () => {

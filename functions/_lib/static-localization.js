@@ -188,7 +188,7 @@ export function localizeStaticPage(shell, page, language = "en") {
     html = html.replace(/>Post with your rank<\/small>/, ">附上排名发布</small>");
     html = html.replace(/(<span data-share-native-label>)Share…(<\/span>)/, "$1分享…$2");
     html = html.replace(/>Messenger and more apps<\/small>/, ">Messenger 及更多应用</small>");
-    html = html.replace(/(<span class="board-seo-note"[^>]*>)Sponsored · ([^·<]+) · ([^·<]+) settled · ([\d,]+) tracked clicks<\/span>/g, (match, open, market, total, clicks) => `${open}广告 · ${escapeHtml(MARKET_TRANSLATIONS[market.trim().replaceAll("&amp;", "&")] || market.trim().replaceAll("&amp;", "&"))} · ${total.trim()} 已结算 · ${clicks} 次追踪点击</span>`);
+    html = html.replace(/(<span class="board-seo-note"[^>]*>)Sponsored · ([^·<]+) · ([^·<]+) paid · ([\d,]+) tracked clicks<\/span>/g, (match, open, market, total, clicks) => `${open}广告 · ${escapeHtml(MARKET_TRANSLATIONS[market.trim().replaceAll("&amp;", "&")] || market.trim().replaceAll("&amp;", "&"))} · 已付 ${total.trim()} · ${clicks} 次追踪点击</span>`);
     const schemaMatch = /<script id="website-schema" type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(html);
     if (schemaMatch) {
       try {
