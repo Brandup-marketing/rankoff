@@ -1496,7 +1496,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .category-market { margin-top: .4rem; padding: .5rem 0; }
   .category-rail { padding-block: 0 .15rem; }
   .board-toolbar { padding: .45rem 0 .3rem; }
-  .board-toolbar-lead h2 { font-size: .9rem; }
+  .board-toolbar-lead h2 { font-size: .85rem; }
 
   .top-three-hero { margin-top: .45rem; gap: .35rem; }
   .top-three-hero .featured-listing,
@@ -1517,6 +1517,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 @media (min-width: 64rem) {
   .claim-panel h1 { font-size: 2.15rem; }
   .category-market { padding: .55rem 0; }
+  /* The section label was 18.4px/850 against the #1 listing's 17.3px/800,
+     so the label outweighed the listing it labels. It goes under both. */
+  .board-toolbar-lead h2 { font-size: .9rem; }
   .top-three-hero { gap: .4rem; margin-top: .45rem; }
   .top-three-hero .featured-listing { padding: .6rem .85rem; }
   .top-three-hero .featured-listing .product-name { font-size: .98rem; }
