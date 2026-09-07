@@ -141,6 +141,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .theme-toggle:hover, .language-toggle:hover { border-color: var(--accent); background: var(--surface); color: var(--ink); }
 .theme-toggle:active, .language-toggle:active { transform: translateY(1px); }
 .demo-state i, .market-status i { width: 0.45rem; height: 0.45rem; border-radius: 50%; background: var(--up); }
+.demo-state i { width: 0.5rem; height: 0.5rem; animation: live-pulse-signal 2s ease-in-out infinite; }
 
 .claim-stage { padding: 0.9rem 0 0.55rem; }
 .claim-panel { width: min(100%, 68rem); margin: 0 auto; text-align: left; }
@@ -378,10 +379,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .activity-tape li.activity-empty strong { display: block; margin-bottom: .18rem; color: var(--ink); font-size: .76rem; }
 .activity-tape li.activity-empty span { color: var(--muted); }
 @keyframes live-pulse { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 38%, transparent); } 55% { box-shadow: 0 0 0 .35rem transparent; } }
+@keyframes live-pulse-signal { 0%, 100% { box-shadow: 0 0 0 0 var(--up-soft); } 55% { box-shadow: 0 0 0 .3rem transparent; } }
 @keyframes activity-in { from { opacity: .45; transform: translateX(-.5rem); } to { opacity: 1; transform: translateX(0); } }
 @keyframes market-ticker { to { transform: translateX(calc(-50% - .275rem)); } }
 @media (prefers-reduced-motion: reduce) {
-  .live-dot, .activity-tape, .activity-tape li.is-latest { animation: none; }
+  .live-dot, .demo-state i, .activity-tape, .activity-tape li.is-latest { animation: none; }
   .activity-ticker-viewport { overflow: hidden; }
   .activity-tape li.is-duplicate { display: none; }
 }
@@ -1419,7 +1421,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
    podium cards drop their spare height and second description line. */
 @media (min-width: 64rem) {
   .topbar { min-height: 0; padding-block: .55rem; }
-  .topbar .brand { width: 3.5rem; height: 3.5rem; max-width: 3.5rem; flex-basis: 3.5rem; }
+  .topbar .brand { width: 4.15rem; height: 4.15rem; max-width: 4.15rem; flex-basis: 4.15rem; }
   .claim-stage { padding-top: .6rem; }
   .claim-panel h1 { font-size: 2.5rem; }
   .claim-copy { margin-top: .4rem; font-size: .88rem; }
