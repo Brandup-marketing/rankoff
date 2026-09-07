@@ -47,7 +47,7 @@ export function renderRankingSchema(rankings, origin, language = "en") {
     "@type": "ItemList",
     name: language === "zh" ? "实时赞助榜单" : "Sponsored leaderboard",
     description: language === "zh"
-      ? "按累计已结算付款排序的公开赞助榜单。"
+      ? "按累计已付金额排序的公开赞助榜单。"
       : "Public sponsored leaderboard, ordered by the total each listing has paid.",
     url: `${origin}/${language === "zh" ? "?lang=zh" : ""}`,
     numberOfItems: items.length,
