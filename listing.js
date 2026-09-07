@@ -370,11 +370,23 @@
     catch { return String(title).split(/\s+/).map((part) => part[0]).join("").slice(0, 3).toUpperCase(); }
   }
 
+  // Mirrors functions/_lib/product.js initialsFor. A social title is "@handle",
+  // one word starting with punctuation, so first-letter-of-each-word rendered
+  // "@" on every profile and repainted the server's correct letter to match.
+  function initialsFromName(source) {
+    const value = String(source || "").trim();
+    if (!value) return "";
+    if (/[㐀-鿿]/.test(value)) return (value.match(/[㐀-鿿]/) || [""])[0];
+    const words = value.replace(/[^A-Za-z0-9\s]/g, " ").split(/\s+/).filter(Boolean);
+    if (!words.length) return "";
+    return (words[0][0] + (words[1]?.[0] || "")).toUpperCase();
+  }
+
   function setIcon() {
     elements.mark.querySelector("img")?.remove();
     elements.mark.classList.remove("has-icon");
     elements.initials.textContent = modelPlatform()
-      ? String(model.title || "").split(/\s+/).map((part) => part[0]).join("").slice(0, 3).toUpperCase()
+      ? (initialsFromName(model.title) || initialsFromName(String(model?.identity || "").split(":")[1]) || "YOU")
       : initials(model.url, model.title);
     let host = "";
     try { host = new URL(model.url).hostname; } catch { return; }

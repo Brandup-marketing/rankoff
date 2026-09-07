@@ -1,4 +1,12 @@
 User-agent: *
 Allow: /
 
+# /go/ is the click-tracking redirect, not a page: every one of them answers a
+# 302 to a merchant, which Search Console reports back as "Page with redirect".
+# The links already carry rel="nofollow sponsored", so nothing is lost by
+# keeping crawlers out of them, and the crawl budget goes to real pages instead
+# — 9 of them are still "Discovered, currently not indexed".
+Disallow: /go/
+Disallow: /api/
+
 Sitemap: https://rankoff.my/sitemap.xml

@@ -855,15 +855,28 @@
     return element;
   }
 
+  // Mirrors functions/_lib/product.js initialsFor: one character for a CJK name,
+  // initials for a latin one, and punctuation is not a letter.
+  function initialsFromName(source) {
+    const value = String(source || "").trim();
+    if (!value) return "";
+    if (/[㐀-鿿]/.test(value)) return (value.match(/[㐀-鿿]/) || [""])[0];
+    const words = value.replace(/[^A-Za-z0-9\s]/g, " ").split(/\s+/).filter(Boolean);
+    if (!words.length) return "";
+    return (words[0][0] + (words[1]?.[0] || "")).toUpperCase();
+  }
+
   // "instagram.com" would stamp the same letter on every profile, so an account
   // takes its initials from its name instead.
   function initialsFor(identity, url, title) {
     const split = identity.indexOf(":");
     const platform = split > 0 ? identity.slice(0, split) : "";
     if (SOCIAL_PLATFORMS.includes(platform)) {
-      const fromTitle = String(title).trim().split(/\s+/).map((part) => part[0]).join("").slice(0, 3).toUpperCase();
-      if (fromTitle) return fromTitle;
-      return identity.slice(split + 1).slice(0, 3).toUpperCase() || "YOU";
+      // A social title is "@handle" — one word beginning with punctuation — so
+      // taking the first letter of each word stamped "@" on every profile, the
+      // very sameness the platform favicon was rejected for. Mirrors
+      // functions/_lib/product.js initialsFor.
+      return initialsFromName(String(title || "")) || initialsFromName(identity.slice(split + 1)) || "YOU";
     }
     return initialsFromUrl(url);
   }
