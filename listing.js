@@ -116,19 +116,22 @@
   let preferences = loadPreferences();
   let model = readServerModel();
   let toastTimer = null;
-  const boardCurrencyFormat = (code) => new Intl.NumberFormat(code === "MYR" ? "en-MY" : "en-US", { style: "currency", currency: code || "USD", maximumFractionDigits: 0 });
+  const boardCurrencyFormat = (code = "USD") => {
+    const formatter = new Intl.NumberFormat(code === "MYR" ? "en-MY" : "en-US", { style: "currency", currency: code, minimumFractionDigits: 0, maximumFractionDigits: 2 });
+    return { format: (amount) => formatter.format(amount).replace(/^\$/, "US$") };
+  };
   let money = boardCurrencyFormat(model?.currency || "USD");
   // The server-rendered page hands the currency down with the model and never
   // reaches the board fetch below, so the code has to start from the model too.
   let boardCurrency = String(model?.currency || "USD").toUpperCase();
-  // The board's minimum single payment (RM 5 — the gateway's floor too).
+  // The board's minimum single payment, supplied by the API.
   // Arrives with the board payload; until then the target total alone rules.
   let boardFloor = 0;
   let claimAmountTouched = false;
   // The whole all-time board, for the claim preview: which position a total
   // would land at, in this listing's market and overall.
   let boardRankings = [];
-  const TERMS_VERSION = "2026-09-02";
+  const TERMS_VERSION = "2026-09-08";
   const count = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
 
   function languageFromUrl() {
@@ -287,7 +290,7 @@
     return {
       id: String(entry.listing.id), identity: String(entry.listing.hostname || ""), title: String(entry.listing.title), description: String(entry.listing.description || "Sponsored listing on Rankoff."),
       url: String(entry.listing.url || ""), category: String(entry.listing.category || "Other"), icon: String(entry.listing.favicon_url || ""),
-      rank: Number(entry.rank), bid: Math.ceil(Number(entry.bid?.amount_minor || 0) / 100), clicks: Number(entry.clicks || 0),
+      rank: Number(entry.rank), bid: (Number(entry.bid?.amount_minor || 0) / 100), clicks: Number(entry.clicks || 0),
       snapshot: "", mode: "preview",
     };
   }
@@ -338,7 +341,7 @@
             if (place >= 0) model.marketRank = place + 1;
             if (todayEntry) {
               model.todayRank = Number(todayEntry.rank);
-              model.todayBid = Math.ceil(Number(todayEntry.bid?.amount_minor || 0) / 100);
+              model.todayBid = (Number(todayEntry.bid?.amount_minor || 0) / 100);
               model.todayClicks = Number(todayEntry.clicks || 0);
             }
           }
@@ -525,7 +528,7 @@
       const minimum = model.nextBid || model.bid + 1;
       elements.claimAmount.min = String(minimum);
       if (!claimAmountTouched || Number(elements.claimAmount.value) < minimum) elements.claimAmount.value = String(minimum);
-      elements.claimCurrency.textContent = boardCurrency === "MYR" ? "RM" : boardCurrency;
+      elements.claimCurrency.textContent = boardCurrency === "MYR" ? "RM" : "US$";
       renderClaimPreview();
     }
     let host = model.url;
@@ -566,7 +569,7 @@
         id: String(entry.listing?.id || ""),
         hostname: hostname.toLowerCase().replace(/^(?:www|m)\./, ""),
         market: categoryAliases[String(entry.listing?.category || "").toLowerCase()] || "Other",
-        bid: Math.ceil(Number(entry.bid?.amount_minor || 0) / 100),
+        bid: (Number(entry.bid?.amount_minor || 0) / 100),
       };
     });
   }
@@ -597,7 +600,7 @@
   function claimSuggested(existing) {
     const target = model?.nextBid || (model?.bid || 0) + (boardFloor || 1);
     const gap = existing ? target - existing.bid : target;
-    return Math.max(boardFloor || 1, gap);
+    return Math.max(boardFloor || 1, Math.ceil(gap));
   }
 
   function existingForTypedUrl() {
@@ -626,7 +629,7 @@
     const amount = Number(elements.claimAmount.value);
     if (!Number.isSafeInteger(amount) || amount <= 0) return void (node.hidden = true);
     const previous = existing ? existing.bid : 0;
-    const total = previous + amount;
+    const total = Math.round((previous + amount) * 100) / 100;
     // A website already on the board keeps its own market: the payment lands
     // there, not on this listing's board, so the preview names that market.
     const market = existing ? existing.market : (categoryAliases[String(model.category || "").toLowerCase()] || "Other");
@@ -684,7 +687,7 @@
       listing_refused: "此网站不符合上榜条件，未产生任何费用。",
       listing_unavailable: "此网站目前无法上榜，未产生任何费用。",
       submission_limit: "目前提交数量过多，请稍后再试。",
-      bid_not_a_step: "付款以 RM 5 为一档，未产生任何费用。",
+
       checkout_disabled: "实时付款暂未启用，未产生任何费用。",
       checkout_paused: "此榜单的付款目前暂停，未产生任何费用。",
       checkout_provider_error: "托管付款页面暂时无法建立，未产生任何费用。",

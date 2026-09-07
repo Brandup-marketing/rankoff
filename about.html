@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="How Rankoff works: Malaysian businesses pay to hold a spot on a public board, and every total and click stays visible." />
+    <meta name="description" content="How Rankoff works: businesses worldwide pay to hold a spot on a public board, and every total and click stays visible." />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href="https://rankoff.my/about" />
     <meta property="og:site_name" content="RANKOFF" />
@@ -11,14 +11,14 @@
     <meta property="og:locale" content="en_MY" />
     <meta property="og:locale:alternate" content="zh_MY" />
     <meta property="og:title" content="About RANKOFF" />
-    <meta property="og:description" content="How Rankoff works: Malaysian businesses pay to hold a rank, and every payment is public." />
+    <meta property="og:description" content="How Rankoff works: businesses worldwide pay to hold a rank, and every payment is public." />
     <meta property="og:url" content="https://rankoff.my/about" />
     <meta property="og:image" content="https://rankoff.my/assets/rankoff-og-card.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="About RANKOFF" />
-    <meta name="twitter:description" content="How Rankoff works: Malaysian businesses pay to hold a rank, and every payment is public." />
+    <meta name="twitter:description" content="How Rankoff works: businesses worldwide pay to hold a rank, and every payment is public." />
     <meta name="twitter:image" content="https://rankoff.my/assets/rankoff-og-card.png" />
     <link rel="alternate" hreflang="en" href="https://rankoff.my/about" />
     <link rel="alternate" hreflang="zh-Hans" href="https://rankoff.my/about?lang=zh" />
@@ -26,7 +26,7 @@
     <meta name="theme-color" content="#090a0c" />
     <title>About RANKOFF</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=94" />
+    <link rel="stylesheet" href="./styles.css?v=95" />
     <link rel="stylesheet" href="./about.css?v=11" />
   </head>
   <body>
@@ -39,10 +39,11 @@
         <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch colour theme" aria-pressed="true">Light</button>
       </header>
 
+      <p class="currency-note" data-currency-note hidden></p>
       <section class="about-hero" aria-labelledby="about-title">
         <p class="section-intro">The story behind the board</p>
         <h1 id="about-title"><span class="hero-line">Attention has a price.</span><br /><span>Make it visible.</span></h1>
-        <p class="about-lede">RANKOFF is the public leaderboard for Malaysian businesses. Pay to hold a spot, show customers what you do, and keep it until someone pays more. One board, one rule: the highest total paid takes #1.</p>
+        <p class="about-lede">RANKOFF is the public leaderboard for businesses worldwide. Pay to hold a spot, show customers what you do, and keep it until someone pays more. One board, one rule: the highest total paid takes #1.</p>
         <p class="about-actions"><a class="primary-action about-cta" href="/#claim">Claim your spot →</a></p>
       </section>
 
@@ -74,7 +75,7 @@
         <p class="section-intro">How it works</p>
         <h2 id="timeline-title">The board keeps moving.</h2>
         <ol class="rules-flow about-flow">
-          <li><span class="rules-glyph" aria-hidden="true">RM</span><strong>List your business</strong><span>Enter your website, choose a market, and pay from RM5.</span></li>
+          <li><span class="rules-glyph" aria-hidden="true">US$</span><strong>List your business</strong><span>Enter your website, choose a market, and pay from US$1.</span></li>
           <li><span class="rules-glyph" aria-hidden="true">#1</span><strong>Compete in public</strong><span>Once payment settles, your business, your total and your position are on the board for everyone to see.</span></li>
           <li><span class="rules-glyph" aria-hidden="true">↗</span><strong>See what it earns</strong><span>Tracked clicks show how many people went from the board to your website.</span></li>
         </ol>
@@ -83,6 +84,7 @@
 
       <footer class="footer about-footer"><div class="footer-identity"><a class="footer-brand" href="/" aria-label="RANKOFF home"><img class="footer-logo-image" src="./assets/rankoff-final-logo.png?v=4" alt="RANKOFF" width="1254" height="1254" /></a><span class="footer-credit"><strong>Rankoff</strong><a class="footer-parent" href="https://www.brandupdesignmarketing.com/">A Brandup Marketing product</a></span></div><span class="footer-links"><a href="/legal#rules">Rules</a><a href="/legal#terms">Terms</a><a href="/legal#privacy">Privacy</a><a href="/legal#payments">Payments</a></span></footer>
     </main>
-    <script src="./about.js?v=13" defer></script>
+    <script src="./about.js?v=14" defer></script>
+    <script type="module" src="/currency.js?v=1"></script>
   </body>
 </html>

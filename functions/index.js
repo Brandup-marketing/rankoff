@@ -1,3 +1,4 @@
+import { currencyNotice } from "../currency.js";
 import { defaultBoardSlug, isProduction, marketLabel, requireDatabase } from "./_lib/config.js";
 import { escapeHtml, formatMoney } from "./_lib/product.js";
 import { displayName, profilePath } from "./_lib/platform.js";
@@ -77,8 +78,10 @@ export async function onRequestGet(context) {
       const db = requireDatabase(context.env);
       const board = await loadBoard(db, defaultBoardSlug(context.env));
       const payload = await loadPublicBoard(db, board, { category: "all", period: "all", limit: LIMIT, page: 1 });
-      const currency = String(payload.board?.currency || "MYR").toUpperCase();
+      const currency = String(payload.board?.currency || "USD").toUpperCase();
       const markup = renderBoard(payload.rankings, currency, language);
+      const notice = currencyNotice(payload.board?.currency_conversion, language);
+      if (notice) html = html.replace('<p class="currency-note" data-currency-note hidden></p>', `<p class="currency-note" data-currency-note>${escapeHtml(notice)}</p>`);
       if (markup) {
         html = html.replace(
           /(<div class="board-list" data-board-list[^>]*>)(<\/div>)/,

@@ -7,7 +7,7 @@
   const DEFAULT_CATEGORY = "all";
   const BOARD_API_ENDPOINT = "./api/v1/board";
   // Keep in step with TERMS_VERSION in functions/_lib/config.js and the date printed on /legal.
-  const TERMS_VERSION = "2026-09-02";
+  const TERMS_VERSION = "2026-09-08";
   // The demo board exists for opening index.html straight off disk. On a served
   // origin it must never render: for the moment before the API answers it put a
   // fake USD price on a page that sells in ringgit, and it overwrote the real
@@ -30,23 +30,23 @@
   }, {}));
   const categoryIcons = Object.freeze({ all: "▦", Creators: "✦", Property: "⌂", Interior: "▤", Beauty: "✿", Health: "✚", Sports: "◐", Food: "◍", Marketing: "↗", Creative: "✎", Professional: "◆", Education: "✎+", Finance: "◧", Electronics: "▣", Retail: "◇", Construction: "▦+", Home: "⚙", Automotive: "◎", AI: "✧", Other: "•••" });
   const translations = {
-    en: { navBoard: "Board", navCategories: "Categories", navAbout: "About", heroCopy: "Put your business where customers look first. It stays at the top until someone pays more.", totalBid: "Your payment", productUrl: "Your website or social profile", productUrlPlaceholder: "example.com or instagram.com/yourname", invalidWebsite: "Enter a website or a public profile address, such as example.com or instagram.com/yourname.", chooseMarket: "Choose a market", challengeCategory: "Market", categoryRule: "The trade your business is in.", reviewBid: "Review & pay", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest total takes #1. Top up any time to move up.", todayRanking: "Today’s leaders", latestActivity: "Latest activity", liveUpdates: "Latest updates", howItWorks: "How ranking works", searchPlaceholder: "Search businesses and markets…", close: "Close", seeAll: "See all", past24: "Past 24h", livePulse: "Live payments", refresh: "Refresh", rank: "Rank", listing: "Listing", bid: "Paid", clicks: "Clicks", sponsored: "Sponsored", rules: "Every listing is paid advertising. The highest total paid ranks first \u2014 no prizes, no draws, and no element of chance.", position: "Position", positionCopy: "Held until another listing's total paid passes it.", charge: "Charge", chargeCopy: "One payment through secure hosted checkout.", reporting: "Reporting", reportingCopy: "Tracked clicks for the selected timeframe. Repeats and automated traffic are not filtered — a click is not a unique customer.", readRules: "Read all rules →", askWhatIs: "What is a pay-to-rank leaderboard?", askHowWorks: "How does Rankoff ranking work?", askHowSponsor: "How can I sponsor a website or social profile?", rulesLink: "Rules", terms: "Terms", termsOfService: "Terms of Service", privacyLink: "Privacy", payments: "Payments", footerCredit: "A Brandup Marketing product", confirmRank: "Confirm this rank", confirmRankIntro: "Check the rank and price, then agree to the Terms of Service to continue.", chanceDisclaimer: "This is a one-time fee for advertising placement \u2014 not a wager, deposit, or contest entry. There are no prizes and no element of chance.", rankLabel: "Rank", priceLabel: "Price", dueNow: "Due now", stepPay: "Pay", stepPayCopy: "One payment, from RM5.", stepRank: "Rank", stepRankCopy: "Highest total paid takes #1.", stepHold: "Hold", stepHoldCopy: "Until someone pays more. Top up any time.", statVisitors: "visitor sessions", statClicks: "clicks to businesses", statPaid: "paid", statWindow: "All-time, counted by Rankoff", alreadyPaid: "Already paid", payNow: "Pay now", totalAfter: "Total after", confirmationCopy: "Your listing goes live at this rank after payment confirms. Someone else can still claim a higher rank. This is a one-time fee for advertising placement \u2014 not a wager, deposit, or contest entry. There are no prizes and no element of chance.", agreeTermsPrefix: "I understand this is a paid sponsored placement for a public link. It gives me no ownership or editing rights over that account, and the listed party may request removal. I agree to the ", agreeTermsSuffix: ".", cancel: "Cancel", continueCheckout: "Continue to checkout", skipLeaderboard: "Skip to leaderboard", brandHome: "RANKOFF home", brandLogoAlt: "RANKOFF — pay-to-rank leaderboard", rankingTimeframe: "Ranking timeframe", mainNavigation: "Main navigation", searchResults: "Search results", challengeLeaderboard: "Challenge the leaderboard", decreaseBid: "Decrease by RM5", increaseBid: "Increase by RM5", filterCategory: "Filter by category", topThree: "Top three sponsored listings", boardPulse: "Board pulse", boardListings: "Sponsored listings", pageNumbers: "Page numbers", answers: "Answers", closeDialog: "Close dialog", rankPrice: "Rank and price", savePreferencesError: "This browser could not save your preferences.", checkoutUnavailable: "Hosted checkout is unavailable. No payment was made.", checkoutOpening: "Opening secure checkout…", checkoutPreview: "Live checkout is not connected for this submission yet. No payment was made." },
-    zh: { navBoard: "榜单", navCategories: "分类", navAbout: "关于", heroCopy: "把你的生意放在顾客第一眼看到的位置。直到有人付得更多，它都留在榜首。", totalBid: "付款金额", productUrl: "你的网站或社交账号", productUrlPlaceholder: "example.com 或 instagram.com/yourname", invalidWebsite: "请输入网站或公开主页网址，例如 example.com 或 instagram.com/yourname。", chooseMarket: "选择市场", challengeCategory: "市场", categoryRule: "你的生意所属的行业。", reviewBid: "确认并付款", markets: "市场", liveLeaderboard: "实时榜单", boardSummary: "累计付款最高者第 1 名。随时追加付款即可上升。", todayRanking: "今日领先", latestActivity: "最新动态", liveUpdates: "最新动态", howItWorks: "排名规则", searchPlaceholder: "搜索商家和市场…", close: "关闭", seeAll: "查看全部", past24: "近 24 小时", livePulse: "实时付款", refresh: "刷新", rank: "排名", listing: "条目", bid: "已付", clicks: "点击", sponsored: "广告", rules: "每个条目都是付费广告。累计付款最高者排第一——没有奖品、没有抽奖，也不涉及任何运气成分。", position: "排名位置", positionCopy: "直到别的条目累计付款超过你为止。", charge: "费用", chargeCopy: "通过安全托管付款页面一次性付款。", reporting: "数据", reportingCopy: "所选时间范围内的追踪点击。重复与自动化流量未经过滤——一次点击不等于一位客户。", readRules: "查看完整规则 →", askWhatIs: "什么是付费排名榜？", askHowWorks: "Rankoff 排名怎么算？", askHowSponsor: "怎么赞助一个网站或社交账号？", rulesLink: "规则", terms: "条款", termsOfService: "服务条款", privacyLink: "隐私", payments: "付款", footerCredit: "Brandup Marketing 出品", confirmRank: "确认此排名", confirmRankIntro: "核对排名与价格，同意《服务条款》后继续。", chanceDisclaimer: "此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。", rankLabel: "排名", priceLabel: "价格", dueNow: "现在支付", stepPay: "付款", stepPayCopy: "一次付清，RM5 起。", stepRank: "排名", stepRankCopy: "累计付款最高者拿下第 1 名。", stepHold: "保持", stepHoldCopy: "直到有人付得更多。随时可追加。", statVisitors: "访问人次", statClicks: "次点进商家", statPaid: "商家已付", statWindow: "全时段，由 Rankoff 统计", alreadyPaid: "已付金额", payNow: "本次支付", totalAfter: "付款后累计", confirmationCopy: "付款确认后，你的条目会以此排名上线。其他人仍可付更多取得更高排名。此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。", agreeTermsPrefix: "我了解这是为一个公开链接购买的赞助展示，付款不会获得该账号的所有权或编辑权，被展示方可要求下架。我同意《", agreeTermsSuffix: "》。", cancel: "取消", continueCheckout: "继续付款", skipLeaderboard: "跳到榜单", brandHome: "RANKOFF 首页", brandLogoAlt: "RANKOFF — 付费排名榜", rankingTimeframe: "排名时间范围", mainNavigation: "主导航", searchResults: "搜索结果", challengeLeaderboard: "挑战排行榜", decreaseBid: "减少 RM5", increaseBid: "增加 RM5", filterCategory: "按类别筛选", topThree: "赞助榜单前三名", boardPulse: "榜单动态", boardListings: "赞助条目榜单", pageNumbers: "页码", answers: "常见问题", closeDialog: "关闭对话框", rankPrice: "排名与价格", savePreferencesError: "此浏览器无法保存你的偏好设置。", checkoutUnavailable: "托管付款页面暂时无法使用，未产生任何费用。", checkoutOpening: "正在打开安全付款页面…", checkoutPreview: "此预览暂未连接实时付款，未产生任何费用。" },
+    en: { navBoard: "Board", navCategories: "Categories", navAbout: "About", heroCopy: "Put your business where customers look first. It stays at the top until someone pays more.", totalBid: "Your payment", productUrl: "Your website or social profile", productUrlPlaceholder: "example.com or instagram.com/yourname", invalidWebsite: "Enter a website or a public profile address, such as example.com or instagram.com/yourname.", chooseMarket: "Choose a market", challengeCategory: "Market", categoryRule: "The trade your business is in.", reviewBid: "Review & pay", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest total takes #1. Top up any time to move up.", todayRanking: "Today’s leaders", latestActivity: "Latest activity", liveUpdates: "Latest updates", howItWorks: "How ranking works", searchPlaceholder: "Search businesses and markets…", close: "Close", seeAll: "See all", past24: "Past 24h", livePulse: "Live payments", refresh: "Refresh", rank: "Rank", listing: "Listing", bid: "Paid", clicks: "Clicks", sponsored: "Sponsored", rules: "Every listing is paid advertising. The highest total paid ranks first \u2014 no prizes, no draws, and no element of chance.", position: "Position", positionCopy: "Held until another listing's total paid passes it.", charge: "Charge", chargeCopy: "One payment through secure hosted checkout.", reporting: "Reporting", reportingCopy: "Tracked clicks for the selected timeframe. Repeats and automated traffic are not filtered — a click is not a unique customer.", readRules: "Read all rules →", askWhatIs: "What is a pay-to-rank leaderboard?", askHowWorks: "How does Rankoff ranking work?", askHowSponsor: "How can I sponsor a website or social profile?", rulesLink: "Rules", terms: "Terms", termsOfService: "Terms of Service", privacyLink: "Privacy", payments: "Payments", footerCredit: "A Brandup Marketing product", confirmRank: "Confirm this rank", confirmRankIntro: "Check the rank and price, then agree to the Terms of Service to continue.", chanceDisclaimer: "This is a one-time fee for advertising placement \u2014 not a wager, deposit, or contest entry. There are no prizes and no element of chance.", rankLabel: "Rank", priceLabel: "Price", dueNow: "Due now", stepPay: "Pay", stepPayCopy: "One payment, from US$1.", stepRank: "Rank", stepRankCopy: "Highest total paid takes #1.", stepHold: "Hold", stepHoldCopy: "Until someone pays more. Top up any time.", statVisitors: "visitor sessions", statClicks: "clicks to businesses", statPaid: "paid", statWindow: "All-time, counted by Rankoff", alreadyPaid: "Already paid", payNow: "Pay now", totalAfter: "Total after", confirmationCopy: "Your listing goes live at this rank after payment confirms. Someone else can still claim a higher rank. This is a one-time fee for advertising placement \u2014 not a wager, deposit, or contest entry. There are no prizes and no element of chance.", agreeTermsPrefix: "I understand this is a paid sponsored placement for a public link. It gives me no ownership or editing rights over that account, and the listed party may request removal. I agree to the ", agreeTermsSuffix: ".", cancel: "Cancel", continueCheckout: "Continue to checkout", skipLeaderboard: "Skip to leaderboard", brandHome: "RANKOFF home", brandLogoAlt: "RANKOFF — pay-to-rank leaderboard", rankingTimeframe: "Ranking timeframe", mainNavigation: "Main navigation", searchResults: "Search results", challengeLeaderboard: "Challenge the leaderboard", decreaseBid: "Decrease by US$1", increaseBid: "Increase by US$1", filterCategory: "Filter by category", topThree: "Top three sponsored listings", boardPulse: "Board pulse", boardListings: "Sponsored listings", pageNumbers: "Page numbers", answers: "Answers", closeDialog: "Close dialog", rankPrice: "Rank and price", savePreferencesError: "This browser could not save your preferences.", checkoutUnavailable: "Hosted checkout is unavailable. No payment was made.", checkoutOpening: "Opening secure checkout…", checkoutPreview: "Live checkout is not connected for this submission yet. No payment was made." },
+    zh: { navBoard: "榜单", navCategories: "分类", navAbout: "关于", heroCopy: "把你的生意放在顾客第一眼看到的位置。直到有人付得更多，它都留在榜首。", totalBid: "付款金额", productUrl: "你的网站或社交账号", productUrlPlaceholder: "example.com 或 instagram.com/yourname", invalidWebsite: "请输入网站或公开主页网址，例如 example.com 或 instagram.com/yourname。", chooseMarket: "选择市场", challengeCategory: "市场", categoryRule: "你的生意所属的行业。", reviewBid: "确认并付款", markets: "市场", liveLeaderboard: "实时榜单", boardSummary: "累计付款最高者第 1 名。随时追加付款即可上升。", todayRanking: "今日领先", latestActivity: "最新动态", liveUpdates: "最新动态", howItWorks: "排名规则", searchPlaceholder: "搜索商家和市场…", close: "关闭", seeAll: "查看全部", past24: "近 24 小时", livePulse: "实时付款", refresh: "刷新", rank: "排名", listing: "条目", bid: "已付", clicks: "点击", sponsored: "广告", rules: "每个条目都是付费广告。累计付款最高者排第一——没有奖品、没有抽奖，也不涉及任何运气成分。", position: "排名位置", positionCopy: "直到别的条目累计付款超过你为止。", charge: "费用", chargeCopy: "通过安全托管付款页面一次性付款。", reporting: "数据", reportingCopy: "所选时间范围内的追踪点击。重复与自动化流量未经过滤——一次点击不等于一位客户。", readRules: "查看完整规则 →", askWhatIs: "什么是付费排名榜？", askHowWorks: "Rankoff 排名怎么算？", askHowSponsor: "怎么赞助一个网站或社交账号？", rulesLink: "规则", terms: "条款", termsOfService: "服务条款", privacyLink: "隐私", payments: "付款", footerCredit: "Brandup Marketing 出品", confirmRank: "确认此排名", confirmRankIntro: "核对排名与价格，同意《服务条款》后继续。", chanceDisclaimer: "此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。", rankLabel: "排名", priceLabel: "价格", dueNow: "现在支付", stepPay: "付款", stepPayCopy: "一次付清，US$1 起。", stepRank: "排名", stepRankCopy: "累计付款最高者拿下第 1 名。", stepHold: "保持", stepHoldCopy: "直到有人付得更多。随时可追加。", statVisitors: "访问人次", statClicks: "次点进商家", statPaid: "商家已付", statWindow: "全时段，由 Rankoff 统计", alreadyPaid: "已付金额", payNow: "本次支付", totalAfter: "付款后累计", confirmationCopy: "付款确认后，你的条目会以此排名上线。其他人仍可付更多取得更高排名。此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。", agreeTermsPrefix: "我了解这是为一个公开链接购买的赞助展示，付款不会获得该账号的所有权或编辑权，被展示方可要求下架。我同意《", agreeTermsSuffix: "》。", cancel: "取消", continueCheckout: "继续付款", skipLeaderboard: "跳到榜单", brandHome: "RANKOFF 首页", brandLogoAlt: "RANKOFF — 付费排名榜", rankingTimeframe: "排名时间范围", mainNavigation: "主导航", searchResults: "搜索结果", challengeLeaderboard: "挑战排行榜", decreaseBid: "减少 US$1", increaseBid: "增加 US$1", filterCategory: "按类别筛选", topThree: "赞助榜单前三名", boardPulse: "榜单动态", boardListings: "赞助条目榜单", pageNumbers: "页码", answers: "常见问题", closeDialog: "关闭对话框", rankPrice: "排名与价格", savePreferencesError: "此浏览器无法保存你的偏好设置。", checkoutUnavailable: "托管付款页面暂时无法使用，未产生任何费用。", checkoutOpening: "正在打开安全付款页面…", checkoutPreview: "此预览暂未连接实时付款，未产生任何费用。" },
   };
   const pageMetadata = Object.freeze({
     en: Object.freeze({
-      title: "RANKOFF | Pay-to-rank leaderboard, from RM5",
-      description: "Start at RM5 on Rankoff and compete for visible sponsored rank. Totals paid and tracked clicks remain public.",
-      socialTitle: "RANKOFF | Start at RM5, compete for #1",
-      socialDescription: "A public sponsored leaderboard for Malaysian businesses. Start at RM5; totals paid and tracked clicks stay visible.",
-      schemaDescription: "Rankoff is a public sponsored leaderboard where Malaysian businesses pay for visible rank. Rank, total paid and tracked clicks are public.",
+      title: "RANKOFF | Pay-to-rank leaderboard, from US$1",
+      description: "Start at US$1 on Rankoff and compete for visible sponsored rank. Totals paid and tracked clicks remain public.",
+      socialTitle: "RANKOFF | Start at US$1, compete for #1",
+      socialDescription: "A public sponsored leaderboard for businesses worldwide. Start at US$1; totals paid and tracked clicks stay visible.",
+      schemaDescription: "Rankoff is a public sponsored leaderboard where businesses worldwide pay for visible rank. Rank, total paid and tracked clicks are public.",
       schemaAction: "Claim a sponsored rank",
     }),
     zh: Object.freeze({
-      title: "RANKOFF｜付费排名榜，RM5 起",
-      description: "在 Rankoff 付费拿下第 1 名。RM5 起的公开赞助榜单——排名、累计已付与追踪点击全部公开。",
-      socialTitle: "RANKOFF｜RM5 起，竞逐第 1 名",
-      socialDescription: "面向马来西亚商家的公开赞助榜单。RM5 起即可上榜；累计付款金额和追踪点击公开可见。",
+      title: "RANKOFF｜付费排名榜，US$1 起",
+      description: "在 Rankoff 付费拿下第 1 名。US$1 起的公开赞助榜单——排名、累计已付与追踪点击全部公开。",
+      socialTitle: "RANKOFF｜US$1 起，竞逐第 1 名",
+      socialDescription: "面向全球商家的公开赞助榜单。US$1 起即可上榜；累计付款金额和追踪点击公开可见。",
       schemaDescription: "Rankoff 是公开的赞助排名榜，商家通过公开付款竞争最显眼的位置。排名、累计已付与追踪点击全部公开。",
       schemaAction: "认领赞助排名",
     }),
@@ -54,7 +54,10 @@
   const categoryLabels = { AI: "AI Tools & Agents", Creators: "Creators & Talent", Property: "Property & Agents", Interior: "Interior & Renovation", Beauty: "Beauty & Wellness", Health: "Health & Medical", Sports: "Sports & Fitness", Food: "Food & Beverage", Marketing: "Marketing & Advertising", Creative: "Creative & Production", Professional: "Professional Services", Education: "Education & Training", Finance: "Finance & Insurance", Electronics: "Electronics & Repair", Retail: "Retail & Ecommerce", Construction: "Hardware & Construction", Home: "Home Services", Automotive: "Automotive", Other: "Other" };
   const categoryTranslations = { AI: "AI 工具与智能体", Creators: "创作者与艺人", Property: "房产与经纪", Interior: "室内设计与装修", Beauty: "美容与养生", Health: "健康与医疗", Sports: "运动与健身", Food: "餐饮", Marketing: "营销与广告", Creative: "创意与制作", Professional: "专业服务", Education: "教育与培训", Finance: "金融与保险", Electronics: "电子与维修", Retail: "零售与电商", Construction: "五金与建筑", Home: "家居服务", Automotive: "汽车", Other: "其他" };
 
-  const boardCurrencyFormat = (code) => new Intl.NumberFormat(code === "MYR" ? "en-MY" : "en-US", { style: "currency", currency: code || "USD", maximumFractionDigits: 0 });
+  const boardCurrencyFormat = (code = "USD") => {
+    const formatter = new Intl.NumberFormat(code === "MYR" ? "en-MY" : "en-US", { style: "currency", currency: code, minimumFractionDigits: 0, maximumFractionDigits: 2 });
+    return { format: (amount) => formatter.format(amount).replace(/^\$/, "US$") };
+  };
   let currency = boardCurrencyFormat("USD");
   const compact = new Intl.NumberFormat("en-US", {
     notation: "compact",
@@ -581,7 +584,7 @@
   function dollarsFromMinor(value, fallback = 1) {
     const minor = Number(value);
     if (!Number.isSafeInteger(minor) || minor < 0) return fallback;
-    return Math.max(1, Math.ceil(minor / 100));
+    return minor / 100;
   }
 
   function normalizedClickCount(value) {
@@ -688,7 +691,7 @@
       remoteMinIncrement = dollarsFromMinor(payload.board?.min_increment_minor, 1);
       currency = boardCurrencyFormat(remoteCurrency);
       const symbolNode = document.querySelector("[data-currency-symbol]");
-      if (symbolNode) symbolNode.textContent = remoteCurrency === "MYR" ? "RM" : "$";
+      if (symbolNode) symbolNode.textContent = remoteCurrency === "MYR" ? "RM" : "US$";
       render();
       if (boardSource === "production" && !boardViewSent) {
         boardViewSent = true;
@@ -734,7 +737,7 @@
         // dollarsFromMinor floors at 1, so it cannot express a genuine zero.
         const minor = Number(counterpartEntry?.bid?.amount_minor);
         const amount = counterpartEntry
-          ? (Number.isSafeInteger(minor) && minor >= 0 ? Math.ceil(minor / 100) : null)
+          ? (Number.isSafeInteger(minor) && minor >= 0 ? minor / 100 : null)
           : 0;
         if (listing.bids[counterpart] !== amount) { listing.bids[counterpart] = amount; changed = true; }
       }
@@ -942,7 +945,7 @@
       return minimum ? `当前最低出价为 ${money(minimum)}。` : "当前付款金额过低，请刷新榜单后重试。";
     }
     const messages = {
-      bid_not_a_step: "付款以 RM 5 为一档，未产生任何费用。",
+
       checkout_disabled: "实时付款暂未启用，未产生任何费用。",
       checkout_paused: "此榜单的付款目前暂停，未产生任何费用。",
       checkout_provider_error: "托管付款页面暂时无法建立，未产生任何费用。",
@@ -1221,8 +1224,8 @@
   function getMinimumForPosition(position, ranked = rankedListings()) {
     if (!ranked.length) return 1;
     const index = Math.max(0, position - 1);
-    if (index <= 0) return getBid(ranked[0]) + boardMinimum();
-    return getBid(ranked[index - 1]) + boardMinimum();
+    if (index <= 0) return Math.ceil(getBid(ranked[0]) + boardMinimum());
+    return Math.ceil(getBid(ranked[index - 1]) + boardMinimum());
   }
 
   document.addEventListener("input", (event) => {
@@ -1266,21 +1269,21 @@
       // Every place costs the board's step more than the one holding it, and
       // the step is the minimum payment, so every figure stays a round one.
       if (existing && leader && existing.id !== leader.id) {
-        return Math.max(boardMinimum(), getBid(leader) - getBid(existing) + boardMinimum());
+        return Math.max(boardMinimum(), Math.ceil(getBid(leader) - getBid(existing) + boardMinimum()));
       }
       if (existing && leader && existing.id === leader.id) return boardMinimum();
-      return getBid(leader) + boardMinimum();
+      return Math.ceil(getBid(leader) + boardMinimum());
     }
 
     const listing = state.listings.find((item) => item.id === activeBid?.listingId);
-    if (!listing) return getBid(ranked[0]) + 1;
+    if (!listing) return Math.ceil(getBid(ranked[0]) + 1);
     const index = ranked.findIndex((item) => item.id === listing.id);
     // A top-up ADDS to this listing's existing total, so the suggestion is the
     // gap to close — not the rival's total. Suggesting the rival's total
     // overcharged every returning customer by everything they had already paid.
     if (index <= 0) return boardMinimum();
     const gap = getBid(ranked[index - 1]) - getBid(listing) + boardMinimum();
-    return Math.max(boardMinimum(), gap);
+    return Math.max(boardMinimum(), Math.ceil(gap));
   }
 
   async function loadChosenMarket(category) {
@@ -1301,11 +1304,11 @@
         .catch(() => null);
       chosenMarket = {
         category,
-        totals: payload.rankings.map((entry) => Math.ceil(Number(entry.bid?.amount_minor || 0) / 100)),
+        totals: payload.rankings.map((entry) => (Number(entry.bid?.amount_minor || 0) / 100)),
         // What the same payment is worth on the whole board, so a market's #1
         // is not mistaken for the top of the home page.
         boardTotals: Array.isArray(board?.rankings)
-          ? board.rankings.map((entry) => Math.ceil(Number(entry.bid?.amount_minor || 0) / 100))
+          ? board.rankings.map((entry) => (Number(entry.bid?.amount_minor || 0) / 100))
           : null,
         nextBid: dollarsFromMinor(payload.next_bid_minor, null),
       };
@@ -1326,7 +1329,7 @@
     const ranked = rankedListings();
     if (activeBid?.type === "new") {
       const existing = existingListingForPending();
-      const total = existing ? getBid(existing) + amount : amount;
+      const total = existing ? Math.round((getBid(existing) + amount) * 100) / 100 : amount;
       // A tie goes to whoever settled first, and this payment settles last, so an
       // equal total still outranks it: counting only strictly larger totals
       // promised #1 for a price that ties the leader.
@@ -1341,7 +1344,7 @@
     // Cumulative: this payment adds to whatever the listing has already
     // settled. Replacing the total instead of adding to it projected the wrong
     // rank for every repeat customer.
-    const projectedTotal = getBid(listing) + amount;
+    const projectedTotal = Math.round((getBid(listing) + amount) * 100) / 100;
     const projected = ranked.map((item) =>
       item.id === listing.id
         ? { ...item, bids: { ...item.bids, [state.activeWindow]: projectedTotal } }
@@ -1513,12 +1516,12 @@
     card.dataset.listingId = listing.id;
     card.setAttribute("role", "listitem");
     // "Claim THIS rank" has to price this row. Every card quoted the board
-    // leader's price, so taking #2 off a RM 5 listing was advertised at the
+    // leader's price, so taking #2 off a US$ 1 listing was advertised at the
     // RM 15 it costs to take #1. A position is taken by exceeding the total
     // that holds it, and a tie loses because it settles later.
     // The price of this listing's place: the board's step above what it
     // holds. For #1 the server's own next bid wins if higher.
-    const ownPrice = getBid(listing) + boardMinimum();
+    const ownPrice = Math.ceil(getBid(listing) + boardMinimum());
     const minimum = position === 1 && boardSource !== "local" && remoteNextBid
       ? Math.max(remoteNextBid, ownPrice)
       : ownPrice;
@@ -1543,8 +1546,8 @@
     return card;
   }
 
-  // "Claim #1 for RM 5" is a different promise on a market view than on the whole
-  // board: RM 5 leads an empty Beauty & Wellness while the board's first place
+  // "Claim #1 for US$ 1" is a different promise on a market view than on the whole
+  // board: US$ 1 leads an empty Beauty & Wellness while the board's first place
   // costs more. The headline says which one is being offered.
   function renderHeroMarket() {
     if (!elements.heroMarket) return;
@@ -1597,7 +1600,7 @@
     // checkout without anyone noticing it was filed in the wrong trade.
     const leaderCategory = canonicalCategory(leader.category) || "Other";
     const marketPrice = chosenMarket && chosenMarket.category === elements.categorySelect?.value ? chosenMarket.nextBid : null;
-    const nextPrice = marketPrice || (boardSource === "local" || !remoteNextBid ? getBid(leader) + 1 : remoteNextBid);
+    const nextPrice = marketPrice || (boardSource === "local" || !remoteNextBid ? Math.ceil(getBid(leader) + 1) : remoteNextBid);
 
     renderHeroMarket();
     if (elements.heroPrice) elements.heroPrice.textContent = money(nextPrice);
@@ -1823,7 +1826,7 @@
       if (![visitors, clicks, paidMinor].every(Number.isFinite)) return;
       elements.statVisitors.textContent = compact.format(visitors);
       elements.statClicks.textContent = compact.format(clicks);
-      elements.statPaid.textContent = money(Math.round(paidMinor / 100));
+      elements.statPaid.textContent = money(paidMinor / 100);
       elements.audienceStrip.hidden = false;
     } catch {
       audienceStatsLoaded = false;
@@ -1902,7 +1905,7 @@
     if (elements.dialogPrice) elements.dialogPrice.textContent = money(amount);
     // Payments accumulate on one listing per website, so a repeat buyer sees
     // what is already on the board, what this payment adds, and the total the
-    // rank above is computed from. A first payment shows RM 0 already paid.
+    // rank above is computed from. A first payment shows US$ 0 already paid.
     if (elements.dialogPrevious) {
       const existing = activeBid.type === "new" ? existingListingForPending() : listing;
       const previous = existing ? getBid(existing) : 0;

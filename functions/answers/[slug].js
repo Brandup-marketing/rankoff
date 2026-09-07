@@ -34,7 +34,7 @@ export async function onRequestGet(context) {
         Number(payload.pagination?.total || 0),
         Number(stats.settled_revenue_minor || 0),
         Number(stats.total_clicks || 0),
-        String(payload.board?.currency || "MYR").toUpperCase(),
+        String(payload.board?.currency || "USD").toUpperCase(),
       );
       html = html
         .replace(/<span data-live-summary>[\s\S]*?<\/span>/g, `<span data-live-summary>${escapeHtml(summary.en)}</span>`)

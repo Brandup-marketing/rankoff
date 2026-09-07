@@ -13,6 +13,12 @@ export async function loadBoard(db, slug) {
   if (!board || board.status === "closed") {
     throw new ApiError(404, "board_not_found", "That board is not available.");
   }
+  const rates = await db.prepare(`SELECT source_currency, target_currency, numerator, denominator, source_url, rate_date
+    FROM board_currency_rates WHERE board_id = ?1 AND target_currency = ?2`).bind(board.id, board.currency).all();
+  const missing = await db.prepare(`SELECT COUNT(*) AS n FROM ranking_payments
+    WHERE board_id = ?1 AND status = 'settled' AND ranking_amount_minor IS NULL`).bind(board.id).first();
+  if (Number(missing?.n || 0)) throw new ApiError(503, "currency_conversion_missing", "The board currency is being updated.");
+  board.currency_conversion = rates.results?.length ? rates.results : null;
   return board;
 }
 
@@ -49,8 +55,8 @@ export async function loadPublicBoard(db, board, { category, period, limit, page
        SELECT
          b.id AS bid_id,
          b.listing_id,
-         b.amount_minor,
-         b.currency,
+         b.ranking_amount_minor AS amount_minor,
+         b.ranking_currency AS currency,
          b.settled_at,
          l.title,
          l.description,
@@ -58,12 +64,12 @@ export async function loadPublicBoard(db, board, { category, period, limit, page
          l.hostname,
          l.favicon_url,
          l.category,
-         SUM(b.amount_minor) OVER (PARTITION BY b.listing_id) AS total_minor,
+         SUM(b.ranking_amount_minor) OVER (PARTITION BY b.listing_id) AS total_minor,
          ROW_NUMBER() OVER (
            PARTITION BY b.listing_id
            ORDER BY b.settled_at DESC, b.id DESC
          ) AS listing_bid_order
-       FROM bids b
+       FROM ranking_payments b
        INNER JOIN listings l ON l.id = b.listing_id
        WHERE ${where.join(" AND ")}
      ), best AS (
@@ -90,8 +96,8 @@ export async function loadPublicBoard(db, board, { category, period, limit, page
        COUNT(*) AS total_count,
        COALESCE(MAX(listing_total), 0) AS top_amount_minor
      FROM (
-       SELECT SUM(b.amount_minor) AS listing_total
-       FROM bids b
+       SELECT SUM(b.ranking_amount_minor) AS listing_total
+       FROM ranking_payments b
        INNER JOIN listings l ON l.id = b.listing_id
        WHERE ${where.join(" AND ")}
        GROUP BY b.listing_id
@@ -102,13 +108,13 @@ export async function loadPublicBoard(db, board, { category, period, limit, page
        SELECT
          b.id AS bid_id,
          b.listing_id,
-         b.amount_minor,
+         b.ranking_amount_minor AS amount_minor,
          b.settled_at,
          l.title,
          l.destination_url,
          l.favicon_url,
-         (SELECT COALESCE(SUM(previous.amount_minor), 0)
-          FROM bids previous
+         (SELECT COALESCE(SUM(previous.ranking_amount_minor), 0)
+          FROM ranking_payments previous
           WHERE previous.board_id = b.board_id
             AND previous.listing_id = b.listing_id
             AND previous.status = 'settled'
@@ -120,7 +126,7 @@ export async function loadPublicBoard(db, board, { category, period, limit, page
            PARTITION BY b.listing_id
            ORDER BY b.settled_at DESC, b.id DESC
          ) AS activity_order
-       FROM bids b
+       FROM ranking_payments b
        INNER JOIN listings l ON l.id = b.listing_id
        WHERE ${where.join(" AND ")}
      )
@@ -202,11 +208,9 @@ export async function loadPublicBoard(db, board, { category, period, limit, page
       has_previous: page > 1,
       has_next: page * limit < total,
     },
-    // One number does three jobs: the smallest payment, the step between
-    // places, and the price of an empty board. Every place costs the board's
-    // increment more than the one holding it — RM 15 over RM 10 — so every
-    // figure a merchant sees is a round RM 5, 10, 15.
-    next_bid_minor: topAmount + Number(board.min_increment_minor),
+    // Converted legacy totals can contain cents. New payments remain whole
+    // currency units, so round the suggested price upward after the increment.
+    next_bid_minor: Math.ceil((topAmount + Number(board.min_increment_minor)) / 100) * 100,
   };
 }
 
@@ -222,8 +226,8 @@ export async function loadPublicStats(db, board) {
           WHERE board_id = ?1
             AND CAST(strftime('%s', occurred_at) AS INTEGER) >= unixepoch() - 300) AS online_now,
          (SELECT COUNT(*) FROM click_events WHERE board_id = ?1) AS total_clicks,
-         (SELECT COALESCE(SUM(amount_minor), 0)
-          FROM bids
+         (SELECT COALESCE(SUM(ranking_amount_minor), 0)
+          FROM ranking_payments
           WHERE board_id = ?1 AND status = 'settled') AS settled_revenue_minor`,
     )
     .bind(board.id)
@@ -237,6 +241,7 @@ export async function loadPublicStats(db, board) {
     total_clicks: Number(result?.total_clicks || 0),
     settled_revenue_minor: Number(result?.settled_revenue_minor || 0),
     currency: board.currency,
+    currency_conversion: board.currency_conversion || null,
     updated_at: new Date().toISOString(),
   };
 }
@@ -538,6 +543,7 @@ function publicBoard(board) {
     name: board.name,
     currency: board.currency,
     min_increment_minor: Number(board.min_increment_minor),
+    currency_conversion: board.currency_conversion || null,
   };
 }
 
@@ -565,10 +571,10 @@ export async function loadListingRecord(db, listingId) {
     .prepare(
       `SELECT
          COUNT(*) AS bid_count,
-         COALESCE(SUM(amount_minor), 0) AS total_minor,
+         COALESCE(SUM(ranking_amount_minor), 0) AS total_minor,
          MIN(settled_at) AS first_settled_at,
          MAX(settled_at) AS last_settled_at
-       FROM bids
+       FROM ranking_payments
        WHERE listing_id = ?1 AND status = 'settled'`,
     )
     .bind(listingId)
@@ -590,12 +596,12 @@ export async function recordSnapshotEntries(db, snapshotId, boardId) {
            b.id AS bid_id,
            b.listing_id,
            b.settled_at,
-           SUM(b.amount_minor) OVER (PARTITION BY b.listing_id) AS total_minor,
+           SUM(b.ranking_amount_minor) OVER (PARTITION BY b.listing_id) AS total_minor,
            ROW_NUMBER() OVER (
              PARTITION BY b.listing_id
              ORDER BY b.settled_at DESC, b.id DESC
            ) AS listing_bid_order
-         FROM bids b
+         FROM ranking_payments b
          INNER JOIN listings l ON l.id = b.listing_id
          WHERE b.board_id = ?2 AND b.status = 'settled' AND l.status = 'approved'
        )
@@ -630,22 +636,22 @@ export async function loadSettledPayments(db, board, { limit, page = 1 }) {
       .all(),
     db
       .prepare(
-        `SELECT COUNT(*) AS settled_count, COALESCE(SUM(amount_minor), 0) AS total_minor
+        `SELECT currency, COUNT(*) AS settled_count, COALESCE(SUM(amount_minor), 0) AS total_minor
          FROM bids
-         WHERE board_id = ?1 AND status = 'settled'`,
+         WHERE board_id = ?1 AND status = 'settled' GROUP BY currency`,
       )
       .bind(board.id)
-      .first(),
+      .all(),
   ]);
 
-  const total = Number(summary?.settled_count || 0);
+  const totals = (summary?.results || []).map((row) => ({ currency: row.currency, total_minor: Number(row.total_minor), settled_count: Number(row.settled_count) }));
+  const total = totals.reduce((sum, row) => sum + row.settled_count, 0);
   return {
     board: publicBoard(board),
     payments: (result?.results || []).map(adminPayment),
     summary: {
       settled_count: total,
-      total_minor: Number(summary?.total_minor || 0),
-      currency: board.currency,
+      totals,
     },
     pagination: {
       page,
@@ -728,7 +734,15 @@ export async function saveListingShareCard(db, card) {
 
 export async function loadListingShareCard(db, listingId) {
   return db
-    .prepare("SELECT content_type, width, height, bytes, image, updated_at FROM listing_share_cards WHERE listing_id = ?1")
+    .prepare(`SELECT c.content_type, c.width, c.height, c.bytes, c.image, c.updated_at
+      FROM listing_share_cards c
+      JOIN listings l ON l.id = c.listing_id
+      JOIN boards b ON b.id = l.board_id
+      WHERE c.listing_id = ?1 AND NOT EXISTS (
+        SELECT 1 FROM board_currency_rates r
+        WHERE r.board_id = b.id AND r.target_currency = b.currency
+          AND r.created_at >= c.updated_at
+      )`)
     .bind(listingId)
     .first();
 }

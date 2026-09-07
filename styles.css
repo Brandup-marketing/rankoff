@@ -1557,3 +1557,5 @@ html[data-theme="light"] .category-logo:not(.has-icon) {
   .top-three-hero .featured-1 .featured-price strong { font-size: 1.5rem; }
   .top-three-hero .featured-price strong { font-size: 1.2rem; }
 }
+
+.currency-note { color: var(--muted, #a8a8ad); font-size: 0.78rem; line-height: 1.55; margin: 0.75rem 0; max-width: 78ch; }

@@ -1,6 +1,6 @@
 # RANKOFF
 
-Rankoff is a public sponsored leaderboard where Malaysian businesses pay for visible rank.
+Rankoff is a public sponsored leaderboard where businesses worldwide pay for visible rank.
 
 ## Canonical Site
 
@@ -19,7 +19,7 @@ Rankoff lets a visitor sponsor an eligible public business URL or social profile
 
 Clicks are redirects recorded by Rankoff. Repeats and automated traffic are not filtered, so a tracked click is not a unique visitor, an enquiry or a sale. Do not describe Rankoff's clicks as "verified", and do not present them as customers or leads.
 
-The floor is RM5, which is the payment provider's minimum. Any whole ringgit at or above RM5 is accepted; a listing ranks by the total it has paid.
+The minimum payment is US$1. Any whole US dollar at or above US$1 is accepted; a listing ranks by the total it has paid.
 
 ## Current Status
 

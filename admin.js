@@ -400,7 +400,7 @@
     state.pages = Number(payload.pagination?.total_pages || 1);
 
     if (elements.count) elements.count.textContent = String(Number(payload.summary?.settled_count || 0));
-    if (elements.total) elements.total.textContent = formatAmount(payload.summary?.total_minor, state.currency);
+    if (elements.total) elements.total.textContent = (payload.summary?.totals || []).map((total) => formatAmount(total.total_minor, total.currency)).join(" + ") || formatAmount(0, state.currency);
     if (elements.summary) elements.summary.hidden = false;
 
     if (elements.rows) {
@@ -449,7 +449,7 @@
       setStatus(text("cardsWorking").replace("{n}", String(rankings.length)));
       for (const entry of rankings) {
         const listing = entry.listing || {};
-        const money = `RM ${Math.ceil(Number(entry.bid?.amount_minor || 0) / 100)}`;
+        const money = formatAmount(entry.bid?.amount_minor, board.board?.currency || "USD");
         const model = C.buildCardModel({
           language: "en",
           card: {

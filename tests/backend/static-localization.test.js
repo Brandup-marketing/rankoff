@@ -23,11 +23,11 @@ test("the Chinese home page is indexable before JavaScript runs", () => {
   const schema = JSON.parse(html.match(/<script id="website-schema" type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
 
   assert.match(html, /<html lang="zh-Hans"/);
-  assert.match(html, /<title>RANKOFF｜付费排名榜，RM5 起<\/title>/);
+  assert.match(html, /<title>RANKOFF｜付费排名榜，US\$1 起<\/title>/);
   assert.match(html, /<link rel="canonical" href="https:\/\/rankoff\.my\/\?lang=zh" \/>/);
   assert.match(html, /<meta property="og:locale" content="zh_MY" \/>/);
   assert.match(html, /<meta property="og:locale:alternate" content="en_MY" \/>/);
-  assert.match(html, /<h1 id="page-title"><strong data-hero-next-price>RM 5<\/strong>.*拿下.*data-hero-rank>第 1 名<\/span>.*<\/h1>/);
+  assert.match(html, /<h1 id="page-title"><strong data-hero-next-price>US\$ 1<\/strong>.*拿下.*data-hero-rank>第 1 名<\/span>.*<\/h1>/);
   assert.match(html, /data-i18n="heroCopy">把你的生意放在顾客第一眼看到的位置/);
   assert.match(html, /data-i18n-placeholder="searchPlaceholder"[^>]*placeholder="搜索商家和市场…"/);
   assert.match(html, /data-i18n-aria-label="rankingTimeframe"[^>]*aria-label="排名时间范围"/);

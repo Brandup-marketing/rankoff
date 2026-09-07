@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Start at RM5 on Rankoff and compete for visible sponsored rank. Totals paid and tracked clicks remain public."
+      content="Start at US$1 on Rankoff and compete for visible sponsored rank. Totals paid and tracked clicks remain public."
     />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href="https://rankoff.my/" />
@@ -16,20 +16,20 @@
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="en_MY" />
     <meta property="og:locale:alternate" content="zh_MY" />
-    <meta property="og:title" content="RANKOFF | Pay RM5, hold #1" />
-    <meta property="og:description" content="A public leaderboard for Malaysian businesses. RM5 (~$1) to get on it — and every listing, payment and click is public." />
+    <meta property="og:title" content="RANKOFF | Start at US$1, compete for #1" />
+    <meta property="og:description" content="A public leaderboard for businesses worldwide. US$1 to get on it — and every listing, payment and click is public." />
     <meta property="og:url" content="https://rankoff.my/" />
     <meta property="og:image" content="https://rankoff.my/assets/rankoff-og-card.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="RANKOFF | Pay RM5, hold #1" />
-    <meta name="twitter:description" content="A public leaderboard for Malaysian businesses. RM5 (~$1) to get on it — and every listing, payment and click is public." />
+    <meta name="twitter:title" content="RANKOFF | Start at US$1, compete for #1" />
+    <meta name="twitter:description" content="A public leaderboard for businesses worldwide. US$1 to get on it — and every listing, payment and click is public." />
     <meta name="twitter:image" content="https://rankoff.my/assets/rankoff-og-card.png" />
     <meta name="theme-color" content="#090a0c" />
-    <title>RANKOFF | Pay-to-rank leaderboard, from RM5</title>
+    <title>RANKOFF | Pay-to-rank leaderboard, from US$1</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=94" />
+    <link rel="stylesheet" href="./styles.css?v=95" />
     <link rel="stylesheet" href="./answers.css?v=2" />
     <script id="website-schema" type="application/ld+json">
       {
@@ -37,7 +37,7 @@
         "@type": "WebSite",
         "name": "RANKOFF",
         "url": "https://rankoff.my/",
-        "description": "Rankoff is a public sponsored leaderboard where Malaysian businesses pay for visible rank. Rank, total paid and tracked clicks are public.",
+        "description": "Rankoff is a public sponsored leaderboard where businesses worldwide pay for visible rank. Rank, total paid and tracked clicks are public.",
         "publisher": {
           "@type": "Organization",
           "name": "RANKOFF",
@@ -80,7 +80,7 @@
 
       <section class="claim-stage" id="claim" aria-labelledby="page-title">
         <div class="claim-panel">
-          <h1 id="page-title"><span class="hero-word" data-hero-lead>Claim </span><span data-hero-rank>#1</span><span data-hero-market></span><span class="hero-word" data-hero-join> for </span><strong data-hero-next-price>RM 5</strong></h1>
+          <h1 id="page-title"><span class="hero-word" data-hero-lead>Claim </span><span data-hero-rank>#1</span><span data-hero-market></span><span class="hero-word" data-hero-join> for </span><strong data-hero-next-price>US$ 1</strong></h1>
           <p class="claim-copy" data-hero-context data-i18n="heroCopy">Put your business where customers look first. It stays at the top until someone pays more.</p>
 
           <div class="market-entry" data-market-entry data-entry-collapsed="true">
@@ -89,15 +89,15 @@
             <button class="entry-toggle" type="button" data-entry-toggle aria-expanded="false" aria-controls="entry-form"><span data-entry-toggle-label>Enter your website</span><span class="entry-toggle-icon" aria-hidden="true">→</span></button>
             <form class="bid-console" id="entry-form" data-inline-challenge data-i18n-aria-label="challengeLeaderboard" aria-label="Challenge the leaderboard">
               <div class="amount-control">
-                <button type="button" data-inline-adjust="-5" data-i18n-aria-label="decreaseBid" aria-label="Decrease by RM5">−</button>
+                <button type="button" data-inline-adjust="-1" data-i18n-aria-label="decreaseBid" aria-label="Decrease by US$1">−</button>
                 <label>
                   <span data-i18n="totalBid">Your payment</span>
                   <span class="money-field">
-                    <b aria-hidden="true" data-currency-symbol>$</b>
-                    <input name="challengeAmount" type="number" inputmode="numeric" min="5" max="1000000" step="1" required data-inline-bid />
+                    <b aria-hidden="true" data-currency-symbol>US$</b>
+                    <input name="challengeAmount" type="number" inputmode="numeric" min="1" max="1000000" step="1" required data-inline-bid />
                   </span>
                 </label>
-                <button type="button" data-inline-adjust="5" data-i18n-aria-label="increaseBid" aria-label="Increase by RM5">+</button>
+                <button type="button" data-inline-adjust="1" data-i18n-aria-label="increaseBid" aria-label="Increase by US$1">+</button>
               </div>
 
               <label class="field field-wide">
@@ -146,6 +146,7 @@
             </div>
           </div>
 
+          <p class="currency-note" data-currency-note hidden></p>
           <div class="top-three top-three-hero" data-top-three data-i18n-aria-label="topThree" aria-label="Top three sponsored listings"></div>
           <p class="audience-strip" data-audience-strip hidden>
             <span><strong data-stat-visitors>—</strong> <span data-i18n="statVisitors">visitor sessions</span></span>
@@ -211,7 +212,7 @@
           <a href="/legal#rules" data-language-link data-i18n="readRules">Read all rules →</a>
         </div>
         <ol class="rules-flow">
-          <li><span class="rules-glyph" aria-hidden="true">RM</span><strong data-i18n="stepPay">Pay</strong><span data-i18n="stepPayCopy">One payment, from RM5.</span></li>
+          <li><span class="rules-glyph" aria-hidden="true">US$</span><strong data-i18n="stepPay">Pay</strong><span data-i18n="stepPayCopy">One payment, from US$1.</span></li>
           <li><span class="rules-glyph" aria-hidden="true">#1</span><strong data-i18n="stepRank">Rank</strong><span data-i18n="stepRankCopy">Highest total paid takes #1.</span></li>
           <li><span class="rules-glyph" aria-hidden="true">↑</span><strong data-i18n="stepHold">Hold</strong><span data-i18n="stepHoldCopy">Until someone pays more. Top up any time.</span></li>
         </ol>
@@ -258,9 +259,9 @@
         </section>
 
         <dl class="bid-breakdown" data-dialog-breakdown>
-          <div><dt data-i18n="alreadyPaid">Already paid</dt><dd data-dialog-previous>RM 0</dd></div>
-          <div><dt data-i18n="payNow">Pay now</dt><dd data-dialog-now>RM 0</dd></div>
-          <div><dt data-i18n="totalAfter">Total after</dt><dd data-dialog-after>RM 0</dd></div>
+          <div><dt data-i18n="alreadyPaid">Already paid</dt><dd data-dialog-previous>US$ 0</dd></div>
+          <div><dt data-i18n="payNow">Pay now</dt><dd data-dialog-now>US$ 0</dd></div>
+          <div><dt data-i18n="totalAfter">Total after</dt><dd data-dialog-after>US$ 0</dd></div>
         </dl>
 
         <input id="bid-amount" name="bidAmount" type="hidden" />
@@ -323,6 +324,7 @@
     <script src="./search.js?v=7" defer></script>
     <script src="./share-card.js?v=7" type="module"></script>
     <script src="./share.js?v=8" defer></script>
-    <script src="./app.js?v=106" defer></script>
+    <script src="./app.js?v=107" defer></script>
+    <script type="module" src="/currency.js?v=1"></script>
   </body>
 </html>

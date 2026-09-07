@@ -45,7 +45,7 @@ function fakeDatabase({ rows = [SETTLED_ROW], summary = { settled_count: 1, tota
         bind(...bindings) {
           statements.push({ sql, bindings });
           return {
-            all: async () => ({ results: rows }),
+            all: async () => ({ results: sql.includes("GROUP BY currency") ? [{ currency: "MYR", ...summary }] : sql.includes("board_currency_rates") ? [] : rows }),
             first: async () => (sql.includes("FROM boards") ? BOARD : summary),
           };
         },
@@ -84,7 +84,7 @@ test("the owner query reads settled bids for one board, paginated", async () => 
   const listQuery = db.statements.find((statement) => statement.sql.includes("FROM bids b"));
   assert.ok(listQuery.sql.includes("b.status = 'settled'"));
   assert.deepEqual(listQuery.bindings, ["board_1", 2, 2]);
-  assert.deepEqual(payload.summary, { settled_count: 4, total_minor: 2000, currency: "MYR" });
+  assert.deepEqual(payload.summary, { settled_count: 4, totals: [{ total_minor: 2000, currency: "MYR", settled_count: 4 }] });
   assert.deepEqual(payload.pagination, {
     page: 2,
     page_size: 2,

@@ -39,7 +39,7 @@ test("a listing slug is a hostname, never a path or an injection", () => {
 
 test("money follows the board currency", () => {
   assert.equal(formatMoney(500, "MYR"), "RM 5");
-  assert.equal(formatMoney(1250, "USD"), "USD 13");
+  assert.equal(formatMoney(1250, "USD"), "US$ 12.5");
   assert.equal(formatDate("2026-08-31T23:59:59.000Z", "zh"), "2026年8月31日");
   assert.equal(normalizeProductLanguage("zh-Hans"), "zh");
   assert.equal(normalizeProductLanguage("de"), "en");
@@ -249,8 +249,8 @@ test("the share image points at this listing's own resolver", () => {
     shell,
     buildProductView({ entry, todayEntry: null, board: { currency: "MYR" }, snapshotId: "", record: null }),
   );
-  assert.match(html, /<meta property="og:image" content="https:\/\/rankoff\.my\/og\/brandupdesignmarketing\.com" \/>/);
-  assert.match(html, /<meta name="twitter:image" content="https:\/\/rankoff\.my\/og\/brandupdesignmarketing\.com" \/>/);
+  assert.match(html, /<meta property="og:image" content="https:\/\/rankoff\.my\/og\/brandupdesignmarketing\.com\?currency=MYR" \/>/);
+  assert.match(html, /<meta name="twitter:image" content="https:\/\/rankoff\.my\/og\/brandupdesignmarketing\.com\?currency=MYR" \/>/);
   // The merchant's image is whatever size they publish, so a fixed one would lie.
   assert.ok(!html.includes("og:image:width"), "a hardcoded size must not survive");
   assert.ok(!html.includes("og:image:height"), "a hardcoded size must not survive");

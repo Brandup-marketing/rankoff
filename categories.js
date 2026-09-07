@@ -5,7 +5,10 @@
   const canonicalLink = document.querySelector('link[rel="canonical"]');
   const initialCanonical = canonicalLink?.href || "https://rankoff.my/categories";
   const compact = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
-  const boardCurrencyFormat = (code) => new Intl.NumberFormat(code === "MYR" ? "en-MY" : "en-US", { style: "currency", currency: code || "USD", maximumFractionDigits: 0 });
+  const boardCurrencyFormat = (code = "USD") => {
+    const formatter = new Intl.NumberFormat(code === "MYR" ? "en-MY" : "en-US", { style: "currency", currency: code, minimumFractionDigits: 0, maximumFractionDigits: 2 });
+    return { format: (amount) => formatter.format(amount).replace(/^\$/, "US$") };
+  };
   let currency = boardCurrencyFormat("USD");
   const categoryConfig = [
     { id: "AI", name: "AI Tools & Agents", zh: "AI 工具与智能体", icon: "✧", members: ["AI", "Agents", "AIMedia"] },
@@ -148,7 +151,7 @@
       url: String(entry?.listing?.url || "https://rankoff.my"),
       icon: String(entry?.listing?.favicon_url || ""),
       category: String(entry?.listing?.category || "Other"),
-      bid: Math.max(1, Math.round(Number(entry?.bid?.amount_minor || 100) / 100)),
+      bid: Number(entry?.bid?.amount_minor || 0) / 100,
       clicks: Math.max(0, Math.round(Number(entry?.clicks || 0))),
       age: entry?.bid?.settled_at || "",
       period,
@@ -375,7 +378,7 @@
       const claim = document.createElement("a");
       claim.className = "category-claim";
       claim.href = claimHrefFor(config.id);
-      const price = currency.format(rows[0].bid + elements.floorUnits);
+      const price = currency.format(Math.ceil(rows[0].bid + elements.floorUnits));
       const label = document.createElement("span");
       const amount = document.createElement("strong");
       amount.textContent = price;

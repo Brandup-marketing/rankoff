@@ -1,3 +1,4 @@
+import { currencyNotice } from "../../currency.js";
 // Server-rendered listing pages. The board decides the numbers; this file only
 // formats them into the shell that /listing already ships, so a crawler, a
 // WhatsApp preview and a reader without JavaScript all see the same record.
@@ -94,8 +95,8 @@ export function canonicalDetailPath(identity) {
 }
 
 export function formatMoney(amountMinor, currency) {
-  const amount = Math.ceil(Number(amountMinor || 0) / 100);
-  return currency === "MYR" ? `RM ${amount}` : `${currency} ${amount}`;
+  const amount = new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format(Number(amountMinor || 0) / 100);
+  return currency === "MYR" ? `RM ${amount}` : `${currency === "USD" ? "US$" : currency} ${amount}`;
 }
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -181,9 +182,9 @@ export function buildProductView({ entry, todayEntry, board, snapshotId, record,
   const identity = String(listing.hostname || "");
   const parts = identityParts(identity);
   const label = displayName(identity);
-  const currency = String(board?.currency || "MYR").toUpperCase();
-  const bidAmount = Math.ceil(Number(entry.bid?.amount_minor || 0) / 100);
-  const todayBidAmount = todayEntry ? Math.ceil(Number(todayEntry.bid?.amount_minor || 0) / 100) : null;
+  const currency = String(board?.currency || "USD").toUpperCase();
+  const bidAmount = Number(entry.bid?.amount_minor || 0) / 100;
+  const todayBidAmount = todayEntry ? Number(todayEntry.bid?.amount_minor || 0) / 100 : null;
   const nextBidAmount = nextBidMinor !== null && Number.isFinite(Number(nextBidMinor))
     ? Math.ceil(Number(nextBidMinor) / 100)
     : null;
@@ -213,7 +214,7 @@ export function buildProductView({ entry, todayEntry, board, snapshotId, record,
     // hand us a share image of its own.
     shareImage: parts.platform
       ? `${SITE_ORIGIN}/assets/rankoff-og-card.png`
-      : `${SITE_ORIGIN}/og/${parts.hostname}`,
+      : `${SITE_ORIGIN}/og/${parts.hostname}?currency=${encodeURIComponent(currency)}`,
     title,
     description,
     category: String(listing.category || "Other"),
@@ -225,6 +226,7 @@ export function buildProductView({ entry, todayEntry, board, snapshotId, record,
     bid,
     bidAmount,
     currency,
+    currencyConversion: board?.currency_conversion || null,
     clicks,
     todayRank: todayEntry ? Number(todayEntry.rank) : null,
     todayBid: todayEntry ? formatMoney(todayEntry.bid?.amount_minor, currency) : null,
@@ -253,19 +255,19 @@ export function buildProductView({ entry, todayEntry, board, snapshotId, record,
     // board is large the overall number wins this comparison on its own.
     pageTitle: `${title} — ${headline}`,
     metaDescription: clamp(locale === "zh"
-      ? `${title}以 ${bid} 累计付款位列 Rankoff ${position}，获得 ${clicks} 次追踪点击。`
-      : `${title} holds ${position} on Rankoff with ${bid} paid and ${clicks} tracked clicks. ${description}`,
+      ? `${title}以 ${bid}${board?.currency_conversion?.length ? " 等值" : ""} 累计付款位列 Rankoff ${position}，获得 ${clicks} 次追踪点击。`
+      : `${title} holds ${position} on Rankoff with ${bid}${board?.currency_conversion?.length ? " equivalent" : ""} paid and ${clicks} tracked clicks. ${description}`,
     200),
   };
 }
 
 function replaceTag(html, pattern, replacement) {
-  return pattern.test(html) ? html.replace(pattern, replacement) : html;
+  return pattern.test(html) ? html.replace(pattern, () => replacement) : html;
 }
 
 function replaceDataCopy(html, key, value) {
   const pattern = new RegExp(`(<([a-z][a-z0-9-]*)\\b[^>]*\\bdata-copy="${key}"[^>]*>)[\\s\\S]*?(<\\/\\2>)`, "gi");
-  return html.replace(pattern, `$1${escapeHtml(value)}$3`);
+  return html.replace(pattern, (match, open, tag, close) => `${open}${escapeHtml(value)}${close}`);
 }
 
 export function localizeProductShell(shell, language = "en") {
@@ -290,6 +292,8 @@ export function localizeProductShell(shell, language = "en") {
 
 export function renderProductPage(shell, view) {
   const title = escapeHtml(view.pageTitle);
+  const notice = currencyNotice(view.currencyConversion, view.language);
+  if (notice) shell = shell.replace('<p class="currency-note" data-currency-note hidden></p>', `<p class="currency-note" data-currency-note>${escapeHtml(notice)}</p>`);
   const description = escapeHtml(view.metaDescription);
   const canonical = escapeHtml(view.canonical);
   const canonicalBase = escapeHtml(view.canonicalBase || view.canonical);

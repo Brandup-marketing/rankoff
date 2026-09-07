@@ -50,6 +50,20 @@ export async function createDodoCheckout(env, bid) {
   const apiBase = env.DODO_ENVIRONMENT === "live_mode"
     ? "https://live.dodopayments.com"
     : "https://test.dodopayments.com";
+  // The dynamic amount uses the PRODUCT's currency. Merely changing the
+  // board or billing_currency can otherwise charge a different amount.
+  const productResponse = await fetch(`${apiBase}/products/${encodeURIComponent(env.DODO_PRODUCT_ID)}`, {
+    headers: { Authorization: `Bearer ${env.DODO_PAYMENTS_API_KEY}`, Accept: "application/json" },
+  });
+  if (!productResponse.ok) throw new ApiError(502, "checkout_provider_error", "Hosted checkout could not be verified.");
+  let product;
+  try {
+    product = JSON.parse(await readText(productResponse, { maxBytes: 64 * 1024 }));
+  } catch (error) {
+    if (error instanceof ApiError) throw error;
+    throw new ApiError(502, "checkout_provider_error", "Hosted checkout returned an invalid product response.");
+  }
+  validateCheckoutProduct(product, bid);
   const returnUrl = buildCheckoutReturnUrl(env.DODO_RETURN_URL, bid.id);
   const response = await fetch(`${apiBase}/checkouts`, {
     method: "POST",
@@ -60,11 +74,12 @@ export async function createDodoCheckout(env, bid) {
     },
     body: JSON.stringify({
       product_cart: [{ product_id: env.DODO_PRODUCT_ID, quantity: 1, amount: bid.amountMinor }],
+      billing_currency: bid.currency,
       // Advertising placement is a simple B2C charge: no buyer tax id, and the
       // hosted page's tax-id validation rejects Malaysian formats anyway.
       // A Malaysian merchant is reached on WhatsApp, so the number is worth the
       // extra field; without require_phone_number the provider may return none.
-      feature_flags: { allow_tax_id: false, allow_phone_number_collection: true, require_phone_number: true },
+      feature_flags: { allow_tax_id: false, allow_phone_number_collection: true, require_phone_number: true, allow_currency_selection: false, allow_discount_code: false },
       return_url: returnUrl,
       metadata: {
         rankoff_bid_id: bid.id,
@@ -96,4 +111,15 @@ export async function createDodoCheckout(env, bid) {
     paymentId: payload.payment_id ? String(payload.payment_id) : null,
     checkoutUrl: String(payload.checkout_url),
   };
+}
+
+export function validateCheckoutProduct(product, bid) {
+  const price = product?.price;
+  if (product?.is_recurring || price?.type !== "one_time_price"
+      || price.currency !== bid.currency || price.pay_what_you_want !== true
+      || price.purchasing_power_parity === true || Number(price.discount || 0) !== 0
+      || price.tax_inclusive !== true
+      || !Number.isSafeInteger(price.price) || price.price > bid.amountMinor) {
+    throw new ServiceUnavailableError("payment_product_mismatch", "Checkout pricing is being updated. No charge was made.");
+  }
 }

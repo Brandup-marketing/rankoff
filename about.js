@@ -11,13 +11,13 @@
   const pageMetadata = {
     en: {
       title: "About RANKOFF",
-      description: "How Rankoff works: Malaysian businesses pay to hold a spot on a public board, and every total and click stays visible.",
-      socialDescription: "How Rankoff works: Malaysian businesses pay to hold a spot on a public board, and every total and click stays visible.",
+      description: "How Rankoff works: businesses worldwide pay to hold a spot on a public board, and every total and click stays visible.",
+      socialDescription: "How Rankoff works: businesses worldwide pay to hold a spot on a public board, and every total and click stays visible.",
     },
     zh: {
       title: "关于 RANKOFF",
-      description: "Rankoff 怎么运作：马来西亚商家付费占据公开榜单的位置，每一笔付款和点击都公开可见。",
-      socialDescription: "Rankoff 怎么运作：马来西亚商家付费占据公开榜单的位置，每一笔付款和点击都公开可见。",
+      description: "Rankoff 怎么运作：全球商家付费占据公开榜单的位置，每一笔付款和点击都公开可见。",
+      socialDescription: "Rankoff 怎么运作：全球商家付费占据公开榜单的位置，每一笔付款和点击都公开可见。",
     },
   };
   const accessibilityCopy = {
@@ -35,7 +35,7 @@
   const translations = new Map([
     ["Board", "榜单"], ["Categories", "分类"], ["About", "关于"],
     ["The story behind the board", "榜单背后的故事"], ["Attention has a price.", "注意力，明码标价。"], ["Make it visible.", "让它公开可见。"],
-    ["RANKOFF is the public leaderboard for Malaysian businesses. Pay to hold a spot, show customers what you do, and keep it until someone pays more. One board, one rule: the highest total paid takes #1.", "RANKOFF 是马来西亚商家的公开榜单。付费占一个位置，把你的生意展示给顾客，直到有人付得更多。一个榜单，一条规则：累计付款最高者，就是第 1 名。"],
+    ["RANKOFF is the public leaderboard for businesses worldwide. Pay to hold a spot, show customers what you do, and keep it until someone pays more. One board, one rule: the highest total paid takes #1.", "RANKOFF 是全球商家的公开榜单。付费占一个位置，把你的生意展示给顾客，直到有人付得更多。一个榜单，一条规则：累计付款最高者，就是第 1 名。"],
     ["Why it exists", "为什么有 Rankoff"], ["Rankoff started with one question.", "Rankoff 始于一个问题。"],
     ["What if a business could buy the top spot in the open, not in a hidden ad auction? What if everyone could see who is on top, what it cost, and who is getting the clicks?", "如果商家可以光明正大买下最显眼的位置，而不是在看不见的广告竞价里？如果每个人都能看到谁在榜首、花了多少钱、谁拿到了点击？"],
     ["Rankoff is the answer: a public board where the price, the position and the clicks are all on show, and every listing is labelled as sponsored.", "Rankoff 就是答案：一个公开榜单，价格、排名、点击全部公开，每个条目都标明是赞助。"],
@@ -46,7 +46,7 @@
     ["live listings", "上榜条目"], ["tracked clicks", "追踪点击"], ["top total paid", "最高累计付款"],
     ["How it works", "运作方式"], ["The board keeps moving.", "榜单一直在动。"],
     ["List your business", "让生意上榜"], ["Compete in public", "公开竞争"], ["See what it earns", "看看回报"],
-    ["Now", "现在"], ["Enter your website, choose a market, and pay from RM5.", "输入网站、选择市场，RM5 起付款。"],
+    ["Now", "现在"], ["Enter your website, choose a market, and pay from US$1.", "输入网站、选择市场，US$1 起付款。"],
     ["Then", "随后"], ["Once payment settles, your business, your total and your position are on the board for everyone to see.", "付款确认后，你的生意、累计付款和排名就公开在榜单上，人人可见。"],
     ["Next", "接下来"], ["Tracked clicks show how many people went from the board to your website.", "追踪点击告诉你，有多少人从榜单点进了你的网站。"],
     ["Real numbers from the board, updated live.", "榜单真实数据，实时更新。"],
@@ -167,7 +167,10 @@
 
   if (!/^https?:$/.test(window.location.protocol)) return;
   const compact = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
-  const boardCurrencyFormat = (code) => new Intl.NumberFormat(code === "MYR" ? "en-MY" : "en-US", { style: "currency", currency: code || "USD", maximumFractionDigits: 0 });
+  const boardCurrencyFormat = (code = "USD") => {
+    const formatter = new Intl.NumberFormat(code === "MYR" ? "en-MY" : "en-US", { style: "currency", currency: code, minimumFractionDigits: 0, maximumFractionDigits: 2 });
+    return { format: (amount) => formatter.format(amount).replace(/^\$/, "US$") };
+  };
   let currency = boardCurrencyFormat("USD");
   // Never leave a number on screen that did not come from the board.
   function showUnavailable() {

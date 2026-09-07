@@ -7,10 +7,10 @@ const SITE_ORIGIN = "https://rankoff.my";
 const STATIC_LOCALIZED_METADATA = Object.freeze({
   home: Object.freeze({
     path: "/",
-    title: "RANKOFF｜付费排名榜，RM5 起",
-    description: "在 Rankoff 付费拿下第 1 名。RM5 起的公开赞助榜单——排名、累计已付与追踪点击全部公开。",
-    socialTitle: "RANKOFF｜RM5 拿下第 1 名",
-    socialDescription: "面向马来西亚商家的公开赞助榜单。RM5 起即可上榜；累计付款金额和追踪点击公开可见。",
+    title: "RANKOFF｜付费排名榜，US$1 起",
+    description: "在 Rankoff 付费拿下第 1 名。US$1 起的公开赞助榜单——排名、累计已付与追踪点击全部公开。",
+    socialTitle: "RANKOFF｜US$1 起，竞逐第 1 名",
+    socialDescription: "面向全球商家的公开赞助榜单。US$1 起即可上榜；累计付款金额和追踪点击公开可见。",
   }),
   categories: Object.freeze({
     path: "/categories",
@@ -22,9 +22,9 @@ const STATIC_LOCALIZED_METADATA = Object.freeze({
   about: Object.freeze({
     path: "/about",
     title: "关于 RANKOFF",
-    description: "Rankoff 怎么运作：马来西亚商家付费占据公开榜单的位置，每一笔付款和点击都公开可见。",
+    description: "Rankoff 怎么运作：全球商家付费占据公开榜单的位置，每一笔付款和点击都公开可见。",
     socialTitle: "关于 RANKOFF",
-    socialDescription: "Rankoff 怎么运作：马来西亚商家付费占据公开榜单的位置，每一笔付款和点击都公开可见。",
+    socialDescription: "Rankoff 怎么运作：全球商家付费占据公开榜单的位置，每一笔付款和点击都公开可见。",
   }),
 });
 
@@ -40,12 +40,12 @@ const HOME_STATIC_COPY = Object.freeze({
   reporting: "数据", reportingCopy: "所选时间范围内的追踪点击。重复与自动化流量未经过滤——一次点击不等于一位客户。", readRules: "查看完整规则 →",
   askWhatIs: "什么是付费排名榜？", askHowWorks: "Rankoff 排名怎么算？", askHowSponsor: "怎么赞助一个网站或社交账号？",
   rulesLink: "规则", terms: "条款", termsOfService: "服务条款", privacyLink: "隐私", payments: "付款", footerCredit: "Brandup Marketing 出品",
-  confirmRank: "确认此排名", confirmRankIntro: "核对排名与价格，同意《服务条款》后继续。", rankLabel: "排名", priceLabel: "价格", dueNow: "现在支付", stepPay: "付款", stepPayCopy: "一次付清，RM5 起。", stepRank: "排名", stepRankCopy: "累计付款最高者拿下第 1 名。", stepHold: "保持", stepHoldCopy: "直到有人付得更多。随时可追加。", statVisitors: "访问人次", statClicks: "次点进商家", statPaid: "商家已付", statWindow: "全时段，由 Rankoff 统计", alreadyPaid: "已付金额", payNow: "本次支付", totalAfter: "付款后累计",
+  confirmRank: "确认此排名", confirmRankIntro: "核对排名与价格，同意《服务条款》后继续。", rankLabel: "排名", priceLabel: "价格", dueNow: "现在支付", stepPay: "付款", stepPayCopy: "一次付清，US$1 起。", stepRank: "排名", stepRankCopy: "累计付款最高者拿下第 1 名。", stepHold: "保持", stepHoldCopy: "直到有人付得更多。随时可追加。", statVisitors: "访问人次", statClicks: "次点进商家", statPaid: "商家已付", statWindow: "全时段，由 Rankoff 统计", alreadyPaid: "已付金额", payNow: "本次支付", totalAfter: "付款后累计",
   confirmationCopy: "付款确认后，你的条目会以此排名上线。其他人仍可付更多取得更高排名。此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。",
   agreeTermsPrefix: "我了解这是为一个公开链接购买的赞助展示，付款不会获得该账号的所有权或编辑权，被展示方可要求下架。我同意《",
   agreeTermsSuffix: "》。", cancel: "取消", continueCheckout: "继续付款", close: "关闭", searchPlaceholder: "搜索商家和市场…",
   brandHome: "RANKOFF 首页", brandLogoAlt: "RANKOFF — 付费排名榜", rankingTimeframe: "排名时间范围", mainNavigation: "主导航",
-  searchResults: "搜索结果", challengeLeaderboard: "挑战排行榜", decreaseBid: "减少 RM5", increaseBid: "增加 RM5",
+  searchResults: "搜索结果", challengeLeaderboard: "挑战排行榜", decreaseBid: "减少 US$1", increaseBid: "增加 US$1",
   filterCategory: "按类别筛选", topThree: "赞助榜单前三名", boardPulse: "榜单动态", boardListings: "赞助条目榜单",
   pageNumbers: "页码", answers: "常见问题", closeDialog: "关闭对话框", rankPrice: "排名与价格",
 });
@@ -59,7 +59,7 @@ const CATEGORIES_STATIC_COPY = Object.freeze({
 const ABOUT_STATIC_COPY = Object.freeze({
   Board: "榜单", Categories: "分类", About: "关于", "The story behind the board": "榜单背后的故事",
   "Attention has a price.": "注意力，明码标价。", "Make it visible.": "让它公开可见。",
-  "RANKOFF is the public leaderboard for Malaysian businesses. Pay to hold a spot, show customers what you do, and keep it until someone pays more. One board, one rule: the highest total paid takes #1.": "RANKOFF 是马来西亚商家的公开榜单。付费占一个位置，把你的生意展示给顾客，直到有人付得更多。一个榜单，一条规则：累计付款最高者，就是第 1 名。",
+  "RANKOFF is the public leaderboard for businesses worldwide. Pay to hold a spot, show customers what you do, and keep it until someone pays more. One board, one rule: the highest total paid takes #1.": "RANKOFF 是全球商家的公开榜单。付费占一个位置，把你的生意展示给顾客，直到有人付得更多。一个榜单，一条规则：累计付款最高者，就是第 1 名。",
   "Why it exists": "为什么有 Rankoff", "Rankoff started with one question.": "Rankoff 始于一个问题。",
   "What if a business could buy the top spot in the open, not in a hidden ad auction? What if everyone could see who is on top, what it cost, and who is getting the clicks?": "如果商家可以光明正大买下最显眼的位置，而不是在看不见的广告竞价里？如果每个人都能看到谁在榜首、花了多少钱、谁拿到了点击？",
   "Rankoff is the answer: a public board where the price, the position and the clicks are all on show, and every listing is labelled as sponsored.": "Rankoff 就是答案：一个公开榜单，价格、排名、点击全部公开，每个条目都标明是赞助。",
@@ -68,7 +68,7 @@ const ABOUT_STATIC_COPY = Object.freeze({
   Measured: "可衡量", "Evidence over promises": "数据胜于承诺", "Clicks are tracked redirects, counted by Rankoff and shown in public. No promises, just the number.": "点击是 Rankoff 记录的跳转次数，公开显示。不承诺效果，只给你数字。",
   "The board today": "榜单现况", "The board, right now.": "此刻的榜单。", "live listings": "上榜条目", "tracked clicks": "追踪点击", "top total paid": "最高累计付款",
   "Real numbers from the board, updated live.": "榜单真实数据，实时更新。", "Claim your spot →": "拿下你的位置 →", "How it works": "运作方式", "The board keeps moving.": "榜单一直在动。",
-  Now: "现在", "List your business": "让生意上榜", "Enter your website, choose a market, and pay from RM5.": "输入网站、选择市场，RM5 起付款。",
+  Now: "现在", "List your business": "让生意上榜", "Enter your website, choose a market, and pay from US$1.": "输入网站、选择市场，US$1 起付款。",
   Then: "随后", "Compete in public": "公开竞争", "Once payment settles, your business, your total and your position are on the board for everyone to see.": "付款确认后，你的生意、累计付款和排名就公开在榜单上，人人可见。",
   Next: "接下来", "See what it earns": "看看回报", "Tracked clicks show how many people went from the board to your website.": "追踪点击告诉你，有多少人从榜单点进了你的网站。",
   "A Brandup Marketing product": "Brandup Marketing 旗下产品", Rules: "规则", Terms: "条款", Privacy: "隐私", Payments: "付款",
@@ -89,7 +89,7 @@ function replaceStaticCopy(html, attribute, copy) {
   let output = html;
   for (const [key, value] of Object.entries(copy)) {
     const pattern = new RegExp(`(<([a-z][a-z0-9-]*)\\b[^>]*\\b${attribute}="${key}"[^>]*>)[\\s\\S]*?(<\\/\\2>)`, "gi");
-    output = output.replace(pattern, `$1${escapeHtml(value)}$3`);
+    output = output.replace(pattern, (match, open, tag, close) => `${open}${escapeHtml(value)}${close}`);
   }
   return output;
 }
@@ -101,8 +101,8 @@ function replaceMarkedAttribute(html, marker, target, copy) {
     const value = escapeHtml(copy[key]);
     const targetPattern = new RegExp(`(\\s${target}=)"[^"]*"`, "i");
     return targetPattern.test(tag)
-      ? tag.replace(targetPattern, `$1"${value}"`)
-      : tag.replace(/>$/, ` ${target}="${value}">`);
+      ? tag.replace(targetPattern, (match, prefix) => `${prefix}"${value}"`)
+      : tag.replace(/>$/, () => ` ${target}="${value}">`);
   });
 }
 
@@ -111,8 +111,8 @@ function replaceHeadAttribute(html, marker, target, value) {
     if (!marker.test(tag)) return tag;
     const escaped = escapeHtml(value);
     return new RegExp(`${target}="[^"]*"`, "i").test(tag)
-      ? tag.replace(new RegExp(`${target}="[^"]*"`, "i"), `${target}="${escaped}"`)
-      : tag.replace(/\s*\/>$/, ` ${target}="${escaped}" />`);
+      ? tag.replace(new RegExp(`${target}="[^"]*"`, "i"), () => `${target}="${escaped}"`)
+      : tag.replace(/\s*\/>$/, () => ` ${target}="${escaped}" />`);
   });
 }
 
@@ -160,7 +160,7 @@ export function localizeStaticPage(shell, page, language = "en") {
     html = replaceMarkedAttribute(html, "data-i18n-placeholder", "placeholder", HOME_STATIC_COPY);
     html = replaceMarkedAttribute(html, "data-i18n-aria-label", "aria-label", HOME_STATIC_COPY);
     html = replaceMarkedAttribute(html, "data-i18n-alt", "alt", HOME_STATIC_COPY);
-    const price = /<strong data-hero-next-price>([\s\S]*?)<\/strong>/.exec(html)?.[1] || "RM 5";
+    const price = /<strong data-hero-next-price>([\s\S]*?)<\/strong>/.exec(html)?.[1] || "US$ 1";
     html = html.replace(/<h1 id="page-title">[\s\S]*?<\/h1>/, `<h1 id="page-title"><strong data-hero-next-price>${price}</strong><span class="hero-word" data-hero-join> 拿下</span><span data-hero-market></span><span data-hero-rank>第 1 名</span><span class="hero-word" data-hero-lead></span></h1>`);
     html = html.replace(/>All-time<\/button>/g, ">全部时间</button>").replace(/>Past 24h<\/button>/g, ">近 24 小时</button>");
     html = html.replace(/(<span class="demo-state"[^>]*>\s*<i[^>]*><\/i>\s*)Live board(<\/span>)/, "$1实时榜单$2");
