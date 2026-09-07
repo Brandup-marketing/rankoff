@@ -969,7 +969,11 @@
       .map((segment) => decodeURIComponent(segment).replace(/^@/, "").toLowerCase());
     const first = segments[0] || "";
     const handle = platform.reject.includes(first) ? "" : platform.extract(segments);
-    const usable = handle && /^[a-z0-9](?:[a-z0-9._-]{0,58}[a-z0-9])?$/.test(handle);
+    // Matches the server's rule in functions/_lib/platform.js: a handle may open
+    // or close with an underscore (_umidesign_ is a real account), but it must
+    // carry a letter or digit and must not traverse.
+    const usable = handle && handle.length <= 60 && /^[a-z0-9._-]+$/.test(handle)
+      && /[a-z0-9]/.test(handle) && !handle.includes("..");
     return { ...platform, handle: usable ? handle : "" };
   }
 
@@ -1049,7 +1053,8 @@
     if (split > 0) {
       const platform = identity.slice(0, split);
       const handle = identity.slice(split + 1);
-      if (SOCIAL_PLATFORMS.includes(platform) && /^[a-z0-9](?:[a-z0-9._-]{0,58}[a-z0-9])?$/.test(handle)) {
+      if (SOCIAL_PLATFORMS.includes(platform) && handle.length <= 60 && /^[a-z0-9._-]+$/.test(handle)
+        && /[a-z0-9]/.test(handle) && !handle.includes("..")) {
         return `/profile/${platform}/${handle}`;
       }
       return "";

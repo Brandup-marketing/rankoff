@@ -82,7 +82,16 @@ export function accountFrom(url) {
     ? ""
     : platform.extract(segments);
 
-  const usable = Boolean(handle) && /^[a-z0-9](?:[a-z0-9._-]{0,58}[a-z0-9])?$/.test(handle);
+  // Anchoring both ends to a letter or digit rejected real accounts: Instagram,
+  // TikTok and X all allow a handle to open or close with an underscore, and
+  // _umidesign_ could not be listed or paid for. The handle still has to be safe
+  // to drop into /profile/<platform>/<handle>, so it must carry at least one
+  // letter or digit and must never contain "..", which no platform allows either.
+  const usable = Boolean(handle)
+    && handle.length <= 60
+    && /^[a-z0-9._-]+$/.test(handle)
+    && /[a-z0-9]/.test(handle)
+    && !handle.includes("..");
   return { key, label: platform.label, action: platform.action, handle: usable ? handle : "" };
 }
 

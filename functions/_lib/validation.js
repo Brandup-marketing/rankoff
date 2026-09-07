@@ -89,6 +89,12 @@ export function normalizeDestinationUrl(value) {
       `Use the ${account.label} profile address, such as ${hostname}/yourname — not a post, reel, story or group.`,
     );
   }
+  // A profile's address is the handle; anything in the query is the app's, not
+  // the merchant's. Instagram's share links carry ?stkn=, a token that expires
+  // and identifies whoever copied the link — it should not become the public
+  // destination every visitor clicks. A plain website keeps its query, which
+  // may be the page the merchant meant.
+  if (account?.handle) url.search = "";
 
   return {
     url: url.toString(),

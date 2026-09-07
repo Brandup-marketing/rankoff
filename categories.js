@@ -198,7 +198,8 @@
       const platform = identity.slice(0, separator);
       const handle = identity.slice(separator + 1);
       if (/^(?:instagram|tiktok|facebook|x|linktree|youtube|linkedin|xiaohongshu)$/.test(platform)
-        && /^[a-z0-9](?:[a-z0-9._-]{0,58}[a-z0-9])?$/.test(handle)) {
+        && handle.length <= 60 && /^[a-z0-9._-]+$/.test(handle)
+        && /[a-z0-9]/.test(handle) && !handle.includes("..")) {
         return `/profile/${platform}/${handle}`;
       }
     } else if (/^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+$/.test(identity)) {

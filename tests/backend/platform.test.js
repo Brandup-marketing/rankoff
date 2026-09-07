@@ -22,6 +22,32 @@ test("a profile address resolves to one identity however it is written", () => {
   assert.equal(identityOf("https://x.com/someone"), "x:someone");
 });
 
+test("a handle may open or close with an underscore, as the platforms allow", () => {
+  // _umidesign_ is a real Instagram account that could not be listed or paid
+  // for: the handle rule required a letter or digit at both ends.
+  assert.equal(identityOf("https://www.instagram.com/_umidesign_"), "instagram:_umidesign_");
+  assert.equal(identityOf("https://instagram.com/_umidesign"), "instagram:_umidesign");
+  assert.equal(identityOf("https://instagram.com/umidesign_"), "instagram:umidesign_");
+  assert.equal(identityOf("https://www.tiktok.com/@_shop_"), "tiktok:_shop_");
+  assert.equal(identityOf("https://x.com/_jack_"), "x:_jack_");
+  // The handle is placed in /profile/<platform>/<handle>, so it still may not
+  // traverse, and punctuation on its own is not an account.
+  assert.equal(refusal("https://instagram.com/.."), "profile_required");
+  assert.equal(refusal("https://instagram.com/."), "profile_required");
+  assert.equal(refusal("https://instagram.com/___"), "profile_required");
+  assert.equal(refusal("https://instagram.com/a..b"), "profile_required");
+});
+
+test("a share token is not the merchant's public destination", () => {
+  // Instagram's share links carry ?stkn=, which expires and identifies whoever
+  // copied the link. The stored destination is the profile itself.
+  const shared = normalizeDestinationUrl("https://www.instagram.com/_umidesign_?stkn=NDJjaGx2enRtYTZk");
+  assert.equal(shared.url, "https://www.instagram.com/_umidesign_");
+  assert.equal(shared.identity, "instagram:_umidesign_");
+  // A website's query may be the page the merchant meant, so it survives.
+  assert.match(normalizeDestinationUrl("https://example.com/shop?item=42").url, /\?item=42$/);
+});
+
 test("posts, reels, stories and groups are not profiles", () => {
   assert.equal(refusal("https://www.instagram.com/p/Cabc123/"), "profile_required");
   assert.equal(refusal("https://www.instagram.com/reel/Cabc123/"), "profile_required");
