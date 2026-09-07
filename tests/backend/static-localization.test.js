@@ -23,7 +23,7 @@ test("the Chinese home page is indexable before JavaScript runs", () => {
   const schema = JSON.parse(html.match(/<script id="website-schema" type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
 
   assert.match(html, /<html lang="zh-Hans"/);
-  assert.match(html, /<title>RANKOFF｜出价登上第 1 名<\/title>/);
+  assert.match(html, /<title>RANKOFF｜付费排名榜，RM5 起<\/title>/);
   assert.match(html, /<link rel="canonical" href="https:\/\/rankoff\.my\/\?lang=zh" \/>/);
   assert.match(html, /<meta property="og:locale" content="zh_MY" \/>/);
   assert.match(html, /<meta property="og:locale:alternate" content="en_MY" \/>/);

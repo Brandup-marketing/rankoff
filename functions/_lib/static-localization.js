@@ -7,8 +7,8 @@ const SITE_ORIGIN = "https://rankoff.my";
 const STATIC_LOCALIZED_METADATA = Object.freeze({
   home: Object.freeze({
     path: "/",
-    title: "RANKOFF｜出价登上第 1 名",
-    description: "在 Rankoff 出价登上第 1 名。用公开透明的赞助出价，让你的产品出现在实时榜单最显眼的位置。",
+    title: "RANKOFF｜付费排名榜，RM5 起",
+    description: "在 Rankoff 付费拿下第 1 名。RM5 起的公开赞助榜单——排名、累计已付与追踪点击全部公开。",
     socialTitle: "RANKOFF｜RM5 拿下第 1 名",
     socialDescription: "面向马来西亚商家的公开赞助榜单。RM5 起即可上榜；累计付款金额和追踪点击公开可见。",
   }),
@@ -33,7 +33,7 @@ const HOME_STATIC_COPY = Object.freeze({
   heroCopy: "把你的生意放在顾客第一眼看到的位置。直到有人付得更多，它都留在榜首。",
   totalBid: "付款金额", productUrl: "你的网站或社交账号", productUrlPlaceholder: "example.com 或 instagram.com/yourname",
   challengeCategory: "市场", chooseMarket: "选择市场", reviewBid: "确认并付款", markets: "市场",
-  todayRanking: "今日领先", seeAll: "查看全部", livePulse: "实时竞价", latestActivity: "最新动态", refresh: "刷新",
+  todayRanking: "今日领先", seeAll: "查看全部", livePulse: "实时付款", latestActivity: "最新动态", refresh: "刷新",
   boardSummary: "累计付款最高者第 1 名。随时追加付款即可上升。", howItWorks: "排名规则",
   rules: "每个条目都是付费广告。累计付款最高者排第一——没有奖品、没有抽奖，也不涉及任何运气成分。",
   position: "排名位置", positionCopy: "直到别的条目累计付款超过你为止。", charge: "费用", chargeCopy: "通过安全托管付款页面一次性付款。",
@@ -44,7 +44,7 @@ const HOME_STATIC_COPY = Object.freeze({
   confirmationCopy: "付款确认后，你的条目会以此排名上线。其他人仍可付更多取得更高排名。此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。",
   agreeTermsPrefix: "我了解这是为一个公开链接购买的赞助展示，付款不会获得该账号的所有权或编辑权，被展示方可要求下架。我同意《",
   agreeTermsSuffix: "》。", cancel: "取消", continueCheckout: "继续付款", close: "关闭", searchPlaceholder: "搜索商家和市场…",
-  brandHome: "RANKOFF 首页", brandLogoAlt: "RANKOFF — 出价登上第一名", rankingTimeframe: "排名时间范围", mainNavigation: "主导航",
+  brandHome: "RANKOFF 首页", brandLogoAlt: "RANKOFF — 付费排名榜", rankingTimeframe: "排名时间范围", mainNavigation: "主导航",
   searchResults: "搜索结果", challengeLeaderboard: "挑战排行榜", decreaseBid: "减少 RM5", increaseBid: "增加 RM5",
   filterCategory: "按类别筛选", topThree: "赞助榜单前三名", boardPulse: "榜单动态", boardListings: "赞助条目榜单",
   pageNumbers: "页码", answers: "常见问题", closeDialog: "关闭对话框", rankPrice: "排名与价格",
@@ -121,7 +121,7 @@ function localizeCommon(html) {
   output = output.replace(/aria-label="RANKOFF home"/g, 'aria-label="RANKOFF 首页"');
   output = output.replace(/aria-label="Main navigation"/g, 'aria-label="主导航"');
   output = output.replace(/aria-label="Search businesses and markets"/g, 'aria-label="搜索商家和市场"');
-  output = output.replace(/alt="RANKOFF — Bid your way to number one"/g, 'alt="RANKOFF — 竞价登上第 1 名"');
+  output = output.replace(/alt="RANKOFF — pay-to-rank leaderboard"/g, 'alt="RANKOFF — 付费排名榜"');
   output = output.replace(/(<button class="language-toggle"[^>]*)(>)[\s\S]*?(<\/button>)/, (match, open, close, end) => {
     const labelled = /aria-label="[^"]*"/.test(open)
       ? open.replace(/aria-label="[^"]*"/, 'aria-label="切换为英文"')
@@ -194,7 +194,7 @@ export function localizeStaticPage(shell, page, language = "en") {
       try {
         const schema = JSON.parse(schemaMatch[1]);
         schema.url = `${SITE_ORIGIN}/?lang=zh`;
-        schema.description = "Rankoff 是公开的赞助排名榜，产品通过透明出价竞争最显眼的位置。";
+        schema.description = "Rankoff 是公开的赞助排名榜，商家通过公开付款竞争最显眼的位置。";
         schema.inLanguage = "zh-Hans";
         if (schema.potentialAction) {
           schema.potentialAction.target = `${SITE_ORIGIN}/?lang=zh`;

@@ -29,7 +29,7 @@
     en: {
       board: "Board", categories: "Categories", about: "About", legal: "Legal", contact: "Contact", skipListing: "Skip to listing details", back: "← Back to leaderboard", loading: "Loading ranking details…",
       notFoundTitle: "Listing not found", notFoundCopy: "This listing may have moved or is no longer on the public board.", returnBoard: "Return to the board",
-      sponsored: "Sponsored", visit: "Visit website", viewInstagram: "View Instagram", viewFacebook: "View Facebook Page", viewTiktok: "View TikTok", viewProfile: "View profile", share: "Share rank", evidence: "Public ranking record", rank: "Current rank", bid: "Bid", allTimeBid: "All-time total", past24Bid: "Past 24h total", duration: "Duration", past24: "Past 24h",
+      sponsored: "Sponsored", visit: "Visit website", viewInstagram: "View Instagram", viewFacebook: "View Facebook Page", viewTiktok: "View TikTok", viewProfile: "View profile", share: "Share rank", evidence: "Public ranking record", rank: "Current rank", bid: "Paid", allTimeBid: "All-time total", past24Bid: "Past 24h total", duration: "Duration", past24: "Past 24h",
       rule: "Highest total takes #1", claimNumberOne: "Claim #1 for", startClaim: "Claim this rank",
       claimUrl: "Your website or public profile", claimUrlPlaceholder: "example.com or instagram.com/yourname", claimAmount: "Your payment",
       claimAgree: "I understand this is a paid sponsored placement for a public link. It gives me no rights over that account, and the listed party may request removal. I agree to the ", termsOfService: "Terms of Service", claimAgreeSuffix: ".",
@@ -49,7 +49,7 @@
     zh: {
       board: "榜单", categories: "分类", about: "关于", legal: "法律条款", contact: "联系", skipListing: "跳至条目详情", back: "← 返回榜单", loading: "正在加载排名信息…",
       notFoundTitle: "找不到此条目", notFoundCopy: "此条目可能已移动，或已不在公开榜单中。", returnBoard: "返回榜单",
-      sponsored: "赞助", visit: "访问网站", viewInstagram: "查看 Instagram", viewFacebook: "查看 Facebook 专页", viewTiktok: "查看 TikTok", viewProfile: "查看主页", share: "分享排名", evidence: "公开排名记录", rank: "当前排名", bid: "出价", allTimeBid: "累计付款", past24Bid: "近 24 小时付款", duration: "有效期", past24: "近 24 小时",
+      sponsored: "赞助", visit: "访问网站", viewInstagram: "查看 Instagram", viewFacebook: "查看 Facebook 专页", viewTiktok: "查看 TikTok", viewProfile: "查看主页", share: "分享排名", evidence: "公开排名记录", rank: "当前排名", bid: "已付", allTimeBid: "累计付款", past24Bid: "近 24 小时付款", duration: "有效期", past24: "近 24 小时",
       rule: "累计付款最高者第 1 名", claimNumberOne: "拿下第 1 名，只需", startClaim: "拿下此排名",
       claimUrl: "你的网站或公开主页", claimUrlPlaceholder: "example.com 或 instagram.com/yourname", claimAmount: "付款金额",
       claimAgree: "我了解这是针对公开链接的付费赞助展示，不赋予我对该账号的任何权利，被列出的一方可要求移除。我同意", termsOfService: "《服务条款》", claimAgreeSuffix: "。",
@@ -70,18 +70,18 @@
   const pageMetadata = {
     en: {
       title: "Sponsored listing | RANKOFF",
-      description: "View a sponsored product's current Rankoff position, bid, and measured clicks.",
-      socialDescription: "See the bid, rank, and measured attention behind this sponsored listing.",
+      description: "View a sponsored listing's current Rankoff rank, total paid, and tracked clicks.",
+      socialDescription: "See the rank, total paid, and tracked clicks behind this sponsored listing.",
     },
     zh: {
       title: "赞助条目 | RANKOFF",
-      description: "查看赞助产品当前在 Rankoff 的排名、出价和已统计点击。",
-      socialDescription: "查看此赞助条目背后的出价、排名与已统计关注度。",
+      description: "查看该赞助条目在 Rankoff 的当前排名、累计已付与追踪点击。",
+      socialDescription: "查看此赞助条目的排名、累计已付与追踪点击。",
     },
   };
   const accessibilityCopy = {
-    en: { home: "RANKOFF home", tagline: "RANKOFF — Bid your way to number one", navigation: "Main navigation", search: "Search businesses and markets", switchChinese: "Switch to Chinese", switchLight: "Switch to light theme", switchDark: "Switch to dark theme" },
-    zh: { home: "RANKOFF 首页", tagline: "RANKOFF — 竞价登上第 1 名", navigation: "主导航", search: "搜索商家和市场", switchChinese: "切换为中文", switchLight: "切换至浅色主题", switchDark: "切换至深色主题" },
+    en: { home: "RANKOFF home", tagline: "RANKOFF — pay-to-rank leaderboard", navigation: "Main navigation", search: "Search businesses and markets", switchChinese: "Switch to Chinese", switchLight: "Switch to light theme", switchDark: "Switch to dark theme" },
+    zh: { home: "RANKOFF 首页", tagline: "RANKOFF — 付费排名榜", navigation: "主导航", search: "搜索商家和市场", switchChinese: "切换为中文", switchLight: "切换至浅色主题", switchDark: "切换至深色主题" },
   };
 
   const elements = {
@@ -662,7 +662,7 @@
       const minimumMinor = Number(error?.details?.minimum_amount_minor);
       return Number.isSafeInteger(minimumMinor) && minimumMinor > 0
         ? text("claimTooLow").replace("{min}", money.format(Math.ceil(minimumMinor / 100)))
-        : "当前出价过低，请刷新页面后重试。";
+        : "当前付款金额过低，请刷新页面后重试。";
     }
     const messages = {
       unknown_tld: "这不是一个网址。如果是 Instagram、Facebook 或 TikTok 账号，请贴上完整主页链接。",
@@ -676,7 +676,7 @@
       checkout_paused: "此榜单的付款目前暂停，未产生任何费用。",
       checkout_provider_error: "托管付款页面暂时无法建立，未产生任何费用。",
       terms_not_accepted: "请先同意《服务条款》，再继续付款。",
-      listing_not_eligible: "此条目目前不符合出价条件，未产生任何费用。",
+      listing_not_eligible: "此条目目前不符合上榜条件，未产生任何费用。",
     };
     return messages[error?.code] || fallback;
   }

@@ -79,11 +79,11 @@
   };
   const accessibilityCopy = {
     en: {
-      home: "RANKOFF home", tagline: "RANKOFF — Bid your way to number one", navigation: "Main navigation", search: "Search businesses and markets",
+      home: "RANKOFF home", tagline: "RANKOFF — pay-to-rank leaderboard", navigation: "Main navigation", search: "Search businesses and markets",
       boardStatus: "Board status", timeframe: "Category timeframe", allMarkets: "All market categories", switchChinese: "Switch to Chinese", switchLight: "Switch to light theme", switchDark: "Switch to dark theme",
     },
     zh: {
-      home: "RANKOFF 首页", tagline: "RANKOFF — 竞价登上第 1 名", navigation: "主导航", search: "搜索商家和市场",
+      home: "RANKOFF 首页", tagline: "RANKOFF — 付费排名榜", navigation: "主导航", search: "搜索商家和市场",
       boardStatus: "榜单状态", timeframe: "分类时间范围", allMarkets: "全部市场分类", switchChinese: "切换为中文", switchLight: "切换至浅色主题", switchDark: "切换至深色主题",
     },
   };
