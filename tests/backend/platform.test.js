@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { MARKET_GROUPS, VISIBLE_CATEGORIES } from "../../functions/_lib/config.js";
-import { accountFrom, destinationAction, displayName, listingIdentity, profilePath } from "../../functions/_lib/platform.js";
+import { accountFrom, destinationAction, displayName, isUsableHandle, listingIdentity, profilePath } from "../../functions/_lib/platform.js";
+import { canonicalDetailPath } from "../../functions/_lib/product.js";
 import { normalizeDestinationUrl } from "../../functions/_lib/validation.js";
 
 const identityOf = (url) => normalizeDestinationUrl(url).identity;
@@ -36,6 +37,21 @@ test("a handle may open or close with an underscore, as the platforms allow", ()
   assert.equal(refusal("https://instagram.com/."), "profile_required");
   assert.equal(refusal("https://instagram.com/___"), "profile_required");
   assert.equal(refusal("https://instagram.com/a..b"), "profile_required");
+});
+
+test("every path that judges a handle agrees with every other", () => {
+  // Four places accepted _umidesign_ while the profile route still refused it,
+  // so the listing could be paid for and then answered "Listing not found".
+  for (const handle of ["_umidesign_", "umidesign_", "_umidesign", "umi.design", "agent_ali"]) {
+    assert.equal(isUsableHandle(handle), true, `${handle} should be usable`);
+    assert.equal(accountFrom(new URL(`https://instagram.com/${handle}`)).handle, handle);
+    assert.equal(canonicalDetailPath(`instagram:${handle}`), `/profile/instagram/${handle}`);
+    assert.equal(profilePath(`instagram:${handle}`), `/profile/instagram/${handle}`);
+  }
+  for (const handle of ["..", ".", "___", "a..b", "", "x".repeat(61)]) {
+    assert.equal(isUsableHandle(handle), false, `${handle} should be refused`);
+    assert.equal(canonicalDetailPath(`instagram:${handle}`), "");
+  }
 });
 
 test("a share token is not the merchant's public destination", () => {

@@ -68,6 +68,23 @@ export function platformFor(key) {
   return platform ? { key, label: platform.label, action: platform.action } : null;
 }
 
+// Anchoring both ends to a letter or digit rejected real accounts: Instagram,
+// TikTok and X all allow a handle to open or close with an underscore, and
+// _umidesign_ could neither be paid for nor, once listed, be opened — the same
+// rule was copied into the parser, the profile route, the canonical path and
+// two client files, so fixing four of them left the listing page 404ing. It
+// lives here once now. A handle still has to be safe to drop into
+// /profile/<platform>/<handle>: it must carry a letter or digit, and must never
+// contain "..", which no platform allows either.
+export function isUsableHandle(handle) {
+  const value = String(handle || "");
+  return Boolean(value)
+    && value.length <= 60
+    && /^[a-z0-9._-]+$/.test(value)
+    && /[a-z0-9]/.test(value)
+    && !value.includes("..");
+}
+
 // The account name is the first path segment: instagram.com/agent_ali, never the
 // post underneath it. A profile is a page that stays; a reel is a moment.
 export function accountFrom(url) {
@@ -82,17 +99,7 @@ export function accountFrom(url) {
     ? ""
     : platform.extract(segments);
 
-  // Anchoring both ends to a letter or digit rejected real accounts: Instagram,
-  // TikTok and X all allow a handle to open or close with an underscore, and
-  // _umidesign_ could not be listed or paid for. The handle still has to be safe
-  // to drop into /profile/<platform>/<handle>, so it must carry at least one
-  // letter or digit and must never contain "..", which no platform allows either.
-  const usable = Boolean(handle)
-    && handle.length <= 60
-    && /^[a-z0-9._-]+$/.test(handle)
-    && /[a-z0-9]/.test(handle)
-    && !handle.includes("..");
-  return { key, label: platform.label, action: platform.action, handle: usable ? handle : "" };
+  return { key, label: platform.label, action: platform.action, handle: isUsableHandle(handle) ? handle : "" };
 }
 
 export function listingIdentity(hostname, account) {

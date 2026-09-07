@@ -2,7 +2,7 @@
 // formats them into the shell that /listing already ships, so a crawler, a
 // WhatsApp preview and a reader without JavaScript all see the same record.
 
-import { destinationAction, displayName, identityParts, profilePath } from "./platform.js";
+import { destinationAction, displayName, identityParts, isUsableHandle, profilePath } from "./platform.js";
 export const SITE_ORIGIN = "https://rankoff.my";
 
 const HTML_ESCAPES = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
@@ -85,7 +85,7 @@ export function productPath(hostname) {
 export function canonicalDetailPath(identity) {
   const parts = identityParts(identity);
   if (parts.platform) {
-    return /^[a-z0-9](?:[a-z0-9._-]{0,58}[a-z0-9])?$/.test(parts.handle)
+    return isUsableHandle(parts.handle)
       ? profilePath(`${parts.platform}:${parts.handle}`)
       : "";
   }
