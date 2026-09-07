@@ -68,6 +68,31 @@ export function platformFor(key) {
   return platform ? { key, label: platform.label, action: platform.action } : null;
 }
 
+// The canonical host to address a profile on, taken from the table above rather
+// than from anything a request carries.
+export function platformHost(key) {
+  return PLATFORMS.get(key)?.hosts[0] || "";
+}
+
+// Only the platforms whose handle survives the round trip. LinkedIn and YouTube
+// are stored prefixed ("in-someone"), and a handle may itself contain a hyphen,
+// so the split back is a guess — and xiaohongshu hides profiles behind a path
+// this cannot rebuild. Those return "" and keep their initials rather than have
+// this fetch the wrong page.
+const PROFILE_URL = Object.freeze({
+  instagram: (handle) => `https://www.instagram.com/${handle}/`,
+  tiktok: (handle) => `https://www.tiktok.com/@${handle}`,
+  facebook: (handle) => `https://www.facebook.com/${handle}`,
+  x: (handle) => `https://x.com/${handle}`,
+  linktree: (handle) => `https://linktr.ee/${handle}`,
+});
+
+export function profileUrlFor(identity) {
+  const parts = identityParts(identity);
+  if (!parts.platform || !isUsableHandle(parts.handle)) return "";
+  return PROFILE_URL[parts.platform]?.(encodeURIComponent(parts.handle)) || "";
+}
+
 // Anchoring both ends to a letter or digit rejected real accounts: Instagram,
 // TikTok and X all allow a handle to open or close with an underscore, and
 // _umidesign_ could neither be paid for nor, once listed, be opened — the same
