@@ -1483,3 +1483,46 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 /* The search field is red-bordered; a blue focus ring over it read as two
    outlines. The ring takes the accent, softly. */
 .site-search-field:focus-within { box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent); }
+
+/* ---- Ranks 1-3 on the first screen, phone and desktop ---- */
+/* A visitor who cannot see a ranking cannot see the product. #3 ended at
+   808px on a 375x812 phone (below the fold once the browser chrome takes
+   its ~150px) and at 793px on a 1440x780 laptop. Type comes down about a
+   step and the podium rows lose their slack; interactive heights are left
+   alone, since a tap target is not spare space. */
+@media (max-width: 46rem) {
+  .claim-stage { padding: .6rem 0 .4rem; }
+  .claim-panel h1 { font-size: 1.85rem; }
+  .category-market { margin-top: .4rem; padding: .5rem 0; }
+  .category-rail { padding-block: 0 .15rem; }
+  .board-toolbar { padding: .45rem 0 .3rem; }
+  .board-toolbar-lead h2 { font-size: .9rem; }
+
+  .top-three-hero { margin-top: .45rem; gap: .35rem; }
+  .top-three-hero .featured-listing,
+  .top-three-hero .featured-1 { min-height: 0; padding: .5rem .6rem .55rem; gap: .3rem .55rem; }
+  .top-three-hero .product-copy { gap: .18rem; }
+  .top-three-hero .featured-rank { width: 2.5rem; height: 2.5rem; font-size: .95rem; }
+  .top-three-hero .featured-1 .featured-rank { width: 2.75rem; height: 2.75rem; font-size: 1.1rem; }
+  .top-three-hero .featured-listing .product-mark,
+  .top-three-hero .featured-1 .product-mark { width: 2.4rem; height: 2.4rem; flex-basis: 2.4rem; }
+  .top-three-hero .featured-listing .product-name { font-size: .95rem; }
+  .top-three-hero .featured-1 .product-name { font-size: 1.05rem; }
+  .top-three-hero .listing-description { font-size: .68rem; }
+  .top-three-hero .featured-1 .listing-description { -webkit-line-clamp: 1; }
+  .top-three-hero .product-meta { margin-top: .1rem; gap: .14rem .34rem; }
+  .top-three-hero .featured-price strong { font-size: 1.05rem; }
+}
+
+@media (min-width: 64rem) {
+  .claim-panel h1 { font-size: 2.15rem; }
+  .category-market { padding: .55rem 0; }
+  .top-three-hero { gap: .4rem; margin-top: .45rem; }
+  .top-three-hero .featured-listing { padding: .6rem .85rem; }
+  .top-three-hero .featured-listing .product-name { font-size: .98rem; }
+  .top-three-hero .featured-1 .product-name { font-size: 1.08rem; }
+  .top-three-hero .listing-description { font-size: .72rem; }
+  .top-three-hero .product-meta { margin-top: .12rem; font-size: .66rem; }
+  .top-three-hero .featured-1 .featured-price strong { font-size: 1.5rem; }
+  .top-three-hero .featured-price strong { font-size: 1.2rem; }
+}
