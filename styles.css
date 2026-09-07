@@ -95,8 +95,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 .topbar {
   display: grid;
-  /* brand · live-state · nav · search · language · theme */
-  grid-template-columns: auto minmax(0, 1fr) auto auto auto auto;
+  /* brand · nav · search · language · theme */
+  grid-template-columns: auto minmax(0, 1fr) auto auto auto;
   align-items: center;
   gap: 0.8rem;
   min-height: 4rem;
@@ -534,7 +534,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .topbar { grid-template-columns: auto minmax(0, 1fr) auto auto auto; gap: 0.45rem; }
   .site-nav { justify-self: end; }
   .brand { width: 4.75rem; height: 4.75rem; flex-basis: 4.75rem; }
-  .demo-state { display: none; }
   .site-nav { gap: 0.65rem; margin-right: 0; }
 }
 
@@ -549,7 +548,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .brand-wordmark-crop { height: 1.7rem; }
   .time-tabs { justify-self: end; }
   .time-tabs button { min-width: 2.75rem; min-height: 2.75rem; padding-inline: 0.45rem; font-size: 0.75rem; }
-  .demo-state { display: none; }
   .site-nav { display: none; }
 
   /* One row, as on the desktop: identity, the three links, the controls. The
@@ -1420,13 +1418,24 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .topbar .site-nav a { padding-inline: .15rem; font-size: .74rem; }
 }
 
-/* The "Live board" dot and its label travel together and are hidden below
-   75rem (see the two breakpoints above). The dot alone was tried and
-   reverted: it is the bullet for the label, so without it the mark reads as
-   an artifact rather than a status, and a mobile header at capacity has
-   nowhere to put the words. Phones are not left without the signal — the
-   activity panel carries its own .live-dot, where the surrounding copy
-   labels it. */
+/* The live dot sits on the board's own heading, not in the header. Next to
+   the wordmark it modified nothing in particular and had to be dropped
+   below 75rem for space; on the heading it modifies the board it describes
+   and survives at every width, so phones and desktop read alike.
+
+   The label is kept in the DOM but not shown: "Live board" next to
+   "Sponsored leaderboard" says the same thing twice (the Chinese heading is
+   literally 实时赞助榜单), while the pulse alone carries the signal. It stays
+   announced to screen readers, and font-size:0 — the technique .theme-toggle
+   already uses — is what keeps it: app.js writes the translation through
+   .lastChild.textContent and the ZH static pass matches <i></i>Live board,
+   so wrapping that text node in an element would break both.
+
+   The dot and the h2 are wrapped together because .board-toolbar-lead goes
+   justify-content:space-between on phones, which would otherwise fling them
+   to opposite ends of the row. */
+.board-live-line { display: flex; min-width: 0; align-items: center; gap: 0.5rem; }
+.board-toolbar-lead .demo-state { gap: 0; font-size: 0; }
 
 /* ---- Desktop first screen: #1–#3 in view, like the phone ---- */
 /* Card #1 started ~720px down a 785px-tall window. The chrome above it is

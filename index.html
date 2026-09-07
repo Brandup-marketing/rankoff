@@ -29,7 +29,7 @@
     <meta name="theme-color" content="#090a0c" />
     <title>RANKOFF | Bid Your Way to #1</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=89" />
+    <link rel="stylesheet" href="./styles.css?v=90" />
     <link rel="stylesheet" href="./answers.css?v=2" />
     <script id="website-schema" type="application/ld+json">
       {
@@ -62,7 +62,6 @@
           <img class="brand-final-logo" src="./assets/rankoff-final-logo.png?v=4" data-i18n-alt="brandLogoAlt" alt="RANKOFF — Bid your way to number one" width="1254" height="1254" />
         </a>
 
-        <span class="demo-state" data-board-state><i aria-hidden="true"></i> Live board</span>
         <nav class="site-nav" data-i18n-aria-label="mainNavigation" aria-label="Main navigation"><a href="/" data-language-link data-i18n="navBoard" aria-current="page">Board</a><a href="/categories" data-language-link data-i18n="navCategories">Categories</a><a href="/about" data-language-link data-i18n="navAbout">About</a></nav>
         <button class="search-toggle" type="button" data-search-toggle aria-expanded="false" aria-controls="site-search" data-i18n-aria-label="searchPlaceholder" aria-label="Search businesses and markets"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.6 4.6"></path></svg></button>
         <button class="language-toggle" type="button" data-language-toggle aria-pressed="false">中文</button>
@@ -129,7 +128,10 @@
 
           <div class="board-toolbar">
             <div class="board-toolbar-lead">
-              <h2 id="board-heading" data-board-heading>Sponsored leaderboard</h2>
+              <div class="board-live-line">
+                <span class="demo-state" data-board-state><i aria-hidden="true"></i> Live board</span>
+                <h2 id="board-heading" data-board-heading>Sponsored leaderboard</h2>
+              </div>
               <nav class="time-tabs" data-i18n-aria-label="rankingTimeframe" aria-label="Ranking timeframe">
                 <button type="button" data-board-window="all" aria-pressed="true">All-time</button>
                 <button type="button" data-board-window="today" aria-pressed="false">Past 24h</button>
