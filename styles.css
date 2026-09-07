@@ -1497,6 +1497,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .category-rail { padding-block: 0 .15rem; }
   .board-toolbar { padding: .45rem 0 .3rem; }
   .board-toolbar-lead h2 { font-size: .85rem; }
+  .board-toolbar-lead .time-tabs { padding: .12rem; }
+  .board-toolbar-lead .time-tabs button { min-height: 2rem; padding: .28rem .58rem; font-size: .68rem; }
 
   .top-three-hero { margin-top: .45rem; gap: .35rem; }
   .top-three-hero .featured-listing,
@@ -1518,8 +1520,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .claim-panel h1 { font-size: 2.15rem; }
   .category-market { padding: .55rem 0; }
   /* The section label was 18.4px/850 against the #1 listing's 17.3px/800,
-     so the label outweighed the listing it labels. It goes under both. */
+     so the label outweighed the listing it labels. It goes under both, and
+     the timeframe pills come down with it — a 44px control beside a 14px
+     heading read as the loudest thing in the row. They stay well clear of
+     the 24px minimum a pointer target needs. */
   .board-toolbar-lead h2 { font-size: .9rem; }
+  .board-toolbar-lead .time-tabs { padding: .14rem; }
+  .board-toolbar-lead .time-tabs button { min-height: 2.1rem; padding: .3rem .62rem; font-size: .72rem; }
   .top-three-hero { gap: .4rem; margin-top: .45rem; }
   .top-three-hero .featured-listing { padding: .6rem .85rem; }
   .top-three-hero .featured-listing .product-name { font-size: .98rem; }
