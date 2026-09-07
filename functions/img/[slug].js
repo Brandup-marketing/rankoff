@@ -9,7 +9,6 @@
 // raster image, it may not exceed a size cap, and every fetch has a deadline.
 
 import { defaultBoardSlug, isProduction, requireDatabase } from "../_lib/config.js";
-import { profileUrlFor } from "../_lib/platform.js";
 import { normalizeSlug } from "../_lib/product.js";
 import { findListingByHostname, loadBoard } from "../_lib/repository.js";
 import { discoverShareImage } from "../og/[slug].js";
@@ -116,28 +115,6 @@ export async function resolveMerchantImage(hostname, deps = {}) {
   return shareImage ? await fetchImageBytes(shareImage, fetcher) : null;
 }
 
-// A profile has no favicon of its own — instagram.com/favicon.ico is Instagram's
-// logo — but its og:image is the account's picture. That URL is signed and
-// expires in days, so it cannot be stored at listing time; it is read fresh here
-// and only the bytes are cached. The host is taken from our own platform table,
-// never from the request, so this widens what may be proxied by exactly the set
-// of profiles that are already listed.
-export async function resolveProfileImage(identity, deps = {}) {
-  const fetcher = deps.fetcher || fetch;
-  const discover = deps.discover || discoverShareImage;
-  const pageUrl = profilePageUrl(identity);
-  if (!pageUrl) return null;
-  let shareImage = "";
-  try {
-    shareImage = await discover(pageUrl, fetcher);
-  } catch {
-    shareImage = "";
-  }
-  return shareImage ? await fetchImageBytes(shareImage, fetcher) : null;
-}
-
-export const profilePageUrl = profileUrlFor;
-
 function imageResponse(found) {
   return new Response(found.bytes, {
     status: 200,
@@ -171,16 +148,10 @@ export async function onRequestHead(context) {
 
 export async function onRequestGet(context) {
   const url = new URL(context.request.url);
-  const raw = String(context.params.slug || "");
-  // A listing is addressed either by hostname or, for a social account, by its
-  // identity — the same string the board stores, so the lookup below is the
-  // same fence in both cases.
-  const profileUrl = profilePageUrl(raw.toLowerCase());
-  const identity = profileUrl ? raw.toLowerCase() : "";
-  const hostname = identity ? "" : normalizeSlug(raw);
+  const hostname = normalizeSlug(context.params.slug);
   // Never follow a bare address, and never proxy for a board that is not live:
-  // only listings that reached this board may be fetched.
-  if ((!hostname && !identity) || /^\d+\.\d+\.\d+\.\d+$/.test(hostname) || !isProduction(context.env)) return missResponse();
+  // only hostnames that reached this board as listings may be fetched.
+  if (!hostname || /^\d+\.\d+\.\d+\.\d+$/.test(hostname) || !isProduction(context.env)) return missResponse();
 
   const cache = caches.default;
   const cacheKey = new Request(url.toString(), { method: "GET" });
@@ -191,10 +162,8 @@ export async function onRequestGet(context) {
   try {
     const db = requireDatabase(context.env);
     const board = await loadBoard(db, defaultBoardSlug(context.env));
-    const listing = await findListingByHostname(db, board.id, identity || hostname);
-    if (listing && listing.status === "approved") {
-      found = identity ? await resolveProfileImage(identity) : await resolveMerchantImage(hostname);
-    }
+    const listing = await findListingByHostname(db, board.id, hostname);
+    if (listing && listing.status === "approved") found = await resolveMerchantImage(hostname);
   } catch {
     /* Initials are always a valid card. */
   }
