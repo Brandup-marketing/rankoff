@@ -97,12 +97,21 @@ export async function fetchImageBytes(imageUrl, fetcher = fetch) {
   return { type, bytes };
 }
 
-// Tried in order and stopped at the first real image, so a site that publishes
-// a proper square icon never pays for the og:image lookup.
+// The listing already stores the best logo discovered at submission time. Use
+// that first, then fall back to conventional icon paths and finally og:image.
+// This keeps a deliberate brand mark from being replaced by a page photograph.
 export async function resolveMerchantImage(hostname, deps = {}) {
   const fetcher = deps.fetcher || fetch;
   const discover = deps.discover || discoverShareImage;
-  for (const source of candidateSources(hostname)) {
+  let preferred = "";
+  try {
+    const parsed = new URL(String(deps.preferredUrl || ""));
+    if (parsed.protocol === "https:") preferred = parsed.toString();
+  } catch {
+    /* Conventional site icons remain available below. */
+  }
+  const sources = [preferred, ...candidateSources(hostname)].filter((source, index, all) => source && all.indexOf(source) === index);
+  for (const source of sources) {
     const found = await fetchImageBytes(source, fetcher);
     if (found) return found;
   }
@@ -163,7 +172,9 @@ export async function onRequestGet(context) {
     const db = requireDatabase(context.env);
     const board = await loadBoard(db, defaultBoardSlug(context.env));
     const listing = await findListingByHostname(db, board.id, hostname);
-    if (listing && listing.status === "approved") found = await resolveMerchantImage(hostname);
+    if (listing && listing.status === "approved") {
+      found = await resolveMerchantImage(hostname, { preferredUrl: listing.favicon_url });
+    }
   } catch {
     /* Initials are always a valid card. */
   }

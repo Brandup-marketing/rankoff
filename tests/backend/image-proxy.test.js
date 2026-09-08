@@ -92,6 +92,21 @@ test("the square icon is asked for first and stops the search", async () => {
   ]);
 });
 
+test("the listing's stored logo wins over guessed icons and page photography", async () => {
+  const asked = [];
+  const fetcher = async (url) => {
+    asked.push(url);
+    return imageReply();
+  };
+  const found = await resolveMerchantImage("merchant.test", {
+    fetcher,
+    preferredUrl: "https://merchant.test/assets/brand-mark.png",
+    discover: async () => "https://merchant.test/therapy-photo.jpg",
+  });
+  assert.equal(found.type, "image/png");
+  assert.deepEqual(asked, ["https://merchant.test/assets/brand-mark.png"]);
+});
+
 test("a site with no icons falls back to the share image /og already resolves", async () => {
   const asked = [];
   const fetcher = async (url) => {

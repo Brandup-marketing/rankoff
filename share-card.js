@@ -92,7 +92,7 @@ export function proxyPathFor(url) {
   try {
     const parsed = new URL(String(url || ""), "https://rankoff.my");
     const match = parsed.pathname.match(/^\/product\/([a-z0-9.-]+)\/?$/i);
-    return match ? `/img/${match[1].toLowerCase()}` : "";
+    return match ? `/img/${match[1].toLowerCase()}?v=2` : "";
   } catch {
     return "";
   }

@@ -56,8 +56,8 @@ test("the settled total is lifted verbatim, never recomputed", () => {
 });
 
 test("only a website listing gets a proxied logo", () => {
-  assert.equal(proxyPathFor("https://rankoff.my/product/auroraclinic.com"), "/img/auroraclinic.com");
-  assert.equal(proxyPathFor("https://rankoff.my/product/AuroraClinic.com/"), "/img/auroraclinic.com");
+  assert.equal(proxyPathFor("https://rankoff.my/product/auroraclinic.com"), "/img/auroraclinic.com?v=2");
+  assert.equal(proxyPathFor("https://rankoff.my/product/AuroraClinic.com/"), "/img/auroraclinic.com?v=2");
   assert.equal(proxyPathFor("https://rankoff.my/profile/instagram/aurora"), "");
   assert.equal(proxyPathFor("https://rankoff.my/?period=all#listing-7"), "");
   assert.equal(proxyPathFor(""), "");
@@ -74,7 +74,7 @@ test("a full card model is assembled from the board's own copy", () => {
   assert.equal(model.place, 1);
   assert.equal(model.position, "in Beauty & Wellness");
   assert.equal(model.total, RM250);
-  assert.equal(model.logoUrl, "/img/auroraclinic.com");
+  assert.equal(model.logoUrl, "/img/auroraclinic.com?v=2");
   assert.equal(model.initials, "AC");
 });
 
