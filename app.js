@@ -220,7 +220,6 @@
     todayRankingList: document.querySelector("[data-today-ranking-list]"),
     todaySeeAll: document.querySelector("[data-today-see-all]"),
     activityList: document.querySelector("[data-activity-list]"),
-    activityViewport: document.querySelector(".activity-ticker-viewport"),
     liveDot: document.querySelector(".live-dot"),
     panelToggles: Array.from(document.querySelectorAll("[data-panel-toggle]")),
     audienceStrip: document.querySelector("[data-audience-strip]"),
@@ -272,10 +271,6 @@
   let toastTimer = null;
   let changedListingId = null;
   let pendingActivityAnimationId = "";
-  let activityRotationTimer = null;
-  let activityRotationIndex = 0;
-  let activityRotationItems = [];
-  let activityRotationPaused = false;
   let lastRemoteActivityContext = "";
   let remoteNextBid = null;
   let remoteSnapshotId = null;
@@ -541,9 +536,6 @@
   // live leaders stay near the first screen; wider layouts keep it open.
   const phoneQuery = typeof window.matchMedia === "function"
     ? window.matchMedia("(max-width: 46rem)")
-    : null;
-  const reducedMotionQuery = typeof window.matchMedia === "function"
-    ? window.matchMedia("(prefers-reduced-motion: reduce)")
     : null;
   let phoneEntryOpen = false;
 
@@ -1755,19 +1747,21 @@
     return { type: "joined", action: chinese ? "进场" : "Entered", context: chinese ? `以 ${money(amount)} 首次上榜` : `Opened at ${money(amount)}`, metric: money(amount), metricLabel: chinese ? "首次付款" : "First payment", rank };
   }
 
-  function activityRow(item, animate = false) {
+  function activityRow(item, index, duplicate = false) {
     const listing = activityListing(item);
     const presentation = activityPresentation(item);
-    const isLatest = String(item.id || "") === pendingActivityAnimationId;
-    const row = createElement(
-      "li",
-      `activity-event activity-${presentation.type}${isLatest ? " is-latest" : ""}${animate ? " is-rotating" : ""}`,
-    );
+    const shouldAnimate = !duplicate && index === 0 && String(item.id || "") === pendingActivityAnimationId;
+    const row = createElement("li", `activity-event activity-${presentation.type}${shouldAnimate ? " is-latest" : ""}`);
     row.dataset.eventId = String(item.id || "");
+    if (duplicate) {
+      row.classList.add("is-duplicate");
+      row.setAttribute("aria-hidden", "true");
+    }
     const identity = createElement("div", "activity-identity");
     const name = listing.id ? createElement("a", "activity-name", listing.name) : createElement("strong", "activity-name", listing.name);
     if (name instanceof HTMLAnchorElement) {
       name.href = listingDetailsHref(listing);
+      if (duplicate) name.tabIndex = -1;
     }
     identity.append(name);
     if (listing.description) {
@@ -1786,32 +1780,6 @@
     identity.append(details);
     row.append(activityMark(listing), identity);
     return row;
-  }
-
-  function stopActivityRotation() {
-    if (activityRotationTimer !== null) window.clearInterval(activityRotationTimer);
-    activityRotationTimer = null;
-  }
-
-  function paintActivity(animate = false) {
-    if (!elements.activityList || !activityRotationItems.length) return;
-    const item = activityRotationItems[activityRotationIndex % activityRotationItems.length];
-    elements.activityList.replaceChildren(activityRow(item, animate));
-  }
-
-  function startActivityRotation(activity) {
-    stopActivityRotation();
-    activityRotationItems = activity;
-    activityRotationIndex = 0;
-    paintActivity(Boolean(pendingActivityAnimationId));
-    if (activity.length < 2 || reducedMotionQuery?.matches) return;
-
-    activityRotationTimer = window.setInterval(() => {
-      const panelContent = elements.activityList?.closest("[data-panel-content]");
-      if (activityRotationPaused || document.hidden || panelContent?.hidden) return;
-      activityRotationIndex = (activityRotationIndex + 1) % activityRotationItems.length;
-      paintActivity(true);
-    }, 5000);
   }
 
   function todayRankingRow(listing, position) {
@@ -1847,9 +1815,6 @@
       const activity = state.activity.slice(0, 10);
       elements.activityList.classList.toggle("is-empty", activity.length === 0);
       if (!activity.length) {
-        stopActivityRotation();
-        activityRotationItems = [];
-        activityRotationIndex = 0;
         const empty = createElement("li", "activity-empty");
         empty.append(
           createElement("strong", "", state.language === "zh" ? "等待首个已验证挑战" : "Waiting for the first settled challenge"),
@@ -1857,7 +1822,10 @@
         );
         elements.activityList.replaceChildren(empty);
       } else {
-        startActivityRotation(activity);
+        const primary = activity.map((item, index) => activityRow(item, index));
+        const duplicate = activity.map((item, index) => activityRow(item, index, true));
+        elements.activityList.style.setProperty("--ticker-duration", `${Math.max(26, activity.length * 6)}s`);
+        elements.activityList.replaceChildren(...primary, ...duplicate);
       }
       pendingActivityAnimationId = "";
     }
@@ -2591,29 +2559,6 @@
       updatePanelToggleLabels();
     });
   });
-
-  if (elements.activityViewport) {
-    elements.activityViewport.addEventListener("pointerenter", () => {
-      activityRotationPaused = true;
-    });
-    elements.activityViewport.addEventListener("pointerleave", () => {
-      activityRotationPaused = false;
-    });
-    elements.activityViewport.addEventListener("focusin", () => {
-      activityRotationPaused = true;
-    });
-    elements.activityViewport.addEventListener("focusout", (event) => {
-      if (!elements.activityViewport?.contains(event.relatedTarget)) activityRotationPaused = false;
-    });
-  }
-
-  if (reducedMotionQuery) {
-    const onReducedMotionChange = () => startActivityRotation(activityRotationItems);
-    if (typeof reducedMotionQuery.addEventListener === "function") reducedMotionQuery.addEventListener("change", onReducedMotionChange);
-    else if (typeof reducedMotionQuery.addListener === "function") reducedMotionQuery.addListener(onReducedMotionChange);
-  }
-
-  window.addEventListener("pagehide", stopActivityRotation, { once: true });
 
   document.addEventListener("click", (event) => {
     const target = event.target instanceof Element ? event.target : null;

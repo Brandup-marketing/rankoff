@@ -18,7 +18,7 @@ Use the existing resilient sans-serif stack. Ranking and payment amounts use tab
 
 A recognizable mark with a legible wordmark leads the compact header. The selected #1 claim price and short entry form precede the market rail and leaderboard. Keep the hero compact, without audience or explanatory paragraphs. SaaS & Software, Developer Tools and AI Tools & Agents are prominent; other markets remain accessible.
 
-Show ranks #1–#3, then one compact activity update, then ranks #4 onward. Today's leaders and audience statistics follow the full ranking. Cards show the name, product description, sponsored status, market, distinct Visit website and Details links, Total paid, secondary Share and a contained claim action. On narrow screens, the amount and claim action occupy the final row. Do not float claim buttons across card boundaries.
+Show ranks #1–#3, then the compact latest-activity ticker, then ranks #4 onward. Today's leaders and audience statistics follow the full ranking. Cards show the name, product description, sponsored status, market, distinct Visit website and Details links, Total paid, secondary Share and a contained claim action. On narrow screens, the amount and claim action occupy the final row. Do not float claim buttons across card boundaries.
 
 ## Components
 
@@ -26,7 +26,7 @@ Preserve the established modest radii, border-based surfaces, red #1 emphasis, p
 
 ## Motion
 
-Rotate one real settled activity update every five seconds with a 220ms entrance transition. Pause rotation while the activity panel is hovered or focused. Show the first update statically when reduced motion is requested. Retain visible default content; no scroll animation is needed for the launch.
+Move real settled activity continuously from right to left. Duplicate the rendered sequence only to make the loop seamless, keep duplicate links out of keyboard and accessibility navigation, and pause on hover, focus or touch. Show one static sequence when reduced motion is requested. Retain visible default content; no scroll animation is needed for the launch.
 
 ## Content and Proof
 
