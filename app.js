@@ -468,11 +468,14 @@
 
   function renderMetadata() {
     const metadata = pageMetadata[state.language] || pageMetadata.en;
+    const liveMetadata = boardSource === "production"
+      ? Object.fromEntries(Object.entries(metadata).map(([key, value]) => [key, typeof value === "string" ? value.replaceAll("US$1", money(boardMinimum())) : value]))
+      : metadata;
     const canonical = languageCanonicalUrl(state.language);
-    document.title = metadata.title;
-    document.querySelector('meta[name="description"]')?.setAttribute("content", metadata.description);
-    document.querySelector('meta[property="og:title"]')?.setAttribute("content", metadata.socialTitle);
-    document.querySelector('meta[property="og:description"]')?.setAttribute("content", metadata.socialDescription);
+    document.title = liveMetadata.title;
+    document.querySelector('meta[name="description"]')?.setAttribute("content", liveMetadata.description);
+    document.querySelector('meta[property="og:title"]')?.setAttribute("content", liveMetadata.socialTitle);
+    document.querySelector('meta[property="og:description"]')?.setAttribute("content", liveMetadata.socialDescription);
     document.querySelector('meta[property="og:url"]')?.setAttribute("content", canonical);
     document.querySelector('meta[property="og:locale"]')?.setAttribute("content", state.language === "zh" ? "zh_MY" : "en_MY");
     document.querySelector('meta[property="og:locale:alternate"]')?.setAttribute("content", state.language === "zh" ? "en_MY" : "zh_MY");
@@ -488,11 +491,11 @@
       try {
         const schema = JSON.parse(schemaNode.textContent);
         schema.url = canonical;
-        schema.description = metadata.schemaDescription;
+        schema.description = liveMetadata.schemaDescription;
         schema.inLanguage = state.language === "zh" ? "zh-Hans" : "en-MY";
         if (schema.potentialAction) {
           schema.potentialAction.target = canonical;
-          schema.potentialAction.name = metadata.schemaAction;
+          schema.potentialAction.name = liveMetadata.schemaAction;
         }
         schemaNode.textContent = JSON.stringify(schema);
       } catch {
