@@ -71,7 +71,18 @@
   const savedPreferences = readPreferences();
   let language = languageFromUrl() || (savedPreferences.language === "zh" ? "zh" : "en");
   let theme = savedPreferences.theme === "light" ? "light" : "dark";
+  let liveCurrencyCode = "";
+  let liveFloor = "";
   const translate = (english) => (language === "zh" ? (translations.get(english) || english) : english);
+  function updateCurrencyCopy() {
+    if (!liveFloor) return;
+    const glyph = document.querySelector(".timeline li:first-child .rules-glyph");
+    const copy = document.querySelector(".timeline li:first-child > span:last-child");
+    if (glyph) glyph.textContent = liveCurrencyCode === "MYR" ? "RM" : "US$";
+    if (copy) copy.textContent = language === "zh"
+      ? `输入网站、选择市场，${liveFloor} 起付款。`
+      : `Enter your website, choose a market, and pay from ${liveFloor}.`;
+  }
   // Text written by script has to register itself as its own English source,
   // or the next language switch restores whatever the markup shipped with.
   function setCopy(node, english) { if (!node) return; originalText.set(node, english); node.textContent = translate(english); }
@@ -145,6 +156,7 @@
     }
     updateMetadata();
     syncInternalLinks();
+    updateCurrencyCopy();
   }
   function savePreferences() {
     try { localStorage.setItem(STORE_KEY, JSON.stringify({ ...readPreferences(), language, theme })); } catch { /* preference persistence is optional */ }
@@ -187,7 +199,9 @@
   ]).then(async ([boardResponse, statsResponse]) => {
     if (!boardResponse.ok || !statsResponse.ok) { showUnavailable(); return; }
     const [board, stats] = await Promise.all([boardResponse.json(), statsResponse.json()]);
-    currency = boardCurrencyFormat(String(board.board?.currency || "USD").toUpperCase());
+    liveCurrencyCode = String(board.board?.currency || "USD").toUpperCase();
+    currency = boardCurrencyFormat(liveCurrencyCode);
+    liveFloor = currency.format(Number(board.board?.min_increment_minor || 100) / 100);
     const listingCount = document.querySelector("[data-about-listings]");
     const clickCount = document.querySelector("[data-about-clicks]");
     const topBid = document.querySelector("[data-about-bid]");
@@ -196,5 +210,6 @@
     if (clickCount) clickCount.textContent = compact.format(Number(stats.total_clicks || 0));
     if (topBid) topBid.textContent = currency.format(Number(board.rankings?.[0]?.bid?.amount_minor || 0) / 100);
     setCopy(disclosure, "Real numbers from the board, updated live.");
+    updateCurrencyCopy();
   }).catch(showUnavailable);
 })();
