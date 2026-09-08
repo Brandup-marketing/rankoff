@@ -77,9 +77,8 @@ export async function createDodoCheckout(env, bid) {
       billing_currency: bid.currency,
       // Advertising placement is a simple B2C charge: no buyer tax id, and the
       // hosted page's tax-id validation rejects Malaysian formats anyway.
-      // A Malaysian merchant is reached on WhatsApp, so the number is worth the
-      // extra field; without require_phone_number the provider may return none.
-      feature_flags: { allow_tax_id: false, allow_phone_number_collection: true, require_phone_number: true, allow_currency_selection: false, allow_discount_code: false },
+      // Phone is optional: global founders can complete checkout without it.
+      feature_flags: { allow_tax_id: false, allow_phone_number_collection: true, require_phone_number: false, allow_currency_selection: false, allow_discount_code: false },
       return_url: returnUrl,
       metadata: {
         rankoff_bid_id: bid.id,

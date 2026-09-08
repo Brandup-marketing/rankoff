@@ -2,7 +2,7 @@ import { defaultBoardSlug, isProduction, requireDatabase } from "../_lib/config.
 import { normalizeSlug } from "../_lib/product.js";
 import { findListingByHostname, loadBoard, loadListingShareCard } from "../_lib/repository.js";
 
-const FALLBACK = "/assets/rankoff-og-card.png";
+const FALLBACK = "/assets/rankoff-og-claim.png";
 const FETCH_TIMEOUT_MS = 2500;
 const HTML_READ_LIMIT = 120_000;
 const CACHE_SECONDS = 86_400;

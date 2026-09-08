@@ -1,4 +1,6 @@
 export const MARKET_GROUPS = Object.freeze({
+  SaaS: Object.freeze(["SaaS", "Software", "Productivity"]),
+  Developer: Object.freeze(["Developer", "Security"]),
   AI: Object.freeze(["AI", "Agents", "AIMedia"]),
   Creators: Object.freeze(["Creators", "Attention", "People"]),
   Property: Object.freeze(["Property", "RealEstate", "Travel"]),
@@ -9,7 +11,7 @@ export const MARKET_GROUPS = Object.freeze({
   Food: Object.freeze(["Food"]),
   Marketing: Object.freeze(["Marketing", "SEO", "Social", "Sales", "Agencies"]),
   Creative: Object.freeze(["Creative", "Design", "Writing", "Audio", "News"]),
-  Professional: Object.freeze(["Professional", "Business", "Careers", "Productivity"]),
+  Professional: Object.freeze(["Professional", "Business", "Careers"]),
   Education: Object.freeze(["Education", "Training", "Academy"]),
   Finance: Object.freeze(["Finance", "Insurance", "Banking", "Crypto"]),
   Electronics: Object.freeze(["Electronics", "Repair"]),
@@ -17,7 +19,7 @@ export const MARKET_GROUPS = Object.freeze({
   Construction: Object.freeze(["Construction", "Hardware"]),
   Home: Object.freeze(["Home"]),
   Automotive: Object.freeze(["Automotive", "Auto"]),
-  Other: Object.freeze(["Other", "Developer", "Security", "Games", "Domains", "Discovery"]),
+  Other: Object.freeze(["Other", "Games", "Domains", "Discovery"]),
 });
 
 export const VISIBLE_CATEGORIES = Object.freeze(Object.keys(MARKET_GROUPS));
@@ -25,6 +27,8 @@ export const VISIBLE_CATEGORIES = Object.freeze(Object.keys(MARKET_GROUPS));
 // The names a reader sees. Kept beside the groups so a market cannot be added
 // to the board without one.
 export const MARKET_LABELS = Object.freeze({
+  SaaS: "SaaS & Software",
+  Developer: "Developer Tools",
   AI: "AI Tools & Agents",
   Creators: "Creators & Talent",
   Property: "Property & Agents",

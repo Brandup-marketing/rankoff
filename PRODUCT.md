@@ -10,32 +10,34 @@ web
 
 ## Users
 
-Primary users are global founders, makers, agencies, and growth marketers with a live product to promote. They arrive ready to decide whether a visible position is worth a small, transparent bid. Secondary users are curious builders who browse the board to discover products and watch ranking changes.
+Primary users are global founders with a working SaaS product, AI tool or digital business. They want to decide whether a public sponsored position is worth paying for. Visitors browse to discover useful products and watch ranking changes. Other industries remain welcome. Built in Malaysia, open to businesses everywhere.
 
 ## Product Purpose
 
-Rankoff is a public, paid-attention leaderboard: the highest verified bid holds the highest sponsored rank. The MVP proves that a simple, visible contest can turn a product launch into a shareable event while giving buyers a clear record of the clicks it generated.
+Rankoff is a public sponsored leaderboard. The highest cumulative settled payment total for the selected market and timeframe ranks first. A higher total can move another listing ahead; being overtaken does not remove a listing. Every position is paid advertising, not an endorsement or quality award. There is no guaranteed audience, customer outcome or fixed duration at a rank.
 
 ## Positioning
 
-Pay to take #1. Every rank has a visible price, every paid placement is clearly sponsored, and every listing can show the attention it earned.
+Claim a visible position. Discover what people are building. Rankings, cumulative amounts and tracked outbound clicks are public. Entry price, already-paid total and the current claim price are distinct facts and must be labelled accordingly.
+
+The source prepares US$1 entry; live USD activation remains gated by the verified Dodo product and a decision on existing MYR ranking value. Refer to USD_RELEASE.md before quoting live prices. Never sum original MYR and USD payment amounts as if they were one currency.
 
 ## Brand Personality
 
-Direct, lively, and accountable. The product should feel like a live public market for product attention, never like a casino, a black-box ad exchange, or an SEO promise.
-
-## Anti-references
-
-Avoid generic dark trading dashboards, SEO-score dashboards, casino aesthetics, vague AI-agent marketing, deceptive organic-ranking claims, and a visual or verbal clone of Outbid.
+Direct, lively and accountable. Use business/market and pay/claim in reader-facing language. Keep the recognizable R mark and red, black and white identity. Avoid casino language, SEO promises and invented traction.
 
 ## Design Principles
 
-1. Put the live ranking and its next meaningful action above explanation.
-2. Make paid status, price, and ranking rule impossible to miss.
-3. Use real product discovery detail, not anonymous logo tiles.
-4. Keep the bidding path short, but always show its consequence before confirmation.
-5. Treat measured outcomes as evidence; unknown outcomes remain unknown.
+1. Keep the rule and selected board scope visible near the payment action.
+2. Give visitors enough description to decide whether to visit a product.
+3. Keep ranks continuous; activity follows the ranked list.
+4. Label payment controls and explain the effect before confirmation.
+5. Make unknown outcomes explicit. Tracked redirects can include repeats and automated traffic; they are not unique customers.
+
+## Launch Experiment
+
+Recruit one relevant founder community. Target 20 independently paying businesses in 30 days with evidence of repeat payment; this is an experiment target, not a forecast. Track settlements from the payment ledger, and verify business independence separately. See FOUNDER_LAUNCH_KIT.md for drafts, tracking definitions and the manual return-visit routine.
 
 ## Accessibility & Inclusion
 
-Meet WCAG 2.2 AA for contrast, keyboard use, semantic labels, focus visibility, and reduced motion. Do not rely on color alone to convey position, price change, or action state.
+Verify contrast, keyboard operation, meaningful accessible names, visible focus and reduced motion. Use 44px primary and share controls. Descriptions have two readable lines on mobile and names wrap. English is default; Chinese copy and server-rendered translations must agree.

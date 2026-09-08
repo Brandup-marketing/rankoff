@@ -19,17 +19,17 @@
     <meta property="og:title" content="RANKOFF | Start at US$1, compete for #1" />
     <meta property="og:description" content="A public leaderboard for businesses worldwide. US$1 to get on it — and every listing, payment and click is public." />
     <meta property="og:url" content="https://rankoff.my/" />
-    <meta property="og:image" content="https://rankoff.my/assets/rankoff-og-card.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image" content="https://rankoff.my/assets/rankoff-og-claim.png" />
+    <meta property="og:image:width" content="1730" />
+    <meta property="og:image:height" content="909" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="RANKOFF | Start at US$1, compete for #1" />
     <meta name="twitter:description" content="A public leaderboard for businesses worldwide. US$1 to get on it — and every listing, payment and click is public." />
-    <meta name="twitter:image" content="https://rankoff.my/assets/rankoff-og-card.png" />
+    <meta name="twitter:image" content="https://rankoff.my/assets/rankoff-og-claim.png" />
     <meta name="theme-color" content="#090a0c" />
     <title>RANKOFF | Pay-to-rank leaderboard, from US$1</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=95" />
+    <link rel="stylesheet" href="./styles.css?v=97" />
     <link rel="stylesheet" href="./answers.css?v=2" />
     <script id="website-schema" type="application/ld+json">
       {
@@ -59,7 +59,7 @@
     <main class="app-shell">
       <header class="topbar" aria-label="RANKOFF">
         <a class="brand" href="./" data-language-link data-i18n-aria-label="brandHome" aria-label="RANKOFF home">
-          <img class="brand-final-logo" src="./assets/rankoff-final-logo.png?v=4" data-i18n-alt="brandLogoAlt" alt="RANKOFF — pay-to-rank leaderboard" width="1254" height="1254" />
+          <img class="brand-mark" src="/assets/rankoff-favicon.png?v=1" alt="" width="40" height="40" /><span class="brand-word">RANKOFF</span>
         </a>
 
         <nav class="site-nav" data-i18n-aria-label="mainNavigation" aria-label="Main navigation"><a href="/" data-language-link data-i18n="navBoard" aria-current="page">Board</a><a href="/categories" data-language-link data-i18n="navCategories">Categories</a><a href="/about" data-language-link data-i18n="navAbout">About</a></nav>
@@ -80,8 +80,9 @@
 
       <section class="claim-stage" id="claim" aria-labelledby="page-title">
         <div class="claim-panel">
+          <p class="discovery-intro" data-i18n="discoveryIntro">For SaaS, AI tools and digital businesses. Discover something worth visiting.</p>
           <h1 id="page-title"><span class="hero-word" data-hero-lead>Claim </span><span data-hero-rank>#1</span><span data-hero-market></span><span class="hero-word" data-hero-join> for </span><strong data-hero-next-price>US$ 1</strong></h1>
-          <p class="claim-copy" data-hero-context data-i18n="heroCopy">Put your business where customers look first. It stays at the top until someone pays more.</p>
+          <p class="claim-copy" data-hero-context data-i18n="heroCopy">A public sponsored leaderboard. Listings start at US$1. The highest total paid ranks first.</p>
 
           <div class="market-entry" data-market-entry data-entry-collapsed="true">
             <!-- B2 (agent/post-payment): phone-only entry-form toggle. Hidden on
@@ -94,7 +95,7 @@
                   <span data-i18n="totalBid">Your payment</span>
                   <span class="money-field">
                     <b aria-hidden="true" data-currency-symbol>US$</b>
-                    <input name="challengeAmount" type="number" inputmode="numeric" min="1" max="1000000" step="1" required data-inline-bid />
+                    <input aria-label="Your payment in US dollars" data-i18n-aria-label="paymentAmountLabel" name="challengeAmount" type="number" inputmode="numeric" min="1" max="1000000" step="1" required data-inline-bid />
                   </span>
                 </label>
                 <button type="button" data-inline-adjust="1" data-i18n-aria-label="increaseBid" aria-label="Increase by US$1">+</button>
@@ -126,7 +127,7 @@
             </div>
           </section>
 
-          <div class="board-toolbar">
+          <div id="board" class="board-toolbar">
             <div class="board-toolbar-lead">
               <div class="board-live-line">
                 <span class="demo-state" data-board-state><i aria-hidden="true"></i> Live board</span>
@@ -148,6 +149,18 @@
 
           <p class="currency-note" data-currency-note hidden></p>
           <div class="top-three top-three-hero" data-top-three data-i18n-aria-label="topThree" aria-label="Top three sponsored listings"></div>
+      <section class="board-section" aria-labelledby="board-heading">
+        <div class="board-list" data-board-list aria-live="polite" data-i18n-aria-label="boardListings" aria-label="Sponsored listings"></div>
+        <nav class="board-pagination" data-board-pagination aria-label="Leaderboard pages" hidden>
+          <button type="button" class="pagination-button" data-board-page="previous">← Previous</button>
+          <div class="pagination-center">
+            <div class="pagination-links" data-page-links data-i18n-aria-label="pageNumbers" aria-label="Page numbers"></div>
+            <p class="pagination-status" aria-live="polite"><strong data-page-range>1–50</strong><span data-page-total>of 50</span></p>
+          </div>
+          <button type="button" class="pagination-button" data-board-page="next">Next →</button>
+        </nav>
+
+      </section>
           <p class="audience-strip" data-audience-strip hidden>
             <span><strong data-stat-visitors>—</strong> <span data-i18n="statVisitors">visitor sessions</span></span>
             <span><strong data-stat-clicks>—</strong> <span data-i18n="statClicks">clicks to businesses</span></span>
@@ -192,18 +205,7 @@
         </div>
       </section>
 
-      <section class="board-section" id="board" aria-labelledby="board-heading">
-        <div class="board-list" data-board-list aria-live="polite" data-i18n-aria-label="boardListings" aria-label="Sponsored listings"></div>
-        <nav class="board-pagination" data-board-pagination aria-label="Leaderboard pages" hidden>
-          <button type="button" class="pagination-button" data-board-page="previous">← Previous</button>
-          <div class="pagination-center">
-            <div class="pagination-links" data-page-links data-i18n-aria-label="pageNumbers" aria-label="Page numbers"></div>
-            <p class="pagination-status" aria-live="polite"><strong data-page-range>1–50</strong><span data-page-total>of 50</span></p>
-          </div>
-          <button type="button" class="pagination-button" data-board-page="next">Next →</button>
-        </nav>
 
-      </section>
 
       <section class="ranking-rules" aria-labelledby="ranking-rules-heading">
         <div class="rules-lead">
@@ -321,10 +323,11 @@
     </dialog>
 
     <div class="toast" data-toast role="status" aria-live="polite" aria-atomic="true"></div>
+    <script src="/acquisition.js?v=1" defer></script>
     <script src="./search.js?v=7" defer></script>
     <script src="./share-card.js?v=7" type="module"></script>
     <script src="./share.js?v=8" defer></script>
-    <script src="./app.js?v=107" defer></script>
+    <script src="./app.js?v=108" defer></script>
     <script type="module" src="/currency.js?v=1"></script>
   </body>
 </html>

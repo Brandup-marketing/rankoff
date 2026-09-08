@@ -8,13 +8,13 @@
     <meta name="theme-color" content="#090a0c" />
     <title>Owner view</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=95" />
+    <link rel="stylesheet" href="./styles.css?v=97" />
     <link rel="stylesheet" href="./admin.css?v=2" />
   </head>
   <body>
     <main class="owner-shell">
       <header class="owner-topbar">
-        <a class="brand owner-brand" href="/" aria-label="RANKOFF home"><img class="brand-final-logo" src="./assets/rankoff-final-logo.png?v=4" alt="RANKOFF" width="1254" height="1254" /></a>
+        <a class="brand owner-brand" href="/" aria-label="RANKOFF home"><img class="brand-mark" src="/assets/rankoff-favicon.png?v=1" alt="" width="40" height="40" /><span class="brand-word">RANKOFF</span></a>
         <p class="owner-eyebrow" data-i18n="pageKicker">Owner view</p>
         <button class="language-toggle" type="button" data-language-toggle aria-pressed="false">中文</button>
         <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch colour theme" aria-pressed="true">Light</button>
@@ -66,9 +66,19 @@
         </div>
       </section>
 
+      <section class="owner-results" data-owner-acquisition hidden aria-labelledby="acquisition-title">
+        <h2 id="acquisition-title" data-i18n="acquisitionTitle">Campaign results · last 30 days</h2>
+        <p data-i18n="acquisitionNote">Visits are browser-tab sessions, not unique people. Settlements come from the payment ledger. Repeat payments mean another settled payment for the same listing. Campaign labels are visitor supplied; independent ownership must be checked separately.</p>
+        <p data-owner-coverage></p>
+        <div class="owner-table-scroll"><table class="owner-table">
+          <thead><tr><th data-i18n="campaignLabel">Campaign / source</th><th data-i18n="visitsLabel">Visits</th><th data-i18n="reviewsLabel">Reviews</th><th data-i18n="checkoutsLabel">Checkouts</th><th data-i18n="settlementsLabel">Settled</th><th data-i18n="repeatLabel">Repeat</th><th data-i18n="outboundLabel">Outbound clicks</th></tr></thead>
+          <tbody data-owner-campaign-rows></tbody>
+        </table></div>
+      </section>
+      <p class="owner-note" data-owner-acquisition-status role="status"></p>
       <footer class="owner-footer"><a href="/" data-i18n="backToBoard">Back to the board</a></footer>
     </main>
     <script src="./share-card.js?v=7" type="module"></script>
-    <script src="./admin.js?v=6" defer></script>
+    <script src="./admin.js?v=7" defer></script>
   </body>
 </html>

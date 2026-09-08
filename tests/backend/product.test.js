@@ -185,11 +185,11 @@ test("an explicit Chinese product locale renders indexable Chinese metadata and 
   assert.match(html, /<meta property="og:locale" content="zh_MY"/);
   assert.equal(html.match(/<meta property="og:url"/g)?.length, 1, "the Chinese page must not retain the generic shell URL");
   assert.match(html, /"inLanguage":"zh-Hans"/);
-  assert.match(html, /alt="RANKOFF — 竞价登上第 1 名"/);
+  assert.match(html, /aria-label="RANKOFF 首页"/);
   assert.match(html, /data-category>营销与广告<\/span>/);
   assert.match(html, /data-rank-label>营销与广告排名<\/dt>/);
   assert.match(html, /data-rank-note>全站第 3 名<\/p>/);
-  assert.match(html, /data-placement-label>已验证展示<\/span>/);
+  assert.match(html, /data-placement-label>付费展示<\/span>/);
   assert.match(html, /data-click-label>追踪点击<\/dt>/);
   assert.match(html, /data-copy="sponsored">赞助<\/span>/);
   assert.match(html, /data-copy="share">分享排名<\/button>/);
@@ -216,7 +216,7 @@ test("a localized missing detail keeps root assets and language headers", async 
   assert.equal(response.headers.get("content-language"), "zh-Hans");
   assert.ok(!html.includes('href="./'), "404 styles must resolve from the site root");
   assert.ok(!html.includes('src="./'), "404 scripts and images must resolve from the site root");
-  assert.match(html, /alt="RANKOFF — 竞价登上第 1 名"/);
+  assert.match(html, /aria-label="RANKOFF 首页"/);
 });
 
 test("a Chinese social profile keeps its permanent profile URL and localized action", () => {

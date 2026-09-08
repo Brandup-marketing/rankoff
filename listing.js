@@ -7,14 +7,14 @@
   const initialTitle = document.title;
   const initialDescription = document.querySelector('meta[name="description"]')?.getAttribute("content") || "";
   const initialSocialDescription = document.querySelector('meta[property="og:description"]')?.getAttribute("content") || initialDescription;
-  const categoryGroups = Object.freeze({ AI: ["AI", "Agents", "AIMedia"], Creators: ["Creators", "Attention", "People"], Property: ["Property", "RealEstate", "Travel"], Interior: ["Interior"], Beauty: ["Beauty"], Health: ["Health"], Sports: ["Sports"], Food: ["Food"], Marketing: ["Marketing", "SEO", "Social", "Sales", "Agencies"], Creative: ["Creative", "Design", "Writing", "Audio", "News"], Professional: ["Professional", "Business", "Careers", "Productivity"], Education: ["Education", "Training", "Academy"], Finance: ["Finance", "Insurance", "Banking", "Crypto"], Electronics: ["Electronics", "Repair"], Retail: ["Retail", "Ecommerce"], Construction: ["Construction", "Hardware"], Home: ["Home"], Automotive: ["Automotive", "Auto"], Other: ["Other", "Developer", "Security", "Games", "Domains", "Discovery"] });
+  const categoryGroups = Object.freeze({ SaaS: ["SaaS", "Software", "Productivity"], Developer: ["Developer", "Security"], AI: ["AI", "Agents", "AIMedia"], Creators: ["Creators", "Attention", "People"], Property: ["Property", "RealEstate", "Travel"], Interior: ["Interior"], Beauty: ["Beauty"], Health: ["Health"], Sports: ["Sports"], Food: ["Food"], Marketing: ["Marketing", "SEO", "Social", "Sales", "Agencies"], Creative: ["Creative", "Design", "Writing", "Audio", "News"], Professional: ["Professional", "Business", "Careers"], Education: ["Education", "Training", "Academy"], Finance: ["Finance", "Insurance", "Banking", "Crypto"], Electronics: ["Electronics", "Repair"], Retail: ["Retail", "Ecommerce"], Construction: ["Construction", "Hardware"], Home: ["Home"], Automotive: ["Automotive", "Auto"], Other: ["Other", "Games", "Domains", "Discovery"] });
   const categoryAliases = Object.freeze(Object.entries(categoryGroups).reduce((aliases, [market, members]) => {
     aliases[market.toLowerCase()] = market;
     members.forEach((member) => { aliases[member.toLowerCase()] = market; });
     return aliases;
   }, {}));
-  const categoryLabels = { AI: "AI Tools & Agents", Creators: "Creators & Talent", Property: "Property & Agents", Interior: "Interior & Renovation", Beauty: "Beauty & Wellness", Health: "Health & Medical", Sports: "Sports & Fitness", Food: "Food & Beverage", Marketing: "Marketing & Advertising", Creative: "Creative & Production", Professional: "Professional Services", Education: "Education & Training", Finance: "Finance & Insurance", Electronics: "Electronics & Repair", Retail: "Retail & Ecommerce", Construction: "Hardware & Construction", Home: "Home Services", Automotive: "Automotive", Other: "Other" };
-  const categoryTranslations = { AI: "AI 工具与智能体", Creators: "创作者与艺人", Property: "房产与经纪", Interior: "室内设计与装修", Beauty: "美容与养生", Health: "健康与医疗", Sports: "运动与健身", Food: "餐饮", Marketing: "营销与广告", Creative: "创意与制作", Professional: "专业服务", Education: "教育与培训", Finance: "金融与保险", Electronics: "电子与维修", Retail: "零售与电商", Construction: "五金与建筑", Home: "家居服务", Automotive: "汽车", Other: "其他" };
+  const categoryLabels = { SaaS: "SaaS & Software", Developer: "Developer Tools", AI: "AI Tools & Agents", Creators: "Creators & Talent", Property: "Property & Agents", Interior: "Interior & Renovation", Beauty: "Beauty & Wellness", Health: "Health & Medical", Sports: "Sports & Fitness", Food: "Food & Beverage", Marketing: "Marketing & Advertising", Creative: "Creative & Production", Professional: "Professional Services", Education: "Education & Training", Finance: "Finance & Insurance", Electronics: "Electronics & Repair", Retail: "Retail & Ecommerce", Construction: "Hardware & Construction", Home: "Home Services", Automotive: "Automotive", Other: "Other" };
+  const categoryTranslations = { SaaS: "SaaS 与软件", Developer: "开发者工具", AI: "AI 工具与智能体", Creators: "创作者与艺人", Property: "房产与经纪", Interior: "室内设计与装修", Beauty: "美容与养生", Health: "健康与医疗", Sports: "运动与健身", Food: "餐饮", Marketing: "营销与广告", Creative: "创意与制作", Professional: "专业服务", Education: "教育与培训", Finance: "金融与保险", Electronics: "电子与维修", Retail: "零售与电商", Construction: "五金与建筑", Home: "家居服务", Automotive: "汽车", Other: "其他" };
   const previewListings = [
     ["model-harbor", "Model Harbor", "A release desk for production AI models, approvals, and customer notices.", "用于管理生产环境 AI 模型、审批与客户通知的发布工作台。", "https://modelharbor.example/", "Agents", 2480, 2840],
     ["trackline", "Trackline", "Campaign reporting for teams that need a clean answer to what moved.", "为需要清楚判断成效来源的团队提供营销活动报告。", "https://trackline.example/", "Marketing", 2160, 1910],
@@ -36,11 +36,11 @@
       payClaim: "Pay & claim #1", claimOpening: "Opening checkout…", claimInvalidUrl: "Enter a valid website or public profile address.", claimHandle: "Paste the full profile address, not a bare @handle.",
       claimTooLow: "The minimum payment is {min}.", claimStep: "Payments go in steps of {min}.", claimAgreeFirst: "Please accept the Terms of Service first.", claimListingFailed: "This website could not be listed. No payment was made.", claimUnavailable: "Checkout is unavailable right now. No payment was made.",
       footer: "Transparent sponsored ranking. Every position has a visible price.",
-      previewListing: "Public listing", verifiedPlacement: "Verified placement", previewData: "Public data", verifiedData: "Live data",
+      previewListing: "Public listing", verifiedPlacement: "Paid placement", previewData: "Public data", verifiedData: "Live data",
       sampleClicks: "Referral clicks", verifiedClicks: "Tracked clicks", estimatedClicks: "Referral clicks", past24Clicks: "Past 24h clicks",
       previewEvidence: "Rank, price, and referral clicks update from the public board.",
       verifiedEvidence: "Rank and total come from settled payments. Clicks are redirects recorded by Rankoff; repeats and automated traffic are not filtered, so a click is not a unique visitor, enquiry or sale.",
-      claimCopy: "Put your business above this one. Your full description stays on the board until someone pays more.",
+      claimCopy: "Other payments can change your position. Being overtaken does not remove your listing.",
       previewDisclosure: "Submissions pass automated checks instantly; listings may be removed after publication if they break the rules.", liveDisclosure: "Payment is confirmed only after secure hosted checkout settles.",
       unavailable: "Website temporarily unavailable", copied: "Rank link copied.", shareText: "is ranked", listingFallback: "Listing", sponsoredDescription: "Sponsored listing on Rankoff.",
       footerParent: "A Brandup Marketing product", rules: "Rules", terms: "Terms", privacy: "Privacy", payments: "Payments",
@@ -56,11 +56,11 @@
       payClaim: "付款并拿下第 1 名", claimOpening: "正在打开付款页面…", claimInvalidUrl: "请输入有效的网站或公开主页网址。", claimHandle: "请贴上完整主页链接，而不是单独的 @账号。",
       claimTooLow: "最低付款 {min}。", claimStep: "付款以 {min} 为一档。", claimAgreeFirst: "请先同意《服务条款》。", claimListingFailed: "此网址无法上榜，未产生任何费用。", claimUnavailable: "目前无法打开付款页面，未产生任何费用。",
       footer: "透明的赞助排名。每个位置都有公开价格。",
-      previewListing: "公开条目", verifiedPlacement: "已验证展示", previewData: "公开数据", verifiedData: "实时数据",
+      previewListing: "公开条目", verifiedPlacement: "付费展示", previewData: "公开数据", verifiedData: "实时数据",
       sampleClicks: "推荐点击", verifiedClicks: "追踪点击", estimatedClicks: "推荐点击", past24Clicks: "近 24 小时点击",
       previewEvidence: "排名、价格和推荐点击会随公开榜单更新。",
       verifiedEvidence: "排名与金额来自已结算的付款。点击是 Rankoff 记录的跳转次数；重复与自动化流量未过滤，所以一次点击不等于一位访客、一条询问或一笔成交。",
-      claimCopy: "把你的生意排在这家之上。完整介绍会一直留在榜单上，直到有人付得更多。",
+      claimCopy: "其他付款可能改变你的排名。被超过不会让你的条目下架。",
       previewDisclosure: "提交即通过自动筛查并发布；违反规则的条目可能在发布后被移除。", liveDisclosure: "付款会在安全的托管付款页面完成并确认。",
       unavailable: "网站暂时无法访问", copied: "排名链接已复制。", shareText: "目前排名", listingFallback: "条目", sponsoredDescription: "Rankoff 上的赞助条目。",
       footerParent: "Brandup Marketing 旗下产品", rules: "规则", terms: "条款", privacy: "隐私", payments: "付款",
@@ -548,6 +548,8 @@
       const destination = verified ? new URL(`/go/${encodeURIComponent(model.id)}`, location.origin) : new URL(model.url);
       if (verified && model.snapshot) destination.searchParams.set("snapshot", model.snapshot);
       if (verified && model.rank) destination.searchParams.set("rank", String(model.rank));
+      const visit = window.RankoffAcquisition?.context();
+      if (verified && visit) destination.searchParams.set("sid", visit.session_id);
       elements.visit.href = destination.toString();
       elements.visit.removeAttribute("aria-disabled");
       elements.visit.querySelector("span").textContent = text(ACTION_COPY[modelPlatform()] || "visit");

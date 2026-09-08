@@ -29,8 +29,10 @@ const STATIC_LOCALIZED_METADATA = Object.freeze({
 });
 
 const HOME_STATIC_COPY = Object.freeze({
+  paymentAmountLabel: "付款金额（美元）",
+  discoveryIntro: "为 SaaS、AI 工具与数字业务而建。发现一个值得访问的产品。",
   skipLeaderboard: "跳到榜单", navBoard: "榜单", navCategories: "分类", navAbout: "关于",
-  heroCopy: "把你的生意放在顾客第一眼看到的位置。直到有人付得更多，它都留在榜首。",
+  heroCopy: "公开赞助榜单，US$1 起。累计付款最高者第 1 名。",
   totalBid: "付款金额", productUrl: "你的网站或社交账号", productUrlPlaceholder: "example.com 或 instagram.com/yourname",
   challengeCategory: "市场", chooseMarket: "选择市场", reviewBid: "确认并付款", markets: "市场",
   todayRanking: "今日领先", seeAll: "查看全部", livePulse: "实时付款", latestActivity: "最新动态", refresh: "刷新",
@@ -57,9 +59,10 @@ const CATEGORIES_STATIC_COPY = Object.freeze({
 });
 
 const ABOUT_STATIC_COPY = Object.freeze({
+  "Skip to content": "跳至正文",
   Board: "榜单", Categories: "分类", About: "关于", "The story behind the board": "榜单背后的故事",
   "Attention has a price.": "注意力，明码标价。", "Make it visible.": "让它公开可见。",
-  "RANKOFF is the public leaderboard for businesses worldwide. Pay to hold a spot, show customers what you do, and keep it until someone pays more. One board, one rule: the highest total paid takes #1.": "RANKOFF 是全球商家的公开榜单。付费占一个位置，把你的生意展示给顾客，直到有人付得更多。一个榜单，一条规则：累计付款最高者，就是第 1 名。",
+  "Built in Malaysia. Open to businesses everywhere. Rankoff is a public sponsored leaderboard for SaaS, AI tools, and digital businesses. Discover what people are building, visit their websites, or pay to claim a position. The highest total paid ranks first.": "源自马来西亚，面向全球商家。Rankoff 是 SaaS、AI 工具与数字业务的公开赞助榜单。发现大家正在打造的业务，访问他们的网站，或付费拿下一个位置。累计付款最高者排第一。",
   "Why it exists": "为什么有 Rankoff", "Rankoff started with one question.": "Rankoff 始于一个问题。",
   "What if a business could buy the top spot in the open, not in a hidden ad auction? What if everyone could see who is on top, what it cost, and who is getting the clicks?": "如果商家可以光明正大买下最显眼的位置，而不是在看不见的广告竞价里？如果每个人都能看到谁在榜首、花了多少钱、谁拿到了点击？",
   "Rankoff is the answer: a public board where the price, the position and the clicks are all on show, and every listing is labelled as sponsored.": "Rankoff 就是答案：一个公开榜单，价格、排名、点击全部公开，每个条目都标明是赞助。",
@@ -70,7 +73,7 @@ const ABOUT_STATIC_COPY = Object.freeze({
   "Real numbers from the board, updated live.": "榜单真实数据，实时更新。", "Claim your spot →": "拿下你的位置 →", "How it works": "运作方式", "The board keeps moving.": "榜单一直在动。",
   Now: "现在", "List your business": "让生意上榜", "Enter your website, choose a market, and pay from US$1.": "输入网站、选择市场，US$1 起付款。",
   Then: "随后", "Compete in public": "公开竞争", "Once payment settles, your business, your total and your position are on the board for everyone to see.": "付款确认后，你的生意、累计付款和排名就公开在榜单上，人人可见。",
-  Next: "接下来", "See what it earns": "看看回报", "Tracked clicks show how many people went from the board to your website.": "追踪点击告诉你，有多少人从榜单点进了你的网站。",
+  Next: "接下来", "See what it earns": "看看回报", "Tracked clicks count redirects from Rankoff to listed websites. Repeat and automated clicks may be included.": "追踪点击统计从 Rankoff 跳转到商家网站的次数，可能包含重复与自动化点击。",
   "A Brandup Marketing product": "Brandup Marketing 旗下产品", Rules: "规则", Terms: "条款", Privacy: "隐私", Payments: "付款",
 });
 

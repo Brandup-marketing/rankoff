@@ -108,3 +108,27 @@ late provider events. Immutable conversion records must not be edited or deleted
 Provider references checked during development:
 [checkout sessions](https://docs.dodopayments.com/developer-resources/checkout-session)
 and [dynamic pricing](https://docs.dodopayments.com/developer-resources/dynamic-pricing-checkout).
+
+## Launch clarity and acquisition follow-up
+
+The launch follow-up adds migration `0007_acquisition.sql`. Apply that reviewed,
+additive file explicitly with D1 execute before enabling campaign measurement;
+never use migrations apply. It only adds first-party session/payment-attribution
+storage and indexes. It neither changes board currency nor marks a payment settled.
+The existing SESSION_HASH_SALT must be configured. Campaign failures do not prevent
+checkout. Phone collection remains available but is optional for global customers.
+
+`/admin` now shows a 30-day campaign report using the existing admin token, kept
+only in tab memory. No Meta pixel, advertising spend import, messages or automated
+posts are enabled. See `FOUNDER_LAUNCH_KIT.md` for the measurement model and manual
+launch workflow. Deploying analytics does not complete founder recruitment.
+
+The updated generic social preview is `assets/rankoff-og-claim.png` (1730 × 909).
+It was edited with the built-in imagegen tool from the original OG asset using
+this prompt: “Change ONLY the small tagline under RANKOFF from BID YOUR WAY TO #1
+to exactly CLAIM YOUR POSITION. Keep the recognizable red and white R mark, the
+RANKOFF wordmark, black background, centered composition and all existing logo
+geometry unchanged. Preserve the two red dots around the tagline. Keep the same
+wide social preview aspect ratio, ideally 1200 by 630 pixels. Crisp clean lettering.
+No added text, numbers, prices, claims, decoration or watermark.” The resulting
+image was visually inspected and its actual dimensions are declared in metadata.

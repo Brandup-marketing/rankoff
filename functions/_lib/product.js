@@ -17,13 +17,13 @@ const PRODUCT_COPY = Object.freeze({
     claimUrl: "Your website or public profile", claimAmount: "Your payment", claimAgree: "I understand this is a paid sponsored placement for a public link. It gives me no rights over that account, and the listed party may request removal. I agree to the ", termsOfService: "Terms of Service", claimAgreeSuffix: ".", payClaim: "Pay & claim #1",
     rules: "Rules", terms: "Terms", privacy: "Privacy", payments: "Payments", verifiedData: "Live data", past24Clicks: "Past 24h clicks",
     verifiedEvidence: "Rank and total come from settled payments. Clicks are redirects recorded by Rankoff; repeats and automated traffic are not filtered, so a click is not a unique visitor, enquiry or sale.",
-    claimCopy: "Put your business above this one. Your full description stays on the board until someone pays more.",
+    claimCopy: "Other payments can change your position. Being overtaken does not remove your listing.",
     liveDisclosure: "Payment is confirmed only after secure hosted checkout settles.",
     currentRank: "Current rank",
     firstListed: "First listed",
     settledBids: "Payments",
     lastUpdated: "Last updated",
-    verifiedPlacement: "Verified placement",
+    verifiedPlacement: "Paid placement",
     verifiedClicks: "Tracked clicks",
   }),
   zh: Object.freeze({
@@ -34,18 +34,20 @@ const PRODUCT_COPY = Object.freeze({
     claimUrl: "你的网站或公开主页", claimAmount: "付款金额", claimAgree: "我了解这是针对公开链接的付费赞助展示，不赋予我对该账号的任何权利，被列出的一方可要求移除。我同意", termsOfService: "《服务条款》", claimAgreeSuffix: "。", payClaim: "付款并拿下第 1 名",
     rules: "规则", terms: "条款", privacy: "隐私", payments: "付款", verifiedData: "实时数据", past24Clicks: "近 24 小时点击",
     verifiedEvidence: "排名与金额来自已结算的付款。点击是 Rankoff 记录的跳转次数；重复与自动化流量未过滤，所以一次点击不等于一位访客、一条询问或一笔成交。",
-    claimCopy: "把你的生意排在这家之上。完整介绍会一直留在榜单上，直到有人付得更多。",
+    claimCopy: "其他付款可能改变你的排名。被超过不会让你的条目下架。",
     liveDisclosure: "付款会在安全的托管付款页面完成并确认。",
     currentRank: "当前排名",
     firstListed: "首次上榜",
     settledBids: "付款次数",
     lastUpdated: "最近更新",
-    verifiedPlacement: "已验证展示",
+    verifiedPlacement: "付费展示",
     verifiedClicks: "追踪点击",
   }),
 });
 
 const PRODUCT_MARKET_TRANSLATIONS = Object.freeze({
+  "SaaS & Software": "SaaS 与软件",
+  "Developer Tools": "开发者工具",
   "AI Tools & Agents": "AI 工具与智能体",
   "Creators & Talent": "创作者与艺人",
   "Property & Agents": "房产与经纪",
@@ -213,7 +215,7 @@ export function buildProductView({ entry, todayEntry, board, snapshotId, record,
     // A platform profile hides its picture from crawlers, so only a website can
     // hand us a share image of its own.
     shareImage: parts.platform
-      ? `${SITE_ORIGIN}/assets/rankoff-og-card.png`
+      ? `${SITE_ORIGIN}/assets/rankoff-og-claim.png`
       : `${SITE_ORIGIN}/og/${parts.hostname}?currency=${encodeURIComponent(currency)}`,
     title,
     description,
@@ -277,7 +279,7 @@ export function localizeProductShell(shell, language = "en") {
   for (const [key, value] of Object.entries(copy)) html = replaceDataCopy(html, key, value);
   if (locale !== "zh") return html;
   html = html.replace(/aria-label="RANKOFF home"/g, 'aria-label="RANKOFF 首页"');
-  html = html.replace(/alt="RANKOFF — Bid your way to number one"/g, 'alt="RANKOFF — 竞价登上第 1 名"');
+  html = html.replace(/alt="RANKOFF — public sponsored leaderboard"/g, 'alt="RANKOFF — 竞价登上第 1 名"');
   html = html.replace(/aria-label="Main navigation"/g, 'aria-label="主导航"');
   html = html.replace(/aria-label="Search businesses and markets"/g, 'aria-label="搜索商家和市场"');
   html = html.replace(/(<button class="language-toggle"[^>]*>)[\s\S]*?(<\/button>)/, "$1EN$2");

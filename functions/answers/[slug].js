@@ -9,7 +9,7 @@ const SLUGS = new Set(["pay-to-rank-leaderboard", "how-rankoff-ranking-works", "
 export function liveSummary(listings, settled, clicks, currency) {
   const total = formatMoney(settled, currency);
   const en = `${listings} live ${listings === 1 ? "listing" : "listings"}, ${total} settled and ${clicks} verified ${clicks === 1 ? "click" : "clicks"}`;
-  const zh = `${listings} 个正式条目、${total} 已结算、${clicks} 次验证点击`;
+  const zh = `${listings} 个正式条目、${total} 已结算、${clicks} 次追踪点击`;
   return { en, zh };
 }
 

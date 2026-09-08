@@ -1,3 +1,4 @@
+import { attributePayment } from "../../../_lib/acquisition.js";
 import { ApiError, TERMS_VERSION, defaultCurrency, isProduction, maxBidMinor, paymentConfigurationReady, requireDatabase } from "../../../_lib/config.js";
 import { getRequestId, json, methodNotAllowed, readJson } from "../../../_lib/http.js";
 import { createDodoCheckout } from "../../../_lib/payment.js";
@@ -39,6 +40,8 @@ export async function onRequestPost(context) {
   const now = new Date().toISOString();
   const bid = { id: crypto.randomUUID(), boardId: listing.board_id, listingId, amountMinor, currency, idempotencyKey, fingerprint, snapshotId: input.snapshot_id || null, createdAt: now, termsVersion: agreedVersion, agreedAt: now };
   await createPendingBid(db, bid);
+  try { await attributePayment(db, context.env, bid, input.acquisition); }
+  catch { console.warn("Payment attribution unavailable"); }
   try {
     const checkout = await createDodoCheckout(context.env, bid);
     await updateBidCheckout(db, bid.id, checkout, now);

@@ -540,7 +540,7 @@ function publicBoard(board) {
   return {
     id: board.id,
     slug: board.slug,
-    name: board.name,
+    name: board.slug === "global" ? "Rankoff Global" : board.name,
     currency: board.currency,
     min_increment_minor: Number(board.min_increment_minor),
     currency_conversion: board.currency_conversion || null,

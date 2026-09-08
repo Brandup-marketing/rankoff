@@ -11,6 +11,8 @@
   };
   let currency = boardCurrencyFormat("USD");
   const categoryConfig = [
+    { id: "SaaS", name: "SaaS & Software", zh: "SaaS 与软件", icon: "▦", members: ["SaaS", "Software", "Productivity"] },
+    { id: "Developer", name: "Developer Tools", zh: "开发者工具", icon: "⌘", members: ["Developer", "Security"] },
     { id: "AI", name: "AI Tools & Agents", zh: "AI 工具与智能体", icon: "✧", members: ["AI", "Agents", "AIMedia"] },
     { id: "Creators", name: "Creators & Talent", zh: "创作者与艺人", icon: "✦", members: ["Creators", "Attention", "People"] },
     { id: "Property", name: "Property & Agents", zh: "房产与经纪", icon: "⌂", members: ["Property", "RealEstate", "Travel"] },
@@ -21,7 +23,7 @@
     { id: "Food", name: "Food & Beverage", zh: "餐饮", icon: "◍", members: ["Food"] },
     { id: "Marketing", name: "Marketing & Advertising", zh: "营销与广告", icon: "↗", members: ["Marketing", "SEO", "Social", "Sales", "Agencies"] },
     { id: "Creative", name: "Creative & Production", zh: "创意与制作", icon: "✎", members: ["Creative", "Design", "Writing", "Audio", "News"] },
-    { id: "Professional", name: "Professional Services", zh: "专业服务", icon: "◆", members: ["Professional", "Business", "Careers", "Productivity"] },
+    { id: "Professional", name: "Professional Services", zh: "专业服务", icon: "◆", members: ["Professional", "Business", "Careers"] },
     { id: "Education", name: "Education & Training", zh: "教育与培训", icon: "✎+", members: ["Education", "Training", "Academy"] },
     { id: "Finance", name: "Finance & Insurance", zh: "金融与保险", icon: "◧", members: ["Finance", "Insurance", "Banking", "Crypto"] },
     { id: "Electronics", name: "Electronics & Repair", zh: "电子与维修", icon: "▣", members: ["Electronics", "Repair"] },
@@ -29,7 +31,7 @@
     { id: "Construction", name: "Hardware & Construction", zh: "五金与建筑", icon: "▦+", members: ["Construction", "Hardware"] },
     { id: "Home", name: "Home Services", zh: "家居服务", icon: "⚙", members: ["Home"] },
     { id: "Automotive", name: "Automotive", zh: "汽车", icon: "◎", members: ["Automotive", "Auto"] },
-    { id: "Other", name: "Other", zh: "其他", icon: "•••", members: ["Other", "Developer", "Security", "Games", "Domains", "Discovery"] },
+    { id: "Other", name: "Other", zh: "其他", icon: "•••", members: ["Other", "Games", "Domains", "Discovery"] },
   ];
   const categoryAliases = Object.freeze(categoryConfig.reduce((aliases, config) => {
     aliases[config.id.toLowerCase()] = config.id;
@@ -502,11 +504,12 @@
       return card;
     };
     const scored = categoryConfig.map((config, index) => ({ config, rows: categoryRows(config.id), index }));
-    const populated = scored.filter(({ rows }) => rows.length)
+    const primary = scored.filter(({ config }) => ["SaaS", "AI", "Developer"].includes(config.id));
+    const populated = scored.filter(({ config, rows }) => rows.length && !primary.some((entry) => entry.config.id === config.id))
       .sort((a, b) => b.rows.length - a.rows.length || b.rows[0].bid - a.rows[0].bid || a.index - b.index);
-    const empty = scored.filter(({ rows }) => !rows.length);
+    const empty = scored.filter(({ config, rows }) => !rows.length && !primary.some((entry) => entry.config.id === config.id));
     const today = elements.activeWindow === "today";
-    if (!empty.length || (!populated.length && !today)) {
+    if (!empty.length) {
       elements.grid.replaceChildren(...categoryConfig.map(cards));
       elements.moreMarkets?.remove();
       elements.moreMarkets = null;
@@ -515,7 +518,7 @@
     // A 24-hour window with no payment at all is one sentence, not nineteen
     // "waiting" cards; every market stays reachable under the fold.
     const lead = [];
-    if (!populated.length) {
+    if (today && !scored.some(({ rows }) => rows.length)) {
       const notice = document.createElement("p");
       notice.className = "category-notice";
       notice.textContent = elements.language === "zh"
@@ -523,7 +526,7 @@
         : "No payment in the past 24 hours yet. Switch to All-time to see every market's board.";
       lead.push(notice);
     }
-    elements.grid.replaceChildren(...lead, ...populated.map(({ config }) => cards(config)));
+    elements.grid.replaceChildren(...lead, ...primary.map(({ config }) => cards(config)), ...populated.map(({ config }) => cards(config)));
     const details = elements.moreMarkets || document.createElement("details");
     details.className = "category-more";
     const summary = document.createElement("summary");

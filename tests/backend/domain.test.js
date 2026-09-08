@@ -44,10 +44,13 @@ test("legacy category tags normalize to visible launch markets", () => {
   assert.equal(normalizeCategory("Design"), "Creative");
   assert.equal(normalizeCategory("RealEstate"), "Property");
   assert.equal(normalizeCategory("Education"), "Education");
-  // The tech-shaped markets are gone from the board, but records tagged with them stay valid.
+  // Legacy keys remain valid as the global digital markets become explicit.
   assert.equal(normalizeCategory("AIMedia"), "AI");
   assert.equal(normalizeCategory("Crypto"), "Finance");
-  assert.equal(normalizeCategory("Developer"), "Other");
+  assert.equal(normalizeCategory("Developer"), "Developer");
+  assert.equal(normalizeCategory("Security"), "Developer");
+  assert.equal(normalizeCategory("Software"), "SaaS");
+  assert.equal(normalizeCategory("Productivity"), "SaaS");
   assert.equal(normalizeCategory("Agents"), "AI");
 
   // No stored tag may resolve to a market the board no longer shows.

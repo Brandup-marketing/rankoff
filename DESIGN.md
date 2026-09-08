@@ -2,42 +2,34 @@
 
 ## Scene
 
-A founder checks a live public product contest on a bright laptop screen after a launch post starts circulating: the page feels like a disciplined independent sports desk, with a visible challenge in every bid rather than the anxious darkness of a trading terminal.
+A founder opens Rankoff from a community post on a phone or laptop to inspect the actual board. The first task is understanding the price and ranking rule; the next is judging a listed product or claiming a position. Dark English is the default, with light and Chinese preferences available.
 
 ## Color Strategy
 
-Full palette by role: black and near-white anchor the RANKOFF identity; competition red signals bids and rank movement; ultramarine is reserved for verified outcome data.
+Preserve the established RANKOFF identity: near-black surfaces, near-white text, red ranking and payment actions, and blue discovery/detail links. Green marks activity. Color is never proof that a business or click is verified.
 
-```css
-:root {
-  --bg: oklch(0.985 0.002 270);
-  --surface: oklch(0.955 0.006 270);
-  --surface-strong: oklch(0.925 0.010 270);
-  --ink: oklch(0.170 0.012 270);
-  --muted: oklch(0.430 0.018 270);
-  --line: oklch(0.800 0.012 270);
-  --brand: oklch(0.170 0.012 270);
-  --brand-strong: oklch(0.120 0.010 270);
-  --accent: oklch(0.610 0.220 29);
-  --accent-soft: oklch(0.940 0.045 29);
-  --verified: oklch(0.490 0.170 260);
-  --positive: oklch(0.530 0.135 150);
-  --white: oklch(1 0 0);
-}
-```
+The live source of tokens is styles.css. Dark defaults include --bg oklch(12% 0.008 25), --surface oklch(16% 0.009 25), --ink oklch(94% 0.004 25), --muted oklch(70% 0.01 25) and --accent oklch(64% 0.225 28). White text on red-filled controls uses --accent-fill oklch(55% 0.21 28) for contrast. The light theme supplies its own darker text/link tokens.
 
 ## Typography
 
-Use one resilient sans-serif family stack: `Inter`, `ui-sans-serif`, `system-ui`, `sans-serif`. The ranking number and bid price use tabular numerals. Display headings remain measured and never exceed 56px.
+Use the existing resilient sans-serif stack. Ranking and payment amounts use tabular numerals. Keep headings balanced and letter spacing no tighter than -0.04em. Product names wrap; mobile descriptions show two lines at readable size. Do not shrink the page merely to force the first three ranks above every device's fold.
 
 ## Layout
 
-The board is the first screen, not a marketing hero. A compact masthead establishes the rule; a persistent #1 challenge ticket then leads into an editorial-style, dense ranked list. On mobile, metadata stacks below a product title and bid actions remain full-width without changing order.
+A recognizable mark with a legible wordmark leads the compact header. Audience and discovery copy, the selected #1 claim price, the cumulative-payment rule and the short entry form precede the market rail and leaderboard. SaaS & Software, Developer Tools and AI Tools & Agents are prominent; other markets remain accessible.
+
+Keep ranks #1 onward continuous. Cards show the name, product description, sponsored status, market, distinct Visit website and Details links, Total paid, secondary Share and a contained claim action. On narrow screens, the amount and claim action occupy the final row. Activity and audience evidence follow the list. Do not float claim buttons across card boundaries.
 
 ## Components
 
-Use a stable 8px radius for cards and controls, rectangular price actions, semantic status chips, accessible dialogs, and a single icon language. Avoid nested cards, decorative gradients, and soft floating shadows.
+Preserve the established modest radii, border-based surfaces, red #1 emphasis, pill controls and semantic dialogs. Primary/share touch targets are at least 44px. Every amount field needs a readable label and an accessible name with currency context. The board anchor targets the start of the ranking controls. About has a skip link.
 
 ## Motion
 
-Use short state transitions only: a bid confirmation uses a subtle background flash and the changed row moves into place. All motion is disabled or reduced when the user requests reduced motion.
+Retain short purposeful transitions, visible default content and reduced-motion support. No new scroll animation is needed for the launch.
+
+## Content and Proof
+
+Say Paid placement, not Verified placement. Clicks are tracked redirects and can include repeats and automated traffic. Being overtaken changes position, not listing availability. Never fabricate product descriptions, ranking changes, visitors or launch results. Static Chinese translations must follow exact English changes.
+
+The generic social preview uses assets/rankoff-og-claim.png and “Claim your position.” Lead outreach with a fresh screenshot of the real board, identifying its currency, scope, timeframe and capture date. Local QA fixtures are never marketing evidence.

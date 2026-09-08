@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="View a sponsored product's current Rankoff position, bid, and measured clicks." />
+    <meta name="description" content="View a sponsored business’s Rankoff position, total paid, and tracked clicks." />
     <meta name="robots" content="noindex, follow" />
     <link rel="canonical" href="https://rankoff.my/listing" />
     <meta property="og:site_name" content="RANKOFF" />
@@ -11,22 +11,22 @@
     <meta property="og:locale" content="en_MY" />
     <meta property="og:locale:alternate" content="zh_MY" />
     <meta property="og:title" content="Sponsored listing | RANKOFF" />
-    <meta property="og:description" content="See the bid, rank, and measured attention behind this sponsored listing." />
+    <meta property="og:description" content="See the rank, total paid, and tracked clicks behind this sponsored listing." />
     <meta property="og:url" content="https://rankoff.my/listing" />
-    <meta property="og:image" content="https://rankoff.my/assets/rankoff-og-card.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image" content="https://rankoff.my/assets/rankoff-og-claim.png" />
+    <meta property="og:image:width" content="1730" />
+    <meta property="og:image:height" content="909" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Sponsored listing | RANKOFF" />
-    <meta name="twitter:description" content="See the bid, rank, and measured attention behind this sponsored listing." />
-    <meta name="twitter:image" content="https://rankoff.my/assets/rankoff-og-card.png" />
+    <meta name="twitter:description" content="See the rank, total paid, and tracked clicks behind this sponsored listing." />
+    <meta name="twitter:image" content="https://rankoff.my/assets/rankoff-og-claim.png" />
     <link rel="alternate" hreflang="en" href="https://rankoff.my/listing" />
     <link rel="alternate" hreflang="zh-Hans" href="https://rankoff.my/listing?lang=zh" />
     <link rel="alternate" hreflang="x-default" href="https://rankoff.my/listing" />
     <meta name="theme-color" content="#090a0c" />
     <title>Sponsored listing | RANKOFF</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=95" />
+    <link rel="stylesheet" href="./styles.css?v=97" />
     <link rel="stylesheet" href="./listing.css?v=20" />
   </head>
   <body>
@@ -35,7 +35,7 @@
     <main class="app-shell listing-shell">
       <header class="topbar listing-topbar" aria-label="RANKOFF">
         <a class="brand" href="/" aria-label="RANKOFF home">
-          <img class="brand-final-logo" src="./assets/rankoff-final-logo.png?v=4" alt="RANKOFF — Bid your way to number one" width="1254" height="1254" />
+          <img class="brand-mark" src="/assets/rankoff-favicon.png?v=1" alt="" width="40" height="40" /><span class="brand-word">RANKOFF</span>
         </a>
         <nav class="site-nav" aria-label="Main navigation"><a href="/" data-copy="board">Board</a><a href="/categories" data-copy="categories">Categories</a><a href="/about" data-copy="about">About</a></nav>
         <button class="search-toggle" type="button" data-search-redirect aria-label="Search businesses and markets"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.6 4.6"></path></svg></button>
@@ -110,7 +110,7 @@
           <aside class="claim-ticket" aria-labelledby="claim-heading">
             <p class="claim-ticket-rule" data-copy="rule">Highest total takes #1</p>
             <h2 id="claim-heading"><span data-copy="claimNumberOne">Claim #1 for</span> <strong data-next-bid>—</strong></h2>
-            <p data-claim-copy>Put your business above this one. Your full description stays on the board until someone pays more.</p>
+            <p data-claim-copy>Other payments can change your position. Being overtaken does not remove your listing.</p>
             <form class="claim-form" data-claim-form novalidate>
               <label class="field">
                 <span data-copy="claimUrl">Your website or public profile</span>
@@ -182,9 +182,10 @@
     </dialog>
 
     <div class="toast" role="status" aria-live="polite" data-toast></div>
+    <script src="/acquisition.js?v=1" defer></script>
     <script src="./share-card.js?v=7" type="module"></script>
     <script src="./share.js?v=8" defer></script>
-    <script src="./listing.js?v=47" defer></script>
+    <script src="./listing.js?v=48" defer></script>
     <script type="module" src="/currency.js?v=1"></script>
   </body>
 </html>

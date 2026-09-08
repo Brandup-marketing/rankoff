@@ -32,6 +32,11 @@
 
   const translations = {
     en: {
+      acquisitionTitle: "Campaign results · last 30 days", campaignLabel: "Campaign / source", visitsLabel: "Visits", reviewsLabel: "Reviews", checkoutsLabel: "Checkouts", settlementsLabel: "Settled", repeatLabel: "Repeat", outboundLabel: "Outbound clicks",
+      acquisitionNote: "Visits are browser-tab sessions, not unique people. Settlements come from the payment ledger. Repeat payments mean another settled payment for the same listing. Campaign labels are visitor supplied; independent ownership must be checked separately.",
+      acquisitionUnavailable: "Campaign reporting is unavailable. Payment records above are unaffected.",
+      acquisitionEmpty: "No attributed visits recorded yet.",
+      acquisitionCoverage: "{attributed} of {settled} settled payments in the last 30 days have attribution; {listings} distinct paid listings. Campaign rows group visits started in this period and their subsequent payments.",
       pageKicker: "Owner view",
       pageTitle: "Settled payments",
       pageLede: "Who paid, what they paid for, and how to reach them. Live records only — no payment record and no token is stored in this browser.",
@@ -83,6 +88,11 @@
       switchDark: "Switch to dark theme",
     },
     zh: {
+      acquisitionTitle: "活动成效 · 近 30 天", campaignLabel: "活动 / 来源", visitsLabel: "访问", reviewsLabel: "确认表单", checkoutsLabel: "付款页面", settlementsLabel: "已结算", repeatLabel: "再次付款", outboundLabel: "对外点击",
+      acquisitionNote: "访问按浏览器标签页会话统计，不代表独立用户。结算来自付款记录。再次付款指同一条目的另一笔已结算付款。活动标签由访客提供，独立经营者身份需另行核实。",
+      acquisitionUnavailable: "暂时无法查看活动成效，上方的付款记录不受影响。",
+      acquisitionEmpty: "尚未记录带来源的访问。",
+      acquisitionCoverage: "近 30 天 {settled} 笔已结算付款中，{attributed} 笔有关联来源，涉及 {listings} 个不同条目。活动行按此期间开始的访问及其后续付款统计。",
       pageKicker: "站主视图",
       pageTitle: "已结算付款",
       pageLede: "谁付了款、买了什么、如何联系。仅显示实时记录 —— 本页不会在此浏览器保存任何付款记录或令牌。",
@@ -136,13 +146,14 @@
   };
 
   const OWNER_CATEGORY_GROUPS = Object.freeze({
+    SaaS: ["SaaS", "Software", "Productivity"], Developer: ["Developer", "Security"],
     AI: ["AI", "Agents", "AIMedia"], Creators: ["Creators", "Attention", "People"], Property: ["Property", "RealEstate", "Travel"],
     Interior: ["Interior"], Beauty: ["Beauty"], Health: ["Health"], Sports: ["Sports"], Food: ["Food"],
     Marketing: ["Marketing", "SEO", "Social", "Sales", "Agencies"], Creative: ["Creative", "Design", "Writing", "Audio", "News"],
-    Professional: ["Professional", "Business", "Careers", "Productivity"], Education: ["Education", "Training", "Academy"],
+    Professional: ["Professional", "Business", "Careers"], Education: ["Education", "Training", "Academy"],
     Finance: ["Finance", "Insurance", "Banking", "Crypto"], Electronics: ["Electronics", "Repair"], Retail: ["Retail", "Ecommerce"],
     Construction: ["Construction", "Hardware"], Home: ["Home"], Automotive: ["Automotive", "Auto"],
-    Other: ["Other", "Developer", "Security", "Games", "Domains", "Discovery"],
+    Other: ["Other", "Games", "Domains", "Discovery"],
   });
   const OWNER_CATEGORY_ALIASES = Object.freeze(Object.entries(OWNER_CATEGORY_GROUPS).reduce((aliases, [market, members]) => {
     aliases[market.toLowerCase()] = market;
@@ -150,8 +161,8 @@
     return aliases;
   }, {}));
   const OWNER_CATEGORY_NAMES = Object.freeze({
-    en: Object.freeze({ AI: "AI Tools & Agents", Creators: "Creators & Talent", Property: "Property & Agents", Interior: "Interior & Renovation", Beauty: "Beauty & Wellness", Health: "Health & Medical", Sports: "Sports & Fitness", Food: "Food & Beverage", Marketing: "Marketing & Advertising", Creative: "Creative & Production", Professional: "Professional Services", Education: "Education & Training", Finance: "Finance & Insurance", Electronics: "Electronics & Repair", Retail: "Retail & Ecommerce", Construction: "Hardware & Construction", Home: "Home Services", Automotive: "Automotive", Other: "Other" }),
-    zh: Object.freeze({ AI: "AI 工具与智能体", Creators: "创作者与艺人", Property: "房产与经纪", Interior: "室内设计与装修", Beauty: "美容与养生", Health: "健康与医疗", Sports: "运动与健身", Food: "餐饮", Marketing: "营销与广告", Creative: "创意与制作", Professional: "专业服务", Education: "教育与培训", Finance: "金融与保险", Electronics: "电子与维修", Retail: "零售与电商", Construction: "五金与建筑", Home: "家居服务", Automotive: "汽车", Other: "其他" }),
+    en: Object.freeze({ SaaS: "SaaS & Software", Developer: "Developer Tools", AI: "AI Tools & Agents", Creators: "Creators & Talent", Property: "Property & Agents", Interior: "Interior & Renovation", Beauty: "Beauty & Wellness", Health: "Health & Medical", Sports: "Sports & Fitness", Food: "Food & Beverage", Marketing: "Marketing & Advertising", Creative: "Creative & Production", Professional: "Professional Services", Education: "Education & Training", Finance: "Finance & Insurance", Electronics: "Electronics & Repair", Retail: "Retail & Ecommerce", Construction: "Hardware & Construction", Home: "Home Services", Automotive: "Automotive", Other: "Other" }),
+    zh: Object.freeze({ SaaS: "SaaS 与软件", Developer: "开发者工具", AI: "AI 工具与智能体", Creators: "创作者与艺人", Property: "房产与经纪", Interior: "室内设计与装修", Beauty: "美容与养生", Health: "健康与医疗", Sports: "运动与健身", Food: "餐饮", Marketing: "营销与广告", Creative: "创意与制作", Professional: "专业服务", Education: "教育与培训", Finance: "金融与保险", Electronics: "电子与维修", Retail: "零售与电商", Construction: "五金与建筑", Home: "家居服务", Automotive: "汽车", Other: "其他" }),
   });
 
   const state = { language: "en", page: 1, pages: 1, currency: "MYR" };
@@ -160,6 +171,7 @@
   // Kept so a language switch redraws the rows that JavaScript built. It holds
   // buyer detail, so it is dropped the moment the table is cleared.
   let lastPayload = null;
+  let lastAcquisition = null;
   let copyResetTimer = null;
 
   function text(key) {
@@ -234,6 +246,7 @@
     const boardLink = document.querySelector(".owner-footer a");
     if (boardLink) boardLink.href = state.language === "zh" ? "/?lang=zh" : "/";
     if (lastPayload) render(lastPayload);
+    if (lastAcquisition) renderAcquisition(lastAcquisition);
   }
 
   function setStatus(message) {
@@ -419,6 +432,12 @@
 
   function reset() {
     lastPayload = null;
+    lastAcquisition = null;
+    document.querySelector("[data-owner-campaign-rows]")?.replaceChildren();
+    const campaignSection = document.querySelector("[data-owner-acquisition]");
+    if (campaignSection) campaignSection.hidden = true;
+    const campaignStatus = document.querySelector("[data-owner-acquisition-status]");
+    if (campaignStatus) campaignStatus.textContent = "";
     if (elements.rows) elements.rows.replaceChildren();
     if (elements.results) elements.results.hidden = true;
     if (elements.summary) elements.summary.hidden = true;
@@ -489,12 +508,48 @@
     }
   }
 
+  function renderAcquisition(payload) {
+    lastAcquisition = payload;
+    const body = document.querySelector("[data-owner-campaign-rows]");
+    if (!body) return;
+    body.replaceChildren();
+    for (const campaign of payload.campaigns || []) {
+      const row = document.createElement("tr");
+      const label = `${campaign.campaign} / ${campaign.source} · ${campaign.medium} · ${campaign.content}`;
+      for (const value of [label, campaign.visits, campaign.reviewed_visits, campaign.checkouts, campaign.settled_payments, campaign.repeat_payments, campaign.outbound_clicks]) {
+        const cell = document.createElement("td"); cell.textContent = String(value ?? 0); row.append(cell);
+      }
+      body.append(row);
+    }
+    const coverage = payload.coverage || {};
+    document.querySelector("[data-owner-coverage]").textContent = text("acquisitionCoverage")
+      .replace("{attributed}", String(coverage.attributed_payments || 0)).replace("{settled}", String(coverage.settled_payments || 0)).replace("{listings}", String(coverage.paid_listings || 0));
+    document.querySelector("[data-owner-acquisition]").hidden = false;
+    document.querySelector("[data-owner-acquisition-status]").textContent = payload.campaigns?.length ? "" : text("acquisitionEmpty");
+  }
+
+  async function loadAcquisition(requestedToken) {
+    try {
+      const response = await fetch("/api/v1/admin/acquisition", {
+        headers: { Accept: "application/json", Authorization: `Bearer ${requestedToken}` }, cache: "no-store", credentials: "omit",
+      });
+      const payload = await response.json();
+      if (token !== requestedToken) return;
+      if (!response.ok) throw new Error("unavailable");
+      renderAcquisition(payload);
+    } catch {
+      if (token !== requestedToken) return;
+      document.querySelector("[data-owner-acquisition-status]").textContent = text("acquisitionUnavailable");
+    }
+  }
+
   async function load(page) {
     if (inFlight) return;
     if (!token) {
       setStatus(text("tokenRequired"));
       return;
     }
+    const requestedToken = token;
     inFlight = true;
     if (elements.load) elements.load.disabled = true;
     setStatus(text("loading"));
@@ -505,12 +560,14 @@
         credentials: "omit",
       });
       const payload = await response.json().catch(() => ({}));
+      if (token !== requestedToken) return;
       if (!response.ok) {
         reset();
         setStatus(messageFor(response.status, payload.error?.code));
         return;
       }
       render(payload);
+      await loadAcquisition(requestedToken);
     } catch {
       reset();
       setStatus(text("networkError"));
