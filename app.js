@@ -412,6 +412,28 @@
 
   function languageText(key) { return (translations[state.language] || translations.en)[key] || translations.en[key] || key; }
 
+  function currencyUnit() {
+    return remoteCurrency === "MYR" ? "RM" : "US$";
+  }
+
+  function updateCurrencyCopy() {
+    const unit = currencyUnit();
+    const one = `${unit}1`;
+    const floor = money(boardMinimum());
+    const chinese = state.language === "zh";
+    const amountLabel = chinese ? `付款金额（${remoteCurrency === "MYR" ? "马来西亚令吉" : "美元"}）` : `Your payment in ${remoteCurrency === "MYR" ? "Malaysian ringgit" : "US dollars"}`;
+    const paymentAmount = document.querySelector("[data-i18n-aria-label=paymentAmountLabel]");
+    if (paymentAmount) paymentAmount.setAttribute("aria-label", amountLabel);
+    document.querySelectorAll("[data-inline-adjust]").forEach((button) => {
+      const direction = Number(button.dataset.inlineAdjust) < 0 ? (chinese ? "减少" : "Decrease") : (chinese ? "增加" : "Increase");
+      button.setAttribute("aria-label", `${direction} ${one}`);
+    });
+    const glyph = document.querySelector(".rules-flow .rules-glyph");
+    if (glyph) glyph.textContent = unit;
+    const step = document.querySelector("[data-i18n=stepPayCopy]");
+    if (step) step.textContent = chinese ? `一次付清，${floor} 起。` : `One payment, from ${floor}.`;
+  }
+
   function languageCanonicalUrl(language) {
     const url = new URL("https://rankoff.my/");
     if (language === "zh") url.searchParams.set("lang", "zh");
@@ -1894,6 +1916,7 @@
     renderSidebar();
     renderTotals();
     updateBoardSourceLabels();
+    updateCurrencyCopy();
     window.dispatchEvent(new CustomEvent("rankoff:content-updated"));
   }
 

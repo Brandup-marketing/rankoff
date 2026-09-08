@@ -99,6 +99,19 @@ export async function onRequestGet(context) {
         /(<strong data-hero-next-price[^>]*>)[\s\S]*?(<\/strong>)/,
         (match, open, close) => `${open}${escapeHtml(price)}${close}`,
       );
+      // The static shell is also consumed by link unfurlers and assistive
+      // technology before the browser bundle hydrates. Replace its provisional
+      // USD wording with the actual board currency, without changing original
+      // payment records or the conversion policy.
+      const floor = formatMoney(payload.board?.min_increment_minor, currency).replace(" ", "\u00a0");
+      const currencyName = currency === "MYR" ? "Malaysian ringgit" : "US dollars";
+      html = html.replaceAll("US$1", floor)
+        .replaceAll("Your payment in US dollars", `Your payment in ${currencyName}`)
+        .replaceAll("Decrease by US$1", `Decrease by ${currency === "MYR" ? "RM" : "US$"}1`)
+        .replaceAll("Increase by US$1", `Increase by ${currency === "MYR" ? "RM" : "US$"}1`)
+        .replaceAll("付款金额（美元）", currency === "MYR" ? "付款金额（马来西亚令吉）" : "付款金额（美元）")
+        .replaceAll("减少 US$1", `减少 ${currency === "MYR" ? "RM" : "US$"}1`)
+        .replaceAll("增加 US$1", `增加 ${currency === "MYR" ? "RM" : "US$"}1`);
     } catch {
       /* The page still works: its own script draws the board a moment later. */
     }
