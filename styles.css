@@ -411,7 +411,7 @@ html[data-theme="light"] .category-logo:not(.has-icon) {
 .activity-tape li.activity-empty span { color: var(--muted); }
 @keyframes live-pulse { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 38%, transparent); } 55% { box-shadow: 0 0 0 .35rem transparent; } }
 @keyframes live-pulse-signal { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--up) 55%, transparent); } 55% { box-shadow: 0 0 0 .38rem transparent; } }
-@keyframes activity-in { from { opacity: .45; transform: translateX(-.5rem); } to { opacity: 1; transform: translateX(0); } }
+@keyframes activity-in { from { opacity: .45; transform: translateX(.5rem); } to { opacity: 1; transform: translateX(0); } }
 @media (prefers-reduced-motion: reduce) {
   .live-dot, .demo-state i, .activity-event.is-latest, .activity-event.is-rotating { animation: none; }
   .activity-ticker-viewport { overflow: hidden; }
