@@ -6,9 +6,9 @@
   "compatibility_flags": ["nodejs_compat"],
   "vars": {
     "RANKOFF_MODE": "production",
-    "PAYMENTS_ENABLED": "false",
+    "PAYMENTS_ENABLED": "true",
     "BOARD_SLUG": "global",
-    "DEFAULT_CURRENCY": "USD",
+    "DEFAULT_CURRENCY": "MYR",
     "DODO_ENVIRONMENT": "live_mode",
     "DODO_PRODUCT_ID": "pdt_0NmSKNT2Fc2M9dSgRkEEZ"
   },
