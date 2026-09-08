@@ -550,7 +550,7 @@ function publicBoard(board) {
 export async function findListingByHostname(db, boardId, hostname) {
   return db
     .prepare(
-      `SELECT id, title, status, hostname FROM listings
+      `SELECT id, title, status, hostname, favicon_url FROM listings
        WHERE board_id = ?1 AND hostname = ?2
        ORDER BY created_at ASC LIMIT 1`,
     )
