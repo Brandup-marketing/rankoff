@@ -29,7 +29,7 @@
     <meta name="theme-color" content="#090a0c" />
     <title>RANKOFF | Pay-to-rank leaderboard, from US$1</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=97" />
+    <link rel="stylesheet" href="./styles.css?v=98" />
     <link rel="stylesheet" href="./answers.css?v=2" />
     <script id="website-schema" type="application/ld+json">
       {
@@ -80,9 +80,7 @@
 
       <section class="claim-stage" id="claim" aria-labelledby="page-title">
         <div class="claim-panel">
-          <p class="discovery-intro" data-i18n="discoveryIntro">For SaaS, AI tools and digital businesses. Discover something worth visiting.</p>
           <h1 id="page-title"><span class="hero-word" data-hero-lead>Claim </span><span data-hero-rank>#1</span><span data-hero-market></span><span class="hero-word" data-hero-join> for </span><strong data-hero-next-price>US$ 1</strong></h1>
-          <p class="claim-copy" data-hero-context data-i18n="heroCopy">A public sponsored leaderboard. Listings start at US$1. The highest total paid ranks first.</p>
 
           <div class="market-entry" data-market-entry data-entry-collapsed="true">
             <!-- B2 (agent/post-payment): phone-only entry-form toggle. Hidden on
@@ -149,18 +147,7 @@
 
           <p class="currency-note" data-currency-note hidden></p>
           <div class="top-three top-three-hero" data-top-three data-i18n-aria-label="topThree" aria-label="Top three sponsored listings"></div>
-      <section class="board-section" aria-labelledby="board-heading">
-        <div class="board-list" data-board-list aria-live="polite" data-i18n-aria-label="boardListings" aria-label="Sponsored listings"></div>
-        <nav class="board-pagination" data-board-pagination aria-label="Leaderboard pages" hidden>
-          <button type="button" class="pagination-button" data-board-page="previous">← Previous</button>
-          <div class="pagination-center">
-            <div class="pagination-links" data-page-links data-i18n-aria-label="pageNumbers" aria-label="Page numbers"></div>
-            <p class="pagination-status" aria-live="polite"><strong data-page-range>1–50</strong><span data-page-total>of 50</span></p>
-          </div>
-          <button type="button" class="pagination-button" data-board-page="next">Next →</button>
-        </nav>
 
-      </section>
           <p class="audience-strip" data-audience-strip hidden>
             <span><strong data-stat-visitors>—</strong> <span data-i18n="statVisitors">visitor sessions</span></span>
             <span><strong data-stat-clicks>—</strong> <span data-i18n="statClicks">clicks to businesses</span></span>
@@ -206,6 +193,19 @@
       </section>
 
 
+
+      <section class="board-section" aria-labelledby="board-heading">
+        <div class="board-list" data-board-list aria-live="polite" data-i18n-aria-label="boardListings" aria-label="Sponsored listings"></div>
+        <nav class="board-pagination" data-board-pagination aria-label="Leaderboard pages" hidden>
+          <button type="button" class="pagination-button" data-board-page="previous">← Previous</button>
+          <div class="pagination-center">
+            <div class="pagination-links" data-page-links data-i18n-aria-label="pageNumbers" aria-label="Page numbers"></div>
+            <p class="pagination-status" aria-live="polite"><strong data-page-range>1–50</strong><span data-page-total>of 50</span></p>
+          </div>
+          <button type="button" class="pagination-button" data-board-page="next">Next →</button>
+        </nav>
+
+      </section>
 
       <section class="ranking-rules" aria-labelledby="ranking-rules-heading">
         <div class="rules-lead">
@@ -327,7 +327,7 @@
     <script src="./search.js?v=7" defer></script>
     <script src="./share-card.js?v=7" type="module"></script>
     <script src="./share.js?v=8" defer></script>
-    <script src="./app.js?v=110" defer></script>
+    <script src="./app.js?v=111" defer></script>
     <script type="module" src="/currency.js?v=1"></script>
   </body>
 </html>

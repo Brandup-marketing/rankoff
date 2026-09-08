@@ -10,7 +10,7 @@ web
 
 ## Users
 
-Primary users are global founders with a working SaaS product, AI tool or digital business. They want to decide whether a public sponsored position is worth paying for. Visitors browse to discover useful products and watch ranking changes. Other industries remain welcome. Built in Malaysia, open to businesses everywhere.
+Rankoff welcomes businesses, products and services across industries. Validate demand from Malaysian businesses and digital founders before choosing a primary audience. The live service remains MYR, from RM5; USD conversion is paused by Jake’s decision on 2026-09-08.
 
 ## Product Purpose
 
@@ -30,7 +30,7 @@ Direct, lively and accountable. Use business/market and pay/claim in reader-faci
 
 1. Keep the rule and selected board scope visible near the payment action.
 2. Give visitors enough description to decide whether to visit a product.
-3. Keep ranks continuous; activity follows the ranked list.
+3. Show #1–#3 first, then audience statistics and activity, then #4 onward.
 4. Label payment controls and explain the effect before confirmation.
 5. Make unknown outcomes explicit. Tracked redirects can include repeats and automated traffic; they are not unique customers.
 

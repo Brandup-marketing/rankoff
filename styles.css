@@ -172,7 +172,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .amount-control > button, .dialog-stepper > button { min-height: 3rem; border: 0; background: var(--surface-subtle); color: var(--ink); font-size: 1.1rem; font-weight: 800; }
 .amount-control > button:hover, .dialog-stepper > button:hover { background: var(--accent-soft); color: var(--accent-strong); }
 .amount-control label { display: grid; align-content: center; min-width: 0; padding: 0 0.55rem; border-inline: 1px solid var(--line); }
-.amount-control label > span:first-child { display: block; color: var(--muted); font-size: .68rem; font-weight: 650; }
+.amount-control label > span:first-child { display: none; }
 .money-field { display: flex; align-items: center; min-width: 0; color: var(--ink); font-weight: 850; }
 .money-field b { flex: 0 0 auto; }
 .money-field input { width: 100%; min-width: 0; min-height: 2.9rem; padding: 0 0.15rem; border: 0; background: transparent; color: var(--ink); font-weight: 850; font-variant-numeric: tabular-nums; outline: 0; }
@@ -1335,7 +1335,7 @@ html[data-theme="light"] .category-logo:not(.has-icon) {
   .board-toolbar { gap: .25rem; padding: .55rem 0 .3rem; }
   .board-toolbar-lead { flex-wrap: nowrap; justify-content: space-between; gap: .5rem; }
   .board-toolbar-lead h2 { font-size: .98rem; }
-  .board-context { display: flex; flex-wrap: wrap; }
+  .board-context { display: none; }
 }
 @media (max-width: 34rem) {
   .top-three-hero { margin-top: .5rem; gap: 1.2rem; }
@@ -1347,7 +1347,7 @@ html[data-theme="light"] .category-logo:not(.has-icon) {
    the button already say it), so #1–#3 land inside the first screen. */
 .audience-strip { margin: .9rem 0 0; }
 @media (max-width: 34rem) {
-  .claim-copy { display: block; }
+  .claim-copy { display: none; }
   .top-three-hero { gap: 1.05rem; }
   .top-three-hero .featured-listing, .top-three-hero .featured-1 { padding-bottom: .95rem; }
   .audience-strip { margin-top: 1.1rem; }
@@ -1495,7 +1495,7 @@ html[data-theme="light"] .category-logo:not(.has-icon) {
 @media (min-width: 64rem) {
   /* The headline makes the offer; the explainer under it repeated it and
      cost the third podium card its place on a 785px-tall window. */
-  .claim-copy { display: block; }
+  .claim-copy { display: none; }
   .market-entry { margin-top: .75rem; }
   .board-toolbar { padding: .55rem 0 .35rem; }
   .board-context { gap: .2rem; }
@@ -1505,68 +1505,72 @@ html[data-theme="light"] .category-logo:not(.has-icon) {
    outlines. The ring takes the accent, softly. */
 .site-search-field:focus-within { box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent); }
 
-.currency-note { color: var(--muted, #a8a8ad); font-size: 0.78rem; line-height: 1.55; margin: 0.75rem 0; max-width: 78ch; }
+/* ---- Ranks 1-3 on the first screen, phone and desktop ---- */
+/* A visitor who cannot see a ranking cannot see the product. #3 ended at
+   808px on a 375x812 phone (below the fold once the browser chrome takes
+   its ~150px) and at 793px on a 1440x780 laptop. Type comes down about a
+   step and the podium rows lose their slack; interactive heights are left
+   alone, since a tap target is not spare space. */
+@media (max-width: 46rem) {
+  .claim-stage { padding: .6rem 0 .4rem; }
+  .claim-panel h1 { font-size: 1.85rem; }
+  .category-market { margin-top: .4rem; padding: .5rem 0; }
+  .category-rail { padding-block: 0 .15rem; }
+  .board-toolbar { padding: .45rem 0 .3rem; }
+  .board-toolbar-lead h2 { font-size: .85rem; }
+  .board-toolbar-lead .time-tabs { padding: .12rem; }
+  .board-toolbar-lead .time-tabs button { min-height: 2rem; padding: .28rem .58rem; font-size: .68rem; }
 
-/* Launch clarity: preserve the ranking order and keep every action inside its row. */
+  .top-three-hero { margin-top: .45rem; gap: .35rem; }
+  .top-three-hero .featured-listing,
+  .top-three-hero .featured-1 { min-height: 0; padding: .5rem .6rem .55rem; gap: .3rem .55rem; }
+  .top-three-hero .product-copy { gap: .18rem; }
+  .top-three-hero .featured-rank { width: 2.5rem; height: 2.5rem; font-size: .95rem; }
+  .top-three-hero .featured-1 .featured-rank { width: 2.75rem; height: 2.75rem; font-size: 1.1rem; }
+  .top-three-hero .featured-listing .product-mark,
+  .top-three-hero .featured-1 .product-mark { width: 2.4rem; height: 2.4rem; flex-basis: 2.4rem; }
+  .top-three-hero .featured-listing .product-name { font-size: .95rem; }
+  .top-three-hero .featured-1 .product-name { font-size: 1.05rem; }
+  .top-three-hero .listing-description { font-size: .68rem; }
+  .top-three-hero .featured-1 .listing-description { -webkit-line-clamp: 1; }
+  .top-three-hero .product-meta { margin-top: .1rem; gap: .14rem .34rem; }
+  .top-three-hero .featured-price strong { font-size: 1.05rem; }
+}
+
+@media (min-width: 64rem) {
+  .claim-panel h1 { font-size: 2.15rem; }
+  .category-market { padding: .55rem 0; }
+  /* The section label was 18.4px/850 against the #1 listing's 17.3px/800,
+     so the label outweighed the listing it labels. It goes under both, and
+     the timeframe pills come down with it — a 44px control beside a 14px
+     heading read as the loudest thing in the row. They stay well clear of
+     the 24px minimum a pointer target needs. */
+  .board-toolbar-lead h2 { font-size: .9rem; }
+  .board-toolbar-lead .time-tabs { padding: .14rem; }
+  .board-toolbar-lead .time-tabs button { min-height: 2.1rem; padding: .3rem .62rem; font-size: .72rem; }
+  .top-three-hero { gap: .4rem; margin-top: .45rem; }
+  .top-three-hero .featured-listing { padding: .6rem .85rem; }
+  .top-three-hero .featured-listing .product-name { font-size: .98rem; }
+  .top-three-hero .featured-1 .product-name { font-size: 1.08rem; }
+  .top-three-hero .listing-description { font-size: .72rem; }
+  .top-three-hero .product-meta { margin-top: .12rem; font-size: .66rem; }
+  .top-three-hero .featured-1 .featured-price strong { font-size: 1.5rem; }
+  .top-three-hero .featured-price strong { font-size: 1.2rem; }
+}
+
+/* Preserve the current wordmark with the restored compact leaderboard. */
 .brand .brand-mark { width: 2.25rem; height: 2.25rem; flex: 0 0 2.25rem; object-fit: contain; }
 .brand .brand-word { font-size: 1rem; font-weight: 850; letter-spacing: .04em; color: var(--ink); }
 .topbar .brand, .owner-topbar .brand { display: flex; align-items: center; gap: .45rem; width: auto; height: 2.75rem; max-width: none; flex-basis: auto; overflow: visible; }
-.claim-copy { display: block; max-width: 65ch; }
-.board-section { margin-top: .65rem; }
-.top-three-hero .featured-listing .listing-description,
-.board-list .standard-listing .listing-description { font-size: .85rem; line-height: 1.45; -webkit-line-clamp: 2; }
-.top-three-hero .featured-listing .product-name,
-.board-list .standard-listing .product-name { display: block; overflow: visible; white-space: normal; overflow-wrap: anywhere; -webkit-line-clamp: unset; }
-.top-three-hero .listing-visit, .board-list .standard-listing .listing-visit,
-.top-three-hero .listing-details, .board-list .standard-listing .listing-details { display: inline-flex; min-height: 2.75rem; align-items: center; font-size: .78rem; text-decoration: underline; text-underline-offset: .15em; }
-.top-three-hero .featured-listing .rank-share-control,
-.board-list .standard-listing .rank-share-control { min-width: 2.75rem; min-height: 2.75rem; color: var(--muted); }
-:is(.top-three-hero, .board-list) .featured-listing .claim-rank-pill { position: static; transform: none; min-height: 2.75rem; margin: 0; grid-area: claim; justify-self: end; width: auto; padding: .5rem 1rem; }
-.top-three-hero .featured-listing { grid-template-areas: "rank product evidence" "rank product claim"; grid-template-columns: 3.25rem minmax(0, 1fr) auto; row-gap: .4rem; }
-:is(.top-three-hero, .board-list) .featured-listing .featured-price span { display: block; font-size: .75rem; }
-.outbound-cue { font-size: .8em; color: var(--muted); }
+
+.claim-copy { display: none; }
+@media (max-width: 22rem) {
+  .topbar { grid-template-areas: none; grid-template-columns: auto minmax(0, 1fr) auto auto auto; column-gap: .2rem; }
+  .topbar > * { grid-area: auto !important; }
+  .app-shell > .topbar .site-nav { gap: .15rem; }
+  .topbar .site-nav a { font-size: .65rem; }
+}
 @media (max-width: 46rem) {
-  .topbar .brand .brand-word { font-size: .82rem; letter-spacing: 0; }
-  .topbar .brand { gap: .25rem; }
-  .topbar .brand .brand-mark { width: 1.75rem; height: 1.75rem; flex-basis: 1.75rem; }
-  .claim-copy { font-size: .86rem; line-height: 1.5; margin-top: .6rem; }
-  .board-context { display: flex; justify-content: flex-start; gap: .2rem; }
-  .board-context .measurement-note { display: block; }
-  .top-three-hero { gap: .65rem; }
-  .top-three-hero .featured-listing, .top-three-hero .featured-1 {
-    grid-template-areas: "rank mark name" "desc desc desc" "meta meta meta" "evidence evidence claim";
-    grid-template-columns: 2.5rem 2.5rem minmax(0, 1fr); grid-template-rows: auto auto auto auto;
-    gap: .5rem; padding: .85rem;
-  }
-  .top-three-hero .featured-listing .product-cell,
-  .top-three-hero .featured-listing .product-copy { display: contents; }
-  .top-three-hero .featured-listing .product-mark-link { grid-area: mark; }
-  .top-three-hero .featured-listing .product-name { grid-area: name; align-self: center; font-size: 1rem; line-height: 1.3; }
-  .top-three-hero .featured-listing .listing-description { grid-area: desc; margin: 0; }
-  .top-three-hero .featured-listing .product-meta { grid-area: meta; margin: 0; gap: .1rem .65rem; font-size: .76rem; }
-  .top-three-hero .featured-listing .featured-evidence { grid-area: evidence; align-self: center; justify-self: start; width: auto; margin: 0; border: 0; padding: 0; }
-  .top-three-hero .featured-listing .featured-bid-stack { flex-direction: row; align-items: center; }
-  .top-three-hero .featured-listing .featured-price { min-width: 0; }
-  .top-three-hero .featured-listing .featured-price strong { font-size: 1.1rem; }
-  :is(.top-three-hero, .board-list) .featured-listing .claim-rank-pill { justify-self: end; align-self: center; max-width: 100%; white-space: normal; font-size: .78rem; }
-  .top-three-hero .featured-listing .product-mark,
-  .top-three-hero .featured-listing .featured-rank { width: 2.5rem; height: 2.5rem; }
-  .board-list .standard-listing { padding: .8rem; }
-  .board-list .standard-listing .product-copy { grid-template-areas: "name" "desc" "meta"; grid-template-columns: minmax(0, 1fr); }
-}
-@media (max-width: 34rem) {
-  .board-list .standard-listing { grid-template-areas: "rank mark name" "desc desc desc" "meta meta meta" "evidence evidence claim"; grid-template-columns: 2.5rem 2rem minmax(0, 1fr); gap: .4rem .5rem; }
-  .board-list .standard-listing .product-copy { display: contents; }
-  .board-list .standard-listing .featured-evidence { justify-self: start; }
-  .board-list .standard-listing .claim-rank-pill { min-height: 2.75rem; padding: .5rem 1rem; }
-  .board-list .standard-listing .featured-bid-stack { flex-direction: row; align-items: center; gap: .25rem; }
-  .board-toolbar-lead { flex-wrap: wrap; }
-}
-
-.discovery-intro { margin: 0 0 .6rem; text-align: center; color: var(--muted); font-size: .86rem; line-height: 1.5; text-wrap: balance; }
-
-:is(.top-three-hero, .board-list) .featured-listing .claim-rank-pill { background: var(--surface); color: var(--ink); border-color: var(--accent); }
-.top-three-hero .featured-1 .claim-rank-pill { background: var(--accent-fill); color: white; }
-@media (min-width: 34.01rem) {
-  .board-list .standard-listing { grid-template-areas: "rank product evidence" "rank product claim"; grid-template-columns: 3rem minmax(0, 1fr) auto; }
+  .topbar .brand-word { display: none; }
+  .topbar .brand { width: 2.9rem; max-width: 2.9rem; }
 }

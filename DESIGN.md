@@ -16,9 +16,9 @@ Use the existing resilient sans-serif stack. Ranking and payment amounts use tab
 
 ## Layout
 
-A recognizable mark with a legible wordmark leads the compact header. Audience and discovery copy, the selected #1 claim price, the cumulative-payment rule and the short entry form precede the market rail and leaderboard. SaaS & Software, Developer Tools and AI Tools & Agents are prominent; other markets remain accessible.
+A recognizable mark with a legible wordmark leads the compact header. The selected #1 claim price and short entry form precede the market rail and leaderboard. Keep the hero compact, without audience or explanatory paragraphs. SaaS & Software, Developer Tools and AI Tools & Agents are prominent; other markets remain accessible.
 
-Keep ranks #1 onward continuous. Cards show the name, product description, sponsored status, market, distinct Visit website and Details links, Total paid, secondary Share and a contained claim action. On narrow screens, the amount and claim action occupy the final row. Activity and audience evidence follow the list. Do not float claim buttons across card boundaries.
+Show ranks #1–#3 before the audience/activity section and ranks #4 onward below it. Cards show the name, product description, sponsored status, market, distinct Visit website and Details links, Total paid, secondary Share and a contained claim action. On narrow screens, the amount and claim action occupy the final row. Activity and audience evidence separate #3 from #4. Do not float claim buttons across card boundaries.
 
 ## Components
 

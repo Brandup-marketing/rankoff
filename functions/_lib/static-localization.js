@@ -62,7 +62,7 @@ const ABOUT_STATIC_COPY = Object.freeze({
   "Skip to content": "跳至正文",
   Board: "榜单", Categories: "分类", About: "关于", "The story behind the board": "榜单背后的故事",
   "Attention has a price.": "注意力，明码标价。", "Make it visible.": "让它公开可见。",
-  "Built in Malaysia. Open to businesses everywhere. Rankoff is a public sponsored leaderboard for SaaS, AI tools, and digital businesses. Discover what people are building, visit their websites, or pay to claim a position. The highest total paid ranks first.": "源自马来西亚，面向全球商家。Rankoff 是 SaaS、AI 工具与数字业务的公开赞助榜单。发现大家正在打造的业务，访问他们的网站，或付费拿下一个位置。累计付款最高者排第一。",
+  "Built in Malaysia. Open to businesses everywhere. Discover businesses, products and services on Rankoff’s public sponsored leaderboard. Visit their websites or pay to claim a position. The highest total paid ranks first.": "源自马来西亚，面向全球商家。在 Rankoff 公开赞助榜单发现商家、产品与服务。访问他们的网站，或付费拿下一个位置。累计付款最高者排第一。",
   "Why it exists": "为什么有 Rankoff", "Rankoff started with one question.": "Rankoff 始于一个问题。",
   "What if a business could buy the top spot in the open, not in a hidden ad auction? What if everyone could see who is on top, what it cost, and who is getting the clicks?": "如果商家可以光明正大买下最显眼的位置，而不是在看不见的广告竞价里？如果每个人都能看到谁在榜首、花了多少钱、谁拿到了点击？",
   "Rankoff is the answer: a public board where the price, the position and the clicks are all on show, and every listing is labelled as sponsored.": "Rankoff 就是答案：一个公开榜单，价格、排名、点击全部公开，每个条目都标明是赞助。",
