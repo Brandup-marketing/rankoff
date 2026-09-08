@@ -30,7 +30,7 @@ Direct, lively and accountable. Use business/market and pay/claim in reader-faci
 
 1. Keep the rule and selected board scope visible near the payment action.
 2. Give visitors enough description to decide whether to visit a product.
-3. Show #1–#3 first, then audience statistics and activity, then #4 onward.
+3. Show #1–#3 first, then one rotating settled activity update, then #4 onward. Today's leaders and audience statistics follow the full ranking.
 4. Label payment controls and explain the effect before confirmation.
 5. Make unknown outcomes explicit. Tracked redirects can include repeats and automated traffic; they are not unique customers.
 

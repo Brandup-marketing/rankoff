@@ -29,7 +29,7 @@
     <meta name="theme-color" content="#090a0c" />
     <title>RANKOFF | Pay-to-rank leaderboard, from US$1</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=98" />
+    <link rel="stylesheet" href="./styles.css?v=99" />
     <link rel="stylesheet" href="./answers.css?v=2" />
     <script id="website-schema" type="application/ld+json">
       {
@@ -148,29 +148,7 @@
           <p class="currency-note" data-currency-note hidden></p>
           <div class="top-three top-three-hero" data-top-three data-i18n-aria-label="topThree" aria-label="Top three sponsored listings"></div>
 
-          <p class="audience-strip" data-audience-strip hidden>
-            <span><strong data-stat-visitors>—</strong> <span data-i18n="statVisitors">visitor sessions</span></span>
-            <span><strong data-stat-clicks>—</strong> <span data-i18n="statClicks">clicks to businesses</span></span>
-            <span><strong data-stat-paid>—</strong> <span data-i18n="statPaid">paid</span></span>
-            <span class="audience-strip-note" data-i18n="statWindow">All-time, counted by Rankoff</span>
-          </p>
-
-          <section class="board-interstitial" data-i18n-aria-label="boardPulse" aria-label="Board pulse">
-            <section class="today-ranking-panel pulse-panel" data-today-panel aria-labelledby="today-ranking-heading">
-              <div class="section-heading-line section-heading-line-spread">
-                <div>
-                  <h2 id="today-ranking-heading" data-i18n="todayRanking">Today’s leaders</h2>
-                </div>
-                <div class="panel-actions">
-                  <a class="text-link" data-today-see-all data-language-link data-i18n="seeAll" href="/?period=today#board">See all</a>
-                  <button class="panel-toggle" type="button" data-panel-toggle aria-expanded="true" aria-controls="today-ranking-content" data-panel-title="Today’s top ranking" data-panel-title-zh="今日热门榜"><span data-panel-toggle-label>Minimize</span><span class="panel-toggle-icon" aria-hidden="true">−</span></button>
-                </div>
-              </div>
-              <div id="today-ranking-content" data-panel-content>
-                <ol class="today-ranking-list" data-today-ranking-list aria-live="polite"></ol>
-              </div>
-            </section>
-
+          <section class="board-interstitial activity-interstitial" data-i18n-aria-label="boardPulse" aria-label="Board pulse">
             <section class="activity-section pulse-panel" aria-labelledby="activity-heading">
               <div class="section-heading-line section-heading-line-spread">
                 <div>
@@ -183,7 +161,7 @@
               </div>
               <div id="latest-activity-content" data-panel-content>
                 <div class="activity-ticker-viewport">
-                  <ol class="activity-tape" id="latest-activity-list" data-activity-list aria-live="polite" aria-relevant="additions text"></ol>
+                  <ol class="activity-tape" id="latest-activity-list" data-activity-list></ol>
                 </div>
               </div>
             </section>
@@ -206,6 +184,30 @@
         </nav>
 
       </section>
+
+      <div class="board-support">
+        <section class="today-ranking-panel pulse-panel" data-today-panel aria-labelledby="today-ranking-heading">
+          <div class="section-heading-line section-heading-line-spread">
+            <div>
+              <h2 id="today-ranking-heading" data-i18n="todayRanking">Today’s leaders</h2>
+            </div>
+            <div class="panel-actions">
+              <a class="text-link" data-today-see-all data-language-link data-i18n="seeAll" href="/?period=today#board">See all</a>
+              <button class="panel-toggle" type="button" data-panel-toggle aria-expanded="true" aria-controls="today-ranking-content" data-panel-title="Today’s top ranking" data-panel-title-zh="今日热门榜"><span data-panel-toggle-label>Minimize</span><span class="panel-toggle-icon" aria-hidden="true">−</span></button>
+            </div>
+          </div>
+          <div id="today-ranking-content" data-panel-content>
+            <ol class="today-ranking-list" data-today-ranking-list aria-live="polite"></ol>
+          </div>
+        </section>
+
+        <p class="audience-strip" data-audience-strip hidden>
+          <span><strong data-stat-visitors>—</strong> <span data-i18n="statVisitors">visitor sessions</span></span>
+          <span><strong data-stat-clicks>—</strong> <span data-i18n="statClicks">clicks to businesses</span></span>
+          <span><strong data-stat-paid>—</strong> <span data-i18n="statPaid">paid</span></span>
+          <span class="audience-strip-note" data-i18n="statWindow">All-time, counted by Rankoff</span>
+        </p>
+      </div>
 
       <section class="ranking-rules" aria-labelledby="ranking-rules-heading">
         <div class="rules-lead">
@@ -327,7 +329,7 @@
     <script src="./search.js?v=7" defer></script>
     <script src="./share-card.js?v=7" type="module"></script>
     <script src="./share.js?v=8" defer></script>
-    <script src="./app.js?v=111" defer></script>
+    <script src="./app.js?v=112" defer></script>
     <script type="module" src="/currency.js?v=1"></script>
   </body>
 </html>
