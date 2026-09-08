@@ -854,8 +854,7 @@ html[data-theme="light"] .category-logo:not(.has-icon) {
 /* Age and hostname remain available on the detail page and full board. In the
    Top 3 they compete with the facts that decide a click: sponsorship, market,
    measured clicks and the listing's destination/details controls. */
-.top-three-hero .product-meta > .meta-item:not(.category-meta):not(.listing-clicks),
-.top-three-hero .listing-visit {
+.top-three-hero .product-meta > .meta-item:not(.category-meta):not(.listing-clicks) {
   display: none;
 }
 
@@ -1004,8 +1003,7 @@ html[data-theme="light"] .category-logo:not(.has-icon) {
     padding-inline: 0.65rem;
     font-size: 0.75rem;
   }
-  .standard-listing .listing-age,
-  .standard-listing .listing-visit { display: none; }
+  .standard-listing .listing-age { display: none; }
   /* Same as the podium: the hostname wrapped the row and made #4+ taller than #1–3. */
   .standard-listing .product-meta > .meta-item:not(.category-meta):not(.listing-clicks) { display: none; }
 }
@@ -1029,7 +1027,6 @@ html[data-theme="light"] .category-logo:not(.has-icon) {
   }
   .top-three-hero .featured-1 .listing-description { -webkit-line-clamp: 2; }
   .top-three-hero .product-meta { gap: 0.25rem 0.45rem; }
-  .top-three-hero .listing-visit { display: none; }
   .top-three-hero .featured-evidence {
     align-self: stretch;
     justify-self: stretch;

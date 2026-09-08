@@ -1084,9 +1084,6 @@
     // traffic: it goes straight to their site through the tracked redirect.
     // Ranking evidence stays one click away behind "See details".
     const link = createElement("a", "product-name", listing.name);
-    const outbound = createElement("span", "outbound-cue", " ↗");
-    outbound.setAttribute("aria-hidden", "true");
-    link.append(outbound);
     link.href = listingVisitHref(listing, position);
     link.target = "_blank";
     link.rel = "noopener nofollow sponsored";
