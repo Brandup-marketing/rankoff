@@ -195,7 +195,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 .board-interstitial { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; margin: 1.1rem 0 0; padding: 1rem; border: 1px solid var(--line); border-radius: .65rem; background: var(--surface-subtle); }
 .activity-interstitial { margin-top: 1.4rem; padding: .65rem; }
-.board-support { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem; margin-top: 2.2rem; }
+.board-support { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem; width: min(100%, 68rem); margin: 2.2rem auto 0; }
 .board-support .today-ranking-panel { padding: 0 0 1.2rem; border-bottom: 1px solid var(--line); background: transparent; }
 .board-support .audience-strip { margin: 0; }
 [data-today-panel][data-empty="true"] { display: none; }
