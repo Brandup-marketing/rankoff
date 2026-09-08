@@ -29,7 +29,7 @@
     <meta name="theme-color" content="#090a0c" />
     <title>RANKOFF | Pay-to-rank leaderboard, from US$1</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <link rel="stylesheet" href="./styles.css?v=102" />
+    <link rel="stylesheet" href="./styles.css?v=103" />
     <link rel="stylesheet" href="./answers.css?v=2" />
     <script id="website-schema" type="application/ld+json">
       {
@@ -201,12 +201,13 @@
           </div>
         </section>
 
-        <p class="audience-strip" data-audience-strip hidden>
+        <section class="audience-strip" data-audience-strip aria-labelledby="board-totals-heading" hidden>
+          <h2 class="audience-strip-heading" id="board-totals-heading" data-i18n="boardTotals">Board totals</h2>
           <span><strong data-stat-visitors>—</strong> <span data-i18n="statVisitors">visitor sessions</span></span>
           <span><strong data-stat-clicks>—</strong> <span data-i18n="statClicks">clicks to businesses</span></span>
           <span><strong data-stat-paid>—</strong> <span data-i18n="statPaid">paid</span></span>
           <span class="audience-strip-note" data-i18n="statWindow">All-time, counted by Rankoff</span>
-        </p>
+        </section>
       </div>
 
       <section class="ranking-rules" aria-labelledby="ranking-rules-heading">
@@ -329,7 +330,7 @@
     <script src="./search.js?v=7" defer></script>
     <script src="./share-card.js?v=7" type="module"></script>
     <script src="./share.js?v=8" defer></script>
-    <script src="./app.js?v=113" defer></script>
+    <script src="./app.js?v=114" defer></script>
     <script type="module" src="/currency.js?v=1"></script>
   </body>
 </html>

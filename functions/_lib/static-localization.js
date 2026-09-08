@@ -35,7 +35,7 @@ const HOME_STATIC_COPY = Object.freeze({
   heroCopy: "公开赞助榜单，US$1 起。累计付款最高者第 1 名。",
   totalBid: "付款金额", productUrl: "你的网站或社交账号", productUrlPlaceholder: "example.com 或 instagram.com/yourname",
   challengeCategory: "市场", chooseMarket: "选择市场", reviewBid: "确认并付款", markets: "市场",
-  todayRanking: "今日领先", seeAll: "查看全部", livePulse: "实时付款", latestActivity: "最新动态", refresh: "刷新",
+  todayRanking: "今日领先", boardTotals: "榜单总览", seeAll: "查看全部", livePulse: "实时付款", latestActivity: "最新动态", refresh: "刷新",
   boardSummary: "累计付款最高者第 1 名。随时追加付款即可上升。", howItWorks: "排名规则",
   rules: "每个条目都是付费广告。累计付款最高者排第一——没有奖品、没有抽奖，也不涉及任何运气成分。",
   position: "排名位置", positionCopy: "直到别的条目累计付款超过你为止。", charge: "费用", chargeCopy: "通过安全托管付款页面一次性付款。",

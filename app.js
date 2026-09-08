@@ -410,7 +410,10 @@
     }
   }
 
-  function languageText(key) { return (translations[state.language] || translations.en)[key] || translations.en[key] || key; }
+  function languageText(key) {
+    if (key === "boardTotals") return state.language === "zh" ? "榜单总览" : "Board totals";
+    return (translations[state.language] || translations.en)[key] || translations.en[key] || key;
+  }
 
   function currencyUnit() {
     return remoteCurrency === "MYR" ? "RM" : "US$";
