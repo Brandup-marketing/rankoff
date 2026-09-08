@@ -412,6 +412,7 @@
 
   function languageText(key) {
     if (key === "boardTotals") return state.language === "zh" ? "榜单总览" : "Board totals";
+    if (key === "boardRightNow") return state.language === "zh" ? "此刻的榜单。" : "The board, right now.";
     return (translations[state.language] || translations.en)[key] || translations.en[key] || key;
   }
 
