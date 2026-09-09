@@ -764,6 +764,7 @@
       await startClaimCheckout(parsedUrl, amount);
     } catch (error) {
       showToast(error?.isRankoffMessage ? error.message : text("claimUnavailable"));
+      document.querySelector("[data-checkout-support]")?.removeAttribute("hidden");
       button.disabled = false;
       button.innerHTML = label;
     }

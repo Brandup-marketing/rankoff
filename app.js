@@ -2749,6 +2749,7 @@
         await startLiveCheckout(amount);
       } catch (error) {
         showToast(error?.isRankoffMessage ? error.message : languageText("checkoutUnavailable"), "error");
+        document.querySelector("[data-checkout-support]")?.removeAttribute("hidden");
         if (submitButton) {
           submitButton.disabled = false;
           submitButton.textContent = state.language === "zh" ? "继续付款" : "Continue to checkout";

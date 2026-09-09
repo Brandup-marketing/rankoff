@@ -1575,3 +1575,9 @@ html[data-theme="light"] .category-logo:not(.has-icon) {
   .topbar .brand-word { display: none; }
   .topbar .brand { width: 2.9rem; max-width: 2.9rem; }
 }
+
+/* Shared support contact stays readable in footers and failed checkout forms. */
+.support-contact { margin: 0; font-size: .875rem; line-height: 1.6; color: var(--muted); overflow-wrap: anywhere; }
+.footer > .support-contact { flex-basis: 100%; }
+.support-contact a { display: inline-block; padding-block: .45rem; color: var(--link, var(--ink)); text-decoration: underline; text-underline-offset: .15em; }
+.support-contact[hidden] { display: none; }

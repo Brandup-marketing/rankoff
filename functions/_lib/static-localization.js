@@ -136,6 +136,7 @@ function localizeCommon(html) {
   output = output.replace(/href="\/about"/g, 'href="/about?lang=zh"');
   output = output.replace(/href="\.\/"/g, 'href="/?lang=zh"');
   output = output.replace(/href="\/"/g, 'href="/?lang=zh"');
+  output = output.replaceAll("Payment issue or missing logo? Email us with your listing link.", "付款遇到问题，或 logo 没有显示？请将榜单链接发送到以下邮箱，我们会协助处理。");
   return output;
 }
 
