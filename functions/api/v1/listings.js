@@ -2,6 +2,7 @@ import { ApiError, defaultBoardSlug, isProduction, requireDatabase } from "../..
 import { json, methodNotAllowed, readJson } from "../../_lib/http.js";
 import { countListingsCreatedSince, createListing, findListingByHostname, loadBoard } from "../../_lib/repository.js";
 import { fetchSiteInfo } from "../../_lib/siteinfo.js";
+import { fetchInstagramProfile } from "../../_lib/instagram.js";
 import { sha256Hex } from "../../_lib/security.js";
 import { normalizeCategory, normalizeDestinationUrl, optionalString } from "../../_lib/validation.js";
 
@@ -43,7 +44,9 @@ export async function onRequestPost(context) {
   // description we could not fetch.
   const discovered = givenTitle && givenDescription
     ? { title: "", description: "", logo: "" }
-    : await fetchSiteInfo(destination.url, destination.hostname, { social: Boolean(destination.platform) });
+    : destination.platform === "instagram"
+      ? (await fetchInstagramProfile(destination.handle, context.env)) || { title: "", description: "", logo: "" }
+      : await fetchSiteInfo(destination.url, destination.hostname, { social: Boolean(destination.platform) });
 
   // A social listing titled "www.instagram.com" would read the same on every card.
   const title = givenTitle
