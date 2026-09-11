@@ -235,9 +235,18 @@
     return hash;
   }
 
-  // Same mark as the board: the stored icon first, then the sharp sources
-  // (touch icon, Google's 128px service), favicon.ico last. A 16px favicon.ico
-  // alone was what turned most marks into mush or initials here.
+  // Mirrors markImageFor in functions/_lib/product.js: an Instagram picture is
+  // served through our own /img/ proxy, which asks Meta for a fresh link each
+  // day, because the link stored at listing time is signed for only a few days.
+  function markProxyPath(identity) {
+    const match = /^instagram:([a-z0-9._-]{1,60})$/.exec(String(identity || "").toLowerCase());
+    if (!match || !/[a-z0-9]/.test(match[1]) || match[1].includes("..")) return "";
+    return `/img/instagram:${match[1]}`;
+  }
+
+  // Same mark as the board: the proxied profile picture or stored icon first,
+  // then the sharp sources (touch icon, Google's 128px service), favicon.ico
+  // last. A 16px favicon.ico alone was what turned most marks into mush here.
   function logoFor(row) {
     const logo = document.createElement("span");
     logo.className = "category-logo";
@@ -250,6 +259,7 @@
       const url = new URL(row.url);
       if (url.hostname.endsWith(".example") && !row.icon) return logo;
       const sources = [...new Set([
+        markProxyPath(row.identity),
         row.icon,
         `${url.origin}/apple-touch-icon.png`,
         `https://www.google.com/s2/favicons?domain=${encodeURIComponent(url.hostname)}&sz=128`,

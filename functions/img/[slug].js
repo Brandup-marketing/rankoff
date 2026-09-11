@@ -9,6 +9,8 @@
 // raster image, it may not exceed a size cap, and every fetch has a deadline.
 
 import { defaultBoardSlug, isProduction, requireDatabase } from "../_lib/config.js";
+import { fetchInstagramProfile } from "../_lib/instagram.js";
+import { identityParts, isUsableHandle } from "../_lib/platform.js";
 import { normalizeSlug } from "../_lib/product.js";
 import { findListingByHostname, loadBoard } from "../_lib/repository.js";
 import { discoverShareImage } from "../og/[slug].js";
@@ -155,12 +157,55 @@ export async function onRequestHead(context) {
   return new Response(null, { status: response.status, headers: response.headers });
 }
 
+// An Instagram listing is addressed by its identity, "instagram:<handle>", the
+// same string the board stores. Only Instagram: Business Discovery is the one
+// official way to read a public profile picture, and it covers no other
+// platform, so those keep their initials rather than have this fetch a guess.
+export function instagramIdentityFrom(slug) {
+  let value = String(slug || "");
+  try { value = decodeURIComponent(value); } catch { /* keep as given */ }
+  value = value.trim().toLowerCase();
+  const parts = identityParts(value);
+  if (parts.platform !== "instagram" || !isUsableHandle(parts.handle)) return "";
+  return `instagram:${parts.handle}`;
+}
+
+// A profile picture is never stored here as a picture. Meta hands back a CDN
+// link signed for a few days, so anything kept in the database dies quietly
+// and the card falls back to initials while the account carries on posting.
+// Instead the picture is asked for fresh — the token is permanent, the link is
+// not — and only the bytes are cached, for a day. An account that changes its
+// picture is current on the board within that day. If Meta declines (a personal
+// account, a token without scope), the link the listing was created with is
+// tried while it is still alive, and after that the tile shows initials.
+export async function resolveProfileImage(identity, env, deps = {}) {
+  const fetcher = deps.fetcher || fetch;
+  const discover = deps.discover || ((handle) => fetchInstagramProfile(handle, env, fetcher));
+  const handle = identityParts(identity).handle;
+  if (!handle) return null;
+  let profile = null;
+  try {
+    profile = await discover(handle);
+  } catch {
+    profile = null;
+  }
+  const fresh = /^https:\/\//i.test(String(profile?.logo || "")) ? profile.logo : "";
+  const stored = /^https:\/\//i.test(String(deps.storedUrl || "")) ? deps.storedUrl : "";
+  for (const source of [...new Set([fresh, stored].filter(Boolean))]) {
+    const found = await fetchImageBytes(source, fetcher);
+    if (found) return found;
+  }
+  return null;
+}
+
 export async function onRequestGet(context) {
   const url = new URL(context.request.url);
-  const hostname = normalizeSlug(context.params.slug);
+  const identity = instagramIdentityFrom(context.params.slug);
+  const hostname = identity ? "" : normalizeSlug(context.params.slug);
   // Never follow a bare address, and never proxy for a board that is not live:
-  // only hostnames that reached this board as listings may be fetched.
-  if (!hostname || /^\d+\.\d+\.\d+\.\d+$/.test(hostname) || !isProduction(context.env)) return missResponse();
+  // only listings that reached this board may be fetched, by hostname or by
+  // Instagram identity.
+  if ((!hostname && !identity) || /^\d+\.\d+\.\d+\.\d+$/.test(hostname) || !isProduction(context.env)) return missResponse();
 
   const cache = caches.default;
   const cacheKey = new Request(url.toString(), { method: "GET" });
@@ -171,9 +216,11 @@ export async function onRequestGet(context) {
   try {
     const db = requireDatabase(context.env);
     const board = await loadBoard(db, defaultBoardSlug(context.env));
-    const listing = await findListingByHostname(db, board.id, hostname);
+    const listing = await findListingByHostname(db, board.id, identity || hostname);
     if (listing && listing.status === "approved") {
-      found = await resolveMerchantImage(hostname, { preferredUrl: listing.favicon_url });
+      found = identity
+        ? await resolveProfileImage(identity, context.env, { storedUrl: listing.favicon_url })
+        : await resolveMerchantImage(hostname, { preferredUrl: listing.favicon_url });
     }
   } catch {
     /* Initials are always a valid card. */

@@ -55,10 +55,17 @@ test("the settled total is lifted verbatim, never recomputed", () => {
   assert.equal(parseSettledTotal(""), "");
 });
 
-test("only a website listing gets a proxied logo", () => {
+test("a website and an Instagram profile get a proxied logo; other platforms keep initials", () => {
   assert.equal(proxyPathFor("https://rankoff.my/product/auroraclinic.com"), "/img/auroraclinic.com?v=3");
   assert.equal(proxyPathFor("https://rankoff.my/product/AuroraClinic.com/"), "/img/auroraclinic.com?v=3");
-  assert.equal(proxyPathFor("https://rankoff.my/profile/instagram/aurora"), "");
+  // Meta signs an Instagram picture link for a few days, so the card asks our
+  // proxy, which fetches a fresh one, rather than showing a link that will die.
+  assert.equal(proxyPathFor("https://rankoff.my/profile/instagram/aurora"), "/img/instagram:aurora?v=3");
+  assert.equal(proxyPathFor("https://rankoff.my/profile/instagram/_UmiDesign_/"), "/img/instagram:_umidesign_?v=3");
+  // No official picture lookup exists for these, and the proxy never guesses.
+  assert.equal(proxyPathFor("https://rankoff.my/profile/tiktok/aurora"), "");
+  assert.equal(proxyPathFor("https://rankoff.my/profile/instagram/.."), "");
+  assert.equal(proxyPathFor("https://rankoff.my/profile/instagram/___"), "");
   assert.equal(proxyPathFor("https://rankoff.my/?period=all#listing-7"), "");
   assert.equal(proxyPathFor(""), "");
 });

@@ -86,13 +86,20 @@ export function parseSettledTotal(text) {
   return /\d/.test(total) ? total : "";
 }
 
-// Only a website has a logo we can go and get. A social profile hides its
-// picture from crawlers, so those cards carry initials, same as the board does.
+// A website's logo and an Instagram profile's picture both come through
+// /img/ on our own origin, so the canvas stays untainted and the card can be
+// saved as a file. Instagram is asked fresh by the proxy (Meta signs its CDN
+// links for only a few days); other platforms still carry initials.
 export function proxyPathFor(url) {
   try {
     const parsed = new URL(String(url || ""), "https://rankoff.my");
-    const match = parsed.pathname.match(/^\/product\/([a-z0-9.-]+)\/?$/i);
-    return match ? `/img/${match[1].toLowerCase()}?v=3` : "";
+    const site = parsed.pathname.match(/^\/product\/([a-z0-9.-]+)\/?$/i);
+    if (site) return `/img/${site[1].toLowerCase()}?v=3`;
+    const profile = parsed.pathname.match(/^\/profile\/instagram\/([a-z0-9._-]{1,60})\/?$/i);
+    if (profile && /[a-z0-9]/i.test(profile[1]) && !profile[1].includes("..")) {
+      return `/img/instagram:${profile[1].toLowerCase()}?v=3`;
+    }
+    return "";
   } catch {
     return "";
   }

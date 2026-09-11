@@ -360,6 +360,15 @@
   const SOCIAL_PLATFORMS = ["instagram", "tiktok", "facebook", "x"];
   const ACTION_COPY = { instagram: "viewInstagram", tiktok: "viewTiktok", facebook: "viewFacebook", x: "viewProfile" };
 
+  // Mirrors markImageFor in functions/_lib/product.js: an Instagram picture is
+  // served through our own /img/ proxy, which asks Meta for a fresh link each
+  // day, because the link stored at listing time is signed for only a few days.
+  function markProxyPath(identity) {
+    const match = /^instagram:([a-z0-9._-]{1,60})$/.exec(String(identity || "").toLowerCase());
+    if (!match || !/[a-z0-9]/.test(match[1]) || match[1].includes("..")) return "";
+    return `/img/instagram:${match[1]}`;
+  }
+
   // Mirrors functions/_lib/platform.js: a profile is addressed by its handle.
   function modelPlatform() {
     const identity = String(model?.identity || "");
@@ -407,18 +416,23 @@
     let host = "";
     try { host = new URL(model.url).hostname; } catch { return; }
     if (host.endsWith(".example") && !model.icon) return;
-    // instagram.com/favicon.ico is Instagram's logo, the same on every profile.
-    if (modelPlatform() && !model.icon) return;
+    // instagram.com/favicon.ico is Instagram's logo, the same on every profile:
+    // a profile's picture comes through our proxy first, the stored link second,
+    // and never from the platform's own icon files.
+    const proxied = modelPlatform() ? markProxyPath(model.identity) : "";
+    if (modelPlatform() && !proxied && !model.icon) return;
     const origin = new URL(model.url).origin;
     const guessed = `${origin}/favicon.ico`;
-    const sources = [...new Set([
-      model.icon && model.icon !== guessed ? model.icon : "",
-      `${origin}/apple-touch-icon.png`,
-      `https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=128`,
-      model.icon,
-      guessed,
-      `https://icons.duckduckgo.com/ip3/${encodeURIComponent(host)}.ico`,
-    ].filter(Boolean))];
+    const sources = modelPlatform()
+      ? [...new Set([proxied, model.icon].filter(Boolean))]
+      : [...new Set([
+        model.icon && model.icon !== guessed ? model.icon : "",
+        `${origin}/apple-touch-icon.png`,
+        `https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=128`,
+        model.icon,
+        guessed,
+        `https://icons.duckduckgo.com/ip3/${encodeURIComponent(host)}.ico`,
+      ].filter(Boolean))];
     if (!sources.length) return;
     const img = new Image();
     img.alt = "";

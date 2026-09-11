@@ -146,6 +146,21 @@ const ACTION_LABELS_ZH = Object.freeze({
   viewProfile: "查看主页",
 });
 
+// Where a listing's mark is drawn from. A website's icon is a stable URL on the
+// merchant's own domain and is used as stored. An Instagram picture is a CDN
+// link Meta signs for a few days, so the stored copy is never shown directly:
+// the mark points at /img/<identity>, which asks Meta for a fresh link each
+// day and re-serves the bytes from rankoff.my. Mirrored by markProxyPath in
+// app.js, listing.js, categories.js and proxyPathFor in share-card.js.
+export function markImageFor(listing) {
+  const identity = String(listing?.hostname || "");
+  const parts = identityParts(identity);
+  if (parts.platform === "instagram" && isUsableHandle(parts.handle)) {
+    return `${SITE_ORIGIN}/img/instagram:${parts.handle}`;
+  }
+  return String(listing?.favicon_url || "");
+}
+
 // The colour behind those letters. Seeded from the listing's identity so an
 // account keeps the same tile on the board, on its own page and on the rank
 // card, and so two listings side by side are rarely the same colour. Only a hue
@@ -249,7 +264,7 @@ export function buildProductView({ entry, todayEntry, board, snapshotId, record,
     placementLabel: copy.verifiedPlacement,
     clickLabel: copy.verifiedClicks,
     actionLabel: locale === "zh" ? (ACTION_LABELS_ZH[action] || ACTION_LABELS_ZH.visit) : (ACTION_LABELS[action] || ACTION_LABELS.visit),
-    logo: String(listing.favicon_url || ""),
+    logo: markImageFor(listing),
     initials: initialsFor(title, label),
     markHue: markHue(listing.hostname || label),
     // Both positions are true; a merchant shares the one worth sharing. #3 of a

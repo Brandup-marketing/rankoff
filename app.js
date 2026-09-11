@@ -1045,9 +1045,19 @@
     return parsed;
   }
 
+  // Mirrors markImageFor in functions/_lib/product.js. An Instagram picture is
+  // a CDN link Meta signs for a few days, so the stored one is only a fallback:
+  // the mark asks our own /img/ proxy, which fetches a fresh link each day.
+  function markProxyPath(identity) {
+    const match = /^instagram:([a-z0-9._-]{1,60})$/.exec(String(identity || "").toLowerCase());
+    if (!match || !/[a-z0-9]/.test(match[1]) || match[1].includes("..")) return "";
+    return `/img/instagram:${match[1]}`;
+  }
+
   function faviconCandidates(listing) {
-    // instagram.com/favicon.ico is Instagram's logo, identical on every profile.
-    if (listingPlatform(listing)) return listing.iconUrl ? [listing.iconUrl] : [];
+    // instagram.com/favicon.ico is Instagram's logo, identical on every profile:
+    // a profile's picture comes through our proxy first, the stored link second.
+    if (listingPlatform(listing)) return [...new Set([markProxyPath(listing.identity), listing.iconUrl].filter(Boolean))];
     try {
       const url = new URL(listing.url);
       if (url.hostname.endsWith(".example") && !listing.iconUrl) return [];

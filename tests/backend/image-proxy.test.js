@@ -9,9 +9,11 @@ import {
   allowedImageType,
   candidateSources,
   fetchImageBytes,
+  instagramIdentityFrom,
   onRequestGet,
   readCapped,
   resolveMerchantImage,
+  resolveProfileImage,
 } from "../../functions/img/[slug].js";
 
 const PNG = new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10]);
@@ -28,6 +30,48 @@ function streamOf(chunks) {
 function imageReply(type = "image/png", bytes = PNG, extra = {}) {
   return new Response(bytes, { status: 200, headers: { "Content-Type": type, ...extra } });
 }
+
+test("an Instagram identity is accepted by the proxy; everything else keeps initials", () => {
+  assert.equal(instagramIdentityFrom("instagram:_umidesign_"), "instagram:_umidesign_");
+  assert.equal(instagramIdentityFrom("Instagram:Mumeiyan.HQ"), "instagram:mumeiyan.hq");
+  assert.equal(instagramIdentityFrom("instagram%3A_umidesign_"), "instagram:_umidesign_");
+  // Business Discovery covers only Instagram, and the proxy must never fetch a guess.
+  for (const bad of ["tiktok:makanplace", "facebook:kedaikopi", "instagram:", "instagram:..", "instagram:a..b", "instagram:___", `instagram:${"x".repeat(61)}`, "rakanjayahardware.com", "", "instagram:../../etc"]) {
+    assert.equal(instagramIdentityFrom(bad), "", `${JSON.stringify(bad)} must be refused`);
+  }
+});
+
+test("a profile picture is asked for fresh, with the stored link only as a fallback", async () => {
+  const served = [];
+  const fetcher = async (url) => { served.push(String(url)); return imageReply("image/jpeg"); };
+
+  // Fresh link from Meta wins.
+  const fresh = await resolveProfileImage("instagram:_umidesign_", {}, {
+    fetcher,
+    discover: async () => ({ logo: "https://scontent.cdninstagram.com/fresh.jpg" }),
+    storedUrl: "https://scontent.cdninstagram.com/stale.jpg",
+  });
+  assert.equal(fresh?.type, "image/jpeg");
+  assert.deepEqual(served, ["https://scontent.cdninstagram.com/fresh.jpg"]);
+
+  // Meta declines (personal account, token without scope): the stored link is
+  // tried while it is still alive.
+  served.length = 0;
+  const stored = await resolveProfileImage("instagram:_umidesign_", {}, {
+    fetcher, discover: async () => null, storedUrl: "https://scontent.cdninstagram.com/stale.jpg",
+  });
+  assert.equal(stored?.type, "image/jpeg");
+  assert.deepEqual(served, ["https://scontent.cdninstagram.com/stale.jpg"]);
+
+  // Nothing fresh, nothing stored: initials, not an error.
+  assert.equal(await resolveProfileImage("instagram:_umidesign_", {}, { fetcher, discover: async () => null }), null);
+  // A discover that throws is a miss, never a 500.
+  assert.equal(await resolveProfileImage("instagram:_umidesign_", {}, { fetcher, discover: async () => { throw new Error("meta down"); } }), null);
+  // Only https links from Meta are followed.
+  served.length = 0;
+  assert.equal(await resolveProfileImage("instagram:_umidesign_", {}, { fetcher, discover: async () => ({ logo: "http://evil.example/x.jpg" }) }), null);
+  assert.deepEqual(served, []);
+});
 
 test("only raster image types are re-served", () => {
   assert.equal(allowedImageType("image/png"), "image/png");

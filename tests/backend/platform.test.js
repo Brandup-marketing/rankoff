@@ -3,7 +3,7 @@ import test from "node:test";
 
 import { MARKET_GROUPS, VISIBLE_CATEGORIES } from "../../functions/_lib/config.js";
 import { accountFrom, destinationAction, displayName, isUsableHandle, listingIdentity, profilePath } from "../../functions/_lib/platform.js";
-import { canonicalDetailPath, markHue } from "../../functions/_lib/product.js";
+import { canonicalDetailPath, markHue, markImageFor } from "../../functions/_lib/product.js";
 import { normalizeDestinationUrl } from "../../functions/_lib/validation.js";
 
 const identityOf = (url) => normalizeDestinationUrl(url).identity;
@@ -74,6 +74,20 @@ test("every copy of the mark hue agrees with the server's", async () => {
   }
   // The same listing must not change colour between renders.
   assert.equal(markHue("instagram:_umidesign_"), markHue("instagram:_umidesign_"));
+});
+
+test("an Instagram listing's mark points at the proxy, never at the expiring CDN link", () => {
+  // Meta signs profile_picture_url for a few days. Showing it directly means the
+  // picture vanishes on the fourth day while the account keeps posting.
+  const stale = "https://scontent-sin2-2.xx.fbcdn.net/v/t51.2885-15/pic.jpg?oe=68C8CA97";
+  assert.equal(markImageFor({ hostname: "instagram:_umidesign_", favicon_url: stale }), "https://rankoff.my/img/instagram:_umidesign_");
+  assert.equal(markImageFor({ hostname: "instagram:mumeiyan.hq", favicon_url: "" }), "https://rankoff.my/img/instagram:mumeiyan.hq");
+  // A website's icon lives on the merchant's own domain and is used as stored.
+  assert.equal(markImageFor({ hostname: "rakanjayahardware.com", favicon_url: "https://rakanjayahardware.com/logo.png" }), "https://rakanjayahardware.com/logo.png");
+  // Other platforms have no official picture lookup; they keep what they had.
+  assert.equal(markImageFor({ hostname: "tiktok:makanplace", favicon_url: "" }), "");
+  // A malformed identity must not become a proxy URL.
+  assert.equal(markImageFor({ hostname: "instagram:..", favicon_url: "" }), "");
 });
 
 test("a share token is not the merchant's public destination", () => {
