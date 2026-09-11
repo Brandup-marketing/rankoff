@@ -1,6 +1,6 @@
 import { ApiError, defaultBoardSlug, isProduction, requireDatabase } from "../../_lib/config.js";
 import { json, methodNotAllowed, readJson } from "../../_lib/http.js";
-import { countListingsCreatedSince, createListing, findListingByHostname, loadBoard } from "../../_lib/repository.js";
+import { countListingsCreatedSince, createListing, findListingByHostname, loadBoard, updateListingMetadata } from "../../_lib/repository.js";
 import { fetchSiteInfo } from "../../_lib/siteinfo.js";
 import { fetchInstagramProfile } from "../../_lib/instagram.js";
 import { sha256Hex } from "../../_lib/security.js";
@@ -62,6 +62,10 @@ export async function onRequestPost(context) {
   if (existing) {
     if (existing.status !== "approved") {
       throw new ApiError(403, "listing_unavailable", "This website cannot be listed on the board.");
+    }
+    if (destination.platform === "instagram" && (!existing.favicon_url || !existing.description || !existing.title?.startsWith("@"))) {
+      const refreshed = await fetchInstagramProfile(destination.handle, context.env);
+      if (refreshed) await updateListingMetadata(db, existing.id, refreshed);
     }
     return json({
       listing: { id: existing.id, status: existing.status, title: existing.title },

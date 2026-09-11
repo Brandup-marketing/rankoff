@@ -375,6 +375,20 @@ export async function createListing(db, listing) {
     .run();
 }
 
+export async function updateListingMetadata(db, listingId, metadata) {
+  await db
+    .prepare(
+      `UPDATE listings
+       SET title = COALESCE(NULLIF(?2, ''), title),
+           description = COALESCE(NULLIF(?3, ''), description),
+           favicon_url = COALESCE(NULLIF(?4, ''), favicon_url),
+           updated_at = ?5
+       WHERE id = ?1`,
+    )
+    .bind(listingId, metadata.title || "", metadata.description || "", metadata.logo || "", new Date().toISOString())
+    .run();
+}
+
 export async function loadListingReview(db, listingId) {
   return db
     .prepare(
@@ -550,7 +564,7 @@ function publicBoard(board) {
 export async function findListingByHostname(db, boardId, hostname) {
   return db
     .prepare(
-      `SELECT id, title, status, hostname, favicon_url FROM listings
+      `SELECT id, title, description, status, hostname, favicon_url FROM listings
        WHERE board_id = ?1 AND hostname = ?2
        ORDER BY created_at ASC LIMIT 1`,
     )
