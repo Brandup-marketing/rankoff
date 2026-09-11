@@ -21,10 +21,21 @@ export async function fetchInstagramProfile(username, env, fetcher = fetch) {
       headers: { Accept: "application/json", Authorization: `Bearer ${accessToken}` },
       signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
     });
-    if (!response.ok) return null;
+    // A refusal used to vanish here, so nobody could tell a personal account
+    // from a token without scope from an app still in development mode. Meta's
+    // error body names the cause; the token travels in the header and is never
+    // part of what is logged.
+    if (!response.ok) {
+      const body = await response.text().catch(() => "");
+      console.error(`[instagram] business_discovery ${handle} HTTP ${response.status}: ${body.slice(0, 400)}`);
+      return null;
+    }
     const payload = await response.json();
     const profile = payload?.business_discovery;
-    if (!profile?.username) return null;
+    if (!profile?.username) {
+      console.error(`[instagram] business_discovery ${handle} answered without a profile: ${JSON.stringify(payload).slice(0, 300)}`);
+      return null;
+    }
     return {
       title: String(profile.name || "").trim(),
       description: String(profile.biography || "").trim().slice(0, 240),
@@ -33,7 +44,8 @@ export async function fetchInstagramProfile(username, env, fetcher = fetch) {
         : "",
       website: String(profile.website || "").trim(),
     };
-  } catch {
+  } catch (error) {
+    console.error(`[instagram] business_discovery ${handle} failed: ${error?.name || ""} ${error?.message || error}`);
     return null;
   }
 }
