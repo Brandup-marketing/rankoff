@@ -112,7 +112,7 @@ export async function resolveMerchantImage(hostname, deps = {}) {
   } catch {
     /* Conventional site icons remain available below. */
   }
-  const sources = [preferred, ...candidateSources(hostname)].filter((source, index, all) => source && all.indexOf(source) === index);
+  const sources = [preferred, ...(deps.discoverFirst ? [] : candidateSources(hostname))].filter((source, index, all) => source && all.indexOf(source) === index);
   for (const source of sources) {
     const found = await fetchImageBytes(source, fetcher);
     if (found) return found;
@@ -123,7 +123,12 @@ export async function resolveMerchantImage(hostname, deps = {}) {
   } catch {
     shareImage = "";
   }
-  return shareImage ? await fetchImageBytes(shareImage, fetcher) : null;
+  const discovered = shareImage ? await fetchImageBytes(shareImage, fetcher) : null;
+  if (discovered) return discovered;
+  if (deps.discoverFirst) for (const source of candidateSources(hostname)) {
+    const found = await fetchImageBytes(source, fetcher); if (found) return found;
+  }
+  return null;
 }
 
 function imageResponse(found) {
@@ -229,7 +234,7 @@ export async function onRequestGet(context) {
       found = identity && identity.startsWith('instagram:')
         ? await resolveProfileImage(identity, context.env, { storedUrl: listing.favicon_url })
         : identity
-          ? await resolveMerchantImage(`www.${identity.split(':')[0]}.com`, { preferredUrl: listing.favicon_url, discover: (url, fetcher) => discoverShareImage(`https://${identity.split(':')[0]}.com/${identity.split(':')[1]}`, fetcher) })
+          ? await resolveMerchantImage(`www.${identity.split(':')[0]}.com`, { preferredUrl: listing.favicon_url, discoverFirst: true, discover: (url, fetcher) => discoverShareImage(`https://${identity.split(':')[0]}.com/${identity.split(':')[1]}`, fetcher) })
         : await resolveMerchantImage(hostname, { preferredUrl: listing.favicon_url });
     }
   } catch {
