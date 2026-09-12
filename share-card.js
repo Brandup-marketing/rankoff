@@ -97,9 +97,9 @@ export function proxyPathFor(url) {
     const parsed = new URL(String(url || ""), "https://rankoff.my");
     const site = parsed.pathname.match(/^\/product\/([a-z0-9.-]+)\/?$/i);
     if (site) return `/img/${site[1].toLowerCase()}?v=3`;
-    const profile = parsed.pathname.match(/^\/profile\/instagram\/([a-z0-9._-]{1,60})\/?$/i);
-    if (profile && /[a-z0-9]/i.test(profile[1]) && !profile[1].includes("..")) {
-      return `/img/instagram:${profile[1].toLowerCase()}?v=3`;
+    const profile = parsed.pathname.match(/^\/profile\/(instagram|facebook)\/([a-z0-9._-]{1,60})\/?$/i);
+    if (profile && /[a-z0-9]/i.test(profile[2]) && !profile[2].includes("..")) {
+      return `/img/${profile[1].toLowerCase()}:${profile[2].toLowerCase()}?v=${profile[1].toLowerCase() === 'facebook' ? 4 : 3}`;
     }
     return "";
   } catch {

@@ -1,6 +1,7 @@
 import { defaultBoardSlug, isProduction, requireDatabase } from "../_lib/config.js";
 import { normalizeSlug } from "../_lib/product.js";
 import { findListingByHostname, loadBoard, loadListingShareCard } from "../_lib/repository.js";
+import { decodeEntities } from "../_lib/siteinfo.js";
 
 const FALLBACK = "/assets/rankoff-og-claim.png";
 const FETCH_TIMEOUT_MS = 2500;
@@ -23,7 +24,7 @@ export async function discoverShareImage(pageUrl, fetcher = fetch) {
   const content = match[0].match(/content=["']([^"']+)["']/i);
   if (!content) return "";
   try {
-    const resolved = new URL(content[1], response.url || pageUrl);
+    const resolved = new URL(decodeEntities(content[1]), response.url || pageUrl);
     if (resolved.protocol === "https:") return resolved.toString();
     // Plenty of sites still declare their share image over http while serving
     // the same file over https. A crawler will not load mixed content, so try

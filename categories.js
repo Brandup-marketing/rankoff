@@ -241,7 +241,7 @@
   function markProxyPath(identity) {
     const match = /^(instagram|facebook):([a-z0-9._-]{1,60})$/.exec(String(identity || "").toLowerCase());
     if (!match || !/[a-z0-9]/.test(match[2]) || match[2].includes("..")) return "";
-    return `/img/${match[1]}:${match[2]}`;
+    return `/img/${match[1]}:${match[2]}${match[1] === "facebook" ? "?v=4" : ""}`;
   }
 
   // Same mark as the board: the proxied profile picture or stored icon first,

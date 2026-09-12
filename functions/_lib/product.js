@@ -157,7 +157,7 @@ export function markImageFor(listing) {
   const identity = String(listing?.hostname || "");
   const parts = identityParts(identity);
   if ((parts.platform === "instagram" || parts.platform === "facebook") && isUsableHandle(parts.handle)) {
-    return `${SITE_ORIGIN}/img/${parts.platform}:${parts.handle}`;
+    return `${SITE_ORIGIN}/img/${parts.platform}:${parts.handle}${parts.platform === 'facebook' ? '?v=4' : ''}`;
   }
   return String(listing?.favicon_url || "");
 }

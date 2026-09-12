@@ -10,6 +10,7 @@
 
 import { defaultBoardSlug, isProduction, requireDatabase } from "../_lib/config.js";
 import { fetchInstagramProfile } from "../_lib/instagram.js";
+import { fetchSiteInfo } from "../_lib/siteinfo.js";
 import { identityParts, isUsableHandle } from "../_lib/platform.js";
 import { normalizeSlug } from "../_lib/product.js";
 import { findListingByHostname, loadBoard } from "../_lib/repository.js";
@@ -125,9 +126,6 @@ export async function resolveMerchantImage(hostname, deps = {}) {
   }
   const discovered = shareImage ? await fetchImageBytes(shareImage, fetcher) : null;
   if (discovered) return discovered;
-  if (deps.discoverFirst) for (const source of candidateSources(hostname)) {
-    const found = await fetchImageBytes(source, fetcher); if (found) return found;
-  }
   return null;
 }
 
@@ -179,7 +177,7 @@ export function socialIdentityFrom(slug) {
   let value = String(slug || '');
   try { value = decodeURIComponent(value); } catch {}
   const parts = identityParts(value.trim().toLowerCase());
-  return parts.platform && parts.platform !== 'instagram' && isUsableHandle(parts.handle)
+  return parts.platform === 'facebook' && isUsableHandle(parts.handle)
     ? `${parts.platform}:${parts.handle}` : '';
 }
 
@@ -221,7 +219,9 @@ export async function onRequestGet(context) {
   if ((!hostname && !identity) || /^\d+\.\d+\.\d+\.\d+$/.test(hostname) || !isProduction(context.env)) return missResponse();
 
   const cache = caches.default;
-  const cacheKey = new Request(url.toString(), { method: "GET" });
+  const cacheUrl = new URL(url);
+  if (identity.startsWith('facebook:')) cacheUrl.searchParams.set('avatar-version', '2');
+  const cacheKey = new Request(cacheUrl.toString(), { method: "GET" });
   const cached = await cache.match(cacheKey);
   if (cached) return cached;
 
@@ -234,7 +234,7 @@ export async function onRequestGet(context) {
       found = identity && identity.startsWith('instagram:')
         ? await resolveProfileImage(identity, context.env, { storedUrl: listing.favicon_url })
         : identity
-          ? await resolveMerchantImage(`www.${identity.split(':')[0]}.com`, { preferredUrl: listing.favicon_url, discoverFirst: true, discover: (url, fetcher) => discoverShareImage(`https://${identity.split(':')[0]}.com/${identity.split(':')[1]}`, fetcher) })
+          ? await resolveFacebookImage(identity, listing.favicon_url)
         : await resolveMerchantImage(hostname, { preferredUrl: listing.favicon_url });
     }
   } catch {
@@ -244,4 +244,16 @@ export async function onRequestGet(context) {
   const response = found ? imageResponse(found) : missResponse();
   context.waitUntil(cache.put(cacheKey, response.clone()));
   return response;
+}
+
+export async function resolveFacebookImage(identity, storedUrl = '', fetcher = fetch) {
+  const handle = identityParts(identity).handle;
+  const profile = await fetchSiteInfo(`https://www.facebook.com/${handle}`, 'facebook.com', {social: true, allowSocialImage: true, fetcher});
+  let stored = '';
+  try { const url = new URL(storedUrl); if (url.protocol === 'https:' && url.hostname.endsWith('.fbcdn.net') && /\/v\//.test(url.pathname)) stored = url.href; } catch {}
+  for (const source of [...new Set([profile.logo, stored].filter(Boolean))]) {
+    const found = await fetchImageBytes(source, fetcher);
+    if (found) return found;
+  }
+  return null;
 }

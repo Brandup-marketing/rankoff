@@ -82,34 +82,39 @@ function cleanProfileTitle(value) {
 
 export function extractSiteInfo(html, hostname, { social = false, allowSocialImage = false, allowSocialDescription = false } = {}) {
   const head = String(html || "").slice(0, READ_LIMIT);
-  const rawTitle = metaContent(head, [
+  const rawTitle = (social ? metaContent(head, [/<meta[^>]+property=["']og:title["'][^>]*>/i]) : "") || metaContent(head, [
       /<meta[^>]+property=["']og:site_name["'][^>]*>/i,
       /<meta[^>]+property=["']og:title["'][^>]*>/i,
     ]) || (head.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] || "");
   const title = usableTitle(social ? cleanProfileTitle(rawTitle) : rawTitle, hostname);
-  const description = social && !allowSocialDescription ? "" : usableDescription(
+  let description = social && !allowSocialDescription ? "" : usableDescription(
     metaContent(head, [
       /<meta[^>]+name=["']description["'][^>]*>/i,
       /<meta[^>]+property=["']og:description["'][^>]*>/i,
     ]),
     hostname,
   );
+  if (social && allowSocialDescription) {
+    const parts = description.split(/\b[\d,.]+\s+(?:likes?|sukaan|followers?)\.\s*/i);
+    description = parts.length > 1 ? parts.at(-1).trim() : "";
+    if (!title || PLATFORM_BOILERPLATE.test(description)) description = "";
+  }
   // A site's declared icon is a square mark drawn for exactly this purpose;
   // og:image is usually a wide hero photograph, which reads as a smudge in a
   // card tile. Ask for the mark first and fall back to the share image.
-  const iconHref = (!social || allowSocialImage) && linkHref(head, [
+  const iconHref = !social && linkHref(head, [
     /<link[^>]+rel=["'][^"']*apple-touch-icon[^"']*["'][^>]*>/i,
     /<link[^>]+rel=["'][^"']*icon[^"']*["'][^>]*>/i,
   ]);
   const image = iconHref || ((!social || allowSocialImage) ? metaContent(head, [
     /<meta[^>]+property=["']og:image:secure_url["'][^>]*>/i,
     /<meta[^>]+property=["']og:image["'][^>]*>/i,
-  ]) || markupLogo(head) : "");
+  ]) || (social ? "" : markupLogo(head)) : "");
   let logo = "";
   try {
     if (!image) throw new Error("no image declared");
     const resolved = new URL(image, `https://${hostname}/`);
-    if (resolved.protocol === "https:") logo = resolved.toString();
+    if (resolved.protocol === "https:" && (!social || (title && resolved.hostname.endsWith('.fbcdn.net') && /\/v\//.test(resolved.pathname)))) logo = resolved.toString();
   } catch {
     /* No usable image; the card falls back to its own candidates. */
   }

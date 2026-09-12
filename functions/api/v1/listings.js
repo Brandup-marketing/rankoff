@@ -46,7 +46,7 @@ export async function onRequestPost(context) {
     ? { title: "", description: "", logo: "" }
     : destination.platform === "instagram"
       ? (await fetchInstagramProfile(destination.handle, context.env)) || { title: "", description: "", logo: "" }
-    : await fetchSiteInfo(destination.url, destination.hostname, { social: Boolean(destination.platform) });
+    : await fetchSiteInfo(destination.url, destination.hostname, { social: Boolean(destination.platform), allowSocialImage: destination.platform === 'facebook', allowSocialDescription: destination.platform === 'facebook' });
 
   // A social listing titled "www.instagram.com" would read the same on every card.
   const title = givenTitle
