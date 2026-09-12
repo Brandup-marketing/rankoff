@@ -1,5 +1,8 @@
 // Translation of the existing English policies; English remains authoritative.
 export const MS_LEGAL = Object.freeze(Object.fromEntries(`
+Advertising measurement|Pengukuran pengiklanan
+We use Meta Pixel to measure page visits and advertising performance. Meta may receive page URLs, browser and device information, and cookie identifiers. See Meta’s Privacy Policy for how Meta uses this information.|Kami menggunakan Meta Pixel untuk mengukur lawatan halaman dan prestasi pengiklanan. Meta mungkin menerima URL halaman, maklumat pelayar dan peranti serta pengecam kuki. Rujuk Dasar Privasi Meta untuk cara Meta menggunakan maklumat ini.
+Meta Privacy Policy|Dasar Privasi Meta
 Trust center|Pusat kepercayaan
 Clear rules for a paid public rank.|Peraturan jelas untuk kedudukan awam berbayar.
 These policies explain how RANKOFF listings, rankings, data, and payments work. Checkout is processed through a secure Dodo Payments session.|Dasar ini menerangkan cara penyenaraian, kedudukan, data dan pembayaran RANKOFF berfungsi. Pembayaran diproses melalui sesi Dodo Payments yang selamat.

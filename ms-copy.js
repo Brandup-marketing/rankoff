@@ -1,4 +1,4 @@
-import { MS_LEGAL } from './ms-legal.js';
+import { MS_LEGAL } from './ms-legal.js?v=2';
 import { MS_ANSWERS } from './ms-answers.js';
 // Shared Bahasa Melayu UI copy. Customer-authored text is not translated.
 export const MS_COPY = Object.freeze({...MS_LEGAL, ...MS_ANSWERS,
