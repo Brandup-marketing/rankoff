@@ -155,7 +155,7 @@ test("the record block shows only what the board itself recorded", () => {
 
   assert.match(html, /data-record-key="firstListed"><span>First listed<\/span><strong data-record-date="2026-08-31T11:04:27.190Z">31 Aug 2026<\/strong>/);
   assert.match(html, /data-record-key="settledBids"><span>Payments<\/span><strong>3<\/strong>/);
-  assert.match(html, /data-record-key="lastUpdated"><span>Last updated<\/span><strong data-record-date="2026-09-02T04:00:00.000Z">2 Sep 2026<\/strong>/);
+  assert.match(html, /data-record-key="lastUpdated"><span>Latest payment<\/span><strong data-record-date="2026-09-02T04:00:00.000Z">2 Sep 2026<\/strong>/);
   assert.equal(formatDate("not a date"), "");
 });
 
@@ -175,7 +175,7 @@ test("an explicit Chinese product locale renders indexable Chinese metadata and 
   const html = renderProductPage(shell, view);
 
   assert.equal(view.pageTitle, "BrandUp Design Marketing — 营销与广告第 1 名 | RANKOFF");
-  assert.match(view.metaDescription, /RM 5 累计付款.*营销与广告第 1 名.*41 次追踪点击/);
+  assert.match(view.metaDescription, /AI-powered lead-generation infrastructure\..*付费展示资料；排名按累计付款排列/);
   assert.equal(view.canonical, "https://rankoff.my/product/brandupdesignmarketing.com?lang=zh");
   assert.match(html, /<html lang="zh-Hans"/);
   assert.match(html, /<link rel="canonical" href="https:\/\/rankoff\.my\/product\/brandupdesignmarketing\.com\?lang=zh"/);
@@ -202,7 +202,7 @@ test("an explicit Chinese product locale renders indexable Chinese metadata and 
   assert.match(html, /href="\/\?lang=zh#claim"/);
   assert.match(html, /data-record-key="firstListed"><span>首次上榜<\/span><strong data-record-date="2026-08-31T23:59:59.000Z">2026年8月31日<\/strong>/);
   assert.match(html, /data-record-key="settledBids"><span>付款次数<\/span><strong>3<\/strong>/);
-  assert.match(html, /data-record-key="lastUpdated"><span>最近更新<\/span><strong data-record-date="2026-09-02T04:00:00.000Z">2026年9月2日<\/strong>/);
+  assert.match(html, /data-record-key="lastUpdated"><span>最近付款<\/span><strong data-record-date="2026-09-02T04:00:00.000Z">2026年9月2日<\/strong>/);
 });
 
 test("a localized missing detail keeps root assets and language headers", async () => {
@@ -307,7 +307,7 @@ test("a listing below the top of the board shares its market position instead", 
     marketName: "Beauty & Wellness",
   });
   assert.equal(view.pageTitle, "中华健康 Oriental Wellness — #1 in Beauty & Wellness | RANKOFF");
-  assert.match(view.metaDescription, /holds #1 in Beauty & Wellness on Rankoff/);
+  assert.match(view.metaDescription, /^Traditional massage and TCM\. Sponsored listing/);
   assert.equal(view.initials, "中");
 });
 

@@ -44,7 +44,7 @@
       previewDisclosure: "Submissions pass automated checks instantly; listings may be removed after publication if they break the rules.", liveDisclosure: "Payment is confirmed only after secure hosted checkout settles.",
       unavailable: "Website temporarily unavailable", copied: "Rank link copied.", shareText: "is ranked", listingFallback: "Listing", sponsoredDescription: "Sponsored listing on Rankoff.",
       footerParent: "A Brandup Marketing product", rules: "Rules", terms: "Terms", privacy: "Privacy", payments: "Payments",
-      firstListed: "First listed", settledBids: "Payments", lastUpdated: "Last updated",
+      firstListed: "First listed", settledBids: "Payments", lastUpdated: "Latest payment",
     },
     zh: {
       board: "榜单", categories: "分类", about: "关于", legal: "法律条款", contact: "联系", skipListing: "跳至条目详情", back: "← 返回榜单", loading: "正在加载排名信息…",
@@ -64,7 +64,7 @@
       previewDisclosure: "提交即通过自动筛查并发布；违反规则的条目可能在发布后被移除。", liveDisclosure: "付款会在安全的托管付款页面完成并确认。",
       unavailable: "网站暂时无法访问", copied: "排名链接已复制。", shareText: "目前排名", listingFallback: "条目", sponsoredDescription: "Rankoff 上的赞助条目。",
       footerParent: "Brandup Marketing 旗下产品", rules: "规则", terms: "条款", privacy: "隐私", payments: "付款",
-      firstListed: "首次上榜", settledBids: "付款次数", lastUpdated: "最近更新",
+      firstListed: "首次上榜", settledBids: "付款次数", lastUpdated: "最近付款",
     },
   };
   const pageMetadata = {
@@ -202,6 +202,7 @@
 
   function localizedModelDescription() {
     if (preferences.language === "zh" && model?.descriptionZh) return model.descriptionZh;
+    if (preferences.language === "en" && model?.descriptionEn) return model.descriptionEn;
     return model?.description || text("sponsoredDescription");
   }
 
@@ -270,6 +271,9 @@
     elements.theme.setAttribute("aria-pressed", String(preferences.theme === "dark"));
     elements.theme.setAttribute("aria-label", dark ? accessible.switchLight : accessible.switchDark);
     syncRecordCopy();
+    document.querySelectorAll("[data-business-en]").forEach((node) => {
+      node.textContent = preferences.language === "zh" ? node.dataset.businessZh : node.dataset.businessEn;
+    });
     updateMetadata();
     syncInternalLinks();
     if (model) renderModel();
@@ -571,7 +575,9 @@
     setIcon();
     // The server already wrote the better of the two true positions into the
     // title; hydration must not quietly demote it to the whole-board number.
-    updateMetadata(shareHeadline().pageTitle, localizedModelDescription());
+    // Preserve the server's business-first search description on canonical
+    // pages. A browser and a crawler should receive the same description.
+    updateMetadata(shareHeadline().pageTitle, /^\/(?:product|profile)\//.test(location.pathname) ? initialDescription : localizedModelDescription());
     syncInternalLinks();
   }
 

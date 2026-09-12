@@ -1,6 +1,7 @@
 import { defaultBoardSlug, isProduction, requireDatabase } from "./_lib/config.js";
 import { SITE_ORIGIN, canonicalDetailPath, escapeHtml } from "./_lib/product.js";
 import { loadBoard, loadPublicBoard } from "./_lib/repository.js";
+import { businessFactsFor } from "./_lib/business-facts.js";
 
 const PAGE_LIMIT = 100;
 const MAX_PAGES = 10;
@@ -27,7 +28,7 @@ export function productEntries(rankings) {
   return rankings
     .map((entry) => ({
       path: canonicalDetailPath(entry.listing?.hostname),
-      lastmod: String(entry.bid?.settled_at || "").slice(0, 10),
+      lastmod: [String(entry.bid?.settled_at || "").slice(0, 10), businessFactsFor(String(entry.listing?.hostname || ""))?.reviewedAt || ""].sort().at(-1),
     }))
     .filter((entry) => entry.path)
     .map((entry) => {

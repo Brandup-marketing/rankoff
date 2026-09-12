@@ -1,4 +1,5 @@
 import { currencyNotice } from "../../currency.js";
+import { businessSubject, renderBusinessProfile } from "./business-profile.js";
 // Server-rendered listing pages. The board decides the numbers; this file only
 // formats them into the shell that /listing already ships, so a crawler, a
 // WhatsApp preview and a reader without JavaScript all see the same record.
@@ -22,7 +23,7 @@ const PRODUCT_COPY = Object.freeze({
     currentRank: "Current rank",
     firstListed: "First listed",
     settledBids: "Payments",
-    lastUpdated: "Last updated",
+    lastUpdated: "Latest payment",
     verifiedPlacement: "Paid placement",
     verifiedClicks: "Tracked clicks",
   }),
@@ -39,7 +40,7 @@ const PRODUCT_COPY = Object.freeze({
     currentRank: "当前排名",
     firstListed: "首次上榜",
     settledBids: "付款次数",
-    lastUpdated: "最近更新",
+    lastUpdated: "最近付款",
     verifiedPlacement: "付费展示",
     verifiedClicks: "追踪点击",
   }),
@@ -192,7 +193,7 @@ function clamp(text, limit) {
   return value.length > limit ? `${value.slice(0, limit - 1).trimEnd()}…` : value;
 }
 
-export function buildProductView({ entry, todayEntry, board, snapshotId, record, marketRank = null, marketName = "", language = "en", nextBidMinor = null }) {
+export function buildProductView({ entry, todayEntry, board, snapshotId, record, marketRank = null, marketName = "", language = "en", nextBidMinor = null, businessFacts = null }) {
   const listing = entry.listing || {};
   const locale = normalizeProductLanguage(language);
   const copy = PRODUCT_COPY[locale];
@@ -208,16 +209,13 @@ export function buildProductView({ entry, todayEntry, board, snapshotId, record,
   const bid = formatMoney(entry.bid?.amount_minor, currency);
   const clicks = Number(entry.clicks || 0);
   const title = String(listing.title || label);
-  const description = String(listing.description || "");
+  const description = String(businessFacts?.summary?.[locale] || listing.description || "");
   const rank = Number(entry.rank);
   const useMarket = Boolean(marketRank && marketName) && marketRank < rank;
   const localizedMarketName = locale === "zh" ? (PRODUCT_MARKET_TRANSLATIONS[marketName] || marketName) : marketName;
   const headline = locale === "zh"
     ? (useMarket ? `${localizedMarketName}第 ${marketRank} 名 | RANKOFF` : `RANKOFF 第 ${rank} 名`)
     : (useMarket ? `#${marketRank} in ${marketName} | RANKOFF` : `#${rank} on RANKOFF`);
-  const position = locale === "zh"
-    ? (useMarket ? `${localizedMarketName}第 ${marketRank} 名` : `全站第 ${rank} 名`)
-    : (useMarket ? `#${marketRank} in ${marketName}` : `#${rank}`);
   const action = destinationAction(identity);
   const canonicalBase = `${SITE_ORIGIN}${canonicalDetailPath(identity)}`;
 
@@ -234,6 +232,7 @@ export function buildProductView({ entry, todayEntry, board, snapshotId, record,
       : `${SITE_ORIGIN}/og/${parts.hostname}?currency=${encodeURIComponent(currency)}`,
     title,
     description,
+    businessFacts,
     category: String(listing.category || "Other"),
     destination: String(listing.url || ""),
     language: locale,
@@ -272,8 +271,8 @@ export function buildProductView({ entry, todayEntry, board, snapshotId, record,
     // board is large the overall number wins this comparison on its own.
     pageTitle: `${title} — ${headline}`,
     metaDescription: clamp(locale === "zh"
-      ? `${title}以 ${bid}${board?.currency_conversion?.length ? " 等值" : ""} 累计付款位列 Rankoff ${position}，获得 ${clicks} 次追踪点击。`
-      : `${title} holds ${position} on Rankoff with ${bid}${board?.currency_conversion?.length ? " equivalent" : ""} paid and ${clicks} tracked clicks. ${description}`,
+      ? `${description ? `${description} ` : ""}${title}的 Rankoff 付费展示资料；排名按累计付款排列。`
+      : `${description ? `${description} ` : ""}Sponsored listing for ${title} on Rankoff; positions are ordered by total paid.`,
     200),
   };
 }
@@ -315,8 +314,7 @@ export function renderProductPage(shell, view) {
   const canonical = escapeHtml(view.canonical);
   const canonicalBase = escapeHtml(view.canonicalBase || view.canonical);
   const chineseCanonical = escapeHtml(`${view.canonicalBase || view.canonical}?lang=zh`);
-  const subject = { "@type": "Thing", name: view.title, url: view.destination };
-  if (view.platform) subject.alternateName = view.hostname;
+  const subject = businessSubject(view);
   const jsonLd = JSON.stringify({
     "@context": "https://schema.org",
     // A social account's page is a profile page; a website's listing is not.
@@ -326,7 +324,8 @@ export function renderProductPage(shell, view) {
     description: view.metaDescription,
     inLanguage: view.language === "zh" ? "zh-Hans" : "en-MY",
     isPartOf: { "@type": "WebSite", name: "RANKOFF", url: `${SITE_ORIGIN}/` },
-    ...(view.platform ? { mainEntity: subject } : { about: subject }),
+    mainEntity: subject,
+    ...(view.businessFacts ? { citation: view.businessFacts.source } : {}),
   }).replace(/</g, "\\u003c");
   // Hydrate from the exact record that produced the HTML. Refetching page one of
   // the board could lose a lower-ranked listing or replace correct SSR content
@@ -337,6 +336,7 @@ export function renderProductPage(shell, view) {
     title: view.title,
     description: view.description,
     descriptionZh: "",
+    ...(view.businessFacts ? { descriptionEn: view.businessFacts.summary.en, descriptionZh: view.businessFacts.summary.zh } : {}),
     url: view.destination,
     category: view.category,
     icon: view.logo,
@@ -423,6 +423,7 @@ export function renderProductPage(shell, view) {
   html = html.replace(/(<h1 data-title)>[\s\S]*?<\/h1>/, `$1>${escapeHtml(view.title)}</h1>`);
   html = html.replace(/(<p class="listing-host" data-host)>[\s\S]*?<\/p>/, `$1>${escapeHtml(view.hostname)}</p>`);
   html = html.replace(/(<p class="listing-story" data-description)>[\s\S]*?<\/p>/, `$1>${escapeHtml(view.description)}</p>`);
+  html = html.replace("<!-- business-profile -->", () => renderBusinessProfile(view));
   html = html.replace(/(<span data-category)>[\s\S]*?<\/span>/, `$1>${escapeHtml(view.marketName || view.category)}</span>`);
   html = html.replace(/(<dt data-rank-label)>[\s\S]*?<\/dt>/, `$1>${escapeHtml(view.rankLabel)}</dt>`);
   html = html.replace(/(<dd data-rank)>[\s\S]*?<\/dd>/, `$1>${escapeHtml(view.rankValue)}</dd>`);

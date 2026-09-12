@@ -1,6 +1,7 @@
 import { ApiError, defaultBoardSlug, isProduction, marketLabel, requireDatabase } from "./config.js";
 import { buildProductView, localizeProductShell, normalizeProductLanguage, renderProductPage } from "./product.js";
 import { loadBoard, loadListingRecord, loadPublicBoard } from "./repository.js";
+import { businessFactsFor } from "./business-facts.js";
 
 const PAGE_LIMIT = 100;
 const MAX_PAGES = 10;
@@ -70,6 +71,7 @@ export async function renderDetail(context, identity) {
     marketName: marketLabel(match.listing?.category),
     language,
     nextBidMinor: payload.next_bid_minor,
+    businessFacts: businessFactsFor(identity),
   });
 
   return new Response(renderProductPage(template, view), {

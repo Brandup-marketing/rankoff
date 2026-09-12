@@ -119,6 +119,20 @@
 .listing-actions .secondary-action { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
 .listing-actions .secondary-action:hover { border-color: var(--line-strong); color: var(--ink); }
 .listing-actions [aria-disabled="true"] { cursor: not-allowed; opacity: 0.55; pointer-events: none; }
+.business-profile { margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--line); }
+.business-profile h2 { margin: 0 0 1rem; font-size: 1rem; font-weight: 850; }
+.business-facts { margin: 0; }
+.business-facts > div { display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: .5rem 1rem; padding-block: .65rem; }
+.business-facts dt { color: var(--muted); font-size: .85rem; }
+.business-facts dd { margin: 0; font-size: .9rem; line-height: 1.6; overflow-wrap: anywhere; }
+.business-profile a { color: var(--blue); text-underline-offset: .2em; }
+.business-facts a { display: inline-block; padding-block: .3rem; }
+.business-source-note { max-width: 68ch; margin: .75rem 0 0; color: var(--muted); font-size: .8rem; line-height: 1.6; }
+.business-source-note a { display: inline-block; padding-block: .35rem; }
+@media (max-width: 46rem) {
+  .business-facts > div { grid-template-columns: 1fr; gap: .2rem; }
+  .business-facts a, .business-source-note a { min-height: 2.75rem; display: inline-flex; align-items: center; }
+}
 .evidence-qualifier { margin: .55rem 0 0; color: var(--muted); font-size: .74rem; }
 /* .listing-visit is also the board card's small pill, which sets its own tiny
    type. Here it is a full-size action beside "Share rank" and has to match it. */
