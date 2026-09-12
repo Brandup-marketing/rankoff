@@ -2243,7 +2243,13 @@
     const payload = await response.json();
     const bid = payload?.bid;
     if (!bid || bid.status !== "settled") return { missing: false, settled: false, listingId: "" };
-    return { missing: false, settled: true, listingId: String(bid.listing_id || "") };
+    return {
+      missing: false,
+      settled: true,
+      listingId: String(bid.listing_id || ""),
+      amountMinor: Number(bid.amount_minor),
+      currency: String(bid.currency || ""),
+    };
   }
 
   async function findSettledBoardEntry(listingId) {
@@ -2345,6 +2351,10 @@
           const status = await fetchSettledBid(bidId);
           if (status.missing) return;
           if (!status.settled) continue;
+          // The server has confirmed the money. Report the conversion here,
+          // before the board lookup, so a payment still counts when the row
+          // cannot be found. Absent on preview hosts and when blocked.
+          window.rankoffTrackPurchase?.(bidId, status.amountMinor, status.currency);
           if (!status.listingId) return;
           settledListingId = status.listingId;
         }
