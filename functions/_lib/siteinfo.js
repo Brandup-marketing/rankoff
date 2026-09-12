@@ -80,14 +80,14 @@ function cleanProfileTitle(value) {
   return PLATFORM_BOILERPLATE.test(text) ? "" : text;
 }
 
-export function extractSiteInfo(html, hostname, { social = false, allowSocialImage = false } = {}) {
+export function extractSiteInfo(html, hostname, { social = false, allowSocialImage = false, allowSocialDescription = false } = {}) {
   const head = String(html || "").slice(0, READ_LIMIT);
   const rawTitle = metaContent(head, [
       /<meta[^>]+property=["']og:site_name["'][^>]*>/i,
       /<meta[^>]+property=["']og:title["'][^>]*>/i,
     ]) || (head.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] || "");
   const title = usableTitle(social ? cleanProfileTitle(rawTitle) : rawTitle, hostname);
-  const description = social ? "" : usableDescription(
+  const description = social && !allowSocialDescription ? "" : usableDescription(
     metaContent(head, [
       /<meta[^>]+name=["']description["'][^>]*>/i,
       /<meta[^>]+property=["']og:description["'][^>]*>/i,
@@ -118,7 +118,7 @@ export function extractSiteInfo(html, hostname, { social = false, allowSocialIma
 
 // Never allowed to fail a submission: a merchant paying is worth more than a
 // description we could not fetch.
-export async function fetchSiteInfo(url, hostname, { social = false, allowSocialImage = false, fetcher = fetch } = {}) {
+export async function fetchSiteInfo(url, hostname, { social = false, allowSocialImage = false, allowSocialDescription = false, fetcher = fetch } = {}) {
   try {
     const response = await fetcher(url, {
       headers: { Accept: "text/html", "User-Agent": "RankoffBot/1.0 (+https://rankoff.my)" },
@@ -126,7 +126,7 @@ export async function fetchSiteInfo(url, hostname, { social = false, allowSocial
       signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
     });
     if (!response.ok) return { title: "", description: "", logo: "" };
-    return extractSiteInfo(await response.text(), hostname, { social, allowSocialImage });
+    return extractSiteInfo(await response.text(), hostname, { social, allowSocialImage, allowSocialDescription });
   } catch {
     return { title: "", description: "", logo: "" };
   }

@@ -66,7 +66,7 @@ export async function onRequestPost(context) {
     if ((destination.platform === "instagram" || destination.platform === "facebook") && (!existing.favicon_url || !existing.description || !existing.title?.startsWith("@"))) {
       const refreshed = destination.platform === "instagram"
         ? await fetchInstagramProfile(destination.handle, context.env)
-        : await fetchSiteInfo(destination.url, destination.hostname, { social: true, allowSocialImage: true });
+        : await fetchSiteInfo(destination.url, destination.hostname, { social: true, allowSocialImage: true, allowSocialDescription: true });
       if (refreshed) await updateListingMetadata(db, existing.id, refreshed);
     }
     return json({
