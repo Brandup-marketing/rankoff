@@ -1051,9 +1051,9 @@
   // a CDN link Meta signs for a few days, so the stored one is only a fallback:
   // the mark asks our own /img/ proxy, which fetches a fresh link each day.
   function markProxyPath(identity) {
-    const match = /^instagram:([a-z0-9._-]{1,60})$/.exec(String(identity || "").toLowerCase());
-    if (!match || !/[a-z0-9]/.test(match[1]) || match[1].includes("..")) return "";
-    return `/img/instagram:${match[1]}`;
+    const match = /^(instagram|facebook):([a-z0-9._-]{1,60})$/.exec(String(identity || "").toLowerCase());
+    if (!match || !/[a-z0-9]/.test(match[2]) || match[2].includes("..")) return "";
+    return `/img/${match[1]}:${match[2]}`;
   }
 
   function faviconCandidates(listing) {

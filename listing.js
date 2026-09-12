@@ -370,9 +370,9 @@
   // served through our own /img/ proxy, which asks Meta for a fresh link each
   // day, because the link stored at listing time is signed for only a few days.
   function markProxyPath(identity) {
-    const match = /^instagram:([a-z0-9._-]{1,60})$/.exec(String(identity || "").toLowerCase());
-    if (!match || !/[a-z0-9]/.test(match[1]) || match[1].includes("..")) return "";
-    return `/img/instagram:${match[1]}`;
+    const match = /^(instagram|facebook):([a-z0-9._-]{1,60})$/.exec(String(identity || "").toLowerCase());
+    if (!match || !/[a-z0-9]/.test(match[2]) || match[2].includes("..")) return "";
+    return `/img/${match[1]}:${match[2]}`;
   }
 
   // Mirrors functions/_lib/platform.js: a profile is addressed by its handle.
