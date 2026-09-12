@@ -428,10 +428,6 @@ export function renderProductPage(shell, view) {
   html = html.replace(/(<dt data-rank-label)>[\s\S]*?<\/dt>/, `$1>${escapeHtml(view.rankLabel)}</dt>`);
   html = html.replace(/(<dd data-rank)>[\s\S]*?<\/dd>/, `$1>${escapeHtml(view.rankValue)}</dd>`);
   html = html.replace(
-    /(<span class="verified-chip" data-placement-label>)[\s\S]*?<\/span>/,
-`$1${escapeHtml(view.placementLabel || PRODUCT_COPY.en.verifiedPlacement)}</span>`,
-  );
-  html = html.replace(
     /(<p[^>]*data-evidence-note[^>]*>)[\s\S]*?<\/p>/,
     `$1${escapeHtml(PRODUCT_COPY[view.language].verifiedEvidence)}</p>`,
   );

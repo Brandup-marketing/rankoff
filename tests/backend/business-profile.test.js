@@ -40,7 +40,8 @@ test("unknown social listings keep saved bios without invented businesses, servi
   assert.equal(data.mainEntity.areaServed, undefined);
   assert.equal(data.citation, undefined);
   assert.ok(!html.includes('<time datetime='));
-  assert.match(html, /Description saved with this listing/);
+  assert.match(html, /business-profile-compact/);
+  assert.ok(!html.includes('id="business-heading"'));
   assert.ok(!html.includes('data-business-en="Services &amp; products"'));
 });
 

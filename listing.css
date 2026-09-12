@@ -109,8 +109,8 @@
   max-width: 66ch;
   margin: 1.5rem 0 0;
   color: var(--ink);
-  font-size: 1.15rem;
-  font-weight: 590;
+  font-size: 1rem;
+  font-weight: 400;
   line-height: 1.6;
   text-wrap: pretty;
 }
@@ -129,6 +129,10 @@
 .business-facts a { display: inline-block; padding-block: .3rem; }
 .business-source-note { max-width: 68ch; margin: .75rem 0 0; color: var(--muted); font-size: .8rem; line-height: 1.6; }
 .business-source-note a { display: inline-block; padding-block: .35rem; }
+.business-profile-compact { margin-top: 1rem; padding-top: 0; border-top: 0; }
+.business-profile-compact .business-facts > div { display: flex; flex-wrap: wrap; align-items: baseline; gap: .25rem .65rem; padding: 0; }
+.business-profile-compact .business-facts dd { font-size: .8rem; }
+.business-profile-compact + .evidence-section { margin-top: 1.25rem; }
 @media (max-width: 46rem) {
   .business-facts > div { grid-template-columns: 1fr; gap: .2rem; }
   .business-facts a, .business-source-note a { min-height: 2.75rem; display: inline-flex; align-items: center; }
@@ -136,8 +140,8 @@
 .evidence-qualifier { margin: .55rem 0 0; color: var(--muted); font-size: .74rem; }
 /* .listing-visit is also the board card's small pill, which sets its own tiny
    type. Here it is a full-size action beside "Share rank" and has to match it. */
-.listing-actions .listing-visit { gap: .32rem; padding: .65rem .9rem; border-radius: .7rem; background: transparent; color: var(--muted); font: inherit; font-weight: 750; }
-.listing-actions .listing-visit:hover { background: transparent; color: var(--ink); }
+.listing-actions .listing-visit { gap: .32rem; min-height: 2.75rem; padding: .65rem .9rem; border-radius: .7rem; background: var(--ink); color: var(--bg); border-color: var(--ink); font: inherit; font-weight: 750; }
+.listing-actions .listing-visit:hover { background: var(--ink); color: var(--bg); opacity: .85; }
 
 .evidence-section { margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid var(--line); }
 .evidence-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1.5rem; }

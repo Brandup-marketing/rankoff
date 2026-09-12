@@ -89,7 +89,7 @@
     detail: document.querySelector("[data-content]"), loading: document.querySelector("[data-loading]"), error: document.querySelector("[data-error]"),
     language: document.querySelector("[data-language-toggle]"), theme: document.querySelector("[data-theme-toggle]"),
     mark: document.querySelector("[data-mark]"), initials: document.querySelector("[data-initials]"), title: document.querySelector("[data-title]"),
-    category: document.querySelector("[data-category]"), placement: document.querySelector("[data-placement-label]"), host: document.querySelector("[data-host]"),
+    category: document.querySelector("[data-category]"), host: document.querySelector("[data-host]"),
     description: document.querySelector("[data-description]"), visit: document.querySelector("[data-visit]"), share: document.querySelector("[data-share]"),
     mode: document.querySelector("[data-mode]"), evidenceNote: document.querySelector("[data-evidence-note]"), rank: document.querySelector("[data-rank]"),
     rankLabel: document.querySelector("[data-rank-label]"), rankNote: document.querySelector("[data-rank-note]"),
@@ -527,8 +527,6 @@
     // The 24h row carries its own scope, like the two rows above it. Sharing the
     // all-time label made the same metric read twice with two different values.
     if (elements.clickLabelToday) elements.clickLabelToday.textContent = text("past24Clicks");
-    elements.placement.textContent = verified ? text("verifiedPlacement") : text("previewListing");
-    elements.placement.className = verified ? "verified-chip" : "estimated-chip";
     elements.mode.textContent = verified ? text("verifiedData") : text("previewData");
     elements.mode.classList.toggle("is-verified", verified);
     elements.evidenceNote.textContent = verified ? text("verifiedEvidence") : text("previewEvidence");

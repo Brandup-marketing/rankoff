@@ -189,7 +189,7 @@ test("an explicit Chinese product locale renders indexable Chinese metadata and 
   assert.match(html, /data-category>营销与广告<\/span>/);
   assert.match(html, /data-rank-label>营销与广告排名<\/dt>/);
   assert.match(html, /data-rank-note>全站第 3 名<\/p>/);
-  assert.match(html, /data-placement-label>付费展示<\/span>/);
+  assert.ok(!html.includes('data-placement-label'));
   assert.match(html, /data-click-label>追踪点击<\/dt>/);
   assert.match(html, /data-copy="sponsored">赞助<\/span>/);
   assert.match(html, /data-copy="share">分享排名<\/button>/);

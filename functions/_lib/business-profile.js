@@ -9,7 +9,6 @@ const labels = {
   source: { en: "Source", zh: "资料来源" },
   reviewed: { en: "Source checked", zh: "来源查阅日期" },
   sourced: { en: "Details summarised from the business’s website. Confirm current services and availability with the business.", zh: "资料根据商家网站整理，最新服务与供应情况请向商家确认。" },
-  saved: { en: "Description saved with this listing. Check the linked website or profile for current details.", zh: "以上为条目保存的简介，最新资料请查看所列网站或主页。" },
   disclosure: { en: "Paid position, not a quality rating or endorsement.", zh: "此为付费位置，不代表品质评分或推荐。" },
   correction: { en: "Suggest a correction", zh: "提交资料更正" },
 };
@@ -32,15 +31,21 @@ export function renderBusinessProfile(view) {
     const formatted = { en: Array.isArray(value.en) ? value.en.join(" · ") : value.en, zh: Array.isArray(value.zh) ? value.zh.join(" · ") : value.zh };
     rows.push(`<div><dt>${text(labels[key])}</dt><dd>${text(formatted)}</dd></div>`);
   }
+  const hasDetails = rows.length > 0;
   const source = safeBusinessUrl(facts?.source || view.destination);
   if (source) rows.push(`<div><dt>${text(labels.source)}</dt><dd><a href="${esc(source)}" target="_blank" rel="sponsored nofollow noopener noreferrer">${esc(new URL(source).hostname.replace(/^www\./, ""))}${view.platform ? esc(new URL(source).pathname.replace(/\/$/, "")) : ""} ↗</a></dd></div>`);
   if (facts?.reviewedAt) rows.push(`<div><dt>${text(labels.reviewed)}</dt><dd><time datetime="${esc(facts.reviewedAt)}">${esc(facts.reviewedAt)}</time></dd></div>`);
   const subject = encodeURIComponent(`Listing correction: ${view.canonicalBase}`);
+  const disclosure = `<p class="business-source-note">${text(labels.disclosure)} <a href="mailto:sales@brandupdesignmarketing.com?subject=${esc(subject)}">${text(labels.correction)}</a></p>`;
+  if (!hasDetails) return `<div class="business-profile business-profile-compact">
+    <dl class="business-facts">${rows.join("")}</dl>
+    ${disclosure}
+  </div>`;
   return `<section class="business-profile" aria-labelledby="business-heading">
     <h2 id="business-heading">${text(labels.heading)}</h2>
     <dl class="business-facts">${rows.join("")}</dl>
-    <p class="business-source-note">${text(facts ? labels.sourced : labels.saved)}</p>
-    <p class="business-source-note">${text(labels.disclosure)} <a href="mailto:sales@brandupdesignmarketing.com?subject=${esc(subject)}">${text(labels.correction)}</a></p>
+    <p class="business-source-note">${text(labels.sourced)}</p>
+    ${disclosure}
   </section>`;
 }
 
