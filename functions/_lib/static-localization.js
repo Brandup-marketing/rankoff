@@ -10,7 +10,7 @@ const STATIC_LOCALIZED_METADATA = Object.freeze({
     title: "RANKOFF｜付费排名榜，US$1 起",
     description: "在 Rankoff 付费拿下第 1 名。US$1 起的公开赞助榜单——排名、累计已付与追踪点击全部公开。",
     socialTitle: "RANKOFF｜US$1 起，竞逐第 1 名",
-    socialDescription: "面向全球商家的公开赞助榜单。US$1 起即可上榜；累计付款金额和追踪点击公开可见。",
+    socialDescription: "面向马来西亚商家的公开赞助榜单。US$1 起即可上榜；累计付款金额和追踪点击公开可见。",
   }),
   categories: Object.freeze({
     path: "/categories",
@@ -22,9 +22,9 @@ const STATIC_LOCALIZED_METADATA = Object.freeze({
   about: Object.freeze({
     path: "/about",
     title: "关于 RANKOFF",
-    description: "Rankoff 怎么运作：全球商家付费占据公开榜单的位置，每一笔付款和点击都公开可见。",
+    description: "Rankoff 怎么运作：马来西亚商家付费占据公开榜单的位置，每一笔付款和点击都公开可见。",
     socialTitle: "关于 RANKOFF",
-    socialDescription: "Rankoff 怎么运作：全球商家付费占据公开榜单的位置，每一笔付款和点击都公开可见。",
+    socialDescription: "Rankoff 怎么运作：马来西亚商家付费占据公开榜单的位置，每一笔付款和点击都公开可见。",
   }),
 });
 
@@ -62,7 +62,7 @@ const ABOUT_STATIC_COPY = Object.freeze({
   "Skip to content": "跳至正文",
   Board: "榜单", Categories: "分类", About: "关于", "The story behind the board": "榜单背后的故事",
   "Attention has a price.": "注意力，明码标价。", "Make it visible.": "让它公开可见。",
-  "Built in Malaysia. Open to businesses everywhere. Discover businesses, products and services on Rankoff’s public sponsored leaderboard. Visit their websites or pay to claim a position. The highest total paid ranks first.": "源自马来西亚，面向全球商家。在 Rankoff 公开赞助榜单发现商家、产品与服务。访问他们的网站，或付费拿下一个位置。累计付款最高者排第一。",
+  "RANKOFF is the public leaderboard for Malaysian businesses. Pay to hold a spot, show customers what you do, and keep it until someone pays more. One board, one rule: the highest total paid takes #1.": "RANKOFF 是马来西亚商家的公开榜单。付费占一个位置，把你的生意展示给顾客，直到有人付得更多。一个榜单，一条规则：累计付款最高者，就是第 1 名。",
   "Why it exists": "为什么有 Rankoff", "Rankoff started with one question.": "Rankoff 始于一个问题。",
   "What if a business could buy the top spot in the open, not in a hidden ad auction? What if everyone could see who is on top, what it cost, and who is getting the clicks?": "如果商家可以光明正大买下最显眼的位置，而不是在看不见的广告竞价里？如果每个人都能看到谁在榜首、花了多少钱、谁拿到了点击？",
   "Rankoff is the answer: a public board where the price, the position and the clicks are all on show, and every listing is labelled as sponsored.": "Rankoff 就是答案：一个公开榜单，价格、排名、点击全部公开，每个条目都标明是赞助。",
@@ -87,6 +87,32 @@ const MARKET_TRANSLATIONS = Object.freeze({
 });
 
 const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
+
+// The shells are written with a provisional "US$1" so one copy serves every
+// currency, and the live board decides what a visitor reads. This must run
+// AFTER localisation: the Chinese metadata is injected by localizeStaticPage,
+// and when the swap ran first that copy arrived afterwards untouched, so the
+// English page said "RM 5" while every crawler read "US$1 起" on the Chinese
+// one. Specific phrases go before the bare token so "Decrease by US$1" becomes
+// "Decrease by RM1", not "Decrease by RM 5". Both index.js and about.js call
+// this — one place, so the two pages cannot disagree.
+export function applyLiveCurrency(html, floor, currency) {
+  const value = String(floor || "");
+  if (!value) return html;
+  const symbol = currency === "MYR" ? "RM" : "US$";
+  const currencyName = currency === "MYR" ? "Malaysian ringgit" : "US dollars";
+  return String(html)
+    .replaceAll("Enter your website, choose a market, and pay from US$1.", `Enter your website, choose a market, and pay from ${value}.`)
+    .replaceAll("输入网站、选择市场，US$1 起付款。", `输入网站、选择市场，${value} 起付款。`)
+    .replaceAll("Your payment in US dollars", `Your payment in ${currencyName}`)
+    .replaceAll("付款金额（美元）", currency === "MYR" ? "付款金额（马来西亚令吉）" : "付款金额（美元）")
+    .replaceAll("Decrease by US$1", `Decrease by ${symbol}1`)
+    .replaceAll("Increase by US$1", `Increase by ${symbol}1`)
+    .replaceAll("减少 US$1", `减少 ${symbol}1`)
+    .replaceAll("增加 US$1", `增加 ${symbol}1`)
+    .replaceAll("US$1", value)
+    .replace(/(<span class="rules-glyph" aria-hidden="true">)(?:US\$|RM)(<\/span>)/g, `$1${symbol}$2`);
+}
 
 function replaceStaticCopy(html, attribute, copy) {
   let output = html;

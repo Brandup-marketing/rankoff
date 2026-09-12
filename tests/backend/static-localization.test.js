@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-import { localizeStaticPage, serveLocalizedAsset } from "../../functions/_lib/static-localization.js";
+import { applyLiveCurrency, localizeStaticPage, serveLocalizedAsset } from "../../functions/_lib/static-localization.js";
 import { onRequestGet as renderAbout } from "../../functions/about.js";
 import { onRequestGet as renderCategories } from "../../functions/categories.js";
 import { renderBoard, renderRankingSchema } from "../../functions/index.js";
@@ -56,6 +56,29 @@ test("server-rendered board links stay in the requested language", () => {
   assert.match(html, /data-english-copy="Sponsored · Property &amp; Agents · RM 5 paid · 4 tracked clicks"/);
   assert.match(html, />广告 · 房产与经纪 · 已付 RM 5 · 4 次追踪点击<\/span>/);
   assert.doesNotMatch(html, /&amp;amp;/);
+});
+
+test("the live currency reaches the Chinese metadata, not just the English shell", () => {
+  // The shells carry a provisional "US$1". When the swap ran before
+  // localisation, the Chinese title/description/og were injected afterwards
+  // and every crawler read "US$1 起" while the English page said "RM 5".
+  const zh = applyLiveCurrency(localizeStaticPage(homeShell, "home", "zh"), "RM 5", "MYR");
+  assert.match(zh, /<title>RANKOFF｜付费排名榜，RM 5 起<\/title>/);
+  assert.match(zh, /property="og:title" content="RANKOFF｜RM 5 起，竞逐第 1 名"/);
+  assert.match(zh, /aria-label="减少 RM1"/);
+  assert.doesNotMatch(zh, /US\$1/);
+
+  const en = applyLiveCurrency(homeShell, "RM 5", "MYR");
+  assert.match(en, /<title>RANKOFF \| Pay-to-rank leaderboard, from RM 5<\/title>/);
+  // Specific phrases are swapped before the bare token, so the stepper says
+  // RM1, not "RM 5".
+  assert.match(en, /aria-label="Decrease by RM1"/);
+  assert.match(en, /Your payment in Malaysian ringgit/);
+  assert.doesNotMatch(en, /US\$1/);
+
+  // A USD board keeps its wording; no floor known means no change at all.
+  assert.match(applyLiveCurrency(homeShell, "US$ 1", "USD"), /from US\$ 1<\/title>/);
+  assert.equal(applyLiveCurrency(homeShell, "", "MYR"), homeShell);
 });
 
 test("the ranking is declared as an ItemList that matches the rendered rows", () => {

@@ -3,7 +3,7 @@ import { defaultBoardSlug, isProduction, marketLabel, requireDatabase } from "./
 import { escapeHtml, formatMoney } from "./_lib/product.js";
 import { displayName, profilePath } from "./_lib/platform.js";
 import { loadBoard, loadPublicBoard } from "./_lib/repository.js";
-import { localizeStaticPage } from "./_lib/static-localization.js";
+import { applyLiveCurrency, localizeStaticPage } from "./_lib/static-localization.js";
 
 const LIMIT = 50;
 
@@ -73,6 +73,9 @@ export async function onRequestGet(context) {
     return context.next();
   }
 
+  // Learned inside the production block, applied after localisation below.
+  let liveFloor = "";
+  let liveCurrency = "";
   if (isProduction(context.env)) {
     try {
       const db = requireDatabase(context.env);
@@ -100,24 +103,18 @@ export async function onRequestGet(context) {
         (match, open, close) => `${open}${escapeHtml(price)}${close}`,
       );
       // The static shell is also consumed by link unfurlers and assistive
-      // technology before the browser bundle hydrates. Replace its provisional
-      // USD wording with the actual board currency, without changing original
-      // payment records or the conversion policy.
-      const floor = formatMoney(payload.board?.min_increment_minor, currency).replace(" ", "\u00a0");
-      const currencyName = currency === "MYR" ? "Malaysian ringgit" : "US dollars";
-      html = html.replaceAll("US$1", floor)
-        .replaceAll("Your payment in US dollars", `Your payment in ${currencyName}`)
-        .replaceAll("Decrease by US$1", `Decrease by ${currency === "MYR" ? "RM" : "US$"}1`)
-        .replaceAll("Increase by US$1", `Increase by ${currency === "MYR" ? "RM" : "US$"}1`)
-        .replaceAll("付款金额（美元）", currency === "MYR" ? "付款金额（马来西亚令吉）" : "付款金额（美元）")
-        .replaceAll("减少 US$1", `减少 ${currency === "MYR" ? "RM" : "US$"}1`)
-        .replaceAll("增加 US$1", `增加 ${currency === "MYR" ? "RM" : "US$"}1`);
+      // technology before the browser bundle hydrates. Its provisional USD
+      // wording is swapped for the board's currency — but only after
+      // localisation, or the Chinese metadata is injected too late to be seen.
+      liveFloor = formatMoney(payload.board?.min_increment_minor, currency).replace(" ", "\u00a0");
+      liveCurrency = currency;
     } catch {
       /* The page still works: its own script draws the board a moment later. */
     }
   }
 
   html = localizeStaticPage(html, "home", language);
+  html = applyLiveCurrency(html, liveFloor, liveCurrency);
   return new Response(html, {
     headers: { "Content-Type": "text/html; charset=utf-8", "Content-Language": language === "zh" ? "zh-Hans" : "en", "Cache-Control": "public, max-age=60, must-revalidate" },
   });
