@@ -2,6 +2,17 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://rankoff.my/</loc>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://rankoff.my/?lang=ms" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://rankoff.my/" />
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://rankoff.my/?lang=zh" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://rankoff.my/" />
+    <lastmod>2026-09-06</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://rankoff.my/?lang=ms</loc>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://rankoff.my/?lang=ms" />
     <xhtml:link rel="alternate" hreflang="en" href="https://rankoff.my/" />
     <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://rankoff.my/?lang=zh" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://rankoff.my/" />
@@ -11,6 +22,7 @@
   </url>
   <url>
     <loc>https://rankoff.my/?lang=zh</loc>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://rankoff.my/?lang=ms" />
     <xhtml:link rel="alternate" hreflang="en" href="https://rankoff.my/" />
     <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://rankoff.my/?lang=zh" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://rankoff.my/" />
@@ -20,6 +32,17 @@
   </url>
   <url>
     <loc>https://rankoff.my/categories</loc>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://rankoff.my/categories?lang=ms" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://rankoff.my/categories" />
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://rankoff.my/categories?lang=zh" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://rankoff.my/categories" />
+    <lastmod>2026-09-06</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rankoff.my/categories?lang=ms</loc>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://rankoff.my/categories?lang=ms" />
     <xhtml:link rel="alternate" hreflang="en" href="https://rankoff.my/categories" />
     <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://rankoff.my/categories?lang=zh" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://rankoff.my/categories" />
@@ -29,6 +52,7 @@
   </url>
   <url>
     <loc>https://rankoff.my/categories?lang=zh</loc>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://rankoff.my/categories?lang=ms" />
     <xhtml:link rel="alternate" hreflang="en" href="https://rankoff.my/categories" />
     <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://rankoff.my/categories?lang=zh" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://rankoff.my/categories" />
@@ -38,6 +62,17 @@
   </url>
   <url>
     <loc>https://rankoff.my/about</loc>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://rankoff.my/about?lang=ms" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://rankoff.my/about" />
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://rankoff.my/about?lang=zh" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://rankoff.my/about" />
+    <lastmod>2026-09-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rankoff.my/about?lang=ms</loc>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://rankoff.my/about?lang=ms" />
     <xhtml:link rel="alternate" hreflang="en" href="https://rankoff.my/about" />
     <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://rankoff.my/about?lang=zh" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://rankoff.my/about" />
@@ -47,6 +82,7 @@
   </url>
   <url>
     <loc>https://rankoff.my/about?lang=zh</loc>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://rankoff.my/about?lang=ms" />
     <xhtml:link rel="alternate" hreflang="en" href="https://rankoff.my/about" />
     <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://rankoff.my/about?lang=zh" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://rankoff.my/about" />
@@ -56,24 +92,64 @@
   </url>
   <url>
     <loc>https://rankoff.my/legal</loc>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://rankoff.my/legal?lang=ms" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://rankoff.my/legal" />
+    <lastmod>2026-09-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rankoff.my/legal?lang=ms</loc>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://rankoff.my/legal?lang=ms" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://rankoff.my/legal" />
     <lastmod>2026-09-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rankoff.my/answers/pay-to-rank-leaderboard</loc>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://rankoff.my/answers/pay-to-rank-leaderboard?lang=ms" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://rankoff.my/answers/pay-to-rank-leaderboard" />
+    <lastmod>2026-09-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rankoff.my/answers/pay-to-rank-leaderboard?lang=ms</loc>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://rankoff.my/answers/pay-to-rank-leaderboard?lang=ms" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://rankoff.my/answers/pay-to-rank-leaderboard" />
     <lastmod>2026-09-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://rankoff.my/answers/how-rankoff-ranking-works</loc>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://rankoff.my/answers/how-rankoff-ranking-works?lang=ms" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://rankoff.my/answers/how-rankoff-ranking-works" />
+    <lastmod>2026-09-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rankoff.my/answers/how-rankoff-ranking-works?lang=ms</loc>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://rankoff.my/answers/how-rankoff-ranking-works?lang=ms" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://rankoff.my/answers/how-rankoff-ranking-works" />
     <lastmod>2026-09-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://rankoff.my/answers/sponsor-a-public-link</loc>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://rankoff.my/answers/sponsor-a-public-link?lang=ms" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://rankoff.my/answers/sponsor-a-public-link" />
+    <lastmod>2026-09-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rankoff.my/answers/sponsor-a-public-link?lang=ms</loc>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://rankoff.my/answers/sponsor-a-public-link?lang=ms" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://rankoff.my/answers/sponsor-a-public-link" />
     <lastmod>2026-09-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

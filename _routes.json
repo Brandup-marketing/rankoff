@@ -1,5 +1,19 @@
 {
   "version": 1,
-  "include": ["/", "/about", "/categories", "/api/*", "/go/*", "/answers/*", "/product/*", "/profile/*", "/og/*", "/img/*", "/listing", "/sitemap.xml"],
+  "include": [
+    "/",
+    "/about",
+    "/categories",
+    "/api/*",
+    "/go/*",
+    "/answers/*",
+    "/product/*",
+    "/profile/*",
+    "/og/*",
+    "/img/*",
+    "/listing",
+    "/sitemap.xml",
+    "/legal"
+  ],
   "exclude": []
 }

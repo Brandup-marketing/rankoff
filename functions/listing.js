@@ -14,7 +14,7 @@ export async function onRequestGet(context) {
       const path = canonicalDetailPath(listing?.hostname);
       if (path) {
         const target = new URL(path, url.origin);
-        if (url.searchParams.get("lang") === "zh") target.searchParams.set("lang", "zh");
+        if (["zh", "ms"].includes(url.searchParams.get("lang"))) target.searchParams.set("lang", url.searchParams.get("lang"));
         return Response.redirect(target.toString(), 301);
       }
     } catch {

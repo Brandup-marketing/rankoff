@@ -33,9 +33,10 @@ export function productEntries(rankings) {
     .filter((entry) => entry.path)
     .map((entry) => {
       const canonical = `${SITE_ORIGIN}${entry.path}`;
-      return [canonical, `${canonical}?lang=zh`].map((location) => `  <url>\n    <loc>${escapeHtml(location)}</loc>\n`
+      return [canonical, `${canonical}?lang=zh`, `${canonical}?lang=ms`].map((location) => `  <url>\n    <loc>${escapeHtml(location)}</loc>\n`
         + `    <xhtml:link rel="alternate" hreflang="en" href="${escapeHtml(canonical)}" />\n`
         + `    <xhtml:link rel="alternate" hreflang="zh-Hans" href="${escapeHtml(`${canonical}?lang=zh`)}" />\n`
+        + `    <xhtml:link rel="alternate" hreflang="ms" href="${escapeHtml(`${canonical}?lang=ms`)}" />\n`
         + `    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeHtml(canonical)}" />\n`
         + (/^\d{4}-\d{2}-\d{2}$/.test(entry.lastmod) ? `    <lastmod>${entry.lastmod}</lastmod>\n` : "")
         + `    <changefreq>daily</changefreq>\n    <priority>0.6</priority>\n  </url>`).join("\n");

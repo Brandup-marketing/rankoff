@@ -1,3 +1,4 @@
+import { translateMs } from './ms-copy.js';
 // Instagram accepts no link. It accepts an image. A merchant who just paid for
 // #1 in a market has nothing to post there today, because the only thing we can
 // hand the OS is a URL whose preview picture is the merchant's own logo — which
@@ -39,6 +40,7 @@ const LOGO_TIMEOUT_MS = 4000;
 export const CARD_STRINGS = Object.freeze({
   en: Object.freeze({ total: "Total paid", todayTotal: "Past 24h total", footer: "Sponsored ranking", board: "on RANKOFF", allTime: "All-time", today: "Past 24h", challenge: "OUTRANK ME" }),
   zh: Object.freeze({ total: "累计已付", todayTotal: "近 24 小时已付", footer: "赞助排名", board: "RANKOFF 全站", allTime: "全部时间", today: "近 24 小时", challenge: "来超越我" }),
+  ms: Object.freeze({ total: "Jumlah dibayar", todayTotal: "Jumlah 24 jam lalu", footer: "Kedudukan tajaan", board: "di RANKOFF", allTime: "Sepanjang masa", today: "24 jam lalu", challenge: "ATASI SAYA" }),
 });
 
 function fontOf(weight, size) {
@@ -126,7 +128,7 @@ export function cardFileName(name, shape) {
 }
 
 export function buildCardModel(options) {
-  const language = options?.language === "zh" ? "zh" : "en";
+  const language = options?.language === "ms" ? "ms" : options?.language === "zh" ? "zh" : "en";
   const strings = CARD_STRINGS[language];
   const explicit = options?.card && typeof options.card === "object" ? options.card : null;
   const parsed = parseRankTitle(options?.title);
@@ -139,6 +141,7 @@ export function buildCardModel(options) {
   const joiner = String(explicit?.joiner ?? parsed?.joiner ?? "");
   const position = language === "zh"
     ? (board ? strings.board : where)
+    : language === "ms" ? `${board ? "di" : "dalam"} ${translateMs(where)}`
     : `${board || joiner === "on" ? "on" : "in"} ${where}`;
   const total = String(explicit?.total ?? parseSettledTotal(options?.text) ?? "").trim();
 

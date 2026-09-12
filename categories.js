@@ -96,7 +96,7 @@
   function languageFromUrl() {
     try {
       const value = new URL(window.location.href).searchParams.get("lang");
-      return value === "zh" || value === "en" ? value : "";
+      return value === "ms" ? "en" : value === "zh" || value === "en" ? value : "";
     } catch { return ""; }
   }
 
@@ -411,12 +411,14 @@
 
   function urlWithLanguage(href, nextLanguage = elements.language) {
     const url = new URL(href, window.location.href);
+    if (window.RankoffLocale?.isMalay) { url.searchParams.set("lang", "ms"); return url; }
     if (nextLanguage === "zh") url.searchParams.set("lang", "zh");
     else url.searchParams.delete("lang");
     return url;
   }
 
   function syncLanguageUrl() {
+    if (window.RankoffLocale?.isMalay) return;
     const url = urlWithLanguage(window.location.href);
     if (url.href !== window.location.href && window.history?.replaceState) window.history.replaceState(window.history.state, "", url.href);
   }

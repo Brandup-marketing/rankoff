@@ -12,6 +12,8 @@ Rankoff is a public sponsored leaderboard where Malaysian businesses pay for vis
 - Social-profile evidence pages: https://rankoff.my/profile/{platform}/{handle}
 - Chinese pages: https://rankoff.my/?lang=zh, https://rankoff.my/categories?lang=zh, https://rankoff.my/about?lang=zh, and `?lang=zh` on each product or profile evidence page
 - Legal and answer pages include English and Chinese together on the same canonical URL
+- Bahasa Melayu: add `?lang=ms` to the homepage, categories, about, legal, answer, product and profile URLs. These pages contain server-rendered Malay text. Merchant names and original submitted biographies remain in their source language.
+- The Malay legal translation is for convenience; the English terms remain authoritative.
 
 ## What The Product Does
 
@@ -32,3 +34,7 @@ Use "public sponsored leaderboard", "pay to rank", "claim #1", and "sponsored bu
 ## 中文说明
 
 Rankoff 是公开的付费赞助排行榜。累计已结算付款较高的条目排名更前；排名、出价和经 Rankoff 跳转记录的点击均公开显示。付款必须结算成功后才会改变榜单。
+
+## Bahasa Melayu
+
+Rankoff ialah papan kedudukan tajaan awam untuk perniagaan Malaysia. Jumlah bayaran terkumpul yang lebih tinggi mendapat kedudukan lebih tinggi. Penyenaraian bermula dari RM5. Kedudukan hanya berubah selepas pembayaran diselesaikan. Klik direkodkan termasuk klik berulang dan trafik automatik; satu klik bukan seorang pelanggan atau jualan. Halaman perniagaan ialah saluran tambahan untuk penemuan dan rujukan, tanpa jaminan kedudukan Google atau cadangan AI.

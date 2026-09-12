@@ -1,0 +1,12 @@
+.locale-legacy { display: none !important; }
+.locale-select { flex: 0 0 auto; width: 4.3rem; min-height: 2.75rem; padding: .45rem .4rem; border: 1px solid var(--line); border-radius: .65rem; background: var(--surface, var(--bg)); color: var(--ink); font: inherit; font-size: .8rem; cursor: pointer; }
+.locale-select:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.locale-legal-note { max-width: 70ch; color: var(--muted); font-size: .9rem; line-height: 1.6; }
+html[lang="ms"] .hero-rank { text-wrap: balance; }
+html[lang="ms"] .board-live-line { min-width: 0; }
+html[lang="ms"] .listing-actions { align-items: stretch; }
+html[lang="ms"] .listing-actions > * { min-height: 2.75rem; }
+@media (max-width: 46rem) {
+  html[lang="ms"] .site-nav { gap: .65rem; }
+  html[lang="ms"] .topbar { gap: .45rem; }
+}

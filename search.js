@@ -11,7 +11,8 @@
   function isChinese() { return document.documentElement.lang.toLowerCase().startsWith("zh"); }
   function localizedHref(href) {
     const target = new URL(href, window.location.href);
-    if (isChinese()) target.searchParams.set("lang", "zh");
+    if (window.RankoffLocale?.isMalay) target.searchParams.set("lang", "ms");
+    else if (isChinese()) target.searchParams.set("lang", "zh");
     else target.searchParams.delete("lang");
     return `${target.pathname}${target.search}${target.hash}`;
   }

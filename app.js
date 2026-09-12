@@ -259,7 +259,8 @@
   let state = loadState();
   const sharedView = new URL(window.location.href);
   const requestedLanguage = String(sharedView.searchParams.get("lang") || "").toLowerCase();
-  if (requestedLanguage === "zh" || requestedLanguage === "en") state.language = requestedLanguage;
+  if (requestedLanguage === "ms") state.language = "en";
+  else if (requestedLanguage === "zh" || requestedLanguage === "en") state.language = requestedLanguage;
   if (sharedView.searchParams.get("period") === "today") state.activeWindow = "today";
   if (sharedView.searchParams.get("period") === "all") state.activeWindow = "all";
   const sharedCategory = sharedView.searchParams.get("category");
@@ -445,6 +446,7 @@
   }
 
   function syncLanguageUrl() {
+    if (window.RankoffLocale?.isMalay) return;
     const url = new URL(window.location.href);
     if (state.language === "zh") url.searchParams.set("lang", "zh");
     else url.searchParams.delete("lang");

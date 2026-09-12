@@ -248,13 +248,17 @@
   }
 
   function open(options) {
+    if (window.RankoffLocale?.isMalay) {
+      options = { ...options, card: { ...options.card, total: options.card?.total || window.RankoffCard?.parseSettledTotal(options.text) || settledTotalOnPage() }, language: "ms", text: window.RankoffMalay?.(options.text) || options.text };
+      try { const url = new URL(options.url, location.href); if (url.origin === location.origin) { url.searchParams.set("lang", "ms"); options.url = url.href; } } catch { /* Existing link fallback. */ }
+    }
     current = {
       title: String(options?.title || "RANKOFF"), text: String(options?.text || ""),
-      url: String(options?.url || window.location.href), language: options?.language === "zh" ? "zh" : "en",
+      url: String(options?.url || window.location.href), language: options?.language === "ms" ? "ms" : options?.language === "zh" ? "zh" : "en",
       onStatus: options?.onStatus,
     };
     localize();
-    elements.title.textContent = current.title;
+    elements.title.textContent = window.RankoffMalay?.(current.title) || current.title;
     elements.text.textContent = current.text;
     // The preview is where a merchant decides whether this is worth sending, so
     // it carries the same brand and words the recipient's app will render.
@@ -274,6 +278,7 @@
     // back out of the copy the board itself wrote. A sentence we cannot parse
     // hides the buttons rather than putting a guessed number onto an image.
     current.card = cardModel(options);
+    if (window.RankoffLocale?.isMalay) current.title = window.RankoffMalay(current.title);
     if (elements.cardPreview) elements.cardPreview.hidden = true;
     // The merchant's logo is fetched now, while the dialog is being read: Safari
     // spends the click's user activation on any await, and without activation

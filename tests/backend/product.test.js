@@ -143,7 +143,7 @@ test("the sitemap lists one entry per live listing, dated by its settled bid", (
   assert.match(xml, /hreflang="zh-Hans" href="https:\/\/rankoff\.my\/product\/brandupdesignmarketing\.com\?lang=zh"/);
   assert.match(xml, /<lastmod>2026-08-31<\/lastmod>/);
   assert.match(xml, /<loc>https:\/\/rankoff\.my\/profile\/instagram\/agent_ali\?lang=zh<\/loc>/);
-  assert.equal(xml.match(/<url>/g).length, 4, "each usable identity needs separate English and Chinese URL entries");
+  assert.equal(xml.match(/<url>/g).length, 6, "each usable identity needs separate English, Chinese and Malay URL entries");
 });
 
 test("the record block shows only what the board itself recorded", () => {
