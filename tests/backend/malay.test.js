@@ -10,6 +10,7 @@ test('Malay share card retains the actual name, place and settled total', () => 
  const model=buildCardModel({language:'ms',title:'Example — #2 in Beauty & Wellness',card:{total:'RM 10'}});
  assert.equal(model.name,'Example');assert.equal(model.place,2);assert.equal(model.total,'RM 10');
  assert.equal(model.position,'dalam Kecantikan & Kesejahteraan');
+ assert.equal(translateMs('Example — #2 in Beauty & Wellness | RANKOFF'),'Example — #2 dalam Kecantikan & Kesejahteraan | RANKOFF');
 });
 test('Malay confirmation translates composed disclosure and market context',()=>{
  const message='Your listing goes live at this rank when payment confirms. Someone else can claim a higher one. This is a one-time fee for advertising placement — not a wager, deposit, or contest entry. There are no prizes and no element of chance.';

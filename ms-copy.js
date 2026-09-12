@@ -410,7 +410,7 @@ const MS_PATTERNS = [
   [/^Claimed (\d+) minutes? ago$/, count => `Kedudukan diperoleh ${count} minit lalu`],
   [/^Claimed just now$/, () => 'Kedudukan baru diperoleh'],
   [/^(.+?) holds #(\d+) (on|in) (.+?) with a (.+?) sponsored bid\. Think you can outrank it\? Claim #1 from (.+)\.$/, (name, rank, joiner, market, paid, price) => `${name} menduduki #${rank} ${joiner === 'on' ? 'di' : 'dalam'} ${translateMs(market)} dengan bayaran tajaan ${paid}. Mahu kedudukan lebih tinggi? Dapatkan #1 dari ${price}.`],
-  [/^(.+?) — #(\d+) (on|in) (.+)$/, (name, rank, joiner, market) => `${name} — #${rank} ${joiner === 'on' ? 'di' : 'dalam'} ${translateMs(market)}`],
+  [/^(.+?) — #(\d+) (on|in) ([^|]+)$/, (name, rank, joiner, market) => `${name} — #${rank} ${joiner === 'on' ? 'di' : 'dalam'} ${translateMs(market)}`],
   [/^(.+?) · (.+)$/, (first, rest) => `${translateMs(first)} · ${translateMs(rest)}`],
   [/^all-time$/, () => 'sepanjang masa'],
   [/^past 24h$/, () => '24 jam lalu'],
