@@ -46,7 +46,7 @@ export async function onRequestPost(context) {
     ? { title: "", description: "", logo: "" }
     : destination.platform === "instagram"
       ? (await fetchInstagramProfile(destination.handle, context.env)) || { title: "", description: "", logo: "" }
-      : await fetchSiteInfo(destination.url, destination.hostname, { social: Boolean(destination.platform) });
+    : await fetchSiteInfo(destination.url, destination.hostname, { social: Boolean(destination.platform) });
 
   // A social listing titled "www.instagram.com" would read the same on every card.
   const title = givenTitle
@@ -63,8 +63,10 @@ export async function onRequestPost(context) {
     if (existing.status !== "approved") {
       throw new ApiError(403, "listing_unavailable", "This website cannot be listed on the board.");
     }
-    if (destination.platform === "instagram" && (!existing.favicon_url || !existing.description || !existing.title?.startsWith("@"))) {
-      const refreshed = await fetchInstagramProfile(destination.handle, context.env);
+    if ((destination.platform === "instagram" || destination.platform === "facebook") && (!existing.favicon_url || !existing.description || !existing.title?.startsWith("@"))) {
+      const refreshed = destination.platform === "instagram"
+        ? await fetchInstagramProfile(destination.handle, context.env)
+        : await fetchSiteInfo(destination.url, destination.hostname, { social: true, allowSocialImage: true });
       if (refreshed) await updateListingMetadata(db, existing.id, refreshed);
     }
     return json({

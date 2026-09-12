@@ -80,7 +80,7 @@ function cleanProfileTitle(value) {
   return PLATFORM_BOILERPLATE.test(text) ? "" : text;
 }
 
-export function extractSiteInfo(html, hostname, { social = false } = {}) {
+export function extractSiteInfo(html, hostname, { social = false, allowSocialImage = false } = {}) {
   const head = String(html || "").slice(0, READ_LIMIT);
   const rawTitle = metaContent(head, [
       /<meta[^>]+property=["']og:site_name["'][^>]*>/i,
@@ -97,14 +97,14 @@ export function extractSiteInfo(html, hostname, { social = false } = {}) {
   // A site's declared icon is a square mark drawn for exactly this purpose;
   // og:image is usually a wide hero photograph, which reads as a smudge in a
   // card tile. Ask for the mark first and fall back to the share image.
-  const iconHref = social ? "" : linkHref(head, [
+  const iconHref = (!social || allowSocialImage) && linkHref(head, [
     /<link[^>]+rel=["'][^"']*apple-touch-icon[^"']*["'][^>]*>/i,
     /<link[^>]+rel=["'][^"']*icon[^"']*["'][^>]*>/i,
   ]);
-  const image = social ? "" : (iconHref || metaContent(head, [
+  const image = iconHref || ((!social || allowSocialImage) ? metaContent(head, [
     /<meta[^>]+property=["']og:image:secure_url["'][^>]*>/i,
     /<meta[^>]+property=["']og:image["'][^>]*>/i,
-  ]) || markupLogo(head));
+  ]) || markupLogo(head) : "");
   let logo = "";
   try {
     if (!image) throw new Error("no image declared");
@@ -118,7 +118,7 @@ export function extractSiteInfo(html, hostname, { social = false } = {}) {
 
 // Never allowed to fail a submission: a merchant paying is worth more than a
 // description we could not fetch.
-export async function fetchSiteInfo(url, hostname, { social = false, fetcher = fetch } = {}) {
+export async function fetchSiteInfo(url, hostname, { social = false, allowSocialImage = false, fetcher = fetch } = {}) {
   try {
     const response = await fetcher(url, {
       headers: { Accept: "text/html", "User-Agent": "RankoffBot/1.0 (+https://rankoff.my)" },
@@ -126,7 +126,7 @@ export async function fetchSiteInfo(url, hostname, { social = false, fetcher = f
       signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
     });
     if (!response.ok) return { title: "", description: "", logo: "" };
-    return extractSiteInfo(await response.text(), hostname, { social });
+    return extractSiteInfo(await response.text(), hostname, { social, allowSocialImage });
   } catch {
     return { title: "", description: "", logo: "" };
   }

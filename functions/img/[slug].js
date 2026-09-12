@@ -170,6 +170,14 @@ export function instagramIdentityFrom(slug) {
   return `instagram:${parts.handle}`;
 }
 
+export function socialIdentityFrom(slug) {
+  let value = String(slug || '');
+  try { value = decodeURIComponent(value); } catch {}
+  const parts = identityParts(value.trim().toLowerCase());
+  return parts.platform && parts.platform !== 'instagram' && isUsableHandle(parts.handle)
+    ? `${parts.platform}:${parts.handle}` : '';
+}
+
 // A profile picture is never stored here as a picture. Meta hands back a CDN
 // link signed for a few days, so anything kept in the database dies quietly
 // and the card falls back to initials while the account carries on posting.
@@ -200,7 +208,7 @@ export async function resolveProfileImage(identity, env, deps = {}) {
 
 export async function onRequestGet(context) {
   const url = new URL(context.request.url);
-  const identity = instagramIdentityFrom(context.params.slug);
+  const identity = instagramIdentityFrom(context.params.slug) || socialIdentityFrom(context.params.slug);
   const hostname = identity ? "" : normalizeSlug(context.params.slug);
   // Never follow a bare address, and never proxy for a board that is not live:
   // only listings that reached this board may be fetched, by hostname or by
@@ -218,8 +226,10 @@ export async function onRequestGet(context) {
     const board = await loadBoard(db, defaultBoardSlug(context.env));
     const listing = await findListingByHostname(db, board.id, identity || hostname);
     if (listing && listing.status === "approved") {
-      found = identity
+      found = identity && identity.startsWith('instagram:')
         ? await resolveProfileImage(identity, context.env, { storedUrl: listing.favicon_url })
+        : identity
+          ? await resolveMerchantImage(`www.${identity.split(':')[0]}.com`, { preferredUrl: listing.favicon_url, discover: (url, fetcher) => discoverShareImage(`https://${identity.split(':')[0]}.com/${identity.split(':')[1]}`, fetcher) })
         : await resolveMerchantImage(hostname, { preferredUrl: listing.favicon_url });
     }
   } catch {
