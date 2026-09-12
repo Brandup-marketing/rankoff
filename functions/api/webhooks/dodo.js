@@ -3,6 +3,7 @@ import { paymentTransition } from "../../_lib/domain.js";
 import { getRequestId, json, MAX_WEBHOOK_BYTES, methodNotAllowed, readText } from "../../_lib/http.js";
 import { applyProviderEvent, loadBidForWebhook, recordSnapshotEntries } from "../../_lib/repository.js";
 import { pingIndexNow } from "../../_lib/indexnow.js";
+import { reportSettledPurchase } from "../../_lib/meta-capi.js";
 import { profilePath } from "../../_lib/platform.js";
 import { verifyStandardWebhook } from "../../_lib/security.js";
 
@@ -119,6 +120,25 @@ export async function onRequestPost(context) {
     context.waitUntil(
       pingIndexNow(origin, indexNowUrls(origin, listingPath))
         .catch(() => false),
+    );
+  }
+
+  // Advertising measurement is reported from the server because the buyer's
+  // browser may already be closed, and from here rather than inside the
+  // snapshot branch so it does not depend on ranking history. The payment is
+  // already recorded, and waitUntil runs after the response, so a refusal or a
+  // timeout at Meta can never fail a settlement.
+  if (nextStatus === "settled") {
+    const settledOrigin = new URL(context.request.url).origin;
+    const settledPath = bid.hostname ? profilePath(String(bid.hostname)) : "";
+    context.waitUntil(
+      reportSettledPurchase({
+        bid: { id: bid.id, amount_minor: bid.amount_minor, currency: bid.currency },
+        buyer: buyerFrom(data),
+        eventSourceUrl: `${settledOrigin}${settledPath || "/"}`,
+        eventTime: Date.now(),
+        env: context.env,
+      }).catch(() => false),
     );
   }
   return json({ received: true });
