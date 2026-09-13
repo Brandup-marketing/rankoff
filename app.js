@@ -298,7 +298,7 @@
     const fallback = {
       activeWindow: "all",
       category: DEFAULT_CATEGORY,
-      theme: "dark",
+      theme: "light",
       language: "en",
       listings: servedFromWeb ? [] : seedListings.map(cloneListing),
       activity: servedFromWeb ? [] : [...seedActivity],
@@ -321,12 +321,10 @@
       const saved = parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
       const restoredPreferences = {
         activeWindow: saved.activeWindow === "today" ? "today" : "all",
-        // A market tapped last week is not a preference: every fresh visit
-        // opens on the whole board. Only a shared ?category= link narrows it.
-        category: sharedCategory
-          ? (sharedCategory === DEFAULT_CATEGORY ? DEFAULT_CATEGORY : canonicalCategory(sharedCategory) || DEFAULT_CATEGORY)
-          : DEFAULT_CATEGORY,
-        theme: saved.theme === "light" ? "light" : "dark",
+        // The shared URL is applied after loadState returns. Reading its later
+        // const here throws and silently discards saved theme/language choices.
+        category: DEFAULT_CATEGORY,
+        theme: saved.theme === "dark" ? "dark" : "light",
         language: saved.language === "zh" ? "zh" : "en",
       };
       // A previous visit's demo listings are still demo listings.

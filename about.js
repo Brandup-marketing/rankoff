@@ -70,7 +70,7 @@
   }
   const savedPreferences = readPreferences();
   let language = languageFromUrl() || (savedPreferences.language === "zh" ? "zh" : "en");
-  let theme = savedPreferences.theme === "light" ? "light" : "dark";
+  let theme = savedPreferences.theme === "dark" ? "dark" : "light";
   let liveCurrencyCode = "";
   let liveFloor = "";
   const translate = (english) => (language === "zh" ? (translations.get(english) || english) : english);

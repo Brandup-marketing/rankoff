@@ -34,6 +34,8 @@ html[data-theme="light"] {
   --muted: oklch(48% 0.015 25);
   --line: oklch(87% 0.012 25);
   --line-strong: oklch(76% 0.018 25);
+  /* Deep brand red keeps accent text and white labels legible on light pages. */
+  --accent: oklch(55% 0.21 28);
   --accent-soft: oklch(94% 0.045 28);
   --up-soft: oklch(94% 0.035 160);
   /* The dark-theme green is 9.35:1 on the dark page but only 2.05:1 here —

@@ -144,9 +144,9 @@
   function loadPreferences() {
     try {
       const saved = JSON.parse(localStorage.getItem(STORE_KEY));
-      return { theme: saved?.theme === "light" ? "light" : "dark", language: languageFromUrl() || (saved?.language === "zh" ? "zh" : "en"), listings: Array.isArray(saved?.listings) ? saved.listings : [] };
+      return { theme: saved?.theme === "dark" ? "dark" : "light", language: languageFromUrl() || (saved?.language === "zh" ? "zh" : "en"), listings: Array.isArray(saved?.listings) ? saved.listings : [] };
     } catch {
-      return { theme: "dark", language: languageFromUrl() || "en", listings: [] };
+      return { theme: "light", language: languageFromUrl() || "en", listings: [] };
     }
   }
 

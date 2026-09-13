@@ -2,11 +2,11 @@
 
 ## Scene
 
-A founder opens Rankoff from a community post on a phone or laptop to inspect the actual board. The first task is understanding the price and ranking rule; the next is judging a listed product or claiming a position. Dark English is the default, with light and Chinese preferences available.
+A business owner opens Rankoff from a community post on a phone or laptop to inspect the actual board. The first task is understanding the price and ranking rule; the next is judging a listed business or claiming a position. Warm white and English are the public defaults (Jake approved 2026-09-13); saved dark preferences remain available across pages. Chinese and Malay are available.
 
 ## Color Strategy
 
-Preserve the established RANKOFF identity: near-black surfaces, near-white text, red ranking and payment actions, and blue discovery/detail links. Green marks activity. Color is never proof that a business or click is verified.
+Preserve the established RANKOFF identity: warm white pages, white surfaces, dark text, red ranking and payment actions, and blue discovery/detail links. Green marks activity. Dark mode uses near-black surfaces with near-white text. Share cards retain the black and red design. Color is never proof that a business or click is verified.
 
 The live source of tokens is styles.css. Dark defaults include --bg oklch(12% 0.008 25), --surface oklch(16% 0.009 25), --ink oklch(94% 0.004 25), --muted oklch(70% 0.01 25) and --accent oklch(64% 0.225 28). White text on red-filled controls uses --accent-fill oklch(55% 0.21 28) for contrast. The light theme supplies its own darker text/link tokens.
 

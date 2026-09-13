@@ -104,10 +104,10 @@
     try {
       const saved = JSON.parse(window.localStorage.getItem(STORE_KEY));
       elements.language = languageFromUrl() || (saved?.language === "zh" ? "zh" : "en");
-      elements.root.dataset.theme = saved?.theme === "light" ? "light" : "dark";
+      elements.root.dataset.theme = saved?.theme === "dark" ? "dark" : "light";
     } catch {
       elements.language = languageFromUrl() || "en";
-      elements.root.dataset.theme = "dark";
+      elements.root.dataset.theme = "light";
     }
   }
 

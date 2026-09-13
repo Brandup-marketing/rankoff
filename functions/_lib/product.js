@@ -297,7 +297,7 @@ export function localizeProductShell(shell, language = "en") {
   html = html.replace(/aria-label="Main navigation"/g, 'aria-label="主导航"');
   html = html.replace(/aria-label="Search businesses and markets"/g, 'aria-label="搜索商家和市场"');
   html = html.replace(/(<button class="language-toggle"[^>]*>)[\s\S]*?(<\/button>)/, "$1EN$2");
-  html = html.replace(/(<button class="theme-toggle"[^>]*aria-label=")[^"]*("[^>]*>)[\s\S]*?(<\/button>)/, "$1切换至浅色主题$2浅色$3");
+  html = html.replace(/(<button class="theme-toggle"[^>]*aria-label=")[^"]*("[^>]*>)[\s\S]*?(<\/button>)/, "$1切换至深色主题$2深色$3");
   html = html.replace(/href="\/categories"/g, 'href="/categories?lang=zh"');
   html = html.replace(/href="\/about"/g, 'href="/about?lang=zh"');
   html = html.replace(/href="\/"/g, 'href="/?lang=zh"');

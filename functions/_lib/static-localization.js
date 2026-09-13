@@ -157,7 +157,7 @@ function localizeCommon(html) {
       : `${open} aria-label="切换为英文"`;
     return `${labelled}${close}EN${end}`;
   });
-  output = output.replace(/(<button class="theme-toggle"[^>]*aria-label=")[^"]*("[^>]*>)[\s\S]*?(<\/button>)/, "$1切换至浅色主题$2浅色$3");
+  output = output.replace(/(<button class="theme-toggle"[^>]*aria-label=")[^"]*("[^>]*>)[\s\S]*?(<\/button>)/, "$1切换至深色主题$2深色$3");
   output = output.replace(/href="\/categories"/g, 'href="/categories?lang=zh"');
   output = output.replace(/href="\/about"/g, 'href="/about?lang=zh"');
   output = output.replace(/href="\.\/"/g, 'href="/?lang=zh"');

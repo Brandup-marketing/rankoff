@@ -53,7 +53,7 @@
   }
 
   const saved = readPreferences();
-  root.dataset.theme = saved.theme === "light" ? "light" : "dark";
+  root.dataset.theme = saved.theme === "dark" ? "dark" : "light";
   themeToggle?.addEventListener("click", () => {
     root.dataset.theme = root.dataset.theme === "light" ? "dark" : "light";
     try { localStorage.setItem(STORE_KEY, JSON.stringify({ ...readPreferences(), theme: root.dataset.theme })); } catch { /* optional */ }
