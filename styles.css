@@ -57,7 +57,9 @@ html[data-theme="light"] .brand { background: transparent; }
 html[data-theme="light"] .brand-final-logo { content: url("./assets/rankoff-logo-light.png?v=1"); }
 html[data-theme="light"] .brand-emblem-image, html[data-theme="light"] .brand-wordmark-image { filter: invert(1) hue-rotate(180deg); mix-blend-mode: multiply; }
 html[data-theme="light"] .brand-emblem-crop, html[data-theme="light"] .brand-wordmark-crop { background: transparent; }
-html[data-theme="dark"] .brand .brand-mark { content: url("./assets/rankoff-mark-reverse.svg?v=1"); }
+/* Use the original brand artwork in both themes. White becomes dark ink and
+   its black canvas blends into the light header; the red accent stays red. */
+html[data-theme="light"] .brand .brand-mark { filter: invert(1) hue-rotate(180deg) saturate(4); mix-blend-mode: multiply; }
 
 *,
 *::before,
