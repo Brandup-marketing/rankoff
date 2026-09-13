@@ -6,7 +6,7 @@ A business owner opens Rankoff from a community post on a phone or laptop to ins
 
 ## Color Strategy
 
-Preserve the established RANKOFF identity: warm white pages, white surfaces, dark text, red ranking and payment actions, and blue discovery/detail links. Green marks activity. Dark mode uses near-black surfaces with near-white text. Share cards retain the black and red design. Color is never proof that a business or click is verified.
+Preserve the established RANKOFF identity: warm white pages, white surfaces, dark text, red ranking and payment actions, and blue discovery/detail links. Green marks activity. The compact header uses a transparent black-and-red mark on light pages and a transparent white-and-red mark in dark mode; the square favicon remains for browser tabs. Dark mode uses near-black surfaces with near-white text. Share cards retain the black and red design. Color is never proof that a business or click is verified.
 
 The live source of tokens is styles.css. Dark defaults include --bg oklch(12% 0.008 25), --surface oklch(16% 0.009 25), --ink oklch(94% 0.004 25), --muted oklch(70% 0.01 25) and --accent oklch(64% 0.225 28). White text on red-filled controls uses --accent-fill oklch(55% 0.21 28) for contrast. The light theme supplies its own darker text/link tokens.
 

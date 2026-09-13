@@ -57,6 +57,7 @@ html[data-theme="light"] .brand { background: transparent; }
 html[data-theme="light"] .brand-final-logo { content: url("./assets/rankoff-logo-light.png?v=1"); }
 html[data-theme="light"] .brand-emblem-image, html[data-theme="light"] .brand-wordmark-image { filter: invert(1) hue-rotate(180deg); mix-blend-mode: multiply; }
 html[data-theme="light"] .brand-emblem-crop, html[data-theme="light"] .brand-wordmark-crop { background: transparent; }
+html[data-theme="dark"] .brand .brand-mark { content: url("./assets/rankoff-mark-reverse.svg?v=1"); }
 
 *,
 *::before,

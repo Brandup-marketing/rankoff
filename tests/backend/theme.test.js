@@ -53,3 +53,23 @@ test('home restores appearance before parsing shared URLs and excludes cached de
   assert.equal(state.category, 'all');
   assert.equal(state.listings.length, 0);
 });
+
+test('public headers use a transparent mark that switches with the colour theme', () => {
+  const pages = [
+    '../../index.html',
+    '../../categories.html',
+    '../../about.html',
+    '../../listing.html',
+    '../../legal.html',
+    '../../answers/pay-to-rank-leaderboard.html',
+    '../../answers/sponsor-a-public-link.html',
+    '../../answers/how-rankoff-ranking-works.html',
+  ];
+  for (const page of pages) {
+    const html = readFileSync(new URL(page, import.meta.url), 'utf8');
+    assert.match(html, /class="brand-mark" src="\/assets\/rankoff-mark-light\.svg\?v=1"/);
+    assert.doesNotMatch(html, /class="brand-mark" src="\/assets\/rankoff-favicon\.png/);
+  }
+  const css = readFileSync(new URL('../../styles.css', import.meta.url), 'utf8');
+  assert.match(css, /html\[data-theme="dark"\] \.brand \.brand-mark \{ content: url\("\.\/assets\/rankoff-mark-reverse\.svg\?v=1"\); \}/);
+});
