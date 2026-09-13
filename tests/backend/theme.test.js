@@ -69,6 +69,7 @@ test('public headers use a transparent mark that switches with the colour theme'
     const html = readFileSync(new URL(page, import.meta.url), 'utf8');
     assert.match(html, /class="brand-mark" src="\/assets\/rankoff-mark-light\.svg\?v=1"/);
     assert.doesNotMatch(html, /class="brand-mark" src="\/assets\/rankoff-favicon\.png/);
+    assert.match(html, /rel="preload" href="\/assets\/rankoff-mark-reverse\.svg\?v=1" as="image"/);
   }
   const css = readFileSync(new URL('../../styles.css', import.meta.url), 'utf8');
   assert.match(css, /html\[data-theme="dark"\] \.brand \.brand-mark \{ content: url\("\.\/assets\/rankoff-mark-reverse\.svg\?v=1"\); \}/);
