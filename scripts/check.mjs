@@ -2,7 +2,7 @@ import { execFileSync } from "node:child_process";
 import { readdirSync } from "node:fs";
 import { join } from "node:path";
 
-const roots = ["functions", "tests/backend"];
+const roots = ["functions", "tests/backend", "workers"];
 const files = [];
 for (const root of roots) collect(root);
 files.push("theme-boot.js", "meta-pixel.js", "locale-boot.js", "locale.js", "ms-copy.js", "ms-legal.js", "ms-answers.js", "support.js", "acquisition.js", "currency.js", "app.js", "about.js", "categories.js", "listing.js", "legal.js", "search.js", "share.js", "share-card.js", "admin.js");

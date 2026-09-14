@@ -12,6 +12,8 @@
     "cf:dry-run": "wrangler pages functions build functions --outdir .wrangler/functions-build --project-directory . --compatibility-date 2026-08-28 --compatibility-flag nodejs_compat"
   },
   "devDependencies": {
+    "@cloudflare/puppeteer": "^1.4.0",
+    "@cloudflare/workers-types": "^5.20260911.1",
     "wrangler": "^4.40.2"
   }
 }
