@@ -28,7 +28,7 @@ export async function onRequestGet({ request, env }) {
   const pages = await graph(env, 'me/accounts', { fields: 'id,name,instagram_business_account', limit: '100' });
   const matches = (pages.data || []).filter((page) => String(page.instagram_business_account?.id) === String(env.META_INSTAGRAM_USER_ID));
   return json({ enabled: env.SOCIAL_PUBLISHING_ENABLED === 'true', start_at: env.SOCIAL_START_AT,
-    instagram, matching_pages: matches, renderer_configured: Boolean(env.SOCIAL_RENDERER) });
+    instagram, matching_pages: matches, available_pages: pages.data || [], renderer_configured: Boolean(env.SOCIAL_RENDERER) });
 }
 
 export async function onRequestPost({ request, env }) {
