@@ -1,5 +1,26 @@
 # Merchant introductions on Facebook and Instagram
 
+## Deployment status — 2026-09-14
+
+Code and additive schema deployed. Both publishing switches remain off.
+177 backend tests passed; real Browser Run output visually verified as a complete
+1080×1080 JPEG. The live board remained MYR with a 500-minor-unit minimum.
+
+Jake confirmed the destinations: Facebook Rankoff
+`https://www.facebook.com/profile.php?id=61594359445528` and Instagram `@rankoff.my`.
+The existing token lists only BrandUp Design Marketing (Page 104060961430277,
+Instagram 17841459622069927). Reading the supplied Rankoff Page ID returned
+Graph code 100/subcode 33. Verify the canonical Graph Page ID and grant the
+BRANDUP AUTOMATION System User access to both Rankoff assets before activation.
+Do not replace the existing profile-discovery Instagram binding merely to change
+publishing targets. Set SOCIAL_INSTAGRAM_USER_ID to the verified Rankoff IG ID,
+verify SOCIAL_FACEBOOK_PAGE_ID against Graph, set SOCIAL_START_AT to activation
+time (no historical backfill), then enable both switches. No posts have been sent.
+
+The service token is stored in both Cloudflare deployments. For future local
+diagnostics, replace it in both services through secret stdin if necessary;
+never print it or commit it. Existing Meta credentials remain untouched.
+
 Every five minutes `rankoff-social-publisher` calls the authenticated Pages
 endpoint `/api/v1/internal/social-publish`. Pages reads settled payments and
 stores one `social_jobs` row per listing. Checkout and payment webhooks have no
