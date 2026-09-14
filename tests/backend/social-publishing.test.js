@@ -8,8 +8,9 @@ import { onRequestPost as trigger, onRequestGet as diagnostics } from '../../fun
 
 const now = '2026-09-14T06:00:00.000Z';
 const envFor = (DB) => ({ DB, SOCIAL_PUBLISHING_ENABLED: 'true', SOCIAL_START_AT: '2026-09-14T00:00:00.000Z',
-  META_ACCESS_TOKEN: 'test-secret', META_FACEBOOK_PAGE_ID: '123', META_INSTAGRAM_USER_ID: '456' });
-const jpeg = new Uint8Array([255,216,255,192,0,17,8,2,118,4,176,3,1,17,0,2,17,0,3,17,0,255,217]);
+  META_ACCESS_TOKEN: 'test-secret', META_FACEBOOK_PAGE_ID: '123', META_INSTAGRAM_USER_ID: '456',
+  SOCIAL_FACEBOOK_PAGE_ID: '123', SOCIAL_INSTAGRAM_USER_ID: '456' });
+const jpeg = new Uint8Array([255,216,255,192,0,17,8,4,56,4,56,3,1,17,0,2,17,0,3,17,0,255,217]);
 function setup() {
   const db = testDatabase(); db.sqlite.exec("UPDATE boards SET currency='MYR'");
   seedListing(db); seedPayment(db, { id: 'first', at: now }); return db;
@@ -130,11 +131,8 @@ test('internal trigger and preview reject missing or incorrect credentials', asy
   }
 });
 
-test('Facebook selects only the Page linked to the configured Instagram account', async () => {
-  const db = setup(), calls = [], env = envFor(db); delete env.META_FACEBOOK_PAGE_ID;
-  const fetcher = meta(calls, (url) => url.pathname.endsWith('/me/accounts') ? Response.json({ data: [
-    { id: '999', instagram_business_account: { id: '000' } }, { id: '123', instagram_business_account: { id: '456' } },
-  ] }) : null);
-  assert.equal((await runSocialPublisher(env, { now, renderImage: async () => jpeg, fetcher })).complete, true);
-  assert.equal(calls.some((call) => call.path.includes('/999')), false); db.sqlite.close();
+test('publishing requires explicit destinations and never falls back to agency accounts', async () => {
+  const db = setup(), env = envFor(db); delete env.SOCIAL_FACEBOOK_PAGE_ID;
+  await assert.rejects(runSocialPublisher(env), { message: 'rankoff_publishing_accounts_required' });
+  assert.equal(db.sqlite.prepare('SELECT COUNT(*) n FROM social_jobs').get().n, 0); db.sqlite.close();
 });

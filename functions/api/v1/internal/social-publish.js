@@ -25,10 +25,12 @@ export async function onRequestGet({ request, env }) {
     return render(env, socialContent(payload.rankings[0], new Date().toISOString()).model);
   }
   const instagram = await graph(env, env.META_INSTAGRAM_USER_ID, { fields: 'id,username' });
+  const targetPage = env.SOCIAL_FACEBOOK_PAGE_ID ? await graph(env, env.SOCIAL_FACEBOOK_PAGE_ID,
+    { fields: 'id,name,instagram_business_account{id,username}' }).catch((error) => ({ error: error.message })) : null;
   const pages = await graph(env, 'me/accounts', { fields: 'id,name,instagram_business_account', limit: '100' });
   const matches = (pages.data || []).filter((page) => String(page.instagram_business_account?.id) === String(env.META_INSTAGRAM_USER_ID));
   return json({ enabled: env.SOCIAL_PUBLISHING_ENABLED === 'true', start_at: env.SOCIAL_START_AT,
-    instagram, matching_pages: matches, available_pages: pages.data || [], renderer_configured: Boolean(env.SOCIAL_RENDERER) });
+    instagram, target_page: targetPage, matching_pages: matches, available_pages: pages.data || [], renderer_configured: Boolean(env.SOCIAL_RENDERER) });
 }
 
 export async function onRequestPost({ request, env }) {

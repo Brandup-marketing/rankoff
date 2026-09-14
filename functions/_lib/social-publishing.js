@@ -130,6 +130,12 @@ async function deliver(db, env, job, platform, fetcher) {
 export async function runSocialPublisher(env, { renderImage, fetcher = fetch, now = new Date().toISOString() } = {}) {
   if (env.SOCIAL_PUBLISHING_ENABLED !== 'true') return { enabled: false };
   if (!env.META_ACCESS_TOKEN) throw new Error('meta_access_token_missing');
+  if (!/^\d+$/.test(env.SOCIAL_FACEBOOK_PAGE_ID || '') || !/^\d+$/.test(env.SOCIAL_INSTAGRAM_USER_ID || '')) {
+    throw new Error('rankoff_publishing_accounts_required');
+  }
+  // Publishing destinations are separate from the account used for profile
+  // discovery. Never default to the connected agency's own social accounts.
+  env = { ...env, META_FACEBOOK_PAGE_ID: env.SOCIAL_FACEBOOK_PAGE_ID, META_INSTAGRAM_USER_ID: env.SOCIAL_INSTAGRAM_USER_ID };
   const db = env.DB;
   await discoverSocialJobs(db, env.SOCIAL_START_AT, now);
   const lease = crypto.randomUUID();
@@ -156,7 +162,7 @@ export async function runSocialPublisher(env, { renderImage, fetcher = fetch, no
       const content = socialContent(entry, now);
       const image = new Uint8Array(await renderImage(content.model));
       const header = readImageHeader(image);
-      if (header?.contentType !== 'image/jpeg' || header.width !== 1200 || header.height !== 630 || image.length > 600 * 1024) {
+      if (header?.contentType !== 'image/jpeg' || header.width !== 1080 || header.height !== 1080 || image.length > 600 * 1024) {
         throw new Error('invalid_social_card');
       }
       await db.prepare(`UPDATE social_jobs SET caption=?2,card_model_json=?3,image=?4 WHERE id=?1 AND lease_token=?5`)

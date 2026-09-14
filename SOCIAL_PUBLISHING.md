@@ -13,15 +13,16 @@ The renderer uses the existing `share-card.js` template through Browser Run.
 Pages owns the existing Meta secrets. The worker does not receive them. Pages
 calls the renderer through the `SOCIAL_RENDERER` service binding; both services
 authenticate requests with `SOCIAL_SERVICE_TOKEN`. The worker has no public URL.
-The Meta Facebook Page is selected by matching its Instagram business account
-to `META_INSTAGRAM_USER_ID`, or explicitly using `META_FACEBOOK_PAGE_ID`.
+Publishing requires explicit `SOCIAL_FACEBOOK_PAGE_ID` and
+`SOCIAL_INSTAGRAM_USER_ID` settings for Rankoff. It never falls back to the
+agency accounts used by the existing profile-discovery integration.
 
 ## Operations
 
 - Kill switch: set `SOCIAL_PUBLISHING_ENABLED` to `false` in either service.
 - Pages configuration: `SOCIAL_START_AT`, `SOCIAL_PUBLISHING_ENABLED`,
-  `META_ACCESS_TOKEN`, `META_INSTAGRAM_USER_ID`, `SOCIAL_SERVICE_TOKEN`, and
-  `SOCIAL_RENDERER`. Optional `META_FACEBOOK_PAGE_ID` and `META_GRAPH_API_VERSION`.
+  `META_ACCESS_TOKEN`, `SOCIAL_FACEBOOK_PAGE_ID`, `SOCIAL_INSTAGRAM_USER_ID`,
+  `SOCIAL_SERVICE_TOKEN`, and `SOCIAL_RENDERER`. Optional `META_GRAPH_API_VERSION`.
 - Worker configuration: `BROWSER`, `SOCIAL_SERVICE_TOKEN`,
   `SOCIAL_PUBLISHING_ENABLED`.
 - Read `/api/v1/admin/social` with the existing admin bearer credential to see

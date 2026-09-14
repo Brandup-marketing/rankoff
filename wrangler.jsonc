@@ -12,6 +12,7 @@
     "DODO_ENVIRONMENT": "live_mode",
     "DODO_PRODUCT_ID": "pdt_0NmSKNT2Fc2M9dSgRkEEZ",
     "SOCIAL_PUBLISHING_ENABLED": "false",
+    "SOCIAL_FACEBOOK_PAGE_ID": "61594359445528",
     "SOCIAL_START_AT": "2026-09-14T00:00:00.000Z"
   },
   "services": [{ "binding": "SOCIAL_RENDERER", "service": "rankoff-social-publisher" }],
