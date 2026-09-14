@@ -2129,16 +2129,12 @@
   }
 
   async function startLiveCheckout(amount) {
+    // New submissions must be resolved by the server's canonical identity.
+    // Matching only hostname sends every Instagram/Facebook account to the
+    // first listing on that platform, crediting the wrong merchant.
     const candidate = activeBid?.type === "listing"
       ? state.listings.find((item) => item.id === activeBid.listingId)
-      : state.listings.find((item) => {
-          if (!pendingChallenge) return false;
-          try {
-            return new URL(item.url).hostname === pendingChallenge.url.hostname;
-          } catch {
-            return false;
-          }
-        });
+      : null;
     let listingId = candidate?.id;
     if (!listingId) {
       // A website the board has never seen: create its listing on the spot.
