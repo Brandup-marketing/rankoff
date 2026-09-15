@@ -1,21 +1,21 @@
 # Merchant introductions on Facebook and Instagram
 
-## Deployment status — 2026-09-14
+## Deployment status — 2026-09-15
 
-Code and additive schema deployed. Both publishing switches remain off.
-177 backend tests passed; real Browser Run output visually verified as a complete
-1080×1080 JPEG. The live board remained MYR with a 500-minor-unit minimum.
+Both publishing switches are enabled for new merchants whose first settlement
+is at or after 2026-09-15T09:51:33.281Z (17:51 Malaysia time). No historical
+backfill is enabled. All 185 backend tests and the source checks passed.
 
-Jake confirmed the destinations: Facebook Rankoff
-`https://www.facebook.com/profile.php?id=61594359445528` and Instagram `@rankoff.my`.
-The existing token lists only BrandUp Design Marketing (Page 104060961430277,
-Instagram 17841459622069927). Reading the supplied Rankoff Page ID returned
-Graph code 100/subcode 33. Verify the canonical Graph Page ID and grant the
-BRANDUP AUTOMATION System User access to both Rankoff assets before activation.
-Do not replace the existing profile-discovery Instagram binding merely to change
-publishing targets. Set SOCIAL_INSTAGRAM_USER_ID to the verified Rankoff IG ID,
-verify SOCIAL_FACEBOOK_PAGE_ID against Graph, set SOCIAL_START_AT to activation
-time (no historical backfill), then enable both switches. No posts have been sent.
+Meta access was verified after the owner assigned the Rankoff assets:
+- Canonical Facebook Page ID: `1356018630922623`, name `Rankoff`.
+- Connected Instagram ID: `17841423594914143`, username `rankoff.my`.
+- The Page tasks include `MANAGE` and `CREATE_CONTENT`.
+
+The supplied public Facebook profile ID `61594359445528` did not resolve through
+Graph. Publishing now uses the canonical ID returned by `/me/accounts`.
+The BrandUp profile-discovery bindings remain independent of these explicit
+publishing destinations. Real public delivery still needs to be confirmed when
+the next eligible merchant pays; no synthetic public test posts were created.
 
 The service token is stored in both Cloudflare deployments. For future local
 diagnostics, replace it in both services through secret stdin if necessary;

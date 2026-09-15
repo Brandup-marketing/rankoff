@@ -11,6 +11,6 @@
   "browser": { "binding": "BROWSER" },
   "rules": [{ "type": "Text", "globs": ["**/share-card.js", "**/ms-copy.js", "**/ms-legal.js", "**/ms-answers.js"], "fallthrough": false }],
   "vars": {
-    "SOCIAL_PUBLISHING_ENABLED": "false"
+    "SOCIAL_PUBLISHING_ENABLED": "true"
   }
 }
