@@ -1,3 +1,4 @@
+import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
 (() => {
   "use strict";
 
@@ -1276,14 +1277,14 @@
   /**
    * A returning customer tops up through the same hero form, so a submission
    * whose URL already sits on the board is a top-up, not a new listing.
-   * startLiveCheckout matches on hostname the same way, so the rank we preview
-   * has to add to that listing's total paid instead of standing alone.
+   * Use the same canonical identity as server-side checkout resolution.
    */
   function existingListingForPending() {
     if (!pendingChallenge?.url) return null;
     return state.listings.find((item) => {
       try {
-        return new URL(item.url).hostname === pendingChallenge.url.hostname;
+        const url = new URL(item.url);
+        return listingIdentity(url.hostname, accountFrom(url)) === listingIdentity(pendingChallenge.url.hostname, accountFrom(pendingChallenge.url));
       } catch {
         return false;
       }
@@ -2065,7 +2066,8 @@
       : null;
     if (!previousListing && pendingChallenge) {
       previousListing = state.listings.find((item) => {
-        try { return new URL(item.url).hostname === pendingChallenge.url.hostname; }
+        try { const url = new URL(item.url);
+        return listingIdentity(url.hostname, accountFrom(url)) === listingIdentity(pendingChallenge.url.hostname, accountFrom(pendingChallenge.url)); }
         catch { return false; }
       });
     }

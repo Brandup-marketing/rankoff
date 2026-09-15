@@ -1,3 +1,4 @@
+import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
 (() => {
   "use strict";
 
@@ -627,7 +628,10 @@
 
   function existingForTypedUrl() {
     let hostname = "";
-    try { hostname = parseClaimUrl(elements.claimUrl.value).hostname.toLowerCase().replace(/^(?:www|m)\./, ""); } catch { /* not typed yet */ }
+    try {
+      const url = parseClaimUrl(elements.claimUrl.value);
+      hostname = listingIdentity(url.hostname, accountFrom(url));
+    } catch { /* not typed yet */ }
     return hostname ? boardRankings.find((row) => row.hostname === hostname) || null : null;
   }
 
