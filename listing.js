@@ -814,6 +814,18 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
   });
 
   function showError() {
+    if (!elements.error.querySelector('[data-copy="notFoundTitle"]')) {
+      for (const [tag, key] of [["h1", "notFoundTitle"], ["p", "notFoundCopy"], ["a", "returnBoard"]]) {
+        const node = document.createElement(tag);
+        node.dataset.copy = key;
+        node.textContent = text(key);
+        if (tag === "a") {
+          node.className = "primary-action";
+          node.href = urlWithLanguage("/").href;
+        }
+        elements.error.append(node);
+      }
+    }
     elements.loading.hidden = true;
     elements.error.hidden = false;
     document.querySelector("#listing-detail")?.setAttribute("aria-busy", "false");

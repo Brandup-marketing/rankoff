@@ -366,3 +366,16 @@ test("holding the whole board needs no qualifier", () => {
   assert.equal(view.rankNote, "");
   assert.match(renderProductPage(shell, view), /data-rank-note hidden><\/p>/);
 });
+
+
+test("valid website and social pages omit the hidden missing-listing message", () => {
+  for (const language of ["en", "zh"]) {
+    for (const hostname of ["brandupdesignmarketing.com", "instagram:example"]) {
+      const view = buildProductView({ entry: { ...entry, listing: { ...entry.listing, hostname } }, board: { currency: "MYR" }, language });
+      const html = renderProductPage(shell, view);
+      assert.doesNotMatch(html, /Listing not found|找不到此条目|This listing may have moved|此条目可能已移动/);
+      assert.match(html, /<div class="listing-error" data-error hidden><\/div>/);
+      assert.match(html, /<h1 data-title>BrandUp Design Marketing<\/h1>/);
+    }
+  }
+});

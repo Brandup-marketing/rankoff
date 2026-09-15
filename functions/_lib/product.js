@@ -406,6 +406,10 @@ export function renderProductPage(shell, view) {
   // The shell hydrates from the board API; hand it the listing it is standing on.
   html = html.replace(/<body(\s[^>]*)?>/, (match, attributes) => `<body${attributes || ""} data-listing-id="${escapeHtml(view.id)}">`);
 
+  // A valid page must not ship the hidden missing-listing message to text crawlers.
+  // Keep the empty hook so hydration can still show a later client-side error.
+  html = html.replace(/(<div class="listing-error" data-error hidden>)[\s\S]*?<\/div>/, "$1</div>");
+
   // Content a crawler can read without running the page's JavaScript.
   html = html.replace(/(<div class="listing-loading" data-loading)>/, "$1 hidden>");
   html = html.replace(/(<div class="listing-content" data-content)\s+hidden>/, "$1>");
