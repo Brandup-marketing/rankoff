@@ -116,6 +116,7 @@ test('Meta errors redact messages and tokens are only sent in Authorization', as
 
 test('caption uses stored business description, profile URL and sponsored disclosure', () => {
   const result = socialContent({ rank: 2, listing: { title: 'Example', description: 'Interior design.', hostname: 'instagram:example', url: 'https://instagram.com/example' }, bid: { amount_minor: 500, currency: 'MYR' } }, now);
+  assert.equal(result.model.url, 'https://rankoff.my/profile/instagram/example');
   assert.match(result.caption, /Interior design/); assert.match(result.caption, /https:\/\/rankoff.my\/profile\/instagram\/example/);
   assert.match(result.caption, /Sponsored/); assert.equal(result.model.card.place, 2);
 });

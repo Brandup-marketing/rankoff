@@ -14,8 +14,18 @@ Meta access was verified after the owner assigned the Rankoff assets:
 The supplied public Facebook profile ID `61594359445528` did not resolve through
 Graph. Publishing now uses the canonical ID returned by `/me/accounts`.
 The BrandUp profile-discovery bindings remain independent of these explicit
-publishing destinations. Real public delivery still needs to be confirmed when
-the next eligible merchant pays; no synthetic public test posts were created.
+publishing destinations. The owner authorized backfill for Express Queen Lash
+and Hypex Auto. Initial Facebook delivery exposed a missing `pages_manage_posts`
+scope; the owner replaced the secret and live permission checks now confirm it.
+Both Facebook posts and Hypex Auto Instagram delivery succeeded.
+
+The first Queen Lash Instagram image lacked its logo because socialContent passed
+an external merchant URL to the internal image-proxy resolver. It now passes the
+Rankoff profile URL. Unicode initials are normalized without splitting surrogate
+pairs, and social rendering refuses a card when its expected logo fails to load.
+Both merchants' corrected Browser Run JPEGs were visually checked. The owner
+approved replacing Queen Lash's old Instagram post; its old permalink was verified
+unavailable before resetting delivery, with the original post ID retained in audit_events.
 
 The service token is stored in both Cloudflare deployments. For future local
 diagnostics, replace it in both services through secret stdin if necessary;

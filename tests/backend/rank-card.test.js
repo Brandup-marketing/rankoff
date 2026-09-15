@@ -160,6 +160,8 @@ test("the downloaded file is named after the merchant and the shape", () => {
 
 test("initials match the ones the server already draws", () => {
   assert.equal(initialsOf("Aurora Clinic"), "AC");
+  assert.equal(initialsOf("𝐄𝐱𝐩𝐫𝐞𝐬𝐬 𝐐𝐮𝐞𝐞𝐧 𝐋𝐚𝐬𝐡"), "EQ");
+  assert.equal(initialsOf("😀"), "😀");
   assert.equal(initialsOf("Aurora"), "A");
   assert.equal(initialsOf("极光诊所"), "极");
   assert.equal(initialsOf(""), "R");

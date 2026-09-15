@@ -110,11 +110,11 @@ export function proxyPathFor(url) {
 // Mirrors functions/_lib/product.js initialsFor: one character for a CJK name,
 // two letters for a latin one.
 export function initialsOf(name) {
-  const source = String(name || "").trim();
+  const source = String(name || "").normalize("NFKC").trim();
   if (!source) return "R";
   if (/[㐀-鿿]/.test(source)) return (source.match(/[㐀-鿿]/) || ["R"])[0];
   const words = source.replace(/[^A-Za-z0-9\s]/g, " ").split(/\s+/).filter(Boolean);
-  if (!words.length) return source.slice(0, 1).toUpperCase();
+  if (!words.length) return Array.from(source)[0].toUpperCase();
   return (words[0][0] + (words[1]?.[0] || "")).toUpperCase();
 }
 

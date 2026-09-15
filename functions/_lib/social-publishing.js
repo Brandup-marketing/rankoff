@@ -14,7 +14,7 @@ export function socialContent(entry, now) {
   return {
     caption: [`Meet ${name} on RANKOFF.`, description, `Explore this business: ${url}`,
       `Sponsored listing. Rank reflects total paid, captured ${now.slice(0, 10)}.`].filter(Boolean).join('\n\n'),
-    model: { language: 'en', url: entry.listing.url, card: { name, place: entry.rank,
+    model: { language: 'en', url, card: { name, place: entry.rank,
       where: 'RANKOFF', total: formatMoney(entry.bid.amount_minor, entry.bid.currency),
       period: 'all', capturedAt: now.slice(0, 10) } },
   };

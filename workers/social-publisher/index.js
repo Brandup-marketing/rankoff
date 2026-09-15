@@ -27,8 +27,10 @@ export async function renderSocialImage(env, options) {
     });
     await page.goto('https://rankoff.my/robots.txt', { waitUntil: 'domcontentloaded', timeout: 30000 });
     const bytes = await page.evaluate(async (input, moduleUrl) => {
-      const { buildCardModel, renderCardBlob } = await import(moduleUrl);
-      const png = await renderCardBlob(buildCardModel(input), 'square');
+      const { buildCardModel, preloadLogo, renderCardBlob } = await import(moduleUrl);
+      const model = await preloadLogo(buildCardModel(input));
+      if (!model || (model.logoUrl && !model.logo)) throw new Error('social_logo_unavailable');
+      const png = await renderCardBlob(model, 'square');
       const bitmap = await createImageBitmap(png);
       const canvas = document.createElement('canvas');
       canvas.width = bitmap.width; canvas.height = bitmap.height;
