@@ -1,0 +1,95 @@
+{
+  "captured_at": "2026-09-20T08:43:04.837652+00:00",
+  "source": "Rankoff public API",
+  "currency": "MYR",
+  "notes": [
+    "Before exposure changes. Redirect clicks may include repeats and automated traffic.",
+    "Not search impressions or AI mentions."
+  ],
+  "listings": [
+    {
+      "identity": "hypexauto.com",
+      "name": "Hypex Auto",
+      "rank": 1,
+      "total_paid_minor": 2000,
+      "tracked_clicks": 20
+    },
+    {
+      "identity": "instagram:resoneer_coaching",
+      "name": "ResoneerCoaching | NLP导师",
+      "rank": 2,
+      "total_paid_minor": 1500,
+      "tracked_clicks": 18
+    },
+    {
+      "identity": "instagram:express_queenlash",
+      "name": "𝐄𝐱𝐩𝐫𝐞𝐬𝐬 𝐐𝐮𝐞𝐞𝐧 𝐋𝐚𝐬𝐡",
+      "rank": 3,
+      "total_paid_minor": 1500,
+      "tracked_clicks": 2
+    },
+    {
+      "identity": "rakanjayahardware.com",
+      "name": "Rakan Jaya Hardware",
+      "rank": 4,
+      "total_paid_minor": 1000,
+      "tracked_clicks": 33
+    },
+    {
+      "identity": "instagram:mumeiyan.hq",
+      "name": "沐美颜 MuMeiYan",
+      "rank": 5,
+      "total_paid_minor": 1000,
+      "tracked_clicks": 15
+    },
+    {
+      "identity": "instagram:ihospitaljb",
+      "name": "iPhone Murah JB",
+      "rank": 6,
+      "total_paid_minor": 1000,
+      "tracked_clicks": 5
+    },
+    {
+      "identity": "instagram:glowmebykimisoi",
+      "name": "GLOWME by Kimisoi",
+      "rank": 7,
+      "total_paid_minor": 1000,
+      "tracked_clicks": 3
+    },
+    {
+      "identity": "facebook:moonsoul.fb.official",
+      "name": "MoonSoul",
+      "rank": 8,
+      "total_paid_minor": 1000,
+      "tracked_clicks": 3
+    },
+    {
+      "identity": "brandupdesignmarketing.com",
+      "name": "BrandUp Design Marketing",
+      "rank": 9,
+      "total_paid_minor": 1000,
+      "tracked_clicks": 76
+    },
+    {
+      "identity": "orientalwellness.my",
+      "name": "中华健康 Oriental Wellness",
+      "rank": 10,
+      "total_paid_minor": 500,
+      "tracked_clicks": 19
+    },
+    {
+      "identity": "uscpap.my",
+      "name": "USCPAP",
+      "rank": 11,
+      "total_paid_minor": 500,
+      "tracked_clicks": 18
+    },
+    {
+      "identity": "instagram:_umidesign_",
+      "name": "UMI  Design",
+      "rank": 12,
+      "total_paid_minor": 500,
+      "tracked_clicks": 24
+    }
+  ]
+}

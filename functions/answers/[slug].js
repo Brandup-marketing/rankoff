@@ -2,7 +2,7 @@ import { defaultBoardSlug, isProduction, requireDatabase } from "../_lib/config.
 import { escapeHtml, formatMoney } from "../_lib/product.js";
 import { loadBoard, loadPublicBoard, loadPublicStats } from "../_lib/repository.js";
 
-const SLUGS = new Set(["pay-to-rank-leaderboard", "how-rankoff-ranking-works", "sponsor-a-public-link"]);
+const SLUGS = new Set(["pay-to-rank-leaderboard", "how-rankoff-ranking-works", "sponsor-a-public-link", "business-exposure-malaysia"]);
 
 // These pages exist to be believed, so their figures are read from the board at
 // request time. A number typed into the copy would be wrong by morning.

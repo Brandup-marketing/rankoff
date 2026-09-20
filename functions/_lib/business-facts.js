@@ -1,8 +1,29 @@
-// Editorial facts checked against the linked business's own public website.
+// Editorial facts checked against the business's own public website or profile.
 // This is not a verification badge. Add only sourced facts, keep translations
 // equivalent, and advance reviewedAt only after checking the source again.
 // Unreviewed listings use their saved description; missing facts stay absent.
 const FACTS = {
+  "hypexauto.com": {
+    reviewedAt: "2026-09-20",
+    source: "https://hypexauto.com/",
+    summary: {
+      en: "Hypex Auto offers paint protection film, car coating, window film and automotive detailing in Wangsa Maju, Kuala Lumpur. Its website also publishes automotive and EV guides.",
+      zh: "Hypex Auto 位于吉隆坡 Wangsa Maju，提供车漆保护膜、汽车镀膜、车窗膜及汽车美容服务，网站也发布汽车与电动车指南。",
+    },
+    services: { en: ["Paint protection film", "Car coating", "Window film", "Automotive detailing"], zh: ["车漆保护膜", "汽车镀膜", "车窗膜", "汽车美容"] },
+    location: { en: "No 10, Jalan 1a/27a, Wangsa Maju, 53300 Kuala Lumpur, Malaysia", zh: "No 10, Jalan 1a/27a, Wangsa Maju, 53300 Kuala Lumpur, Malaysia" },
+  },
+  "instagram:express_queenlash": {
+    reviewedAt: "2026-09-20",
+    source: "https://www.instagram.com/express_queenlash/",
+    summary: {
+      en: "Express Queen Lash offers eyelash extensions at The Strand KD. Its Instagram profile lists hours of 11am–8pm and links to appointment booking.",
+      zh: "Express Queen Lash 在 The Strand KD 提供睫毛嫁接服务，Instagram 主页列明营业时间为上午 11 点至晚上 8 点，并提供预约入口。",
+    },
+    services: { en: ["Eyelash extensions"], zh: ["睫毛嫁接"] },
+    location: { en: "The Strand KD", zh: "The Strand KD" },
+    hoursText: { en: "11am–8pm (as listed on Instagram; confirm available days when booking)", zh: "上午 11 点至晚上 8 点（Instagram 所列时间；营业日期请在预约时确认）" },
+  },
   "brandupdesignmarketing.com": {
     reviewedAt: "2026-09-12",
     source: "https://www.brandupdesignmarketing.com/",

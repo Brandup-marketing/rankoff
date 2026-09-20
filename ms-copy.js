@@ -269,9 +269,11 @@ Business details|Butiran perniagaan
 Services & products|Perkhidmatan & produk
 Service areas|Kawasan perkhidmatan
 Location|Lokasi
+Listed hours|Waktu yang dinyatakan
 Source|Sumber
 Source checked|Sumber disemak
 Details summarised from the business’s website. Confirm current services and availability with the business.|Butiran diringkaskan daripada laman web perniagaan. Sahkan perkhidmatan terkini dan ketersediaan dengan perniagaan tersebut.
+Details summarised from the business’s public website or profile. Confirm current services and availability with the business.|Butiran diringkaskan daripada laman web atau profil awam perniagaan. Sahkan perkhidmatan terkini dan ketersediaan dengan perniagaan tersebut.
 Paid position, not a quality rating or endorsement.|Kedudukan berbayar, bukan penilaian kualiti atau sokongan.
 Suggest a correction|Cadangkan pembetulan
 Expected:|Jangkaan:
@@ -318,6 +320,7 @@ Compete in public|Bersaing secara terbuka
 Once payment settles, your business, your total and your position are on the board for everyone to see.|Selepas pembayaran selesai, perniagaan, jumlah bayaran dan kedudukan anda dipaparkan untuk dilihat semua.
 See what it earns|Lihat hasilnya
 Tracked clicks count redirects from Rankoff to listed websites. Repeat and automated clicks may be included.|Klik direkodkan mengira pengalihan dari Rankoff ke laman web yang disenaraikan. Klik berulang dan automatik mungkin disertakan.
+What your listing includes →|Apa yang disertakan dalam penyenaraian anda →
 Claim your spot →|Dapatkan tempat anda →
 Rankoff origin|Asal usul Rankoff
 Rankoff principles|Prinsip Rankoff

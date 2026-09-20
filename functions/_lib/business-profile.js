@@ -6,9 +6,10 @@ const labels = {
   services: { en: "Services & products", zh: "服务与产品" },
   areas: { en: "Service areas", zh: "服务地区" },
   location: { en: "Location", zh: "所在地" },
+  hoursText: { en: "Listed hours", zh: "所列营业时间" },
   source: { en: "Source", zh: "资料来源" },
   reviewed: { en: "Source checked", zh: "来源查阅日期" },
-  sourced: { en: "Details summarised from the business’s website. Confirm current services and availability with the business.", zh: "资料根据商家网站整理，最新服务与供应情况请向商家确认。" },
+  sourced: { en: "Details summarised from the business’s public website or profile. Confirm current services and availability with the business.", zh: "资料根据商家公开网站或主页整理，最新服务与供应情况请向商家确认。" },
   disclosure: { en: "Paid position, not a quality rating or endorsement.", zh: "此为付费位置，不代表品质评分或推荐。" },
   correction: { en: "Suggest a correction", zh: "提交资料更正" },
 };
@@ -25,7 +26,7 @@ export function renderBusinessProfile(view) {
   const facts = view.businessFacts;
   const text = (value, tag = "span") => `<${tag} data-business-en="${esc(value.en)}" data-business-zh="${esc(value.zh)}">${esc(value[locale])}</${tag}>`;
   const rows = [];
-  for (const key of ["services", "location", "areas"]) {
+  for (const key of ["services", "location", "areas", "hoursText"]) {
     if (!facts?.[key]) continue;
     const value = facts[key];
     const formatted = { en: Array.isArray(value.en) ? value.en.join(" · ") : value.en, zh: Array.isArray(value.zh) ? value.zh.join(" · ") : value.zh };

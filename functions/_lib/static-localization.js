@@ -40,7 +40,7 @@ const HOME_STATIC_COPY = Object.freeze({
   rules: "每个条目都是付费广告。累计付款最高者排第一——没有奖品、没有抽奖，也不涉及任何运气成分。",
   position: "排名位置", positionCopy: "直到别的条目累计付款超过你为止。", charge: "费用", chargeCopy: "通过安全托管付款页面一次性付款。",
   reporting: "数据", reportingCopy: "所选时间范围内的追踪点击。重复与自动化流量未经过滤——一次点击不等于一位客户。", readRules: "查看完整规则 →",
-  askWhatIs: "什么是付费排名榜？", askHowWorks: "Rankoff 排名怎么算？", askHowSponsor: "怎么赞助一个网站或社交账号？",
+  askWhatIs: "什么是付费排名榜？", askHowWorks: "Rankoff 排名怎么算？", askHowSponsor: "怎么赞助一个网站或社交账号？", askVisibility: "马来西亚商家怎样增加线上曝光？",
   rulesLink: "规则", terms: "条款", termsOfService: "服务条款", privacyLink: "隐私", payments: "付款", footerCredit: "Brandup Marketing 出品",
   confirmRank: "确认此排名", confirmRankIntro: "核对排名与价格，同意《服务条款》后继续。", rankLabel: "排名", priceLabel: "价格", dueNow: "现在支付", stepPay: "付款", stepPayCopy: "一次付清，US$1 起。", stepRank: "排名", stepRankCopy: "累计付款最高者拿下第 1 名。", stepHold: "保持", stepHoldCopy: "直到有人付得更多。随时可追加。", statVisitors: "访问人次", statClicks: "次点进商家", statPaid: "商家已付", statWindow: "全时段，由 Rankoff 统计", alreadyPaid: "已付金额", payNow: "本次支付", totalAfter: "付款后累计",
   confirmationCopy: "付款确认后，你的条目会以此排名上线。其他人仍可付更多取得更高排名。此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。",
@@ -60,6 +60,7 @@ const CATEGORIES_STATIC_COPY = Object.freeze({
 
 const ABOUT_STATIC_COPY = Object.freeze({
   "Skip to content": "跳至正文",
+  "What your listing includes →": "上榜后获得哪些展示 →",
   Board: "榜单", Categories: "分类", About: "关于", "The story behind the board": "榜单背后的故事",
   "Attention has a price.": "注意力，明码标价。", "Make it visible.": "让它公开可见。",
   "RANKOFF is the public leaderboard for Malaysian businesses. Pay to hold a spot, show customers what you do, and keep it until someone pays more. One board, one rule: the highest total paid takes #1.": "RANKOFF 是马来西亚商家的公开榜单。付费占一个位置，把你的生意展示给顾客，直到有人付得更多。一个榜单，一条规则：累计付款最高者，就是第 1 名。",

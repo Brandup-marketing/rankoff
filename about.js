@@ -51,6 +51,7 @@
     ["Next", "接下来"], ["Tracked clicks count redirects from Rankoff to listed websites. Repeat and automated clicks may be included.", "追踪点击统计从 Rankoff 跳转到商家网站的次数，可能包含重复与自动化点击。"],
     ["Real numbers from the board, updated live.", "榜单真实数据，实时更新。"],
     ["Claim your spot →", "拿下你的位置 →"],
+    ["What your listing includes →", "上榜后获得哪些展示 →"],
     ["Live values are unavailable right now.", "实时数值暂时无法读取。"],
     ["A Brandup Marketing product", "Brandup Marketing 旗下产品"], ["Rules", "规则"], ["Terms", "条款"], ["Privacy", "隐私"], ["Payments", "付款"],
   ]);

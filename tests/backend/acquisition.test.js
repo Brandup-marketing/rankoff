@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { readFileSync } from 'node:fs';
+import { runInNewContext } from 'node:vm';
 import { testDatabase, seedListing, seedPayment } from '../helpers/sqlite.js';
 import { acquisitionInput, recordAcquisition, attributePayment, acquisitionReport } from '../../functions/_lib/acquisition.js';
 import { onRequestGet as report } from '../../functions/api/v1/admin/acquisition.js';
@@ -9,6 +11,59 @@ import { onRequestGet as redirect } from '../../functions/go/[listingId].js';
 const campaign = { session_id: 'bd2a0b43-6ac3-4a3e-ae08-849094399d88', source: 'founder_community', medium: 'community', campaign: 'cohort_01', content: 'invitation' };
 const at = '2026-09-08T00:00:00.000Z';
 const env = (db) => ({ DB: db, RANKOFF_MODE: 'production', SESSION_HASH_SALT: 'test-only-session-salt-at-least-32-characters', ADMIN_API_TOKEN: 'test-owner-token' });
+
+function browserVisit(href, referrer = '', saved = null) {
+  const requests = [];
+  const browser = {
+    location: new URL(href), document: { referrer }, window: {}, URL, crypto,
+    sessionStorage: { getItem: () => saved, setItem: (_key, value) => { saved = value; } },
+    fetch: async (_url, options) => { requests.push(JSON.parse(options.body)); return new Response(); },
+  };
+  runInNewContext(readFileSync(new URL('../../acquisition.js', import.meta.url), 'utf8'), browser);
+  return { value: browser.window.RankoffAcquisition.context(), saved, requests };
+}
+
+test('browser attribution identifies search and AI referrals without retaining referring URLs', () => {
+  for (const [referrer, source, medium] of [
+    ['https://chatgpt.com/c/private-chat-id', 'chatgpt', 'ai_referral'],
+    ['https://chat.openai.com/', 'chatgpt', 'ai_referral'],
+    ['https://www.perplexity.ai/search/private-query', 'perplexity', 'ai_referral'],
+    ['https://gemini.google.com/app/private-chat-id', 'gemini', 'ai_referral'],
+    ['https://copilot.microsoft.com/', 'copilot', 'ai_referral'],
+    ['https://claude.ai/', 'claude', 'ai_referral'],
+    ['https://www.google.com.my/search?q=private-query', 'google', 'organic'],
+    ['https://www.bing.com/search?q=private-query', 'bing', 'organic'],
+    ['https://rankoff.my/about', 'direct', 'none'],
+    ['', 'direct', 'none'], ['invalid-url', 'direct', 'none'],
+    ['https://chatgpt.com.example.org/', 'referral', 'referral'],
+    ['https://notgoogle.com/', 'referral', 'referral'],
+    ['https://docs.google.com/document/private-id', 'referral', 'referral'],
+    ['https://mail.google.com/', 'referral', 'referral'],
+    ['https://drive.google.com/', 'referral', 'referral'],
+  ]) {
+    const result = browserVisit('https://rankoff.my/product/hypexauto.com', referrer);
+    assert.equal(result.value.source, source, referrer);
+    assert.equal(result.value.medium, medium, referrer);
+    assert.ok(!JSON.stringify(result.requests).includes('private-'));
+    assert.ok(!JSON.stringify(result.requests).includes('https://'));
+  }
+});
+
+test('explicit campaigns win and first-source attribution survives navigation and reloads', () => {
+  const first = browserVisit('https://rankoff.my/?utm_source=facebook&utm_medium=paid_social&utm_campaign=launch', 'https://chatgpt.com/');
+  assert.equal(first.value.source, 'facebook');
+  assert.equal(first.value.medium, 'paid_social');
+  assert.equal(first.value.campaign, 'launch');
+  const taggedAI = browserVisit('https://rankoff.my/?utm_source=chatgpt.com');
+  assert.equal(taggedAI.value.source, 'chatgpt.com');
+  assert.equal(taggedAI.value.medium, 'ai_referral');
+  assert.equal(browserVisit('https://rankoff.my/?utm_source=chatgpt&utm_medium=paid').value.medium, 'paid');
+  const next = browserVisit('https://rankoff.my/answers/business-exposure-malaysia?utm_source=other', 'https://www.google.com/', first.saved);
+  assert.equal(next.value.source, 'facebook');
+  assert.equal(next.value.session_id, first.value.session_id);
+  const expired = JSON.parse(first.saved); expired.started_at = Date.now() - 31 * 60 * 1000;
+  assert.equal(browserVisit('https://rankoff.my/', 'https://perplexity.ai/', JSON.stringify(expired)).value.source, 'perplexity');
+});
 
 test('acquisition rejects forged payment events, sanitizes labels and deduplicates first-source visits', async () => {
   const db = testDatabase();

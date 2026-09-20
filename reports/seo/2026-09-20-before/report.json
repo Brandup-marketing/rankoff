@@ -1,0 +1,782 @@
+{
+  "report_id": "seo-report-rankoff.my",
+  "generated_at": "2026-09-20T08:35:36.949629+00:00",
+  "target": {
+    "source_type": "http",
+    "identifier": "https://rankoff.my",
+    "industry_profile": null,
+    "locale": null
+  },
+  "mode": "consultant",
+  "executive_summary": "https://rankoff.my 的整體 SEO 健康分數為 77.1/100。 另有 1 個高影響（P1）問題建議優先排入近期排程。 本次共產出 7 項發現，詳見下方分級清單。",
+  "site_health_score": 77.1,
+  "findings": [
+    {
+      "id": "SEO-HTTP_ERRORS-001",
+      "title": "發現 5 個頁面回傳 4xx/5xx 錯誤",
+      "mode": "consultant",
+      "category": "indexability",
+      "severity": "P2",
+      "impact": 2,
+      "effort": 2,
+      "confidence": 1.0,
+      "affected_urls": [
+        "https://rankoff.my/cdn-cgi/l/email-protection#1162707d7462517363707f75646175746278767f7c70637a7465787f763f727e7c",
+        "https://rankoff.my/cdn-cgi/l/email-protection#7a091b161f093a18081b141e0f0a1e1f09131d14171b08111f0e13141d54191517",
+        "https://rankoff.my/cdn-cgi/l/email-protection#740715181107341606151a1001041011071d131a1915061f11001d1a135a171b19",
+        "https://rankoff.my/cdn-cgi/l/email-protection#0d7e6c61687e4d6f7f6c6369787d69687e646a63606c7f66687964636a236e6260",
+        "https://rankoff.my/cdn-cgi/l/email-protection#3c4f5d50594f7c5e4e5d5258494c58594f555b52515d4e57594855525b125f5351"
+      ],
+      "evidence": {
+        "error_count": 5
+      },
+      "recommendation": "逐一檢查這些 URL：確認是否應該回傳 200（修正連結或伺服器設定），或應該用 301 導向到正確頁面，或該頁面本來就該下架並回傳正確的 410。",
+      "validation": [
+        "重新爬取這些 URL，確認狀態碼已修正為預期值"
+      ],
+      "owner": "engineer",
+      "sources": [
+        "google-search-essentials"
+      ]
+    },
+    {
+      "id": "SEO-ROBOTS_NO_SITEMAP-001",
+      "title": "robots.txt 未宣告 sitemap 位置",
+      "mode": "consultant",
+      "category": "indexability",
+      "severity": "P3",
+      "impact": 1,
+      "effort": 1,
+      "confidence": 0.9,
+      "affected_urls": [
+        "/robots.txt"
+      ],
+      "evidence": {},
+      "recommendation": "在 robots.txt 中加入 `Sitemap: https://<domain>/sitemap.xml`，協助搜尋引擎更快發現網站的完整 URL 清單。",
+      "validation": [
+        "確認 robots.txt 內容包含 Sitemap 宣告"
+      ],
+      "owner": "engineer",
+      "sources": [
+        "robots-txt-intro"
+      ]
+    },
+    {
+      "id": "SEO-SITEMAP_INVALID_XML-001",
+      "title": "sitemap.xml 不是合法的 XML 格式",
+      "mode": "consultant",
+      "category": "indexability",
+      "severity": "P1",
+      "impact": 4,
+      "effort": 2,
+      "confidence": 1.0,
+      "affected_urls": [
+        "/sitemap.xml"
+      ],
+      "evidence": {},
+      "recommendation": "修正 sitemap.xml 的 XML 格式錯誤，可用 XML validator 檢查。",
+      "validation": [
+        "確認 sitemap.xml 可被 XML parser 正確解析"
+      ],
+      "owner": "engineer",
+      "sources": [
+        "sitemaps-protocol"
+      ]
+    },
+    {
+      "id": "SEO-TITLE_DUPLICATE-001",
+      "title": "發現 5 組重複的 <title>",
+      "mode": "consultant",
+      "category": "content_quality",
+      "severity": "P2",
+      "impact": 3,
+      "effort": 2,
+      "confidence": 0.8,
+      "affected_urls": [
+        "https://rankoff.my/",
+        "https://rankoff.my/?period=today#board",
+        "https://rankoff.my/?lang=ms",
+        "https://rankoff.my/?lang=ms#board",
+        "https://rankoff.my/?period=today&lang=ms#board",
+        "https://rankoff.my/?lang=zh",
+        "https://rankoff.my/?lang=zh&period=today#board",
+        "https://rankoff.my/legal",
+        "https://rankoff.my/legal#rules",
+        "https://rankoff.my/legal#terms",
+        "https://rankoff.my/legal#privacy",
+        "https://rankoff.my/legal#payments",
+        "https://rankoff.my/legal?lang=ms",
+        "https://rankoff.my/legal?lang=ms#rules",
+        "https://rankoff.my/legal?lang=ms#terms",
+        "https://rankoff.my/legal?lang=ms#privacy",
+        "https://rankoff.my/legal?lang=ms#payments"
+      ],
+      "evidence": {
+        "duplicate_title_groups": 5,
+        "examples": {
+          "RANKOFF | Pay-to-rank leaderboard, from RM 5": [
+            "https://rankoff.my/",
+            "https://rankoff.my/?period=today#board"
+          ],
+          "RANKOFF | Papan kedudukan berbayar, dari RM 5": [
+            "https://rankoff.my/?lang=ms",
+            "https://rankoff.my/?lang=ms#board",
+            "https://rankoff.my/?period=today&lang=ms#board"
+          ],
+          "RANKOFF｜付费排名榜，RM 5 起": [
+            "https://rankoff.my/?lang=zh",
+            "https://rankoff.my/?lang=zh&period=today#board"
+          ],
+          "RANKOFF | Rules, Terms & Privacy": [
+            "https://rankoff.my/legal",
+            "https://rankoff.my/legal#rules",
+            "https://rankoff.my/legal#terms",
+            "https://rankoff.my/legal#privacy",
+            "https://rankoff.my/legal#payments"
+          ],
+          "RANKOFF | Peraturan, Terma & Privasi": [
+            "https://rankoff.my/legal?lang=ms",
+            "https://rankoff.my/legal?lang=ms#rules",
+            "https://rankoff.my/legal?lang=ms#terms",
+            "https://rankoff.my/legal?lang=ms#privacy",
+            "https://rankoff.my/legal?lang=ms#payments"
+          ]
+        }
+      },
+      "recommendation": "為每個頁面撰寫獨特的 title，避免不同頁面使用相同標題造成搜尋結果混淆與內部競爭。",
+      "validation": [
+        "重新爬取確認每個頁面的 title 皆為獨特"
+      ],
+      "owner": "engineer",
+      "sources": []
+    },
+    {
+      "id": "SEO-HREFLANG_INVALID_CODE-001",
+      "title": "49 個頁面的 hreflang 代碼格式不正確",
+      "mode": "consultant",
+      "category": "indexability",
+      "severity": "P3",
+      "impact": 2,
+      "effort": 1,
+      "confidence": 0.7,
+      "affected_urls": [
+        "https://rankoff.my/",
+        "https://rankoff.my/?lang=ms",
+        "https://rankoff.my/?lang=zh",
+        "https://rankoff.my/categories",
+        "https://rankoff.my/categories?lang=ms",
+        "https://rankoff.my/categories?lang=zh",
+        "https://rankoff.my/about",
+        "https://rankoff.my/about?lang=ms",
+        "https://rankoff.my/about?lang=zh",
+        "https://rankoff.my/product/hypexauto.com",
+        "https://rankoff.my/product/hypexauto.com?lang=zh",
+        "https://rankoff.my/product/hypexauto.com?lang=ms",
+        "https://rankoff.my/profile/instagram/resoneer_coaching",
+        "https://rankoff.my/profile/instagram/resoneer_coaching?lang=zh",
+        "https://rankoff.my/profile/instagram/resoneer_coaching?lang=ms",
+        "https://rankoff.my/profile/instagram/express_queenlash",
+        "https://rankoff.my/profile/instagram/express_queenlash?lang=zh",
+        "https://rankoff.my/profile/instagram/express_queenlash?lang=ms",
+        "https://rankoff.my/product/rakanjayahardware.com",
+        "https://rankoff.my/product/rakanjayahardware.com?lang=zh",
+        "https://rankoff.my/product/rakanjayahardware.com?lang=ms",
+        "https://rankoff.my/profile/instagram/mumeiyan.hq",
+        "https://rankoff.my/profile/instagram/mumeiyan.hq?lang=zh",
+        "https://rankoff.my/profile/instagram/mumeiyan.hq?lang=ms",
+        "https://rankoff.my/profile/instagram/ihospitaljb",
+        "https://rankoff.my/profile/instagram/ihospitaljb?lang=zh",
+        "https://rankoff.my/profile/instagram/ihospitaljb?lang=ms",
+        "https://rankoff.my/profile/instagram/glowmebykimisoi",
+        "https://rankoff.my/profile/instagram/glowmebykimisoi?lang=zh",
+        "https://rankoff.my/profile/instagram/glowmebykimisoi?lang=ms",
+        "https://rankoff.my/profile/facebook/moonsoul.fb.official",
+        "https://rankoff.my/profile/facebook/moonsoul.fb.official?lang=zh",
+        "https://rankoff.my/profile/facebook/moonsoul.fb.official?lang=ms",
+        "https://rankoff.my/product/brandupdesignmarketing.com",
+        "https://rankoff.my/product/brandupdesignmarketing.com?lang=zh",
+        "https://rankoff.my/product/brandupdesignmarketing.com?lang=ms",
+        "https://rankoff.my/product/orientalwellness.my",
+        "https://rankoff.my/product/orientalwellness.my?lang=zh",
+        "https://rankoff.my/product/orientalwellness.my?lang=ms",
+        "https://rankoff.my/product/uscpap.my",
+        "https://rankoff.my/product/uscpap.my?lang=zh",
+        "https://rankoff.my/product/uscpap.my?lang=ms",
+        "https://rankoff.my/profile/instagram/_umidesign_",
+        "https://rankoff.my/profile/instagram/_umidesign_?lang=zh",
+        "https://rankoff.my/profile/instagram/_umidesign_?lang=ms",
+        "https://rankoff.my/?period=today#board",
+        "https://rankoff.my/?lang=ms#board",
+        "https://rankoff.my/?period=today&lang=ms#board",
+        "https://rankoff.my/?lang=zh&period=today#board"
+      ],
+      "evidence": {
+        "examples": {
+          "https://rankoff.my/": [
+            "zh-Hans"
+          ],
+          "https://rankoff.my/?lang=ms": [
+            "zh-Hans"
+          ],
+          "https://rankoff.my/?lang=zh": [
+            "zh-Hans"
+          ],
+          "https://rankoff.my/categories": [
+            "zh-Hans"
+          ],
+          "https://rankoff.my/categories?lang=ms": [
+            "zh-Hans"
+          ],
+          "https://rankoff.my/categories?lang=zh": [
+            "zh-Hans"
+          ],
+          "https://rankoff.my/about": [
+            "zh-Hans"
+          ],
+          "https://rankoff.my/about?lang=ms": [
+            "zh-Hans"
+          ],
+          "https://rankoff.my/about?lang=zh": [
+            "zh-Hans"
+          ],
+          "https://rankoff.my/product/hypexauto.com": [
+            "zh-Hans"
+          ]
+        }
+      },
+      "recommendation": "hreflang 應使用 ISO 639-1 語言代碼（可選加上 ISO 3166-1 地區代碼，例如 zh-TW、en-US），或使用 x-default。這裡只檢查格式是否符合這個樣式，不驗證代碼本身是否真實存在。",
+      "validation": [
+        "確認 hreflang 屬性值符合語言/地區代碼格式"
+      ],
+      "owner": "engineer",
+      "sources": [
+        "google-hreflang"
+      ]
+    },
+    {
+      "id": "SEO-IMAGE_MISSING_DIMENSIONS_HINT-001",
+      "title": "43 個頁面有 <img> 缺少 width/height 屬性",
+      "mode": "consultant",
+      "category": "performance",
+      "severity": "P3",
+      "impact": 2,
+      "effort": 1,
+      "confidence": 0.5,
+      "affected_urls": [
+        "https://rankoff.my/",
+        "https://rankoff.my/?lang=ms",
+        "https://rankoff.my/?lang=zh",
+        "https://rankoff.my/product/hypexauto.com",
+        "https://rankoff.my/product/hypexauto.com?lang=zh",
+        "https://rankoff.my/product/hypexauto.com?lang=ms",
+        "https://rankoff.my/profile/instagram/resoneer_coaching",
+        "https://rankoff.my/profile/instagram/resoneer_coaching?lang=zh",
+        "https://rankoff.my/profile/instagram/resoneer_coaching?lang=ms",
+        "https://rankoff.my/profile/instagram/express_queenlash",
+        "https://rankoff.my/profile/instagram/express_queenlash?lang=zh",
+        "https://rankoff.my/profile/instagram/express_queenlash?lang=ms",
+        "https://rankoff.my/product/rakanjayahardware.com",
+        "https://rankoff.my/product/rakanjayahardware.com?lang=zh",
+        "https://rankoff.my/product/rakanjayahardware.com?lang=ms",
+        "https://rankoff.my/profile/instagram/mumeiyan.hq",
+        "https://rankoff.my/profile/instagram/mumeiyan.hq?lang=zh",
+        "https://rankoff.my/profile/instagram/mumeiyan.hq?lang=ms",
+        "https://rankoff.my/profile/instagram/ihospitaljb",
+        "https://rankoff.my/profile/instagram/ihospitaljb?lang=zh",
+        "https://rankoff.my/profile/instagram/ihospitaljb?lang=ms",
+        "https://rankoff.my/profile/instagram/glowmebykimisoi",
+        "https://rankoff.my/profile/instagram/glowmebykimisoi?lang=zh",
+        "https://rankoff.my/profile/instagram/glowmebykimisoi?lang=ms",
+        "https://rankoff.my/profile/facebook/moonsoul.fb.official",
+        "https://rankoff.my/profile/facebook/moonsoul.fb.official?lang=zh",
+        "https://rankoff.my/profile/facebook/moonsoul.fb.official?lang=ms",
+        "https://rankoff.my/product/brandupdesignmarketing.com",
+        "https://rankoff.my/product/brandupdesignmarketing.com?lang=zh",
+        "https://rankoff.my/product/brandupdesignmarketing.com?lang=ms",
+        "https://rankoff.my/product/orientalwellness.my",
+        "https://rankoff.my/product/orientalwellness.my?lang=zh",
+        "https://rankoff.my/product/orientalwellness.my?lang=ms",
+        "https://rankoff.my/product/uscpap.my",
+        "https://rankoff.my/product/uscpap.my?lang=zh",
+        "https://rankoff.my/product/uscpap.my?lang=ms",
+        "https://rankoff.my/profile/instagram/_umidesign_",
+        "https://rankoff.my/profile/instagram/_umidesign_?lang=zh",
+        "https://rankoff.my/profile/instagram/_umidesign_?lang=ms",
+        "https://rankoff.my/?period=today#board",
+        "https://rankoff.my/?lang=ms#board",
+        "https://rankoff.my/?period=today&lang=ms#board",
+        "https://rankoff.my/?lang=zh&period=today#board"
+      ],
+      "evidence": {
+        "count": 43,
+        "note": "只檢查 HTML 屬性是否存在，不驗證數值是否正確，也未考慮 CSS aspect-ratio 或容器保留空間等替代做法，可能有誤判。"
+      },
+      "recommendation": "為 <img> 補上 width 與 height 屬性（或用 CSS aspect-ratio 搭配容器保留版面空間），避免圖片載入時造成畫面跳動（layout shift）。這只是靜態線索，不是實際的 Core Web Vitals 分數。",
+      "validation": [
+        "用瀏覽器開發者工具或 PageSpeed Insights 確認 CLS 分數"
+      ],
+      "owner": "engineer",
+      "sources": [
+        "web-vitals-cls"
+      ]
+    },
+    {
+      "id": "SEO-BLOCKING_SCRIPTS_HINT-001",
+      "title": "65 個頁面有多個未使用 defer/async 的 <script>",
+      "mode": "consultant",
+      "category": "performance",
+      "severity": "P3",
+      "impact": 2,
+      "effort": 2,
+      "confidence": 0.5,
+      "affected_urls": [
+        "https://rankoff.my/",
+        "https://rankoff.my/?lang=ms",
+        "https://rankoff.my/?lang=zh",
+        "https://rankoff.my/categories",
+        "https://rankoff.my/categories?lang=ms",
+        "https://rankoff.my/categories?lang=zh",
+        "https://rankoff.my/about",
+        "https://rankoff.my/about?lang=ms",
+        "https://rankoff.my/about?lang=zh",
+        "https://rankoff.my/legal",
+        "https://rankoff.my/legal?lang=ms",
+        "https://rankoff.my/answers/pay-to-rank-leaderboard",
+        "https://rankoff.my/answers/pay-to-rank-leaderboard?lang=ms",
+        "https://rankoff.my/answers/how-rankoff-ranking-works",
+        "https://rankoff.my/answers/how-rankoff-ranking-works?lang=ms",
+        "https://rankoff.my/answers/sponsor-a-public-link",
+        "https://rankoff.my/answers/sponsor-a-public-link?lang=ms",
+        "https://rankoff.my/product/hypexauto.com",
+        "https://rankoff.my/product/hypexauto.com?lang=zh",
+        "https://rankoff.my/product/hypexauto.com?lang=ms",
+        "https://rankoff.my/profile/instagram/resoneer_coaching",
+        "https://rankoff.my/profile/instagram/resoneer_coaching?lang=zh",
+        "https://rankoff.my/profile/instagram/resoneer_coaching?lang=ms",
+        "https://rankoff.my/profile/instagram/express_queenlash",
+        "https://rankoff.my/profile/instagram/express_queenlash?lang=zh",
+        "https://rankoff.my/profile/instagram/express_queenlash?lang=ms",
+        "https://rankoff.my/product/rakanjayahardware.com",
+        "https://rankoff.my/product/rakanjayahardware.com?lang=zh",
+        "https://rankoff.my/product/rakanjayahardware.com?lang=ms",
+        "https://rankoff.my/profile/instagram/mumeiyan.hq",
+        "https://rankoff.my/profile/instagram/mumeiyan.hq?lang=zh",
+        "https://rankoff.my/profile/instagram/mumeiyan.hq?lang=ms",
+        "https://rankoff.my/profile/instagram/ihospitaljb",
+        "https://rankoff.my/profile/instagram/ihospitaljb?lang=zh",
+        "https://rankoff.my/profile/instagram/ihospitaljb?lang=ms",
+        "https://rankoff.my/profile/instagram/glowmebykimisoi",
+        "https://rankoff.my/profile/instagram/glowmebykimisoi?lang=zh",
+        "https://rankoff.my/profile/instagram/glowmebykimisoi?lang=ms",
+        "https://rankoff.my/profile/facebook/moonsoul.fb.official",
+        "https://rankoff.my/profile/facebook/moonsoul.fb.official?lang=zh",
+        "https://rankoff.my/profile/facebook/moonsoul.fb.official?lang=ms",
+        "https://rankoff.my/product/brandupdesignmarketing.com",
+        "https://rankoff.my/product/brandupdesignmarketing.com?lang=zh",
+        "https://rankoff.my/product/brandupdesignmarketing.com?lang=ms",
+        "https://rankoff.my/product/orientalwellness.my",
+        "https://rankoff.my/product/orientalwellness.my?lang=zh",
+        "https://rankoff.my/product/orientalwellness.my?lang=ms",
+        "https://rankoff.my/product/uscpap.my",
+        "https://rankoff.my/product/uscpap.my?lang=zh",
+        "https://rankoff.my/product/uscpap.my?lang=ms"
+      ],
+      "evidence": {
+        "count": 65,
+        "note": "只是靜態線索（script 數量與屬性），不是實際的載入時間量測。"
+      },
+      "recommendation": "為外部 <script> 標籤加上 defer 或 async 屬性，避免多個同步載入的 script 阻塞頁面渲染。是否適合加 defer/async 需視該 script 的執行順序需求而定，這裡不會自動修改（可能影響 JS 執行順序）。",
+      "validation": [
+        "用瀏覽器開發者工具的效能面板確認渲染阻塞情況是否改善"
+      ],
+      "owner": "engineer",
+      "sources": [
+        "web-vitals-general"
+      ]
+    }
+  ],
+  "top_findings": [
+    "SEO-SITEMAP_INVALID_XML-001",
+    "SEO-TITLE_DUPLICATE-001",
+    "SEO-HTTP_ERRORS-001",
+    "SEO-HREFLANG_INVALID_CODE-001",
+    "SEO-IMAGE_MISSING_DIMENSIONS_HINT-001",
+    "SEO-ROBOTS_NO_SITEMAP-001",
+    "SEO-BLOCKING_SCRIPTS_HINT-001"
+  ],
+  "coverage_notes": [
+    "Core Web Vitals、JavaScript 渲染差異比對、結構化資料驗證、Search Console/GA4 資料整合尚未實作（見 docs/roadmap.md v0.2.0）。"
+  ],
+  "scan_stats": {
+    "urls_crawled": 70,
+    "urls_skipped": 0,
+    "detected_stack": null,
+    "status_code_distribution": {
+      "2xx": 65,
+      "3xx": 0,
+      "4xx": 5,
+      "5xx": 0,
+      "0": 0
+    },
+    "hreflang_matrix": {
+      "https://rankoff.my/": {
+        "en": "https://rankoff.my/",
+        "zh-Hans": "https://rankoff.my/?lang=zh",
+        "x-default": "https://rankoff.my/",
+        "ms": "https://rankoff.my/?lang=ms"
+      },
+      "https://rankoff.my/?lang=ms": {
+        "en": "https://rankoff.my/",
+        "zh-Hans": "https://rankoff.my/?lang=zh",
+        "x-default": "https://rankoff.my/",
+        "ms": "https://rankoff.my/?lang=ms"
+      },
+      "https://rankoff.my/?lang=zh": {
+        "en": "https://rankoff.my/",
+        "zh-Hans": "https://rankoff.my/?lang=zh",
+        "x-default": "https://rankoff.my/",
+        "ms": "https://rankoff.my/?lang=ms"
+      },
+      "https://rankoff.my/categories": {
+        "en": "https://rankoff.my/categories",
+        "zh-Hans": "https://rankoff.my/categories?lang=zh",
+        "x-default": "https://rankoff.my/categories",
+        "ms": "https://rankoff.my/categories?lang=ms"
+      },
+      "https://rankoff.my/categories?lang=ms": {
+        "en": "https://rankoff.my/categories",
+        "zh-Hans": "https://rankoff.my/categories?lang=zh",
+        "x-default": "https://rankoff.my/categories",
+        "ms": "https://rankoff.my/categories?lang=ms"
+      },
+      "https://rankoff.my/categories?lang=zh": {
+        "en": "https://rankoff.my/categories",
+        "zh-Hans": "https://rankoff.my/categories?lang=zh",
+        "x-default": "https://rankoff.my/categories",
+        "ms": "https://rankoff.my/categories?lang=ms"
+      },
+      "https://rankoff.my/about": {
+        "en": "https://rankoff.my/about",
+        "zh-Hans": "https://rankoff.my/about?lang=zh",
+        "x-default": "https://rankoff.my/about",
+        "ms": "https://rankoff.my/about?lang=ms"
+      },
+      "https://rankoff.my/about?lang=ms": {
+        "en": "https://rankoff.my/about",
+        "zh-Hans": "https://rankoff.my/about?lang=zh",
+        "x-default": "https://rankoff.my/about",
+        "ms": "https://rankoff.my/about?lang=ms"
+      },
+      "https://rankoff.my/about?lang=zh": {
+        "en": "https://rankoff.my/about",
+        "zh-Hans": "https://rankoff.my/about?lang=zh",
+        "x-default": "https://rankoff.my/about",
+        "ms": "https://rankoff.my/about?lang=ms"
+      },
+      "https://rankoff.my/legal": {
+        "en": "https://rankoff.my/legal",
+        "ms": "https://rankoff.my/legal?lang=ms"
+      },
+      "https://rankoff.my/legal?lang=ms": {
+        "en": "https://rankoff.my/legal",
+        "ms": "https://rankoff.my/legal?lang=ms"
+      },
+      "https://rankoff.my/answers/pay-to-rank-leaderboard": {
+        "en": "https://rankoff.my/answers/pay-to-rank-leaderboard",
+        "ms": "https://rankoff.my/answers/pay-to-rank-leaderboard?lang=ms"
+      },
+      "https://rankoff.my/answers/pay-to-rank-leaderboard?lang=ms": {
+        "en": "https://rankoff.my/answers/pay-to-rank-leaderboard",
+        "ms": "https://rankoff.my/answers/pay-to-rank-leaderboard?lang=ms"
+      },
+      "https://rankoff.my/answers/how-rankoff-ranking-works": {
+        "en": "https://rankoff.my/answers/how-rankoff-ranking-works",
+        "ms": "https://rankoff.my/answers/how-rankoff-ranking-works?lang=ms"
+      },
+      "https://rankoff.my/answers/how-rankoff-ranking-works?lang=ms": {
+        "en": "https://rankoff.my/answers/how-rankoff-ranking-works",
+        "ms": "https://rankoff.my/answers/how-rankoff-ranking-works?lang=ms"
+      },
+      "https://rankoff.my/answers/sponsor-a-public-link": {
+        "en": "https://rankoff.my/answers/sponsor-a-public-link",
+        "ms": "https://rankoff.my/answers/sponsor-a-public-link?lang=ms"
+      },
+      "https://rankoff.my/answers/sponsor-a-public-link?lang=ms": {
+        "en": "https://rankoff.my/answers/sponsor-a-public-link",
+        "ms": "https://rankoff.my/answers/sponsor-a-public-link?lang=ms"
+      },
+      "https://rankoff.my/product/hypexauto.com": {
+        "en": "https://rankoff.my/product/hypexauto.com",
+        "zh-Hans": "https://rankoff.my/product/hypexauto.com?lang=zh",
+        "x-default": "https://rankoff.my/product/hypexauto.com",
+        "ms": "https://rankoff.my/product/hypexauto.com?lang=ms"
+      },
+      "https://rankoff.my/product/hypexauto.com?lang=zh": {
+        "en": "https://rankoff.my/product/hypexauto.com",
+        "zh-Hans": "https://rankoff.my/product/hypexauto.com?lang=zh",
+        "x-default": "https://rankoff.my/product/hypexauto.com",
+        "ms": "https://rankoff.my/product/hypexauto.com?lang=ms"
+      },
+      "https://rankoff.my/product/hypexauto.com?lang=ms": {
+        "en": "https://rankoff.my/product/hypexauto.com",
+        "zh-Hans": "https://rankoff.my/product/hypexauto.com?lang=zh",
+        "x-default": "https://rankoff.my/product/hypexauto.com",
+        "ms": "https://rankoff.my/product/hypexauto.com?lang=ms"
+      },
+      "https://rankoff.my/profile/instagram/resoneer_coaching": {
+        "en": "https://rankoff.my/profile/instagram/resoneer_coaching",
+        "zh-Hans": "https://rankoff.my/profile/instagram/resoneer_coaching?lang=zh",
+        "x-default": "https://rankoff.my/profile/instagram/resoneer_coaching",
+        "ms": "https://rankoff.my/profile/instagram/resoneer_coaching?lang=ms"
+      },
+      "https://rankoff.my/profile/instagram/resoneer_coaching?lang=zh": {
+        "en": "https://rankoff.my/profile/instagram/resoneer_coaching",
+        "zh-Hans": "https://rankoff.my/profile/instagram/resoneer_coaching?lang=zh",
+        "x-default": "https://rankoff.my/profile/instagram/resoneer_coaching",
+        "ms": "https://rankoff.my/profile/instagram/resoneer_coaching?lang=ms"
+      },
+      "https://rankoff.my/profile/instagram/resoneer_coaching?lang=ms": {
+        "en": "https://rankoff.my/profile/instagram/resoneer_coaching",
+        "zh-Hans": "https://rankoff.my/profile/instagram/resoneer_coaching?lang=zh",
+        "x-default": "https://rankoff.my/profile/instagram/resoneer_coaching",
+        "ms": "https://rankoff.my/profile/instagram/resoneer_coaching?lang=ms"
+      },
+      "https://rankoff.my/profile/instagram/express_queenlash": {
+        "en": "https://rankoff.my/profile/instagram/express_queenlash",
+        "zh-Hans": "https://rankoff.my/profile/instagram/express_queenlash?lang=zh",
+        "x-default": "https://rankoff.my/profile/instagram/express_queenlash",
+        "ms": "https://rankoff.my/profile/instagram/express_queenlash?lang=ms"
+      },
+      "https://rankoff.my/profile/instagram/express_queenlash?lang=zh": {
+        "en": "https://rankoff.my/profile/instagram/express_queenlash",
+        "zh-Hans": "https://rankoff.my/profile/instagram/express_queenlash?lang=zh",
+        "x-default": "https://rankoff.my/profile/instagram/express_queenlash",
+        "ms": "https://rankoff.my/profile/instagram/express_queenlash?lang=ms"
+      },
+      "https://rankoff.my/profile/instagram/express_queenlash?lang=ms": {
+        "en": "https://rankoff.my/profile/instagram/express_queenlash",
+        "zh-Hans": "https://rankoff.my/profile/instagram/express_queenlash?lang=zh",
+        "x-default": "https://rankoff.my/profile/instagram/express_queenlash",
+        "ms": "https://rankoff.my/profile/instagram/express_queenlash?lang=ms"
+      },
+      "https://rankoff.my/product/rakanjayahardware.com": {
+        "en": "https://rankoff.my/product/rakanjayahardware.com",
+        "zh-Hans": "https://rankoff.my/product/rakanjayahardware.com?lang=zh",
+        "x-default": "https://rankoff.my/product/rakanjayahardware.com",
+        "ms": "https://rankoff.my/product/rakanjayahardware.com?lang=ms"
+      },
+      "https://rankoff.my/product/rakanjayahardware.com?lang=zh": {
+        "en": "https://rankoff.my/product/rakanjayahardware.com",
+        "zh-Hans": "https://rankoff.my/product/rakanjayahardware.com?lang=zh",
+        "x-default": "https://rankoff.my/product/rakanjayahardware.com",
+        "ms": "https://rankoff.my/product/rakanjayahardware.com?lang=ms"
+      },
+      "https://rankoff.my/product/rakanjayahardware.com?lang=ms": {
+        "en": "https://rankoff.my/product/rakanjayahardware.com",
+        "zh-Hans": "https://rankoff.my/product/rakanjayahardware.com?lang=zh",
+        "x-default": "https://rankoff.my/product/rakanjayahardware.com",
+        "ms": "https://rankoff.my/product/rakanjayahardware.com?lang=ms"
+      },
+      "https://rankoff.my/profile/instagram/mumeiyan.hq": {
+        "en": "https://rankoff.my/profile/instagram/mumeiyan.hq",
+        "zh-Hans": "https://rankoff.my/profile/instagram/mumeiyan.hq?lang=zh",
+        "x-default": "https://rankoff.my/profile/instagram/mumeiyan.hq",
+        "ms": "https://rankoff.my/profile/instagram/mumeiyan.hq?lang=ms"
+      },
+      "https://rankoff.my/profile/instagram/mumeiyan.hq?lang=zh": {
+        "en": "https://rankoff.my/profile/instagram/mumeiyan.hq",
+        "zh-Hans": "https://rankoff.my/profile/instagram/mumeiyan.hq?lang=zh",
+        "x-default": "https://rankoff.my/profile/instagram/mumeiyan.hq",
+        "ms": "https://rankoff.my/profile/instagram/mumeiyan.hq?lang=ms"
+      },
+      "https://rankoff.my/profile/instagram/mumeiyan.hq?lang=ms": {
+        "en": "https://rankoff.my/profile/instagram/mumeiyan.hq",
+        "zh-Hans": "https://rankoff.my/profile/instagram/mumeiyan.hq?lang=zh",
+        "x-default": "https://rankoff.my/profile/instagram/mumeiyan.hq",
+        "ms": "https://rankoff.my/profile/instagram/mumeiyan.hq?lang=ms"
+      },
+      "https://rankoff.my/profile/instagram/ihospitaljb": {
+        "en": "https://rankoff.my/profile/instagram/ihospitaljb",
+        "zh-Hans": "https://rankoff.my/profile/instagram/ihospitaljb?lang=zh",
+        "x-default": "https://rankoff.my/profile/instagram/ihospitaljb",
+        "ms": "https://rankoff.my/profile/instagram/ihospitaljb?lang=ms"
+      },
+      "https://rankoff.my/profile/instagram/ihospitaljb?lang=zh": {
+        "en": "https://rankoff.my/profile/instagram/ihospitaljb",
+        "zh-Hans": "https://rankoff.my/profile/instagram/ihospitaljb?lang=zh",
+        "x-default": "https://rankoff.my/profile/instagram/ihospitaljb",
+        "ms": "https://rankoff.my/profile/instagram/ihospitaljb?lang=ms"
+      },
+      "https://rankoff.my/profile/instagram/ihospitaljb?lang=ms": {
+        "en": "https://rankoff.my/profile/instagram/ihospitaljb",
+        "zh-Hans": "https://rankoff.my/profile/instagram/ihospitaljb?lang=zh",
+        "x-default": "https://rankoff.my/profile/instagram/ihospitaljb",
+        "ms": "https://rankoff.my/profile/instagram/ihospitaljb?lang=ms"
+      },
+      "https://rankoff.my/profile/instagram/glowmebykimisoi": {
+        "en": "https://rankoff.my/profile/instagram/glowmebykimisoi",
+        "zh-Hans": "https://rankoff.my/profile/instagram/glowmebykimisoi?lang=zh",
+        "x-default": "https://rankoff.my/profile/instagram/glowmebykimisoi",
+        "ms": "https://rankoff.my/profile/instagram/glowmebykimisoi?lang=ms"
+      },
+      "https://rankoff.my/profile/instagram/glowmebykimisoi?lang=zh": {
+        "en": "https://rankoff.my/profile/instagram/glowmebykimisoi",
+        "zh-Hans": "https://rankoff.my/profile/instagram/glowmebykimisoi?lang=zh",
+        "x-default": "https://rankoff.my/profile/instagram/glowmebykimisoi",
+        "ms": "https://rankoff.my/profile/instagram/glowmebykimisoi?lang=ms"
+      },
+      "https://rankoff.my/profile/instagram/glowmebykimisoi?lang=ms": {
+        "en": "https://rankoff.my/profile/instagram/glowmebykimisoi",
+        "zh-Hans": "https://rankoff.my/profile/instagram/glowmebykimisoi?lang=zh",
+        "x-default": "https://rankoff.my/profile/instagram/glowmebykimisoi",
+        "ms": "https://rankoff.my/profile/instagram/glowmebykimisoi?lang=ms"
+      },
+      "https://rankoff.my/profile/facebook/moonsoul.fb.official": {
+        "en": "https://rankoff.my/profile/facebook/moonsoul.fb.official",
+        "zh-Hans": "https://rankoff.my/profile/facebook/moonsoul.fb.official?lang=zh",
+        "x-default": "https://rankoff.my/profile/facebook/moonsoul.fb.official",
+        "ms": "https://rankoff.my/profile/facebook/moonsoul.fb.official?lang=ms"
+      },
+      "https://rankoff.my/profile/facebook/moonsoul.fb.official?lang=zh": {
+        "en": "https://rankoff.my/profile/facebook/moonsoul.fb.official",
+        "zh-Hans": "https://rankoff.my/profile/facebook/moonsoul.fb.official?lang=zh",
+        "x-default": "https://rankoff.my/profile/facebook/moonsoul.fb.official",
+        "ms": "https://rankoff.my/profile/facebook/moonsoul.fb.official?lang=ms"
+      },
+      "https://rankoff.my/profile/facebook/moonsoul.fb.official?lang=ms": {
+        "en": "https://rankoff.my/profile/facebook/moonsoul.fb.official",
+        "zh-Hans": "https://rankoff.my/profile/facebook/moonsoul.fb.official?lang=zh",
+        "x-default": "https://rankoff.my/profile/facebook/moonsoul.fb.official",
+        "ms": "https://rankoff.my/profile/facebook/moonsoul.fb.official?lang=ms"
+      },
+      "https://rankoff.my/product/brandupdesignmarketing.com": {
+        "en": "https://rankoff.my/product/brandupdesignmarketing.com",
+        "zh-Hans": "https://rankoff.my/product/brandupdesignmarketing.com?lang=zh",
+        "x-default": "https://rankoff.my/product/brandupdesignmarketing.com",
+        "ms": "https://rankoff.my/product/brandupdesignmarketing.com?lang=ms"
+      },
+      "https://rankoff.my/product/brandupdesignmarketing.com?lang=zh": {
+        "en": "https://rankoff.my/product/brandupdesignmarketing.com",
+        "zh-Hans": "https://rankoff.my/product/brandupdesignmarketing.com?lang=zh",
+        "x-default": "https://rankoff.my/product/brandupdesignmarketing.com",
+        "ms": "https://rankoff.my/product/brandupdesignmarketing.com?lang=ms"
+      },
+      "https://rankoff.my/product/brandupdesignmarketing.com?lang=ms": {
+        "en": "https://rankoff.my/product/brandupdesignmarketing.com",
+        "zh-Hans": "https://rankoff.my/product/brandupdesignmarketing.com?lang=zh",
+        "x-default": "https://rankoff.my/product/brandupdesignmarketing.com",
+        "ms": "https://rankoff.my/product/brandupdesignmarketing.com?lang=ms"
+      },
+      "https://rankoff.my/product/orientalwellness.my": {
+        "en": "https://rankoff.my/product/orientalwellness.my",
+        "zh-Hans": "https://rankoff.my/product/orientalwellness.my?lang=zh",
+        "x-default": "https://rankoff.my/product/orientalwellness.my",
+        "ms": "https://rankoff.my/product/orientalwellness.my?lang=ms"
+      },
+      "https://rankoff.my/product/orientalwellness.my?lang=zh": {
+        "en": "https://rankoff.my/product/orientalwellness.my",
+        "zh-Hans": "https://rankoff.my/product/orientalwellness.my?lang=zh",
+        "x-default": "https://rankoff.my/product/orientalwellness.my",
+        "ms": "https://rankoff.my/product/orientalwellness.my?lang=ms"
+      },
+      "https://rankoff.my/product/orientalwellness.my?lang=ms": {
+        "en": "https://rankoff.my/product/orientalwellness.my",
+        "zh-Hans": "https://rankoff.my/product/orientalwellness.my?lang=zh",
+        "x-default": "https://rankoff.my/product/orientalwellness.my",
+        "ms": "https://rankoff.my/product/orientalwellness.my?lang=ms"
+      },
+      "https://rankoff.my/product/uscpap.my": {
+        "en": "https://rankoff.my/product/uscpap.my",
+        "zh-Hans": "https://rankoff.my/product/uscpap.my?lang=zh",
+        "x-default": "https://rankoff.my/product/uscpap.my",
+        "ms": "https://rankoff.my/product/uscpap.my?lang=ms"
+      },
+      "https://rankoff.my/product/uscpap.my?lang=zh": {
+        "en": "https://rankoff.my/product/uscpap.my",
+        "zh-Hans": "https://rankoff.my/product/uscpap.my?lang=zh",
+        "x-default": "https://rankoff.my/product/uscpap.my",
+        "ms": "https://rankoff.my/product/uscpap.my?lang=ms"
+      },
+      "https://rankoff.my/product/uscpap.my?lang=ms": {
+        "en": "https://rankoff.my/product/uscpap.my",
+        "zh-Hans": "https://rankoff.my/product/uscpap.my?lang=zh",
+        "x-default": "https://rankoff.my/product/uscpap.my",
+        "ms": "https://rankoff.my/product/uscpap.my?lang=ms"
+      },
+      "https://rankoff.my/profile/instagram/_umidesign_": {
+        "en": "https://rankoff.my/profile/instagram/_umidesign_",
+        "zh-Hans": "https://rankoff.my/profile/instagram/_umidesign_?lang=zh",
+        "x-default": "https://rankoff.my/profile/instagram/_umidesign_",
+        "ms": "https://rankoff.my/profile/instagram/_umidesign_?lang=ms"
+      },
+      "https://rankoff.my/profile/instagram/_umidesign_?lang=zh": {
+        "en": "https://rankoff.my/profile/instagram/_umidesign_",
+        "zh-Hans": "https://rankoff.my/profile/instagram/_umidesign_?lang=zh",
+        "x-default": "https://rankoff.my/profile/instagram/_umidesign_",
+        "ms": "https://rankoff.my/profile/instagram/_umidesign_?lang=ms"
+      },
+      "https://rankoff.my/profile/instagram/_umidesign_?lang=ms": {
+        "en": "https://rankoff.my/profile/instagram/_umidesign_",
+        "zh-Hans": "https://rankoff.my/profile/instagram/_umidesign_?lang=zh",
+        "x-default": "https://rankoff.my/profile/instagram/_umidesign_",
+        "ms": "https://rankoff.my/profile/instagram/_umidesign_?lang=ms"
+      },
+      "https://rankoff.my/?period=today#board": {
+        "en": "https://rankoff.my/",
+        "zh-Hans": "https://rankoff.my/?lang=zh",
+        "x-default": "https://rankoff.my/",
+        "ms": "https://rankoff.my/?lang=ms"
+      },
+      "https://rankoff.my/legal#rules": {
+        "en": "https://rankoff.my/legal",
+        "ms": "https://rankoff.my/legal?lang=ms"
+      },
+      "https://rankoff.my/legal#terms": {
+        "en": "https://rankoff.my/legal",
+        "ms": "https://rankoff.my/legal?lang=ms"
+      },
+      "https://rankoff.my/legal#privacy": {
+        "en": "https://rankoff.my/legal",
+        "ms": "https://rankoff.my/legal?lang=ms"
+      },
+      "https://rankoff.my/legal#payments": {
+        "en": "https://rankoff.my/legal",
+        "ms": "https://rankoff.my/legal?lang=ms"
+      },
+      "https://rankoff.my/?lang=ms#board": {
+        "en": "https://rankoff.my/",
+        "zh-Hans": "https://rankoff.my/?lang=zh",
+        "x-default": "https://rankoff.my/",
+        "ms": "https://rankoff.my/?lang=ms"
+      },
+      "https://rankoff.my/?period=today&lang=ms#board": {
+        "en": "https://rankoff.my/",
+        "zh-Hans": "https://rankoff.my/?lang=zh",
+        "x-default": "https://rankoff.my/",
+        "ms": "https://rankoff.my/?lang=ms"
+      },
+      "https://rankoff.my/legal?lang=ms#rules": {
+        "en": "https://rankoff.my/legal",
+        "ms": "https://rankoff.my/legal?lang=ms"
+      },
+      "https://rankoff.my/legal?lang=ms#terms": {
+        "en": "https://rankoff.my/legal",
+        "ms": "https://rankoff.my/legal?lang=ms"
+      },
+      "https://rankoff.my/legal?lang=ms#privacy": {
+        "en": "https://rankoff.my/legal",
+        "ms": "https://rankoff.my/legal?lang=ms"
+      },
+      "https://rankoff.my/legal?lang=ms#payments": {
+        "en": "https://rankoff.my/legal",
+        "ms": "https://rankoff.my/legal?lang=ms"
+      },
+      "https://rankoff.my/?lang=zh&period=today#board": {
+        "en": "https://rankoff.my/",
+        "zh-Hans": "https://rankoff.my/?lang=zh",
+        "x-default": "https://rankoff.my/",
+        "ms": "https://rankoff.my/?lang=ms"
+      }
+    }
+  }
+}

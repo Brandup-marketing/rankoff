@@ -59,3 +59,23 @@ test("sitemap uses the later of the payment and actual editorial review dates", 
   assert.match(productEntries([entry]), /<lastmod>2026-09-12<\/lastmod>/);
   assert.match(productEntries([{ ...entry, bid: { settled_at: "2026-09-15T01:00:00Z" } }]), /<lastmod>2026-09-15<\/lastmod>/);
 });
+
+test("sourced social business details survive hydration and do not invent opening days", () => {
+  const identity = 'instagram:express_queenlash';
+  const facts = businessFactsFor(identity);
+  for (const language of ['en', 'zh']) {
+    const html = render({ language, businessFacts: facts, entry: { ...entry, listing: { ...entry.listing, hostname: identity, title: 'Express Queen Lash', url: facts.source } } });
+    const data = schema(html);
+    assert.equal(data['@type'], 'ProfilePage');
+    assert.equal(data.mainEntity['@type'], 'Organization');
+    assert.equal(data.mainEntity.location.name, 'The Strand KD');
+    assert.equal(data.citation, facts.source);
+    assert.ok(html.includes(facts.hoursText[language]));
+    assert.ok(html.includes(facts.services[language][0]));
+    assert.ok(!JSON.stringify(data).includes('openingHours'), 'the source does not specify days');
+    assert.ok(!JSON.stringify(data).includes('aggregateRating'));
+    const model = JSON.parse(html.match(/id="listing-hydration" type="application\/json">(.*?)<\/script>/s)[1]);
+    assert.equal(model.descriptionEn, facts.summary.en);
+    assert.equal(model.descriptionZh, facts.summary.zh);
+  }
+});
