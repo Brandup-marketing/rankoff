@@ -2,6 +2,8 @@
 .impeccable/critique/.index-html-current.md
 .env
 .env.*
+.dev.vars
+.dev.vars.*
 node_modules/
 dist/
 .wrangler/

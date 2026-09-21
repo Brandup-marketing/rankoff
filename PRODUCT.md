@@ -12,7 +12,7 @@ web
 
 Rankoff serves people discovering businesses, products and services across countries, and businesses buying clearly labelled sponsored visibility. The first acquisition phase focuses on Malaysia and Singapore, with digital and cross-border providers such as software, design, marketing and online education as the priority. Local businesses remain welcome, with sourced location and service-area information to help visitors judge relevance. This is an acquisition focus, not a claim of existing international demand or coverage.
 
-Production remains MYR, from RM5, until an explicitly authorized USD release completes its payment and ranking checks. The approved development target is USD from US$2; preparing it does not change the live price.
+Production remains MYR, from RM5, until an explicitly authorized USD release completes its payment and ranking checks. The approved development target is USD from US$100; preparing it does not change the live price.
 
 ## Product Purpose
 
@@ -24,7 +24,7 @@ Discover businesses, products and services. Claim a visible sponsored position, 
 
 The 20 September scope decision keeps the original global leaderboard and industry controls. Do not add country filters or location labels to ranking cards in this release. Preserve original merchant descriptions, logo retrieval, ranking order, click definitions and accumulated traffic. Source-backed address and service facts remain on existing merchant pages. Country, service area and remote availability are different facts; billing country, language, IP and domain do not establish any of them. Country filtering is deferred until there is enough reliable data and a demonstrated visitor need.
 
-The current development target is a US$2 minimum for both entry and top-ups, a US$2 suggested ranking increment, and US$1 amount-input steps above the minimum. Live prices and currency must come from the board, including server-rendered text and payment review. Preserve original MYR payments and receipts; carry their ranking value forward using one sourced, dated and fixed MYR-to-USD conversion rate, reconciled per listing before release. Never sum original MYR and USD payment amounts as if they were one currency. Do not copy fixture exchange rates into production. Real USD product verification, conversion reconciliation and the authorized production cutover remain release work; historical handoff instructions are context, not current requirements.
+The current development target is a US$100 minimum for both entry and top-ups, a US$100 suggested ranking increment, and US$1 amount-input steps above the minimum. Live prices and currency must come from the board, including server-rendered text and payment review. Preserve original MYR payments and receipts; carry their ranking value forward using one sourced, dated and fixed MYR-to-USD conversion rate, reconciled per listing before release. Never sum original MYR and USD payment amounts as if they were one currency. Do not copy fixture exchange rates into production. Real USD product verification, conversion reconciliation and the authorized production cutover remain release work; historical handoff instructions are context, not current requirements.
 
 ## Brand Personality
 

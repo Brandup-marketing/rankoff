@@ -233,3 +233,36 @@ test('USD cents and literal dollar signs survive SSR, hydration, and Chinese loc
   assert.doesNotMatch(html, /Earlier MYR payments count toward USD equivalent totals|data-currency-note/);
   assert.match(currencyNotice(rates, 'zh'), /等值排名/);
 });
+
+
+test('US$100 release floor validates first payments and top-ups and settles signed USD events once', async (t) => {
+  const db = testDatabase(); seedListing(db); seedConversion(db); seedPayment(db, { id: 'legacy-hundred' });
+  db.sqlite.exec("UPDATE boards SET currency = 'USD', min_increment_minor = 10000, checkout_enabled = 1 WHERE id = 'board_global'");
+  const releaseProduct = { ...product, price: { ...product.price, price: 10000 } };
+  let calls = 0;
+  t.mock.method(globalThis, 'fetch', async (url, options) => {
+    calls++;
+    if (url.includes('/products/')) return Response.json(releaseProduct);
+    const body = JSON.parse(options.body);
+    assert.equal(body.billing_currency, 'USD');
+    assert.ok(body.product_cart[0].amount >= 10000);
+    assert.equal(body.feature_flags.allow_currency_selection, false);
+    return Response.json({ session_id: `hundred-${calls}`, checkout_url: 'https://checkout.example.com/usd100' });
+  });
+  for (const amount of [200, 9900, 9999]) await assert.rejects(
+    checkout({ data: {}, env: envFor(db), request: paymentRequest(amount, 'USD', `reject-${amount}`) }),
+    { code: 'bid_too_low', details: { minimum_amount_minor: 10000 } });
+  assert.equal(calls, 0);
+  const created = await (await checkout({ data: {}, env: envFor(db), request: paymentRequest(10000, 'USD', 'hundred-first') })).json();
+  const replay = await (await checkout({ data: {}, env: envFor(db), request: paymentRequest(10000, 'USD', 'hundred-first') })).json();
+  assert.equal(created.bid.id, replay.bid.id);
+  await sendEvent(db, created.bid.id, 'USD', 10000);
+  await sendEvent(db, created.bid.id, 'USD', 10000);
+  assert.equal((await readBoard(db)).rankings[0].bid.amount_minor, 10125);
+  await assert.rejects(checkout({ data: {}, env: envFor(db), request: paymentRequest(9900, 'USD', 'hundred-topup-low') }), { code: 'bid_too_low' });
+  const topup = await (await checkout({ data: {}, env: envFor(db), request: paymentRequest(10100, 'USD', 'hundred-topup') })).json();
+  await sendEvent(db, topup.bid.id, 'USD', 10100);
+  assert.equal((await readBoard(db)).rankings[0].bid.amount_minor, 20225);
+  assert.equal(db.sqlite.prepare("SELECT amount_minor FROM bids WHERE id='legacy-hundred'").get().amount_minor, 500);
+  db.sqlite.close();
+});
