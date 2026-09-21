@@ -1,4 +1,3 @@
-import { currencyNotice } from "../../currency.js";
 import { businessSubject, renderBusinessProfile } from "./business-profile.js";
 // Server-rendered listing pages. The board decides the numbers; this file only
 // formats them into the shell that /listing already ships, so a crawler, a
@@ -11,7 +10,7 @@ const HTML_ESCAPES = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'
 
 const PRODUCT_COPY = Object.freeze({
   en: Object.freeze({
-    skipListing: "Skip to listing details", categories: "Categories", about: "About", back: "← Back to leaderboard",
+    skipListing: "Skip to listing details", categories: "Industries", about: "About", back: "← Back to leaderboard",
     loading: "Loading ranking details…", notFoundTitle: "Listing not found", notFoundCopy: "This listing may have moved or is no longer on the public board.", returnBoard: "Return to the board",
     sponsored: "Sponsored", share: "Share rank", evidence: "Public ranking record", allTimeBid: "All-time total", past24: "Past 24h", past24Bid: "Past 24h total",
     board: "Board", rule: "Highest total takes #1", claimNumberOne: "Claim #1 for", startClaim: "Claim this rank", footerParent: "A Brandup Marketing product",
@@ -28,7 +27,7 @@ const PRODUCT_COPY = Object.freeze({
     verifiedClicks: "Tracked clicks",
   }),
   zh: Object.freeze({
-    skipListing: "跳至条目详情", categories: "分类", about: "关于", back: "← 返回榜单",
+    skipListing: "跳至条目详情", categories: "行业", about: "关于", back: "← 返回榜单",
     loading: "正在加载排名信息…", notFoundTitle: "找不到此条目", notFoundCopy: "此条目可能已移动，或已不在公开榜单中。", returnBoard: "返回榜单",
     sponsored: "赞助", share: "分享排名", evidence: "公开排名记录", allTimeBid: "累计付款", past24: "近 24 小时", past24Bid: "近 24 小时付款",
     board: "榜单", rule: "累计付款最高者第 1 名", claimNumberOne: "拿下第 1 名，只需", startClaim: "拿下此排名", footerParent: "Brandup Marketing 旗下产品",
@@ -295,7 +294,7 @@ export function localizeProductShell(shell, language = "en") {
   html = html.replace(/aria-label="RANKOFF home"/g, 'aria-label="RANKOFF 首页"');
   html = html.replace(/alt="RANKOFF — public sponsored leaderboard"/g, 'alt="RANKOFF — 竞价登上第 1 名"');
   html = html.replace(/aria-label="Main navigation"/g, 'aria-label="主导航"');
-  html = html.replace(/aria-label="Search businesses and markets"/g, 'aria-label="搜索商家和市场"');
+  html = html.replace(/aria-label="Search businesses and industries"/g, 'aria-label="搜索商家和行业"');
   html = html.replace(/(<button class="language-toggle"[^>]*>)[\s\S]*?(<\/button>)/, "$1EN$2");
   html = html.replace(/(<button class="theme-toggle"[^>]*aria-label=")[^"]*("[^>]*>)[\s\S]*?(<\/button>)/, "$1切换至深色主题$2深色$3");
   html = html.replace(/href="\/categories"/g, 'href="/categories?lang=zh"');
@@ -308,8 +307,6 @@ export function localizeProductShell(shell, language = "en") {
 
 export function renderProductPage(shell, view) {
   const title = escapeHtml(view.pageTitle);
-  const notice = currencyNotice(view.currencyConversion, view.language);
-  if (notice) shell = shell.replace('<p class="currency-note" data-currency-note hidden></p>', `<p class="currency-note" data-currency-note>${escapeHtml(notice)}</p>`);
   const description = escapeHtml(view.metaDescription);
   const canonical = escapeHtml(view.canonical);
   const canonicalBase = escapeHtml(view.canonicalBase || view.canonical);

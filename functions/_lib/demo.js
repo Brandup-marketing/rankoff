@@ -100,7 +100,7 @@ export function demoBoard({ category = "all", period = "all", limit = 50, page =
       slug: "global",
       name: "Rankoff Global",
       currency: "USD",
-      min_increment_minor: 100,
+      min_increment_minor: 200,
     },
     snapshot_id: `demo-${period}`,
     generated_at: new Date().toISOString(),
@@ -113,7 +113,7 @@ export function demoBoard({ category = "all", period = "all", limit = 50, page =
       has_previous: page > 1,
       has_next: offset + rows.length < matchingRows.length,
     },
-    next_bid_minor: topAmount + 100,
+    next_bid_minor: Math.ceil((topAmount + 200) / 100) * 100,
   };
 }
 

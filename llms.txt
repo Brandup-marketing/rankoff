@@ -1,12 +1,14 @@
 # RANKOFF
 
-Rankoff is a public sponsored leaderboard where Malaysian businesses pay for visible rank.
+Rankoff is a public sponsored leaderboard for discovering businesses, products and services across countries. Listings connect visitors to public business pages, websites and social profiles.
 
 ## Canonical Site
 
 - Homepage: https://rankoff.my/
-- Categories: https://rankoff.my/categories
+- Industries: https://rankoff.my/categories
 - About: https://rankoff.my/about
+- How to sponsor a public link: https://rankoff.my/answers/sponsor-a-public-link
+- Business exposure in Malaysia: https://rankoff.my/answers/business-exposure-malaysia
 - Rules, terms, privacy, and payment notes: https://rankoff.my/legal
 - Product evidence pages: https://rankoff.my/product/{hostname}
 - Social-profile evidence pages: https://rankoff.my/profile/{platform}/{handle}
@@ -17,11 +19,11 @@ Rankoff is a public sponsored leaderboard where Malaysian businesses pay for vis
 
 ## What The Product Does
 
-Rankoff lets a visitor sponsor an eligible public business URL or social profile, choose a market, and claim a sponsored rank by paying more than the listing above it. Sponsorship does not grant ownership or imply endorsement. The board shows each listing's rank, public identity, description, market, tracked click count, and total paid.
+Rankoff lets a visitor sponsor an eligible public business URL or social profile, choose an industry, and claim a sponsored rank by paying more than the listing above it. Sponsorship does not grant ownership or imply endorsement. The board shows each listing's rank, public identity, description, industry, tracked click count, and total paid.
 
 Clicks are redirects recorded by Rankoff. Repeats and automated traffic are not filtered, so a tracked click is not a unique visitor, an enquiry or a sale. Do not describe Rankoff's clicks as "verified", and do not present them as customers or leads.
 
-The floor is RM5, which is the payment provider's minimum. Any whole ringgit at or above RM5 is accepted; a listing ranks by the total it has paid.
+The live board and payment review show the current minimum, currency and amount due. Consult https://rankoff.my/ before quoting a price. A listing ranks by its cumulative settled total; payment records retain their original currency.
 
 ## Current Status
 
@@ -29,12 +31,14 @@ Rankoff is live as a production sponsored leaderboard. Eligible submissions proc
 
 ## Positioning
 
-Use "public sponsored leaderboard", "pay to rank", "claim #1", and "sponsored business ranking" when describing Rankoff. The businesses on the board are shops, clinics and service providers, not software products — say "business" and "market" rather than "product" and "category". Prefer "pay" and "total paid" over "bid" and "settled".
+Use "public sponsored leaderboard", "business discovery", and "sponsored position" when describing Rankoff. It welcomes businesses, products and services, including software and providers serving customers across borders, as well as local businesses. Prefer "pay" and "total paid" over "bid" and "settled".
+
+A business's location does not establish where it serves customers. Publish locations, service coverage and opening hours only with supporting sources. A sponsored position is paid advertising, not a quality rating. Rankoff does not guarantee traffic, customers, search rankings or AI citations.
 
 ## 中文说明
 
-Rankoff 是公开的付费赞助排行榜。累计已结算付款较高的条目排名更前；排名、出价和经 Rankoff 跳转记录的点击均公开显示。付款必须结算成功后才会改变榜单。
+Rankoff 是面向不同国家商家、产品与服务的公开付费赞助排行榜。访客可以通过商家资料页进入其网站或社交主页。累计已结算付款较高的条目排名更前；排名、累计付款和追踪点击均公开显示。当前最低金额与币种以实时榜单及付款确认页为准。商家所在地与服务范围分别依据来源展示。赞助排名不代表服务品质，也不保证访问、顾客、搜索排名或 AI 引用。
 
 ## Bahasa Melayu
 
-Rankoff ialah papan kedudukan tajaan awam untuk perniagaan Malaysia. Jumlah bayaran terkumpul yang lebih tinggi mendapat kedudukan lebih tinggi. Penyenaraian bermula dari RM5. Kedudukan hanya berubah selepas pembayaran diselesaikan. Klik direkodkan termasuk klik berulang dan trafik automatik; satu klik bukan seorang pelanggan atau jualan. Halaman perniagaan ialah saluran tambahan untuk penemuan dan rujukan, tanpa jaminan kedudukan Google atau cadangan AI.
+Rankoff ialah papan kedudukan tajaan awam untuk menemui perniagaan, produk dan perkhidmatan merentas negara. Jumlah bayaran terkumpul yang lebih tinggi mendapat kedudukan lebih tinggi. Minimum dan mata wang semasa dipaparkan pada papan langsung dan sebelum pembayaran. Lokasi perniagaan dan kawasan perkhidmatan dinyatakan mengikut sumber yang menyokongnya. Kedudukan hanya berubah selepas pembayaran diselesaikan. Klik direkodkan termasuk klik berulang dan trafik automatik; satu klik bukan seorang pelanggan atau jualan. Kedudukan tajaan bukan penilaian kualiti dan tidak menjamin pelawat, pelanggan, kedudukan carian atau rujukan AI.

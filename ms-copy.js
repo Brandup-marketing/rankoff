@@ -1,18 +1,18 @@
-import { MS_LEGAL } from './ms-legal.js?v=2';
-import { MS_ANSWERS } from './ms-answers.js';
+import { MS_LEGAL } from './ms-legal.js?v=8';
+import { MS_ANSWERS } from './ms-answers.js?v=3';
 // Shared Bahasa Melayu UI copy. Customer-authored text is not translated.
 export const MS_COPY = Object.freeze({...MS_LEGAL, ...MS_ANSWERS,
-  'Pay-to-Rank Sponsored Leaderboards | 马来西亚品牌排行榜': 'Papan Kedudukan Tajaan Berbayar | RANKOFF',
+  'Pay-to-Rank Sponsored Leaderboards | 公开赞助排行榜': 'Papan Kedudukan Tajaan Berbayar | RANKOFF',
   'RANKOFF | Categories': 'RANKOFF | Kategori',
   'RANKOFF | Rules, Terms & Privacy': 'RANKOFF | Peraturan, Terma & Privasi',
   'Sponsored listing | RANKOFF': 'Penyenaraian tajaan | RANKOFF',
-  'What Is a Pay-to-Rank Leaderboard? | 马来西亚品牌排行榜': 'Apakah Papan Kedudukan Berbayar? | RANKOFF',
+  'What Is a Pay-to-Rank Leaderboard? | 公开赞助排行榜': 'Apakah Papan Kedudukan Berbayar? | RANKOFF',
   'How Rankoff Ranking Works | Rankoff 排名规则': 'Cara Kedudukan Rankoff Ditentukan | RANKOFF',
   'Sponsor a Website or Profile | 网站付费排名': 'Taja Laman Web atau Profil | RANKOFF',
   ...Object.fromEntries(`
-A factual guide to Rankoff sponsored positions for startups and businesses.|Panduan tentang kedudukan tajaan Rankoff untuk syarikat pemula dan perniagaan.
+A factual guide to Rankoff sponsored positions for businesses, products and services.|Panduan tentang kedudukan tajaan Rankoff untuk perniagaan, produk dan perkhidmatan.
 See how settled payments set each market’s order, accumulate on the public link and appear with rank and tracked clicks.|Ketahui cara pembayaran yang selesai menentukan kedudukan setiap industri, terkumpul pada pautan awam dan dipaparkan bersama kedudukan serta klik direkodkan.
-Choose a public link and market, review the published advertising price, and pay from RM5.|Pilih pautan awam dan industri, semak harga iklan yang diumumkan dan bayar dari RM5.
+Give your business, product or service a public sponsored listing. Review the current currency, price and position before payment.|Sediakan penyenaraian tajaan awam untuk perniagaan, produk atau perkhidmatan anda. Semak mata wang, harga dan kedudukan semasa sebelum pembayaran.
 About RANKOFF|Tentang RANKOFF
 Your listing goes live at this rank when payment confirms.|Penyenaraian anda dipaparkan pada kedudukan ini selepas pembayaran disahkan.
 Someone else can claim a higher one.|Orang lain boleh mendapatkan kedudukan lebih tinggi.
@@ -23,9 +23,8 @@ RANKOFF rules, terms, privacy policy, and payment information.|Peraturan, terma,
 Rules, terms, privacy, and payment information for the Rankoff sponsored leaderboard.|Peraturan, terma, privasi dan maklumat pembayaran untuk papan kedudukan tajaan Rankoff.
 Every category has its own public sponsored leaderboard.|Setiap kategori mempunyai papan kedudukan tajaan awam sendiri.
 Explore Rankoff categories and see which products lead each sponsored market.|Terokai kategori Rankoff dan lihat perniagaan yang mendahului setiap industri tajaan.
-How Rankoff works: Malaysian businesses pay to hold a spot on a public board, and every total and click stays visible.|Cara Rankoff berfungsi: perniagaan Malaysia membayar untuk mendapat tempat pada papan awam, dengan jumlah dan klik dipaparkan secara terbuka.
-How Rankoff works: Malaysian businesses pay to hold a rank, and every payment is public.|Cara Rankoff berfungsi: perniagaan Malaysia membayar untuk mendapat kedudukan, dan setiap pembayaran dipaparkan secara terbuka.
-Rankoff is a public sponsored leaderboard where Malaysian businesses pay for visible rank. Rank, total paid and tracked clicks are public.|Rankoff ialah papan kedudukan tajaan awam untuk perniagaan Malaysia. Kedudukan, jumlah dibayar dan klik direkodkan dipaparkan secara terbuka.
+Discover businesses, products and services on Rankoff. Public pages, transparent sponsored positions and tracked outbound clicks.|Temui perniagaan, produk dan perkhidmatan di Rankoff. Halaman awam, kedudukan tajaan yang telus dan klik keluar yang direkodkan.
+Rankoff is a public sponsored leaderboard for businesses, products and services. Rank, total paid and tracked clicks are public.|Rankoff ialah papan kedudukan tajaan awam untuk perniagaan, produk dan perkhidmatan. Kedudukan, jumlah dibayar dan klik direkodkan dipaparkan secara terbuka.
 Public sponsored leaderboard, ordered by the total each listing has paid.|Papan kedudukan tajaan awam, disusun mengikut jumlah bayaran setiap penyenaraian.
 Claim a sponsored rank|Dapatkan kedudukan tajaan
 Browse the markets|Layari industri
@@ -203,7 +202,7 @@ Switch to Chinese|Tukar kepada bahasa Cina
 Switch to English|Tukar kepada bahasa Inggeris
 A Brandup Marketing product|Produk Brandup Marketing
 Payment issue or missing logo? Email us with your listing link.|Masalah pembayaran atau logo tidak dipaparkan? E-mel kami bersama pautan penyenaraian anda.
-Visit website|Lawati laman web
+Visit website|Lawati web
 View Instagram|Lihat Instagram
 View Facebook Page|Lihat Halaman Facebook
 View TikTok|Lihat TikTok
@@ -297,7 +296,10 @@ top total paid|jumlah bayaran tertinggi
 The story behind the board|Kisah di sebalik papan kedudukan
 Attention has a price.|Perhatian ada harganya.
 Make it visible.|Paparkannya secara terbuka.
-RANKOFF is the public leaderboard for Malaysian businesses. Pay to hold a spot, show customers what you do, and keep it until someone pays more. One board, one rule: the highest total paid takes #1.|RANKOFF ialah papan kedudukan awam untuk perniagaan Malaysia. Bayar untuk mendapatkan tempat, tunjukkan perniagaan anda kepada pelanggan dan kekalkan tempat itu sehingga orang lain membayar lebih. Satu papan, satu peraturan: jumlah bayaran tertinggi menduduki #1.
+RANKOFF helps people discover businesses, products and services through public pages and sponsored positions. Show what you offer and give visitors a route to your website or profile. The highest total paid takes #1.|RANKOFF membantu orang menemui perniagaan, produk dan perkhidmatan melalui halaman awam dan kedudukan tajaan. Tunjukkan tawaran anda dan sediakan laluan ke laman web atau profil anda. Jumlah bayaran tertinggi menduduki #1.
+Across borders or around the corner.|Merentas sempadan atau berhampiran anda.
+Explore software, design, marketing and other services that can work across borders, alongside local businesses serving nearby customers. A business location and its service area are different facts; check the listing and its linked sources before making an enquiry.|Terokai perisian, reka bentuk, pemasaran dan perkhidmatan lain yang boleh ditawarkan merentas sempadan, bersama perniagaan tempatan untuk pelanggan berdekatan. Lokasi perniagaan berbeza daripada kawasan perkhidmatannya; semak penyenaraian dan sumbernya sebelum membuat pertanyaan.
+Locations, services and opening hours are shown when public sources support them. A sponsored position does not rate service quality or guarantee visitors, customers, search rankings or AI recommendations.|Lokasi, perkhidmatan dan waktu operasi dipaparkan apabila disokong oleh sumber awam. Kedudukan tajaan tidak menilai kualiti perkhidmatan atau menjamin pelawat, pelanggan, kedudukan carian atau cadangan AI.
 Why it exists|Mengapa Rankoff diwujudkan
 Rankoff started with one question.|Rankoff bermula dengan satu soalan.
 What if a business could buy the top spot in the open, not in a hidden ad auction? What if everyone could see who is on top, what it cost, and who is getting the clicks?|Bagaimana jika perniagaan boleh membeli tempat teratas secara terbuka, bukan melalui lelongan iklan tersembunyi? Bagaimana jika semua orang boleh melihat siapa di atas, kosnya dan siapa mendapat klik?
@@ -315,7 +317,7 @@ The board today|Papan hari ini
 Real numbers from the board, updated live.|Angka sebenar daripada papan, dikemas kini secara langsung.
 How it works|Cara ia berfungsi
 The board keeps moving.|Kedudukan sentiasa berubah.
-List your business|Senaraikan perniagaan anda
+List your business|Senaraikan perniagaan
 Compete in public|Bersaing secara terbuka
 Once payment settles, your business, your total and your position are on the board for everyone to see.|Selepas pembayaran selesai, perniagaan, jumlah bayaran dan kedudukan anda dipaparkan untuk dilihat semua.
 See what it earns|Lihat hasilnya
@@ -375,6 +377,35 @@ Herbal baths|Mandian herba
 CPAP purchasing assistance|Bantuan pembelian CPAP
 CPAP masks & replacement supplies|Topeng CPAP & bekalan gantian
 Singapore|Singapura
+Public business pages, sponsored rank, a link to your site.|Halaman perniagaan awam, kedudukan tajaan, pautan ke laman anda.
+Claim #1 now|Dapatkan #1 sekarang
+Explore businesses ↓|Terokai perniagaan ↓
+RANKOFF | Industries|RANKOFF | Industri
+Industries|Industri
+Industry|Industri
+Every industry has its own public sponsored leaderboard.|Setiap industri mempunyai papan kedudukan tajaan awamnya sendiri.
+Explore Rankoff industries and see which businesses lead each sponsored industry.|Terokai industri Rankoff dan lihat perniagaan yang mendahului setiap industri tajaan.
+Browse the industries|Layari industri
+Scroll industries left|Tatal industri ke kiri
+Scroll industries right|Tatal industri ke kanan
+Send the exact position, board, and industry.|Hantar kedudukan, papan dan industri yang tepat.
+Switch to All-time to see this industry's board.|Tukar ke Sepanjang masa untuk melihat papan industri ini.
+No payment in the past 24 hours yet. Switch to All-time to see every industry's board.|Belum ada pembayaran dalam 24 jam lalu. Tukar ke Sepanjang masa untuk melihat papan setiap industri.
+Choose the industry this business belongs to.|Pilih industri perniagaan ini.
+Choose an industry|Pilih industri
+Search businesses and industries…|Cari perniagaan dan industri…
+Search businesses and industries|Cari perniagaan dan industri
+Open this industry|Buka industri ini
+No businesses or industries found.|Tiada perniagaan atau industri ditemui.
+Skip to industries|Langkau ke industri
+Industry timeframe|Tempoh industri
+Filter by industry|Tapis mengikut industri
+Every industry has its own board. Pick yours and see who is on top.|Setiap industri mempunyai papannya sendiri. Pilih industri anda dan lihat siapa di atas.
+Most active industries|Industri paling aktif
+All industries|Semua industri
+No active industries yet.|Belum ada industri aktif.
+Choose an industry to view its live board.|Pilih industri untuk melihat papan langsungnya.
+Enter your website, choose an industry, and pay from US$1.|Masukkan laman web anda, pilih industri, dan bayar dari US$1.
 `.trim().split('\n').map(line => { const at = line.indexOf('|'); return [line.slice(0, at), line.slice(at + 1)]; }))});
 
 export const normalizeCopy = value => String(value).replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
@@ -408,6 +439,8 @@ export function translateMs(value) {
 
 const MS_PATTERNS = [
   [/^top total (.+)$/, amount => `jumlah tertinggi ${amount}`],
+  [/^from ((?:RM|US\$)[\s\u00a0]*[\d.,]+)$/, price => `dari ${price}`],
+  [/^Visit (.+) ↗$/, target => `Lawati ${target === 'website' ? 'web' : target} ↗`],
   [/^Claimed (\d+) days? ago$/, count => `Kedudukan diperoleh ${count} hari lalu`],
   [/^Claimed (\d+) hours? ago$/, count => `Kedudukan diperoleh ${count} jam lalu`],
   [/^Claimed (\d+) minutes? ago$/, count => `Kedudukan diperoleh ${count} minit lalu`],
@@ -427,12 +460,12 @@ const MS_PATTERNS = [
   [/^RANKOFF \| Pay-to-rank leaderboard, from (.+)$/, price => `RANKOFF | Papan kedudukan berbayar, dari ${price}`],
   [/^RANKOFF \| Start at (.+), compete for #1$/, price => `RANKOFF | Dari ${price}, dapatkan #1`],
   [/^Start at (.+) on Rankoff and compete for visible sponsored rank\. Totals paid and tracked clicks remain public\.$/, price => `Bermula dari ${price} di Rankoff untuk kedudukan tajaan yang terbuka. Jumlah dibayar dan klik direkodkan kekal awam.`],
-  [/^A public sponsored leaderboard for Malaysian businesses\. Start at (.+); totals paid and tracked clicks stay visible\.$/, price => `Papan kedudukan tajaan awam untuk perniagaan Malaysia. Dari ${price}; jumlah dibayar dan klik direkodkan dipaparkan.`],
-  [/^A public leaderboard for Malaysian businesses\. (.+) to get on it — and every listing, payment and click is public\.$/, price => `Papan kedudukan awam untuk perniagaan Malaysia. Dari ${price} untuk disenaraikan — setiap penyenaraian, bayaran dan klik dipaparkan.`],
+  [/^A public sponsored leaderboard for businesses, products and services\. Start at (.+); totals paid and tracked clicks stay visible\.$/, price => `Papan kedudukan tajaan awam untuk perniagaan, produk dan perkhidmatan. Dari ${price}; jumlah dibayar dan klik direkodkan dipaparkan.`],
+  [/^A public leaderboard for businesses, products and services\. (.+) to get on it — and every listing, payment and click is public\.$/, price => `Papan kedudukan awam untuk perniagaan, produk dan perkhidmatan. Dari ${price} untuk disenaraikan — setiap penyenaraian, bayaran dan klik dipaparkan.`],
   [/^(.+?) — #(\d+) in (.+?) \| RANKOFF$/, (name,rank,market) => `${name} — #${rank} dalam ${translateMs(market)} | RANKOFF`],
   [/^Listings start at (.+)\.$/, price => `Penyenaraian bermula dari ${price}.`],
-  [/^(\d+) more markets with no payment in the past 24 hours$/, count => `${count} industri lagi tanpa pembayaran dalam 24 jam lalu`],
-  [/^Explore (\d+) more markets waiting for a first listing$/, count => `Terokai ${count} industri lagi yang menunggu penyenaraian pertama`],
+  [/^(\d+) more (?:markets|industries) with no payment in the past 24 hours$/, count => `${count} industri lagi tanpa pembayaran dalam 24 jam lalu`],
+  [/^Explore (\d+) more (?:markets|industries) waiting for a first listing$/, count => `Terokai ${count} industri lagi yang menunggu penyenaraian pertama`],
   [/^(\d+) listings? · top total (.+)$/, (count,price) => `${count} penyenaraian · jumlah tertinggi ${price}`],
   [/^Today rank (\d+)$/, rank => `Kedudukan hari ini ${rank}`],
   [/^Use the (.+) profile address, not a post, reel or video\.$/, platform => `Gunakan alamat profil ${platform}, bukan siaran, reel atau video.`],
@@ -441,10 +474,11 @@ const MS_PATTERNS = [
   [/^(\d+) live listings?, (.+) settled and (\d+) verified clicks?$/, (count,price,clicks) => `${count} penyenaraian aktif, ${price} dibayar dan ${clicks} klik direkodkan`],
   [/^Claim #?(\d+) for (.+)$/, (rank, price) => `Dapatkan #${rank} dengan ${price}`],
   [/^Claim this rank for (.+)$/, price => `Dapatkan kedudukan ini dengan ${price}`],
+  [/^Claim for (.+)$/, price => `Dapatkan ${price}`],
   [/^Claim #(\d+)$/, rank => `Dapatkan #${rank}`],
   [/^Pay & claim #(\d+)$/, rank => `Bayar & dapatkan #${rank}`],
   [/^One payment, from (.+)\.$/, price => `Satu bayaran, dari ${price}.`],
-  [/^Enter your website, choose a market, and pay from (.+)\.$/, price => `Masukkan laman web anda, pilih industri dan bayar dari ${price}.`],
+  [/^Enter your website, choose (?:a market|an industry), and pay from (.+)\.$/, price => `Masukkan laman web anda, pilih industri dan bayar dari ${price}.`],
   [/^A public sponsored leaderboard\. Listings start at (.+)\. The highest total paid ranks first\.$/, price => `Papan kedudukan tajaan awam. Penyenaraian bermula dari ${price}. Jumlah bayaran tertinggi menduduki tempat pertama.`],
   [/^The minimum payment is (.+)\.$/, price => `Bayaran minimum ialah ${price}.`],
   [/^Payments go in steps of (.+)\.$/, price => `Bayaran dalam kenaikan ${price}.`],

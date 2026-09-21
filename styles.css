@@ -1082,7 +1082,7 @@ html[data-theme="light"] .category-logo:not(.has-icon) {
 .board-list .standard-listing .product-name { flex: 0 1 auto; padding-block: 0; font-size: .9rem; }
 .board-list .standard-listing .listing-description { display: none; }
 .board-list .standard-listing .product-meta { flex-wrap: nowrap; margin: 0; }
-.board-list .standard-listing .product-meta > .meta-item:not(.category-meta) { display: none; }
+.board-list .standard-listing .product-meta > .meta-item:not(.category-meta):not(.listing-clicks) { display: none; }
 .board-list .standard-listing .featured-evidence { display: flex; align-self: center; justify-self: end; gap: .6rem; width: auto; padding: 0; border: 0; }
 .board-list .standard-listing .featured-bid-stack { flex-direction: row; align-items: center; gap: .6rem; }
 .board-list .standard-listing .featured-price { min-width: 0; }
@@ -1586,3 +1586,191 @@ html[data-theme="light"] .category-logo:not(.has-icon) {
 .footer > .support-contact { flex-basis: 100%; }
 .support-contact a { display: inline-block; padding-block: .45rem; color: var(--link, var(--ink)); text-decoration: underline; text-underline-offset: .15em; }
 .support-contact[hidden] { display: none; }
+.pricing-unavailable {
+  max-width: 44rem;
+  margin: 12vh auto;
+  padding: 1.5rem;
+}
+.pricing-unavailable h1 { font-size: clamp(1.75rem, 5vw, 3rem); }
+.pricing-unavailable p { line-height: 1.6; margin-block: 1.5rem; }
+
+
+/* ---- Hero: the value line, two labelled prices and two paths (2026-09-20) ----
+   "List your business from RM 5" is the floor; "Take #1 now RM 25" is the
+   current quote. They are different facts and sit side by side, labelled. */
+.hero-context { max-width: 56ch; margin: .55rem auto 0; color: var(--muted); font-size: .9rem; line-height: 1.45; text-align: center; }
+.hero-paths { display: flex; flex-wrap: wrap; align-items: stretch; justify-content: center; gap: .5rem .6rem; margin: .8rem auto 0; }
+.hero-path { display: inline-flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: .1rem; min-height: 3.25rem; padding: .5rem .95rem; border: 1px solid var(--line-strong); border-radius: .5rem; background: var(--surface); color: var(--ink); font: inherit; text-align: left; text-decoration: none; cursor: pointer; transition: border-color 160ms var(--ease), background 160ms var(--ease), transform 160ms var(--ease); }
+.hero-path-label { font-size: .72rem; font-weight: 800; letter-spacing: .01em; }
+.hero-path-price { font-size: 1.05rem; font-weight: 850; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.hero-path-primary { border-color: var(--accent); background: var(--accent-fill, var(--accent)); color: white; }
+.hero-path-primary .hero-path-price { color: white; }
+.hero-path-primary:hover { background: var(--accent-strong); }
+.hero-path-secondary { border-color: var(--accent); }
+.hero-path-secondary .hero-path-price { color: var(--accent-strong); }
+.hero-path-secondary:hover { background: var(--accent-soft); }
+.hero-path-link { flex-direction: row; align-items: center; min-height: 2.75rem; border-color: transparent; background: transparent; color: var(--blue); font-size: .8rem; font-weight: 800; }
+.hero-path-link:hover { text-decoration: underline; text-underline-offset: .18em; }
+.hero-path:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.hero-path[hidden] { display: none; }
+@media (max-width: 46rem) {
+  .hero-context { margin-top: .45rem; font-size: .82rem; }
+  .hero-paths { gap: .45rem; margin-top: .65rem; }
+  .hero-path-primary, .hero-path-secondary { flex: 1 1 calc(50% - .45rem); min-width: 0; }
+  .hero-path-link { flex: 1 1 100%; justify-content: center; }
+}
+@media (max-width: 22rem) {
+  .hero-path-primary, .hero-path-secondary { flex-basis: 100%; }
+}
+
+/* ---- Card actions: one footer row inside the card, 44px targets, nothing
+   straddling the card edge. Visit / details on the left, share / claim on the
+   right; on a phone the two groups take a row each. ---- */
+.claim-rank-pill { position: static; bottom: auto; left: auto; transform: none; }
+.claim-rank-pill:hover { transform: none; }
+.listing-actions { grid-area: action; position: relative; z-index: 3; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .4rem .6rem; min-width: 0; margin-top: .2rem; }
+.listing-actions-links, .listing-actions-controls { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; min-width: 0; }
+.listing-actions .listing-visit, .listing-actions .listing-details { display: inline-flex; min-height: 2.75rem; min-width: 2.75rem; align-items: center; padding: .4rem .65rem; border-radius: .35rem; font-size: .74rem; font-weight: 800; white-space: nowrap; }
+.listing-actions .listing-visit { border: 1px solid var(--line-strong); background: color-mix(in srgb, var(--ink) 5%, transparent); color: var(--ink); }
+.listing-actions .listing-visit:hover { border-color: var(--ink); background: color-mix(in srgb, var(--ink) 10%, transparent); }
+.listing-actions .listing-details { border: 1px solid var(--line); color: var(--blue); }
+.listing-actions .listing-details:hover { border-color: var(--blue); text-decoration: none; }
+.listing-actions .rank-share-control { min-height: 2.75rem; min-width: 2.75rem; margin: 0; padding: 0 .7rem; border: 1px solid var(--line); border-radius: .35rem; background: var(--surface-subtle); color: var(--blue); font-size: .72rem; }
+.listing-actions .rank-share-control::after { content: none; }
+.listing-actions .claim-rank-pill { position: static; min-height: 2.75rem; margin: 0; padding: .5rem .85rem; border: 1px solid var(--accent-fill, var(--accent)); border-radius: .35rem; background: var(--accent-fill, var(--accent)); color: white; font-size: .74rem; line-height: 1.2; white-space: normal; text-align: center; transform: none; }
+.top-three-hero .featured-2 .listing-actions .claim-rank-pill, .top-three-hero .featured-3 .listing-actions .claim-rank-pill, .standard-listing .listing-actions .claim-rank-pill { background: color-mix(in srgb, var(--accent) 8%, var(--surface)); color: var(--ink); }
+.listing-actions .claim-rank-pill:hover { background: var(--accent-strong); color: white; transform: none; }
+.featured-listing, .top-three-hero .featured-listing, .top-three-hero .featured-1, .standard-listing { grid-template-areas: "rank product evidence" "rank action action"; grid-template-rows: auto auto; min-height: 0; }
+/* Names wrap instead of truncating: a long or mixed-script business name must never be cut or overlap the numbers. */
+.featured-listing .product-name { overflow: visible; white-space: normal; overflow-wrap: anywhere; text-overflow: clip; }
+.featured-listing .listing-description, .standard-listing .listing-description { -webkit-line-clamp: 2; }
+@media (max-width: 46rem) {
+  .featured-listing, .top-three-hero .featured-listing, .top-three-hero .featured-1, .standard-listing { padding: .8rem .75rem; margin-bottom: 0; }
+  .featured-listing .listing-description { font-size: .78rem; }
+}
+@media (max-width: 34rem) {
+  .featured-listing, .top-three-hero .featured-listing, .top-three-hero .featured-1, .standard-listing { grid-template-areas: "rank product" "evidence evidence" "action action"; grid-template-rows: auto auto auto; }
+  .listing-actions-links, .listing-actions-controls { flex: 1 1 100%; }
+  .listing-actions-controls { justify-content: flex-end; }
+  .listing-actions .claim-rank-pill { flex: 1 1 auto; }
+  .listing-actions .listing-visit, .listing-actions .listing-details { flex: 1 1 auto; justify-content: center; }
+}
+
+
+/* ---- Card action row: phone templates (2026-09-20) ----
+   The podium and list rows on a phone are laid out with display: contents
+   wrappers and their own grid areas above; those templates had no row for the
+   action group, and their three-class rules pinned the claim pill to the card
+   edge at 32px. Each template gets a fourth/third row for the action group and
+   every frequent control becomes a 44px target inside the card. */
+@media (max-width: 34rem) {
+  .top-three-hero .featured-listing, .top-three-hero .featured-1 { grid-template-areas: "rank mark name evidence" "rank desc desc desc" "rank meta meta meta" "action action action action"; grid-template-rows: auto auto auto auto; padding-bottom: .8rem; }
+  /* The list rows keep their one-line blurb (rule ~1401), so the blurb needs its own row too. */
+  .board-list .standard-listing { grid-template-areas: "rank mark name evidence" "rank desc desc desc" "rank meta meta meta" "action action action action"; grid-template-rows: auto auto auto auto; padding-bottom: .7rem; }
+  .top-three-hero .featured-listing .listing-actions, .board-list .standard-listing .listing-actions { grid-area: action; margin-top: .35rem; }
+  .top-three-hero .featured-listing .claim-rank-pill, .top-three-hero .featured-1 .claim-rank-pill, .top-three-hero .featured-2 .claim-rank-pill, .top-three-hero .featured-3 .claim-rank-pill, .board-list .standard-listing .claim-rank-pill { position: static; left: auto; bottom: auto; transform: none; grid-area: auto; width: auto; min-height: 2.75rem; margin: 0; padding: .5rem .85rem; border-radius: .35rem; font-size: .74rem; line-height: 1.2; white-space: normal; text-align: center; }
+  .top-three-hero .featured-listing .rank-share-control, .board-list .standard-listing .rank-share-control { min-width: 2.75rem; min-height: 2.75rem; margin: 0; padding: 0 .7rem; border-radius: .35rem; }
+  .top-three-hero .featured-listing .listing-details, .board-list .standard-listing .listing-details { display: inline-flex; min-height: 2.75rem; align-items: center; padding: .4rem .65rem; border: 1px solid var(--line); border-radius: .35rem; color: var(--blue); font-size: .74rem; font-weight: 800; text-decoration: none; white-space: nowrap; }
+  .top-three-hero .featured-listing .listing-visit, .board-list .standard-listing .listing-visit { min-height: 2.75rem; }
+  .featured-listing .listing-visit::before { content: none; }
+  /* The extra gaps existed to clear a pill hanging below each card. */
+  .board-list { gap: .6rem; }
+  .top-three-hero { gap: .6rem; }
+  /* Blurbs on the podium stay readable on a phone. */
+  .top-three-hero .featured-listing .listing-description, .top-three-hero .featured-1 .listing-description { -webkit-line-clamp: 2; font-size: .78rem; }
+}
+/* Tablet and desktop list rows: the same footer row, with the same weight as the podium's. */
+@media (min-width: 34.01rem) {
+  .board-list .standard-listing { grid-template-areas: "rank product evidence" "rank action action"; grid-template-columns: 2.25rem minmax(0, 1fr) auto; grid-template-rows: auto auto; row-gap: .35rem; padding: .6rem .75rem; }
+  .board-list .standard-listing .listing-actions { grid-area: action; margin-top: 0; }
+  .board-list .standard-listing .claim-rank-pill { grid-area: auto; min-height: 2.75rem; padding: .5rem .85rem; border: 1px solid var(--line-strong); border-radius: .35rem; font-size: .74rem; }
+}
+
+
+/* ---- First screen: keep #1-#3 above the fold (2026-09-20) ----
+   The value line and the two prices must not push the podium off the first
+   screen; showing the top three is the point of the board. The explore link
+   rides inline on the value line, the price chips are one 44px row, and on a
+   phone the collapsed "Enter your website" bar (a duplicate of the hero's
+   "List your business" button) stays hidden until the form is open. */
+.hero-context { display: block; margin: .4rem auto 0; font-size: .82rem; line-height: 1.4; }
+.hero-explore { margin-left: .35rem; color: var(--blue); font-weight: 800; text-decoration: none; white-space: nowrap; }
+.hero-explore:hover { text-decoration: underline; text-underline-offset: .18em; }
+.hero-paths { margin-top: .55rem; gap: .45rem .5rem; }
+.hero-path { min-height: 2.75rem; gap: 0; padding: .35rem .8rem; }
+.hero-path-label { font-size: .68rem; line-height: 1.1; }
+.hero-path-price { font-size: .98rem; line-height: 1.15; }
+@media (max-width: 46rem) {
+  .hero-context { margin-top: .3rem; font-size: .76rem; }
+  .hero-explore { display: inline-flex; min-height: 2.75rem; align-items: center; margin-left: .25rem; }
+  .hero-paths { margin-top: .35rem; }
+  .hero-path-primary, .hero-path-secondary { flex: 1 1 calc(50% - .35rem); }
+  .market-entry { margin-top: .5rem; }
+  .market-entry[data-entry-collapsed="true"] .entry-toggle { display: none; }
+  .market-entry[data-entry-collapsed="true"] { margin-top: 0; }
+  .category-market { margin-top: .5rem; }
+}
+@media (min-width: 64rem) {
+  .hero-context { margin-top: .35rem; }
+  .hero-paths { margin-top: .45rem; }
+  .market-entry { margin-top: .55rem; }
+}
+
+
+/* ---- Podium density (2026-09-20) ----
+   Three ranks on the first screen is the point of the board. On a phone each
+   card keeps one 44px action row (visit, share, claim) with the details link
+   on the meta line; #2 and #3 show one line of blurb, #1 two. On desktop the
+   value line and the two prices share one row. */
+@media (min-width: 34.01rem) {
+  .featured-listing .listing-details-meta { display: none; }
+}
+@media (max-width: 34rem) {
+  .featured-listing .listing-actions .listing-details-action { display: none; }
+  .top-three-hero .featured-listing .product-meta .listing-details-meta, .board-list .standard-listing .product-meta .listing-details-meta { display: inline-flex; min-height: 2.75rem; align-items: center; margin-block: -.45rem; padding: .5rem .3rem; border: 0; border-radius: .3rem; color: var(--blue); font-size: inherit; font-weight: 800; text-decoration: none; }
+  .top-three-hero .featured-listing, .top-three-hero .featured-1 { padding: .65rem .7rem .7rem; gap: .3rem .55rem; }
+  .board-list .standard-listing { padding: .55rem .7rem .65rem; }
+  .top-three-hero .featured-listing .listing-description, .top-three-hero .featured-listing .product-meta { margin-top: .1rem; }
+  .top-three-hero .featured-listing .listing-description { -webkit-line-clamp: 1; }
+  .top-three-hero .featured-1 .listing-description { -webkit-line-clamp: 2; }
+  .top-three-hero .featured-listing .listing-actions, .board-list .standard-listing .listing-actions { margin-top: .2rem; gap: .3rem .4rem; flex-wrap: wrap; }
+  .listing-actions-links { flex: 0 1 auto; }
+  .listing-actions-controls { flex: 1 1 auto; justify-content: flex-end; }
+  .listing-actions .listing-visit { flex: 0 0 auto; padding-inline: .55rem; }
+  .listing-actions .claim-rank-pill { flex: 1 1 auto; padding-inline: .6rem; }
+  .hero-explore { display: none; }
+  .hero-context { margin-top: .25rem; }
+  .hero-paths { margin-top: .35rem; }
+  .board-toolbar { padding-top: .6rem; }
+}
+@media (min-width: 64rem) {
+  .hero-context { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .3rem 1rem; max-width: none; margin-top: .3rem; }
+  .hero-context > [data-hero-context] { flex: 0 1 auto; }
+  .hero-paths { display: inline-flex; flex: 0 0 auto; margin: 0; }
+  .hero-explore { margin-left: 0; }
+  .market-entry { margin-top: .45rem; }
+  .top-three-hero .featured-2 .listing-description, .top-three-hero .featured-3 .listing-description { -webkit-line-clamp: 1; }
+  .top-three-hero .featured-listing { min-height: 0; }
+}
+
+/* Filled red under white text uses the deeper --accent-fill in dark mode (AA); the #1 tile too. */
+.top-three-hero .featured-1 .featured-rank { background: var(--accent-fill, var(--accent)); border-color: var(--accent-fill, var(--accent)); }
+
+/* ---- 320px and card overlay (fix-it 2) ----
+   On the smallest phones the value line goes, the two price chips stay side
+   by side and #2/#3 drop their blurb so more of the podium fits 568px. The
+   whole-card outbound link is desktop-only (phones have explicit Visit
+   buttons) and shows a pointer + hover ring so it is not invisible. */
+@media (max-width: 22.5rem) {
+  .hero-context > [data-hero-context] { display: none; }
+  .hero-path-primary, .hero-path-secondary { flex: 1 1 calc(50% - .35rem); padding-inline: .55rem; }
+  .top-three-hero .featured-2 .listing-description, .top-three-hero .featured-3 .listing-description { display: none; }
+  .top-three-hero .featured-listing, .top-three-hero .featured-1, .board-list .standard-listing { padding: .5rem .55rem .55rem; gap: .25rem .45rem; }
+  .board-toolbar { padding-top: .45rem; }
+  .category-market { padding-block: .45rem; }
+}
+@media (max-width: 46rem) { .card-visit-overlay { display: none; } }
+@media (min-width: 46.01rem) {
+  .featured-listing:has(.card-visit-overlay) { cursor: pointer; }
+  .featured-listing:has(.card-visit-overlay:hover) { border-color: var(--accent); }
+}

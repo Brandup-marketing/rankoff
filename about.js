@@ -11,31 +11,34 @@
   const pageMetadata = {
     en: {
       title: "About RANKOFF",
-      description: "How Rankoff works: Malaysian businesses pay to hold a spot on a public board, and every total and click stays visible.",
-      socialDescription: "How Rankoff works: Malaysian businesses pay to hold a spot on a public board, and every total and click stays visible.",
+      description: "Discover businesses, products and services on Rankoff. Public pages, transparent sponsored positions and tracked outbound clicks.",
+      socialDescription: "Discover businesses, products and services on Rankoff. Public pages, transparent sponsored positions and tracked outbound clicks.",
     },
     zh: {
       title: "关于 RANKOFF",
-      description: "Rankoff 怎么运作：马来西亚商家付费占据公开榜单的位置，每一笔付款和点击都公开可见。",
-      socialDescription: "Rankoff 怎么运作：马来西亚商家付费占据公开榜单的位置，每一笔付款和点击都公开可见。",
+      description: "通过 Rankoff 发现商家、产品与服务：公开资料页、透明的赞助位置，以及追踪站外点击。",
+      socialDescription: "通过 Rankoff 发现商家、产品与服务：公开资料页、透明的赞助位置，以及追踪站外点击。",
     },
   };
   const accessibilityCopy = {
     en: {
       home: "RANKOFF home", tagline: "RANKOFF — public sponsored leaderboard", navigation: "Main navigation",
-      search: "Search businesses and markets", switchChinese: "Switch to Chinese", switchLight: "Switch to light theme", switchDark: "Switch to dark theme",
+      search: "Search businesses and industries", switchChinese: "Switch to Chinese", switchLight: "Switch to light theme", switchDark: "Switch to dark theme",
       origin: "Rankoff origin", principles: "Rankoff principles",
     },
     zh: {
       home: "RANKOFF 首页", tagline: "RANKOFF — 竞价登上第 1 名", navigation: "主导航",
-      search: "搜索商家和市场", switchChinese: "切换为中文", switchLight: "切换至浅色主题", switchDark: "切换至深色主题",
+      search: "搜索商家和行业", switchChinese: "切换为中文", switchLight: "切换至浅色主题", switchDark: "切换至深色主题",
       origin: "Rankoff 起源", principles: "Rankoff 原则",
     },
   };
   const translations = new Map([
-    ["Board", "榜单"], ["Categories", "分类"], ["About", "关于"],
+    ["Board", "榜单"], ["Industries", "行业"], ["About", "关于"],
     ["The story behind the board", "榜单背后的故事"], ["Attention has a price.", "注意力，明码标价。"], ["Make it visible.", "让它公开可见。"],
-    ["RANKOFF is the public leaderboard for Malaysian businesses. Pay to hold a spot, show customers what you do, and keep it until someone pays more. One board, one rule: the highest total paid takes #1.", "RANKOFF 是马来西亚商家的公开榜单。付费占一个位置，把你的生意展示给顾客，直到有人付得更多。一个榜单，一条规则：累计付款最高者，就是第 1 名。"],
+    ["RANKOFF helps people discover businesses, products and services through public pages and sponsored positions. Show what you offer and give visitors a route to your website or profile. The highest total paid takes #1.", "RANKOFF 通过公开资料页与赞助位置，帮助访客发现商家、产品与服务。展示你的业务，让访客进入你的网站或主页。累计付款最高者排第 1 名。"],
+    ["Across borders or around the corner.", "跨境服务，也有身边的商家。"],
+    ["Explore software, design, marketing and other services that can work across borders, alongside local businesses serving nearby customers. A business location and its service area are different facts; check the listing and its linked sources before making an enquiry.", "探索软件、设计、营销等可跨境交付的服务，以及服务附近顾客的本地商家。商家所在地与服务范围是两回事；询问前，请查看商家页及其来源链接。"],
+    ["Locations, services and opening hours are shown when public sources support them. A sponsored position does not rate service quality or guarantee visitors, customers, search rankings or AI recommendations.", "地点、服务与营业时间均依据公开来源展示。赞助位置不代表服务品质，也不保证访问量、顾客、搜索排名或 AI 推荐。"],
     ["Why it exists", "为什么有 Rankoff"], ["Rankoff started with one question.", "Rankoff 始于一个问题。"],
     ["What if a business could buy the top spot in the open, not in a hidden ad auction? What if everyone could see who is on top, what it cost, and who is getting the clicks?", "如果商家可以光明正大买下最显眼的位置，而不是在看不见的广告竞价里？如果每个人都能看到谁在榜首、花了多少钱、谁拿到了点击？"],
     ["Rankoff is the answer: a public board where the price, the position and the clicks are all on show, and every listing is labelled as sponsored.", "Rankoff 就是答案：一个公开榜单，价格、排名、点击全部公开，每个条目都标明是赞助。"],
@@ -46,7 +49,7 @@
     ["live listings", "上榜条目"], ["tracked clicks", "追踪点击"], ["top total paid", "最高累计付款"],
     ["How it works", "运作方式"], ["The board keeps moving.", "榜单一直在动。"],
     ["List your business", "让生意上榜"], ["Compete in public", "公开竞争"], ["See what it earns", "看看回报"],
-    ["Skip to content", "跳至正文"], ["Now", "现在"], ["Enter your website, choose a market, and pay from US$1.", "输入网站、选择市场，US$1 起付款。"],
+    ["Skip to content", "跳至正文"], ["Now", "现在"], ["Enter your website, choose an industry, and pay from US$1.", "输入网站、选择行业，US$1 起付款。"],
     ["Then", "随后"], ["Once payment settles, your business, your total and your position are on the board for everyone to see.", "付款确认后，你的生意、累计付款和排名就公开在榜单上，人人可见。"],
     ["Next", "接下来"], ["Tracked clicks count redirects from Rankoff to listed websites. Repeat and automated clicks may be included.", "追踪点击统计从 Rankoff 跳转到商家网站的次数，可能包含重复与自动化点击。"],
     ["Real numbers from the board, updated live.", "榜单真实数据，实时更新。"],
@@ -71,7 +74,7 @@
   }
   const savedPreferences = readPreferences();
   let language = languageFromUrl() || (savedPreferences.language === "zh" ? "zh" : "en");
-  let theme = savedPreferences.theme === "dark" ? "dark" : "light";
+  let theme = savedPreferences.theme === "light" ? "light" : "dark";
   let liveCurrencyCode = "";
   let liveFloor = "";
   const translate = (english) => (language === "zh" ? (translations.get(english) || english) : english);
@@ -81,8 +84,8 @@
     const copy = document.querySelector(".timeline li:first-child > span:last-child");
     if (glyph) glyph.textContent = liveCurrencyCode === "MYR" ? "RM" : "US$";
     if (copy) copy.textContent = language === "zh"
-      ? `输入网站、选择市场，${liveFloor} 起付款。`
-      : `Enter your website, choose a market, and pay from ${liveFloor}.`;
+      ? `输入网站、选择行业，${liveFloor} 起付款。`
+      : `Enter your website, choose an industry, and pay from ${liveFloor}.`;
   }
   // Text written by script has to register itself as its own English source,
   // or the next language switch restores whatever the markup shipped with.
@@ -162,7 +165,7 @@
     updateCurrencyCopy();
   }
   function savePreferences() {
-    try { localStorage.setItem(STORE_KEY, JSON.stringify({ ...readPreferences(), language, theme })); } catch { /* preference persistence is optional */ }
+    try { localStorage.setItem(STORE_KEY, JSON.stringify({ ...readPreferences(), language: window.RankoffLocale?.isMalay ? "ms" : language, theme })); } catch { /* preference persistence is optional */ }
   }
   languageToggle?.addEventListener("click", () => {
     language = language === "zh" ? "en" : "zh";

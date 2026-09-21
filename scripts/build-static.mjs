@@ -7,6 +7,7 @@ await rm(dist, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });
 
 const files = [
+  'discovery.js', 'board-preview.js',
   'index.html', 'categories.html', 'about.html', 'legal.html', 'listing.html', 'admin.html',
   'styles.css', 'categories.css', 'about.css', 'legal.css', 'listing.css', 'answers.css', 'admin.css',
   'platform-identity.js', 'theme-boot.js', 'meta-pixel.js', 'locale-boot.js', 'locale.js', 'locale.css', 'ms-copy.js', 'ms-legal.js', 'ms-answers.js', 'support.js', 'acquisition.js', 'currency.js', 'app.js', 'search.js', 'share.js', 'share-card.js', 'categories.js', 'about.js', 'listing.js', 'legal.js', 'admin.js', '_headers', '_routes.json',

@@ -1,4 +1,6 @@
 import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
+import { discoveryCopy } from "./discovery.js?v=2";
+import { readCompleteBoard } from "./board-preview.js?v=1";
 (() => {
   "use strict";
 
@@ -22,6 +24,8 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
   // not whatever the visitor happens to be browsing. Rank and price both come
   // from here, so a market with nobody in it costs the floor and leads at #1.
   let chosenMarket = null;
+  let quoteRequestId = 0;
+  let quoteLoading = false;
   const categoryGroups = Object.freeze({ SaaS: ["SaaS", "Software", "Productivity"], Developer: ["Developer", "Security"], AI: ["AI", "Agents", "AIMedia"], Creators: ["Creators", "Attention", "People"], Property: ["Property", "RealEstate", "Travel"], Interior: ["Interior"], Beauty: ["Beauty"], Health: ["Health"], Sports: ["Sports"], Food: ["Food"], Marketing: ["Marketing", "SEO", "Social", "Sales", "Agencies"], Creative: ["Creative", "Design", "Writing", "Audio", "News"], Professional: ["Professional", "Business", "Careers"], Education: ["Education", "Training", "Academy"], Finance: ["Finance", "Insurance", "Banking", "Crypto"], Electronics: ["Electronics", "Repair"], Retail: ["Retail", "Ecommerce"], Construction: ["Construction", "Hardware"], Home: ["Home"], Automotive: ["Automotive", "Auto"], Other: ["Other", "Games", "Domains", "Discovery"] });
   const categories = Object.freeze(Object.keys(categoryGroups));
   const categoryAliases = Object.freeze(Object.entries(categoryGroups).reduce((aliases, [market, members]) => {
@@ -31,23 +35,23 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
   }, {}));
   const categoryIcons = Object.freeze({ SaaS: "▦", Developer: "⌘", all: "▦", Creators: "✦", Property: "⌂", Interior: "▤", Beauty: "✿", Health: "✚", Sports: "◐", Food: "◍", Marketing: "↗", Creative: "✎", Professional: "◆", Education: "✎+", Finance: "◧", Electronics: "▣", Retail: "◇", Construction: "▦+", Home: "⚙", Automotive: "◎", AI: "✧", Other: "•••" });
   const translations = {
-    en: { paymentAmountLabel: "Your payment in US dollars", navBoard: "Board", navCategories: "Categories", navAbout: "About", heroCopy: "A public sponsored leaderboard. Listings start at US$1. The highest total paid ranks first.", totalBid: "Your payment", productUrl: "Your website or social profile", productUrlPlaceholder: "example.com or instagram.com/yourname", invalidWebsite: "Enter a website or a public profile address, such as example.com or instagram.com/yourname.", chooseMarket: "Choose a market", challengeCategory: "Market", categoryRule: "The trade your business is in.", reviewBid: "Review & pay", markets: "Markets", liveLeaderboard: "Live leaderboard", boardSummary: "Highest total takes #1. Top up any time to move up.", todayRanking: "Today’s leaders", latestActivity: "Latest activity", liveUpdates: "Latest updates", howItWorks: "How ranking works", searchPlaceholder: "Search businesses and markets…", close: "Close", seeAll: "See all", past24: "Past 24h", livePulse: "Live payments", refresh: "Refresh", rank: "Rank", listing: "Listing", bid: "Paid", clicks: "Clicks", sponsored: "Sponsored", rules: "Every listing is paid advertising. The highest total paid ranks first \u2014 no prizes, no draws, and no element of chance.", position: "Position", positionCopy: "Held until another listing's total paid passes it.", charge: "Charge", chargeCopy: "One payment through secure hosted checkout.", reporting: "Reporting", reportingCopy: "Tracked clicks for the selected timeframe. Repeats and automated traffic are not filtered — a click is not a unique customer.", readRules: "Read all rules →", askWhatIs: "What is a pay-to-rank leaderboard?", askHowWorks: "How does Rankoff ranking work?", askHowSponsor: "How can I sponsor a website or social profile?", askVisibility: "How can Malaysian businesses get more online exposure?", rulesLink: "Rules", terms: "Terms", termsOfService: "Terms of Service", privacyLink: "Privacy", payments: "Payments", footerCredit: "A Brandup Marketing product", confirmRank: "Confirm this rank", confirmRankIntro: "Check the rank and price, then agree to the Terms of Service to continue.", chanceDisclaimer: "This is a one-time fee for advertising placement \u2014 not a wager, deposit, or contest entry. There are no prizes and no element of chance.", rankLabel: "Rank", priceLabel: "Price", dueNow: "Due now", stepPay: "Pay", stepPayCopy: "One payment, from US$1.", stepRank: "Rank", stepRankCopy: "Highest total paid takes #1.", stepHold: "Hold", stepHoldCopy: "Until someone pays more. Top up any time.", statVisitors: "visitor sessions", statClicks: "clicks to businesses", statPaid: "paid", statWindow: "All-time, counted by Rankoff", alreadyPaid: "Already paid", payNow: "Pay now", totalAfter: "Total after", confirmationCopy: "Your listing goes live at this rank after payment confirms. Someone else can still claim a higher rank. This is a one-time fee for advertising placement \u2014 not a wager, deposit, or contest entry. There are no prizes and no element of chance.", agreeTermsPrefix: "I understand this is a paid sponsored placement for a public link. It gives me no ownership or editing rights over that account, and the listed party may request removal. I agree to the ", agreeTermsSuffix: ".", cancel: "Cancel", continueCheckout: "Continue to checkout", skipLeaderboard: "Skip to leaderboard", brandHome: "RANKOFF home", brandLogoAlt: "RANKOFF — pay-to-rank leaderboard", rankingTimeframe: "Ranking timeframe", mainNavigation: "Main navigation", searchResults: "Search results", challengeLeaderboard: "Challenge the leaderboard", decreaseBid: "Decrease by US$1", increaseBid: "Increase by US$1", filterCategory: "Filter by category", topThree: "Top three sponsored listings", boardPulse: "Board pulse", boardListings: "Sponsored listings", pageNumbers: "Page numbers", answers: "Answers", closeDialog: "Close dialog", rankPrice: "Rank and price", savePreferencesError: "This browser could not save your preferences.", checkoutUnavailable: "Hosted checkout is unavailable. No payment was made.", checkoutOpening: "Opening secure checkout…", checkoutPreview: "Live checkout is not connected for this submission yet. No payment was made." },
-    zh: { paymentAmountLabel: "付款金额（美元）", navBoard: "榜单", navCategories: "分类", navAbout: "关于", heroCopy: "公开赞助榜单，US$1 起。累计付款最高者第 1 名。", totalBid: "付款金额", productUrl: "你的网站或社交账号", productUrlPlaceholder: "example.com 或 instagram.com/yourname", invalidWebsite: "请输入网站或公开主页网址，例如 example.com 或 instagram.com/yourname。", chooseMarket: "选择市场", challengeCategory: "市场", categoryRule: "你的生意所属的行业。", reviewBid: "确认并付款", markets: "市场", liveLeaderboard: "实时榜单", boardSummary: "累计付款最高者第 1 名。随时追加付款即可上升。", todayRanking: "今日领先", latestActivity: "最新动态", liveUpdates: "最新动态", howItWorks: "排名规则", searchPlaceholder: "搜索商家和市场…", close: "关闭", seeAll: "查看全部", past24: "近 24 小时", livePulse: "实时付款", refresh: "刷新", rank: "排名", listing: "条目", bid: "已付", clicks: "点击", sponsored: "广告", rules: "每个条目都是付费广告。累计付款最高者排第一——没有奖品、没有抽奖，也不涉及任何运气成分。", position: "排名位置", positionCopy: "直到别的条目累计付款超过你为止。", charge: "费用", chargeCopy: "通过安全托管付款页面一次性付款。", reporting: "数据", reportingCopy: "所选时间范围内的追踪点击。重复与自动化流量未经过滤——一次点击不等于一位客户。", readRules: "查看完整规则 →", askWhatIs: "什么是付费排名榜？", askHowWorks: "Rankoff 排名怎么算？", askHowSponsor: "怎么赞助一个网站或社交账号？", askVisibility: "马来西亚商家怎样增加线上曝光？", rulesLink: "规则", terms: "条款", termsOfService: "服务条款", privacyLink: "隐私", payments: "付款", footerCredit: "Brandup Marketing 出品", confirmRank: "确认此排名", confirmRankIntro: "核对排名与价格，同意《服务条款》后继续。", chanceDisclaimer: "此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。", rankLabel: "排名", priceLabel: "价格", dueNow: "现在支付", stepPay: "付款", stepPayCopy: "一次付清，US$1 起。", stepRank: "排名", stepRankCopy: "累计付款最高者拿下第 1 名。", stepHold: "保持", stepHoldCopy: "直到有人付得更多。随时可追加。", statVisitors: "访问人次", statClicks: "次点进商家", statPaid: "商家已付", statWindow: "全时段，由 Rankoff 统计", alreadyPaid: "已付金额", payNow: "本次支付", totalAfter: "付款后累计", confirmationCopy: "付款确认后，你的条目会以此排名上线。其他人仍可付更多取得更高排名。此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。", agreeTermsPrefix: "我了解这是为一个公开链接购买的赞助展示，付款不会获得该账号的所有权或编辑权，被展示方可要求下架。我同意《", agreeTermsSuffix: "》。", cancel: "取消", continueCheckout: "继续付款", skipLeaderboard: "跳到榜单", brandHome: "RANKOFF 首页", brandLogoAlt: "RANKOFF — 付费排名榜", rankingTimeframe: "排名时间范围", mainNavigation: "主导航", searchResults: "搜索结果", challengeLeaderboard: "挑战排行榜", decreaseBid: "减少 US$1", increaseBid: "增加 US$1", filterCategory: "按类别筛选", topThree: "赞助榜单前三名", boardPulse: "榜单动态", boardListings: "赞助条目榜单", pageNumbers: "页码", answers: "常见问题", closeDialog: "关闭对话框", rankPrice: "排名与价格", savePreferencesError: "此浏览器无法保存你的偏好设置。", checkoutUnavailable: "托管付款页面暂时无法使用，未产生任何费用。", checkoutOpening: "正在打开安全付款页面…", checkoutPreview: "此预览暂未连接实时付款，未产生任何费用。" },
+    en: { paymentAmountLabel: "Your payment in US dollars", navBoard: "Board", navCategories: "Industries", navAbout: "About", heroCopy: "A public sponsored leaderboard. Listings start at US$1. The highest total paid ranks first.", heroValue: "Public business pages, sponsored rank, a link to your site.", heroListLabel: "List your business", heroTopLabel: "Claim #1 now", heroExplore: "Explore businesses ↓", totalBid: "Your payment", productUrl: "Your website or social profile", productUrlPlaceholder: "example.com or instagram.com/yourname", invalidWebsite: "Enter a website or a public profile address, such as example.com or instagram.com/yourname.", chooseMarket: "Choose an industry", challengeCategory: "Industry", categoryRule: "The trade your business is in.", reviewBid: "Review & pay", markets: "Industries", liveLeaderboard: "Live leaderboard", boardSummary: "Highest total takes #1. Top up any time to move up.", todayRanking: "Today’s leaders", latestActivity: "Latest activity", liveUpdates: "Latest updates", howItWorks: "How ranking works", searchPlaceholder: "Search businesses and industries…", close: "Close", seeAll: "See all", past24: "Past 24h", livePulse: "Live payments", refresh: "Refresh", rank: "Rank", listing: "Listing", bid: "Paid", clicks: "Clicks", sponsored: "Sponsored", rules: "Every listing is paid advertising. The highest total paid ranks first \u2014 no prizes, no draws, and no element of chance.", position: "Position", positionCopy: "Held until another listing's total paid passes it.", charge: "Charge", chargeCopy: "One payment through secure hosted checkout.", reporting: "Reporting", reportingCopy: "Tracked clicks for the selected timeframe. Repeats and automated traffic are not filtered — a click is not a unique customer.", readRules: "Read all rules →", askWhatIs: "What is a pay-to-rank leaderboard?", askHowWorks: "How does Rankoff ranking work?", askHowSponsor: "How can I sponsor a website or social profile?", askVisibility: "How can Malaysian businesses get more online exposure?", rulesLink: "Rules", terms: "Terms", termsOfService: "Terms of Service", privacyLink: "Privacy", payments: "Payments", footerCredit: "A Brandup Marketing product", confirmRank: "Confirm this rank", confirmRankIntro: "Check the rank and price, then agree to the Terms of Service to continue.", chanceDisclaimer: "This is a one-time fee for advertising placement \u2014 not a wager, deposit, or contest entry. There are no prizes and no element of chance.", rankLabel: "Rank", priceLabel: "Price", dueNow: "Due now", stepPay: "Pay", stepPayCopy: "One payment, from US$1.", stepRank: "Rank", stepRankCopy: "Highest total paid takes #1.", stepHold: "Hold", stepHoldCopy: "Until someone pays more. Top up any time.", statVisitors: "visitor sessions", statClicks: "clicks to businesses", statPaid: "paid", statWindow: "All-time, counted by Rankoff", alreadyPaid: "Already paid", payNow: "Pay now", totalAfter: "Total after", confirmationCopy: "Your listing goes live at this rank after payment confirms. Someone else can still claim a higher rank. This is a one-time fee for advertising placement \u2014 not a wager, deposit, or contest entry. There are no prizes and no element of chance.", agreeTermsPrefix: "I understand this is a paid sponsored placement for a public link. It gives me no ownership or editing rights over that account, and the listed party may request removal. I agree to the ", agreeTermsSuffix: ".", cancel: "Cancel", continueCheckout: "Continue to checkout", skipLeaderboard: "Skip to leaderboard", brandHome: "RANKOFF home", brandLogoAlt: "RANKOFF — pay-to-rank leaderboard", rankingTimeframe: "Ranking timeframe", mainNavigation: "Main navigation", searchResults: "Search results", challengeLeaderboard: "Challenge the leaderboard", decreaseBid: "Decrease by US$1", increaseBid: "Increase by US$1", filterCategory: "Filter by industry", topThree: "Top three sponsored listings", boardPulse: "Board pulse", boardListings: "Sponsored listings", pageNumbers: "Page numbers", answers: "Answers", closeDialog: "Close dialog", rankPrice: "Rank and price", savePreferencesError: "This browser could not save your preferences.", checkoutUnavailable: "Hosted checkout is unavailable. No payment was made.", checkoutOpening: "Opening secure checkout…", checkoutPreview: "Live checkout is not connected for this submission yet. No payment was made." },
+    zh: { paymentAmountLabel: "付款金额（美元）", navBoard: "榜单", navCategories: "行业", navAbout: "关于", heroCopy: "公开赞助榜单，US$1 起。累计付款最高者第 1 名。", heroValue: "公开商家页、赞助排名，以及直达你网站的链接。", heroListLabel: "让生意上榜", heroTopLabel: "立即拿下第 1 名", heroExplore: "浏览商家 ↓", totalBid: "付款金额", productUrl: "你的网站或社交账号", productUrlPlaceholder: "example.com 或 instagram.com/yourname", invalidWebsite: "请输入网站或公开主页网址，例如 example.com 或 instagram.com/yourname。", chooseMarket: "选择行业", challengeCategory: "行业", categoryRule: "你的生意所属的行业。", reviewBid: "确认并付款", markets: "行业", liveLeaderboard: "实时榜单", boardSummary: "累计付款最高者第 1 名。随时追加付款即可上升。", todayRanking: "今日领先", latestActivity: "最新动态", liveUpdates: "最新动态", howItWorks: "排名规则", searchPlaceholder: "搜索商家和行业…", close: "关闭", seeAll: "查看全部", past24: "近 24 小时", livePulse: "实时付款", refresh: "刷新", rank: "排名", listing: "条目", bid: "已付", clicks: "点击", sponsored: "广告", rules: "每个条目都是付费广告。累计付款最高者排第一——没有奖品、没有抽奖，也不涉及任何运气成分。", position: "排名位置", positionCopy: "直到别的条目累计付款超过你为止。", charge: "费用", chargeCopy: "通过安全托管付款页面一次性付款。", reporting: "数据", reportingCopy: "所选时间范围内的追踪点击。重复与自动化流量未经过滤——一次点击不等于一位客户。", readRules: "查看完整规则 →", askWhatIs: "什么是付费排名榜？", askHowWorks: "Rankoff 排名怎么算？", askHowSponsor: "怎么赞助一个网站或社交账号？", askVisibility: "马来西亚商家怎样增加线上曝光？", rulesLink: "规则", terms: "条款", termsOfService: "服务条款", privacyLink: "隐私", payments: "付款", footerCredit: "Brandup Marketing 出品", confirmRank: "确认此排名", confirmRankIntro: "核对排名与价格，同意《服务条款》后继续。", chanceDisclaimer: "此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。", rankLabel: "排名", priceLabel: "价格", dueNow: "现在支付", stepPay: "付款", stepPayCopy: "一次付清，US$1 起。", stepRank: "排名", stepRankCopy: "累计付款最高者拿下第 1 名。", stepHold: "保持", stepHoldCopy: "直到有人付得更多。随时可追加。", statVisitors: "访问人次", statClicks: "次点进商家", statPaid: "商家已付", statWindow: "全时段，由 Rankoff 统计", alreadyPaid: "已付金额", payNow: "本次支付", totalAfter: "付款后累计", confirmationCopy: "付款确认后，你的条目会以此排名上线。其他人仍可付更多取得更高排名。此次收费是一次性的广告位置费用 —— 不是投注、押金或参赛费。没有奖品，也不涉及任何运气成分。", agreeTermsPrefix: "我了解这是为一个公开链接购买的赞助展示，付款不会获得该账号的所有权或编辑权，被展示方可要求下架。我同意《", agreeTermsSuffix: "》。", cancel: "取消", continueCheckout: "继续付款", skipLeaderboard: "跳到榜单", brandHome: "RANKOFF 首页", brandLogoAlt: "RANKOFF — 付费排名榜", rankingTimeframe: "排名时间范围", mainNavigation: "主导航", searchResults: "搜索结果", challengeLeaderboard: "挑战排行榜", decreaseBid: "减少 US$1", increaseBid: "增加 US$1", filterCategory: "按行业筛选", topThree: "赞助榜单前三名", boardPulse: "榜单动态", boardListings: "赞助条目榜单", pageNumbers: "页码", answers: "常见问题", closeDialog: "关闭对话框", rankPrice: "排名与价格", savePreferencesError: "此浏览器无法保存你的偏好设置。", checkoutUnavailable: "托管付款页面暂时无法使用，未产生任何费用。", checkoutOpening: "正在打开安全付款页面…", checkoutPreview: "此预览暂未连接实时付款，未产生任何费用。" },
   };
   const pageMetadata = Object.freeze({
     en: Object.freeze({
       title: "RANKOFF | Pay-to-rank leaderboard, from US$1",
       description: "Start at US$1 on Rankoff and compete for visible sponsored rank. Totals paid and tracked clicks remain public.",
       socialTitle: "RANKOFF | Start at US$1, compete for #1",
-      socialDescription: "A public sponsored leaderboard for Malaysian businesses. Start at US$1; totals paid and tracked clicks stay visible.",
-      schemaDescription: "Rankoff is a public sponsored leaderboard where Malaysian businesses pay for visible rank. Rank, total paid and tracked clicks are public.",
+      socialDescription: "A public sponsored leaderboard for businesses, products and services. Start at US$1; totals paid and tracked clicks stay visible.",
+      schemaDescription: "Rankoff is a public sponsored leaderboard for businesses, products and services. Rank, total paid and tracked clicks are public.",
       schemaAction: "Claim a sponsored rank",
     }),
     zh: Object.freeze({
       title: "RANKOFF｜付费排名榜，US$1 起",
       description: "在 Rankoff 付费拿下第 1 名。US$1 起的公开赞助榜单——排名、累计已付与追踪点击全部公开。",
       socialTitle: "RANKOFF｜US$1 起，竞逐第 1 名",
-      socialDescription: "面向马来西亚商家的公开赞助榜单。US$1 起即可上榜；累计付款金额和追踪点击公开可见。",
+      socialDescription: "面向商家、产品与服务的公开赞助榜单。US$1 起即可上榜；累计付款金额和追踪点击公开可见。",
       schemaDescription: "Rankoff 是公开的赞助排名榜，商家通过公开付款竞争最显眼的位置。排名、累计已付与追踪点击全部公开。",
       schemaAction: "认领赞助排名",
     }),
@@ -212,6 +216,10 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
     heroRank: document.querySelector("[data-hero-rank]"),
     heroJoin: document.querySelector("[data-hero-join]"),
     heroContext: document.querySelector("[data-hero-context]"),
+    heroEntryPrice: document.querySelector("[data-hero-entry-price]"),
+    heroTopPrice: document.querySelector("[data-hero-top-price]"),
+    heroList: document.querySelector("[data-hero-list]"),
+    heroTop: document.querySelector("[data-hero-top]"),
     boardState: document.querySelector("[data-board-state]"),
     inlineSubmit: document.querySelector("[data-inline-submit]"),
     currentLeader: document.querySelector("[data-current-leader]"),
@@ -257,6 +265,8 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
   let remotePagination = null;
   let remoteLeader = null;
   let remoteRequestId = 0;
+  let viewLoading = false;
+  let checkoutPending = false;
   let state = loadState();
   const sharedView = new URL(window.location.href);
   const requestedLanguage = String(sharedView.searchParams.get("lang") || "").toLowerCase();
@@ -267,6 +277,9 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
   const sharedCategory = sharedView.searchParams.get("category");
   if (sharedCategory === DEFAULT_CATEGORY) state.category = DEFAULT_CATEGORY;
   else if (canonicalCategory(sharedCategory)) state.category = canonicalCategory(sharedCategory);
+  const requestedPage = Number(sharedView.searchParams.get("page"));
+  if (Number.isSafeInteger(requestedPage) && requestedPage > 0 && requestedPage <= 10_000) boardPage = requestedPage;
+  let loadedView = { category: state.category, period: state.activeWindow, page: boardPage };
   let activeBid = null;
   let pendingChallenge = null;
   let lastTrigger = null;
@@ -279,7 +292,7 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
   let remoteCurrency = "USD";
   // The board floor (RM1), kept separate from the price of #1. Ranking is
   // cumulative, so these are two different numbers and must never be conflated.
-  let remoteMinIncrement = 1;
+  let remoteMinIncrement = 2;
   // Once the buyer edits the amount we stop prefilling it, so a board refresh
   // can never silently replace the number they chose.
   let inlineBidTouched = false;
@@ -299,7 +312,7 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
     const fallback = {
       activeWindow: "all",
       category: DEFAULT_CATEGORY,
-      theme: "light",
+      theme: "dark",
       language: "en",
       listings: servedFromWeb ? [] : seedListings.map(cloneListing),
       activity: servedFromWeb ? [] : [...seedActivity],
@@ -325,7 +338,7 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
         // The shared URL is applied after loadState returns. Reading its later
         // const here throws and silently discards saved theme/language choices.
         category: DEFAULT_CATEGORY,
-        theme: saved.theme === "dark" ? "dark" : "light",
+        theme: saved.theme === "light" ? "light" : "dark",
         language: saved.language === "zh" ? "zh" : "en",
       };
       // A previous visit's demo listings are still demo listings.
@@ -392,7 +405,9 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
         activeWindow: state.activeWindow,
         category: state.category,
         theme: state.theme,
-        language: state.language,
+        // Malay is a translation layer over the English page, so the app state
+        // stays "en" while the saved preference records the language shown.
+        language: window.RankoffLocale?.isMalay ? "ms" : state.language,
       };
       // index.html opened from disk is the only place where demo listings are
       // state. A served page may briefly have boardSource="local" while the API
@@ -416,11 +431,25 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
     return (translations[state.language] || translations.en)[key] || translations.en[key] || key;
   }
 
+  function discoveryLanguage() {
+    return window.RankoffLocale?.isMalay ? "ms" : state.language;
+  }
+
+  function renderDiscovery() {
+    const language = discoveryLanguage();
+    const statsScope = document.querySelector('[data-i18n="statWindow"]');
+    if (statsScope) statsScope.textContent = language === "zh"
+      ? "全站累计，由 Rankoff 统计"
+      : language === "ms" ? "Jumlah sepanjang masa laman, dikira oleh Rankoff"
+      : "Sitewide totals, counted by Rankoff";
+  }
+
   function currencyUnit() {
     return remoteCurrency === "MYR" ? "RM" : "US$";
   }
 
   function updateCurrencyCopy() {
+    if (servedFromWeb && boardSource === "local") return;
     const unit = currencyUnit();
     const one = `${unit}1`;
     const floor = money(boardMinimum());
@@ -472,6 +501,7 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
   }
 
   function renderMetadata() {
+    if (servedFromWeb && boardSource === "local") return;
     const metadata = pageMetadata[state.language] || pageMetadata.en;
     const liveMetadata = boardSource === "production"
       ? Object.fromEntries(Object.entries(metadata).map(([key, value]) => [key, typeof value === "string" ? value.replaceAll("US$1", money(boardMinimum())) : value]))
@@ -484,8 +514,8 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
     document.querySelector('meta[property="og:url"]')?.setAttribute("content", canonical);
     document.querySelector('meta[property="og:locale"]')?.setAttribute("content", state.language === "zh" ? "zh_MY" : "en_MY");
     document.querySelector('meta[property="og:locale:alternate"]')?.setAttribute("content", state.language === "zh" ? "en_MY" : "zh_MY");
-    document.querySelector('meta[name="twitter:title"]')?.setAttribute("content", metadata.socialTitle);
-    document.querySelector('meta[name="twitter:description"]')?.setAttribute("content", metadata.socialDescription);
+    document.querySelector('meta[name="twitter:title"]')?.setAttribute("content", liveMetadata.socialTitle);
+    document.querySelector('meta[name="twitter:description"]')?.setAttribute("content", liveMetadata.socialDescription);
     document.querySelector('link[rel="canonical"]')?.setAttribute("href", canonical);
     document.querySelector('link[rel="alternate"][hreflang="en"]')?.setAttribute("href", languageCanonicalUrl("en"));
     document.querySelector('link[rel="alternate"][hreflang="zh-Hans"]')?.setAttribute("href", languageCanonicalUrl("zh"));
@@ -579,9 +609,15 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
     // has loaded. Without this it stays English on first paint, and stays
     // English for good if the board request fails.
     renderHeroHeadline();
-    document.querySelectorAll("[data-i18n]").forEach((node) => { node.textContent = languageText(node.dataset.i18n); });
+    document.querySelectorAll("[data-i18n]").forEach((node) => {
+      if (servedFromWeb && boardSource === "local" && ["heroCopy", "stepPayCopy"].includes(node.dataset.i18n)) return;
+      node.textContent = languageText(node.dataset.i18n);
+    });
     document.querySelectorAll("[data-i18n-placeholder]").forEach((node) => { node.setAttribute("placeholder", languageText(node.dataset.i18nPlaceholder)); });
-    document.querySelectorAll("[data-i18n-aria-label]").forEach((node) => { node.setAttribute("aria-label", languageText(node.dataset.i18nAriaLabel)); });
+    document.querySelectorAll("[data-i18n-aria-label]").forEach((node) => {
+      if (servedFromWeb && boardSource === "local" && ["paymentAmountLabel", "decreaseBid", "increaseBid"].includes(node.dataset.i18nAriaLabel)) return;
+      node.setAttribute("aria-label", languageText(node.dataset.i18nAriaLabel));
+    });
     document.querySelectorAll("[data-i18n-alt]").forEach((node) => { node.setAttribute("alt", languageText(node.dataset.i18nAlt)); });
     syncLocalizedLinks();
     localizeServerBoard();
@@ -675,6 +711,9 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
   async function refreshBoardFromApi() {
     if (!/^https?:$/.test(window.location.protocol)) return false;
     const requestId = ++remoteRequestId;
+    viewLoading = true;
+    syncCheckoutControls();
+    const view = { category: state.category, period: state.activeWindow, page: boardPage };
     const endpoint = new URL(BOARD_API_ENDPOINT, window.location.href);
     endpoint.searchParams.set("board", "global");
     endpoint.searchParams.set("category", state.category);
@@ -685,10 +724,12 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
 
     try {
       const response = await fetch(endpoint, { headers: { Accept: "application/json" }, cache: "no-store" });
+      if (requestId !== remoteRequestId) return null;
       if (!response.ok) return false;
       const payload = await response.json();
-      if (requestId !== remoteRequestId || !Array.isArray(payload?.rankings)) return false;
-      const period = state.activeWindow;
+      if (requestId !== remoteRequestId) return null;
+      if (!Array.isArray(payload?.rankings)) return false;
+      const period = view.period;
       const previousActivityId = String(state.activity[0]?.id || "");
       state.listings = payload.rankings.map((entry, index) => normalizeApiRanking(entry, index, period));
       if (state.category === DEFAULT_CATEGORY && boardPage === 1) {
@@ -702,7 +743,7 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
             totalPages: Math.max(1, Number(payload.pagination.total_pages) || 1),
           }
         : null;
-      if (boardPage === 1 && state.listings[0]) remoteLeader = cloneListing(state.listings[0]);
+      if (boardPage === 1) remoteLeader = state.listings[0] ? cloneListing(state.listings[0]) : null;
       boardSource = payload.mode === "production" ? "production" : "api";
       if (boardSource === "production") {
         void loadAudienceStats();
@@ -720,9 +761,12 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
       remoteCurrency = String(payload.board?.currency || "USD").toUpperCase();
       remoteMinIncrement = dollarsFromMinor(payload.board?.min_increment_minor, 1);
       currency = boardCurrencyFormat(remoteCurrency);
+      loadedView = view;
       const symbolNode = document.querySelector("[data-currency-symbol]");
       if (symbolNode) symbolNode.textContent = remoteCurrency === "MYR" ? "RM" : "US$";
       render();
+      saveState();
+      syncBoardViewUrl();
       if (boardSource === "production" && !boardViewSent) {
         boardViewSent = true;
         void recordBoardView();
@@ -730,9 +774,51 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
       void mergeCounterpartClicks();
       return true;
     } catch {
-      /* Static preview and offline use intentionally fall back to the local board. */
-      return false;
+      return requestId === remoteRequestId ? false : null;
+    } finally {
+      if (requestId === remoteRequestId) {
+        viewLoading = false;
+        elements.boardList.removeAttribute("aria-busy");
+        syncCheckoutControls();
+      }
     }
+  }
+
+  function syncBoardViewUrl() {
+    if (!servedFromWeb) return;
+    const url = new URL(window.location.href);
+    url.searchParams.delete("country");
+    for (const [key, value, fallback] of [["category", state.category, "all"], ["period", state.activeWindow, "all"], ["page", String(boardPage), "1"]]) {
+      if (value === fallback) url.searchParams.delete(key);
+      else url.searchParams.set(key, value);
+    }
+    try { window.history.replaceState(window.history.state, "", `${url.pathname}${url.search}${url.hash}`); }
+    catch { /* A browser may restrict optional URL updates. */ }
+  }
+
+  async function changeBoardView(next) {
+    state.category = next.category ?? state.category;
+    state.activeWindow = next.period ?? state.activeWindow;
+    boardPage = next.page ?? 1;
+    invalidateQuote();
+    if (!servedFromWeb) {
+      render();
+      return true;
+    }
+    elements.boardList.setAttribute("aria-busy", "true");
+    const request = refreshBoardFromApi();
+    const requestId = remoteRequestId;
+    const result = await request;
+    if (requestId !== remoteRequestId) return null;
+    if (result === false) {
+      state.category = loadedView.category;
+      state.activeWindow = loadedView.period;
+      boardPage = loadedView.page;
+      render();
+      showToast(discoveryCopy(discoveryLanguage()).error, "error");
+    }
+    elements.boardList.removeAttribute("aria-busy");
+    return result;
   }
 
   async function mergeCounterpartClicks() {
@@ -821,17 +907,19 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
     return `${value} ${count === 1 ? "click" : "clicks"}`;
   }
 
+  // Short enough to share one phone row with "Visit …" and Share.
   function claimLabel(amount) {
     return state.language === "zh"
       ? `${money(amount)} 拿下此排名`
-      : `Claim this rank for ${money(amount)}`;
+      : `Claim for ${money(amount)}`;
   }
 
   function createClaimControl(amount) {
     // A real, always-visible pill: the ONLY bid entry point on the card.
-    const control = createElement("button", "claim-rank-pill", claimLabel(amount));
+    const todayView = state.activeWindow === "today";
+    const control = createElement("button", "claim-rank-pill", todayView ? discoveryCopy(discoveryLanguage()).sponsor : claimLabel(amount));
     control.type = "button";
-    control.dataset.prepareChallenge = String(amount);
+    control.dataset.prepareChallenge = String(todayView ? boardMinimum() : amount);
     return control;
   }
 
@@ -844,6 +932,8 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
     overlay.rel = "noopener nofollow sponsored";
     overlay.tabIndex = -1;
     overlay.setAttribute("aria-hidden", "true");
+    // Desktop-only (CSS hides it on phones); the tooltip says where a click on the card goes.
+    overlay.title = state.language === "zh" ? `访问 ${listing.name}` : `Visit ${listing.name}`;
     return overlay;
   }
 
@@ -1184,7 +1274,39 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
     }
   }
 
-  function productIdentity(listing, descriptionTag = "p", position = null) {
+  // "Visit Instagram", not "Visit website", when the listing is a social account.
+  function visitTargetLabel(listing) {
+    const identity = String(listing.identity || listing.hostname || "");
+    if (!identity.includes(":")) return state.language === "zh" ? "网站" : "website";
+    const platform = identity.split(":")[0].toLowerCase();
+    const names = { instagram: "Instagram", facebook: "Facebook", tiktok: "TikTok", youtube: "YouTube", linkedin: "LinkedIn", x: "X", threads: "Threads", xiaohongshu: "小红书" };
+    return names[platform] || `${platform.charAt(0).toUpperCase()}${platform.slice(1)}`;
+  }
+
+  // One-click visit, outbid-style — but through the tracked /go redirect so
+  // the click still lands in the listing's tracked-clicks count.
+  function createVisitLink(listing, position) {
+    const chinese = state.language === "zh";
+    const target = visitTargetLabel(listing);
+    const visit = createElement("a", "listing-visit", chinese ? `访问${target === "网站" ? "网站" : ` ${target}`} ↗` : `Visit ${target} ↗`);
+    visit.href = listingVisitHref(listing, position);
+    visit.target = "_blank";
+    visit.rel = "noopener nofollow sponsored";
+    visit.setAttribute("aria-label", chinese ? `访问 ${listing.name} 的${target === "网站" ? "网站" : ` ${target}`}` : `Visit ${listing.name}'s ${target}`);
+    return visit;
+  }
+
+  // Two placements, one visible at a time: on a phone the details link sits on
+  // the meta line, on wider screens in the action row (CSS chooses).
+  function createDetailsLink(listing, placement = "action") {
+    const chinese = state.language === "zh";
+    const details = createElement("a", `listing-details listing-details-${placement}`, chinese ? "查看详情" : "See details");
+    details.href = listingDetailsHref(listing);
+    details.setAttribute("aria-label", chinese ? `查看 ${listing.name} 的详细信息` : `See details for ${listing.name}`);
+    return details;
+  }
+
+  function productIdentity(listing, descriptionTag = "p", position = null, withActions = true) {
     const wrapper = createElement("div", "product-cell");
     const markLink = createElement("a", "product-mark-link");
     markLink.href = listingVisitHref(listing, position);
@@ -1242,22 +1364,15 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
     if (production && getClicks(listing) > 0) {
       meta.append(createElement("span", "meta-item listing-clicks", clickLabel));
     }
-    // One-click visit, outbid-style — but through the tracked /go redirect so
-    // the click still lands in the listing's verified-clicks count.
-    const visit = createElement("a", "listing-visit", chinese ? "访问网站 ↗" : "Visit website ↗");
-    visit.href = listingVisitHref(listing, position);
-    visit.target = "_blank";
-    visit.rel = "noopener nofollow sponsored";
-    visit.setAttribute("aria-label", chinese ? `访问 ${listing.name} 的网站` : `Visit ${listing.name}'s website`);
-    meta.append(visit);
-    const details = createElement("a", "listing-details", chinese ? "查看详情" : "See details");
-    details.href = listingDetailsHref(listing);
-    details.setAttribute("aria-label", chinese ? `查看 ${listing.name} 的详细信息` : `See details for ${listing.name}`);
-    meta.append(details);
+    // Board cards carry visit/share/claim in their own action row and keep a
+    // phone-only details link here; other views keep both links on the meta line.
+    if (withActions) meta.append(createVisitLink(listing, position), createDetailsLink(listing, "meta"));
+    else meta.append(createDetailsLink(listing, "meta"));
     if (listing.isDemo) meta.append(createElement("span", "local-chip", chinese ? "本地演示" : "Local"));
 
     const description = createElement(descriptionTag, "listing-description", listing.description);
-    copy.append(listingLink(listing, position), description, meta);
+    copy.append(listingLink(listing, position), description);
+    copy.append(meta);
     markLink.append(mark);
     wrapper.append(markLink, copy);
     return wrapper;
@@ -1281,7 +1396,7 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
    */
   function existingListingForPending() {
     if (!pendingChallenge?.url) return null;
-    return state.listings.find((item) => {
+    return (state.quoteListings || state.listings).find((item) => {
       try {
         const url = new URL(item.url);
         return listingIdentity(url.hostname, accountFrom(url)) === listingIdentity(pendingChallenge.url.hostname, accountFrom(pendingChallenge.url));
@@ -1298,12 +1413,40 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
    * price of #1.
    */
   function boardMinimum() {
-    return boardSource === "local" ? 1 : Math.max(1, remoteMinIncrement);
+    return boardSource === "local" ? 2 : Math.max(1, remoteMinIncrement);
+  }
+
+  function paymentPreviewPeriod() {
+    return servedFromWeb ? "all" : state.activeWindow;
+  }
+
+  function canReviewPayment() {
+    return !servedFromWeb || (boardSource === "production" && !viewLoading);
+  }
+
+  function hasCurrentQuote() {
+    return !servedFromWeb || Boolean(chosenMarket && chosenMarket.category === pendingChallenge?.category
+      && chosenMarket.period === "all" && chosenMarket.currency === remoteCurrency);
+  }
+
+  function syncCheckoutControls() {
+    if (elements.inlineSubmit) elements.inlineSubmit.disabled = !canReviewPayment() || quoteLoading || checkoutPending;
+    const submit = elements.bidForm?.querySelector('button[type="submit"]');
+    if (submit) submit.disabled = !canReviewPayment() || quoteLoading || checkoutPending || !hasCurrentQuote();
+  }
+
+  function invalidateQuote() {
+    quoteRequestId += 1;
+    quoteLoading = false;
+    chosenMarket = null;
+    state.quoteListings = null;
+    syncCheckoutControls();
   }
 
   /** Suggested amount to take the next rank up. A default, never a gate. */
   function suggestedBidForNextRank() {
-    const ranked = rankedListings();
+    const period = paymentPreviewPeriod();
+    const ranked = hasCurrentQuote() && chosenMarket ? chosenMarket.listings : rankedListings(undefined, period);
     if (!ranked.length) return boardMinimum();
     if (activeBid?.type === "new") {
       const existing = existingListingForPending();
@@ -1311,74 +1454,94 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
       // Every place costs the board's step more than the one holding it, and
       // the step is the minimum payment, so every figure stays a round one.
       if (existing && leader && existing.id !== leader.id) {
-        return Math.max(boardMinimum(), Math.ceil(getBid(leader) - getBid(existing) + boardMinimum()));
+        return Math.max(boardMinimum(), Math.ceil(getBid(leader, period) - getBid(existing, period) + boardMinimum()));
       }
       if (existing && leader && existing.id === leader.id) return boardMinimum();
-      return Math.ceil(getBid(leader) + boardMinimum());
+      return Math.ceil(getBid(leader, period) + boardMinimum());
     }
 
     const listing = state.listings.find((item) => item.id === activeBid?.listingId);
-    if (!listing) return Math.ceil(getBid(ranked[0]) + 1);
+    if (!listing) return Math.ceil(getBid(ranked[0], period) + boardMinimum());
     const index = ranked.findIndex((item) => item.id === listing.id);
     // A top-up ADDS to this listing's existing total, so the suggestion is the
     // gap to close — not the rival's total. Suggesting the rival's total
     // overcharged every returning customer by everything they had already paid.
     if (index <= 0) return boardMinimum();
-    const gap = getBid(ranked[index - 1]) - getBid(listing) + boardMinimum();
+    const gap = getBid(ranked[index - 1], period) - getBid(listing, period) + boardMinimum();
     return Math.max(boardMinimum(), Math.ceil(gap));
   }
 
   async function loadChosenMarket(category) {
+    const requestId = ++quoteRequestId;
+    quoteLoading = false;
     chosenMarket = null;
-    if (!categories.includes(category) || !/^https?:$/.test(window.location.protocol)) return;
+    state.quoteListings = null;
+    if (!categories.includes(category) || !servedFromWeb || boardSource !== "production") {
+      syncCheckoutControls();
+      return false;
+    }
+    quoteLoading = true;
+    syncCheckoutControls();
     const endpoint = new URL(BOARD_API_ENDPOINT, window.location.href);
     endpoint.searchParams.set("board", "global");
     endpoint.searchParams.set("category", category);
-    endpoint.searchParams.set("period", state.activeWindow);
+    endpoint.searchParams.set("period", "all");
     endpoint.searchParams.set("limit", String(PAGE_SIZE));
     try {
-      const response = await fetch(endpoint, { headers: { Accept: "application/json" }, cache: "no-store" });
-      if (!response.ok) return;
-      const payload = await response.json();
-      if (payload?.mode !== "production" || !Array.isArray(payload.rankings)) return;
-      const board = await fetch(new URL(`${BOARD_API_ENDPOINT}?board=global&category=all&period=${state.activeWindow}&limit=${PAGE_SIZE}`, window.location.href), { headers: { Accept: "application/json" }, cache: "no-store" })
-        .then((response) => (response.ok ? response.json() : null))
-        .catch(() => null);
+      const boardEndpoint = new URL(endpoint);
+      boardEndpoint.searchParams.set("category", "all");
+      const board = await readCompleteBoard(boardEndpoint);
+      if (requestId !== quoteRequestId) return null;
+      if (board.board?.currency !== remoteCurrency || Number(board.board?.min_increment_minor) / 100 !== boardMinimum()) return false;
+      const payload = { ...board, rankings: board.rankings.filter((entry) => canonicalCategory(entry.listing?.category) === category) };
+      state.quoteListings = board.rankings.map((entry, index) => normalizeApiRanking(entry, index, "all"));
       chosenMarket = {
         category,
+        period: "all",
+        currency: board.board.currency,
+        snapshotId: board.snapshot_id || null,
         totals: payload.rankings.map((entry) => (Number(entry.bid?.amount_minor || 0) / 100)),
+        listings: payload.rankings.map((entry, index) => normalizeApiRanking(entry, index, "all")),
         // What the same payment is worth on the whole board, so a market's #1
         // is not mistaken for the top of the home page.
         boardTotals: Array.isArray(board?.rankings)
           ? board.rankings.map((entry) => (Number(entry.bid?.amount_minor || 0) / 100))
           : null,
-        nextBid: dollarsFromMinor(payload.next_bid_minor, null),
+        nextBid: Math.ceil(Number(payload.rankings[0]?.bid?.amount_minor || 0) / 100 + boardMinimum()),
       };
     } catch {
-      /* Falling back to the visible board is still a truthful projection. */
+      return requestId === quoteRequestId ? false : null;
+    } finally {
+      if (requestId === quoteRequestId) {
+        quoteLoading = false;
+        syncCheckoutControls();
+      }
     }
     render();
+    return true;
   }
 
   function overallRank(amount) {
-    if (activeBid?.type !== "new" || existingListingForPending()) return null;
-    const totals = chosenMarket?.category === pendingChallenge?.category ? chosenMarket?.boardTotals : null;
-    if (!Array.isArray(totals)) return null;
-    return totals.filter((value) => value >= amount).length + 1;
+    if (activeBid?.type !== "new" || !hasCurrentQuote() || !Array.isArray(state.quoteListings)) return null;
+    const existing = existingListingForPending();
+    const total = Math.round(((existing ? getBid(existing, paymentPreviewPeriod()) : 0) + amount) * 100) / 100;
+    return state.quoteListings.filter((listing) => listing.id !== existing?.id && getBid(listing, paymentPreviewPeriod()) >= total).length + 1;
   }
 
   function projectedRank(amount) {
-    const ranked = rankedListings();
+    if (servedFromWeb && !hasCurrentQuote()) return null;
+    const period = paymentPreviewPeriod();
+    const ranked = chosenMarket?.category === pendingChallenge?.category ? chosenMarket.listings : rankedListings();
     if (activeBid?.type === "new") {
       const existing = existingListingForPending();
-      const total = existing ? Math.round((getBid(existing) + amount) * 100) / 100 : amount;
+      const total = existing ? Math.round((getBid(existing, period) + amount) * 100) / 100 : amount;
       // A tie goes to whoever settled first, and this payment settles last, so an
       // equal total still outranks it: counting only strictly larger totals
       // promised #1 for a price that ties the leader.
       if (chosenMarket && chosenMarket.category === pendingChallenge?.category && !existing) {
         return chosenMarket.totals.filter((value) => value >= total).length + 1;
       }
-      return ranked.filter((listing) => listing.id !== existing?.id && getBid(listing) >= total).length + 1;
+      return ranked.filter((listing) => listing.id !== existing?.id && getBid(listing, period) >= total).length + 1;
     }
 
     const listing = state.listings.find((item) => item.id === activeBid?.listingId);
@@ -1386,20 +1549,20 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
     // Cumulative: this payment adds to whatever the listing has already
     // settled. Replacing the total instead of adding to it projected the wrong
     // rank for every repeat customer.
-    const projectedTotal = Math.round((getBid(listing) + amount) * 100) / 100;
+    const projectedTotal = Math.round((getBid(listing, period) + amount) * 100) / 100;
     const projected = ranked.map((item) =>
       item.id === listing.id
-        ? { ...item, bids: { ...item.bids, [state.activeWindow]: projectedTotal } }
+        ? { ...item, bids: { ...item.bids, [period]: projectedTotal } }
         : item,
     );
-    return rankedListings(projected).findIndex((item) => item.id === listing.id) + 1;
+    return rankedListings(projected, period).findIndex((item) => item.id === listing.id) + 1;
   }
 
   function renderCategories() {
     if (!elements.categoryRail) return;
     elements.categoryScrollButtons.forEach((button) => {
       const previous = Number(button.dataset.categoryScroll) < 0;
-      button.setAttribute("aria-label", state.language === "zh" ? (previous ? "向左滚动市场" : "向右滚动市场") : (previous ? "Scroll markets left" : "Scroll markets right"));
+      button.setAttribute("aria-label", state.language === "zh" ? (previous ? "向左滚动行业" : "向右滚动行业") : (previous ? "Scroll industries left" : "Scroll industries right"));
     });
     const shortLabels = state.language === "zh"
       ? { SaaS: "SaaS 与软件", Developer: "开发者工具", Creators: "创作者", Property: "房产", Interior: "室内装修", Beauty: "美容", Health: "健康医疗", Sports: "运动健身", Food: "餐饮", Marketing: "营销", Creative: "创意制作", Professional: "专业服务", Education: "教育与培训", Finance: "金融与保险", Electronics: "电子与维修", Retail: "零售电商", Construction: "五金建筑", Home: "家居服务", Automotive: "汽车", AI: "AI 工具与智能体", Other: "其他" }
@@ -1407,7 +1570,7 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
     // Markets holding a listing come first: a visitor should meet a board with
     // something on it, while an empty market stays one scroll away for whoever
     // wants to take its first place.
-    const ordered = [...categories].sort((left, right) => Number(["AI", "SaaS", "Developer"].includes(right)) - Number(["AI", "SaaS", "Developer"].includes(left)) || Number(marketsWithListings.has(right)) - Number(marketsWithListings.has(left)));
+    const ordered = [...categories].sort((left, right) => Number(marketsWithListings.has(right)) - Number(marketsWithListings.has(left)));
     const buttons = [{ label: state.language === "zh" ? "全部" : "All", value: DEFAULT_CATEGORY }, ...ordered.map((category) => ({ label: shortLabels[category], value: category }))];
     elements.categoryRail.replaceChildren(
       ...buttons.map(({ label, value }) => {
@@ -1533,7 +1696,7 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
     }
 
     if (!listings.length) {
-      const empty = createElement("p", "empty-state", state.language === "zh" ? "此榜单暂时没有符合条件的赞助条目。" : "No sponsored listings match this board yet.");
+      const empty = createElement("p", "empty-state", discoveryCopy(discoveryLanguage()).empty);
       empty.setAttribute("role", "status");
       elements.boardList.replaceChildren(empty);
     } else {
@@ -1580,11 +1743,21 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
       createElement("strong", "", money(getBid(listing))),
     );
     const bidStack = createElement("div", "featured-bid-stack");
-    bidStack.append(bid, createShareControl(listing, position));
+    bidStack.append(bid);
     evidence.append(bidStack);
 
+    // One stable action row inside the card: where to go on the left, share
+    // and claim on the right. Nothing sits on the card's edge, and every
+    // control is a 44px target.
+    const actions = createElement("div", "listing-actions");
+    const links = createElement("div", "listing-actions-links");
+    links.append(createVisitLink(listing, position), createDetailsLink(listing, "action"));
+    const controls = createElement("div", "listing-actions-controls");
+    controls.append(createShareControl(listing, position), createClaimControl(minimum));
+    actions.append(links, controls);
+
     card.id = `listing-${listing.id}`;
-    card.append(rank, productIdentity(listing, "p", position), evidence, createVisitOverlay(listing, position), createClaimControl(minimum));
+    card.append(rank, productIdentity(listing, "p", position, false), evidence, createVisitOverlay(listing, position), actions);
     return card;
   }
 
@@ -1608,6 +1781,10 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
   // it was the one headline on the site that never translated.
   function renderHeroHeadline() {
     if (!elements.heroTitle || !elements.heroLead || !elements.heroRank || !elements.heroJoin) return;
+    if (state.activeWindow === "today") {
+      elements.heroTitle.replaceChildren(createElement("span", "", languageText("todayRanking")));
+      return;
+    }
     const chinese = state.language === "zh";
     elements.heroLead.textContent = chinese ? "" : "Claim ";
     elements.heroRank.textContent = chinese ? "第 1 名" : "#1";
@@ -1618,6 +1795,24 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
     elements.heroTitle.replaceChildren(...order.filter(Boolean));
   }
 
+  // The two prices a visitor needs, side by side and labelled: the floor to be
+  // listed at all, and what taking #1 costs right now. Both come from the board
+  // payload, never from copy, so they cannot drift from the checkout amounts.
+  function renderHeroPaths(topPrice) {
+    const floor = boardMinimum();
+    if (elements.heroEntryPrice) elements.heroEntryPrice.textContent = state.language === "zh" ? `${money(floor)} 起` : `from ${money(floor)}`;
+    if (elements.heroList) elements.heroList.dataset.prepareChallenge = String(floor);
+    if (elements.heroList) elements.heroList.setAttribute("aria-label", state.language === "zh" ? `让生意上榜，${money(floor)} 起` : `List your business from ${money(floor)}`);
+    if (elements.heroTopPrice) elements.heroTopPrice.textContent = money(topPrice);
+    if (elements.heroTop) {
+      elements.heroTop.dataset.prepareChallenge = String(topPrice);
+      elements.heroTop.setAttribute("aria-label", state.language === "zh" ? `立即以 ${money(topPrice)} 拿下第 1 名` : `Claim #1 now for ${money(topPrice)}`);
+      // "Take #1" prices the all-time board; Past 24h is a different ranking.
+      elements.heroTop.hidden = state.activeWindow === "today";
+    }
+    if (elements.heroContext) elements.heroContext.textContent = languageText("heroValue");
+  }
+
   function renderLeader() {
     const leader = boardSource !== "local" && remoteLeader ? remoteLeader : rankedListings()[0];
     if (!leader) {
@@ -1625,14 +1820,10 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
         const openingPrice = remoteNextBid || 1;
         renderHeroMarket();
         if (elements.heroPrice) elements.heroPrice.textContent = money(openingPrice);
-        if (elements.heroContext) {
-          elements.heroContext.textContent = state.language === "zh"
-            ? `${money(openingPrice)} 即可登上${state.category === DEFAULT_CATEGORY ? "榜单" : categoryName(state.category, "zh")}第 1 名。这是付费展示，累计付款最高者排第一。`
-            : `${money(openingPrice)} takes #1${state.category === DEFAULT_CATEGORY ? "" : ` in ${categoryName(state.category)}`}. This is paid placement. The highest total paid ranks first.`;
-        }
+        renderHeroPaths(openingPrice);
         if (elements.inlineBid) {
           elements.inlineBid.min = String(boardMinimum());
-          if (!inlineBidTouched) elements.inlineBid.value = String(openingPrice);
+          if (!inlineBidTouched) elements.inlineBid.value = String(boardMinimum());
         }
       }
       return;
@@ -1641,16 +1832,11 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
     // the board: a hardware shop pre-filled with the leader's Marketing can reach
     // checkout without anyone noticing it was filed in the wrong trade.
     const leaderCategory = canonicalCategory(leader.category) || "Other";
-    const marketPrice = chosenMarket && chosenMarket.category === elements.categorySelect?.value ? chosenMarket.nextBid : null;
-    const nextPrice = marketPrice || (boardSource === "local" || !remoteNextBid ? Math.ceil(getBid(leader) + 1) : remoteNextBid);
+    const nextPrice = boardSource === "local" || !remoteNextBid ? Math.ceil(getBid(leader) + boardMinimum()) : remoteNextBid;
 
     renderHeroMarket();
     if (elements.heroPrice) elements.heroPrice.textContent = money(nextPrice);
-    if (elements.heroContext) {
-      elements.heroContext.textContent = state.language === "zh"
-        ? `公开赞助榜单，${money(boardMinimum())} 起。累计付款最高者第 1 名；上方价格对应所选榜单。`
-        : `Public sponsored rank, from ${money(boardMinimum())}. Highest total paid ranks first. The price above claims #1 on the selected board.`;
-    }
+    renderHeroPaths(nextPrice);
     if (elements.leaderBid) elements.leaderBid.textContent = money(getBid(leader));
     if (elements.leaderClicks) elements.leaderClicks.textContent = compact.format(getClicks(leader));
     if (elements.leaderCategory) elements.leaderCategory.textContent = categoryName(leader.category);
@@ -1660,7 +1846,7 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
       // price of #1 made native validation reject every smaller entry, which
       // shut out exactly the cheap listings cumulative ranking exists to allow.
       elements.inlineBid.min = String(boardMinimum());
-      if (!inlineBidTouched) elements.inlineBid.value = String(nextPrice);
+      if (!inlineBidTouched) elements.inlineBid.value = String(boardMinimum());
     }
   }
 
@@ -1869,6 +2055,7 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
   }
 
   function renderTotals() {
+    if (servedFromWeb && boardSource === "local") return;
     const totalClicks = state.listings.reduce((sum, listing) => sum + getClicks(listing), 0);
     const totalBids = state.listings.reduce((sum, listing) => sum + getBid(listing), 0);
     if (elements.resultClicks) elements.resultClicks.textContent = compact.format(totalClicks);
@@ -1925,11 +2112,18 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
     renderTotals();
     updateBoardSourceLabels();
     updateCurrencyCopy();
+    renderDiscovery();
+    syncCheckoutControls();
     window.dispatchEvent(new CustomEvent("rankoff:content-updated"));
   }
 
   function updateBidPreview() {
     if (!elements.bidAmount || !activeBid) return;
+    if (!canReviewPayment() || !hasCurrentQuote()) {
+      if (elements.dialogRank) elements.dialogRank.textContent = "—";
+      syncCheckoutControls();
+      return;
+    }
     const amount = Number(elements.bidAmount.value);
     if (!Number.isSafeInteger(amount) || amount < boardMinimum() || amount > MAX_BID) return;
     const rank = projectedRank(amount);
@@ -1944,7 +2138,7 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
     // rank above is computed from. A first payment shows US$ 0 already paid.
     if (elements.dialogPrevious) {
       const existing = activeBid.type === "new" ? existingListingForPending() : listing;
-      const previous = existing ? getBid(existing) : 0;
+      const previous = existing ? getBid(existing, paymentPreviewPeriod()) : 0;
       elements.dialogPrevious.textContent = money(previous);
       if (elements.dialogNow) elements.dialogNow.textContent = money(amount);
       if (elements.dialogAfter) elements.dialogAfter.textContent = money(previous + amount);
@@ -1952,15 +2146,16 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
     // "All-time board · Beauty & Wellness" read as the board's own first place;
     // the rank belongs to the market, and the timeframe is the smaller detail.
     if (elements.dialogContext) {
-      const timeframe = state.language === "zh"
-        ? (state.activeWindow === "today" ? "近 24 小时" : "全时段")
-        : (state.activeWindow === "today" ? "past 24h" : "all-time");
-      const market = state.language === "zh"
+      const language = discoveryLanguage();
+      const timeframe = language === "zh" ? "全时段" : language === "ms" ? "sepanjang masa" : "all-time";
+      const market = language === "ms"
+        ? `dalam ${categoryName(category)} · ${timeframe}`
+        : language === "zh"
         ? `${categoryName(category, "zh")}榜 · ${timeframe}`
         : `in ${categoryName(category)} · ${timeframe}`;
       const overall = overallRank(amount);
       elements.dialogContext.textContent = overall && overall !== rank
-        ? (state.language === "zh" ? `${market} · 全站第 ${overall} 名` : `${market} · #${overall} on the whole board`)
+        ? (language === "zh" ? `${market} · 全站第 ${overall} 名` : language === "ms" ? `${market} · #${overall} pada seluruh papan` : `${market} · #${overall} on the whole board`)
         : market;
     }
     if (elements.dialogTarget) {
@@ -1992,6 +2187,10 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
 
   function openBidDialog(trigger, listingId = null) {
     if (!elements.dialog || !elements.bidForm || !elements.bidAmount) return;
+    if (!canReviewPayment() || !hasCurrentQuote()) {
+      showToast(languageText("checkoutUnavailable"), "error");
+      return;
+    }
     activeBid = listingId ? { type: "listing", listingId } : { type: "new" };
     lastTrigger = trigger;
     elements.bidForm.reset();
@@ -2059,6 +2258,7 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
   }
 
   function applyBid(amount) {
+    if (servedFromWeb) return null;
     const before = rankedListings();
     const previousLeader = before[0] || null;
     let previousListing = activeBid?.type === "listing"
@@ -2131,6 +2331,7 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
   }
 
   async function startLiveCheckout(amount) {
+    if (!canReviewPayment() || !hasCurrentQuote()) throw checkoutFailure(languageText("checkoutUnavailable"));
     // New submissions must be resolved by the server's canonical identity.
     // Matching only hostname sends every Instagram/Facebook account to the
     // first listing on that platform, crediting the wrong merchant.
@@ -2173,7 +2374,7 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
         listing_id: listingId,
         amount_minor: amount * 100,
         currency: remoteCurrency,
-        snapshot_id: remoteSnapshotId,
+        snapshot_id: chosenMarket?.snapshotId || remoteSnapshotId,
         agreed_terms: elements.bidAgree?.checked === true,
         terms_version: TERMS_VERSION,
         acquisition: window.RankoffAcquisition?.context(),
@@ -2384,43 +2585,44 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
   }
 
   async function shareListing(listingId) {
+    if (viewLoading) {
+      showToast(discoveryCopy(discoveryLanguage()).loading);
+      return;
+    }
     const listing = state.listings.find((item) => item.id === listingId);
     if (!listing) return;
-    const rank = rankedListings().findIndex((item) => item.id === listing.id) + 1;
-    if (rank < 1) return;
-    // The price the board actually charges. "Leader + 1" ignores the minimum
-    // increment, so the card offered RM 15 while the shared message said RM 11.
-    const claimMinimum = boardSource !== "local" && remoteNextBid
-      ? remoteNextBid
-      : getBid((remoteLeader || rankedListings()[0])) + 1;
+    const sharePlace = servedFromWeb ? Number(listing.serverRank) : rankedListings().findIndex((item) => item.id === listing.id) + 1;
+    if (!Number.isSafeInteger(sharePlace) || sharePlace < 1) return;
+    const language = discoveryLanguage();
+    const useMarket = state.category !== DEFAULT_CATEGORY;
+    const market = useMarket ? categoryName(state.category) : "RANKOFF";
+    const localizedMarket = language === "ms" && window.RankoffMalay ? window.RankoffMalay(market) : market;
+    const timeframe = language === "zh" ? (state.activeWindow === "today" ? "近 24 小时" : "全部时间")
+      : language === "ms" ? (state.activeWindow === "today" ? "24 jam lalu" : "Sepanjang masa") : windowLabel();
+    const shareWhere = `${localizedMarket} · ${timeframe}`;
+    const total = money(getBid(listing));
+    const text = language === "zh"
+      ? `${listing.name} 以 ${total} 的赞助出价位居 ${shareWhere} 第 ${sharePlace} 名。`
+      : language === "ms"
+      ? `${listing.name} menduduki #${sharePlace} dalam ${shareWhere} dengan jumlah tajaan ${total}.`
+      : `${listing.name} holds #${sharePlace} ${useMarket ? "in" : "on"} ${shareWhere} with a ${total} sponsored bid.`;
 
-    // #4 of the whole board says nothing; #1 of a market says something. Both
-    // are true, so the message carries whichever one reads better.
-    const shareMarket = canonicalCategory(listing.category) || "Other";
-    const marketRankOf = rankedListings()
-      .filter((item) => (canonicalCategory(item.category) || "Other") === shareMarket)
-      .findIndex((item) => item.id === listing.id) + 1;
-    const useMarket = marketRankOf > 0 && marketRankOf < rank;
-    const shareWhere = useMarket ? categoryName(listing.category) : "RANKOFF";
-    const sharePlace = useMarket ? marketRankOf : rank;
-
-    const text = state.language === "zh"
-      ? `${listing.name} 以 ${money(getBid(listing))} 的赞助出价位居 ${shareWhere} 第 ${sharePlace} 名。你能超越它吗？${money(claimMinimum)} 起认领第 1 名。`
-      : `${listing.name} holds #${sharePlace} ${useMarket ? "in" : "on"} ${shareWhere} with a ${money(getBid(listing))} sponsored bid. Think you can outrank it? Claim #1 from ${money(claimMinimum)}.`;
-
-    // The listing's own page. Sharing the home page with a hash makes WhatsApp
-    // read Rankoff's own card, so the merchant's brand never appears.
+    // Keep filtered ranks attached to the exact industry and timeframe.
     const detailPath = listingDetailPath(listing);
-    const shareUrl = new URL(detailPath || "/", "https://rankoff.my");
-    if (!detailPath) {
+    const filtered = useMarket || state.activeWindow !== "all";
+    const shareUrl = new URL(filtered ? "/" : detailPath || "/", "https://rankoff.my");
+    if (!detailPath || filtered) {
       shareUrl.searchParams.set("period", state.activeWindow);
+      shareUrl.searchParams.set("category", state.category);
+      if (boardPage > 1) shareUrl.searchParams.set("page", String(boardPage));
       shareUrl.hash = `listing-${listing.id}`;
     }
-    if (state.language === "zh") shareUrl.searchParams.set("lang", "zh");
+    if (language !== "en") shareUrl.searchParams.set("lang", language);
 
     const shareData = {
-      title: state.language === "zh"
+      title: language === "zh"
         ? `${listing.name} — ${shareWhere} 第 ${sharePlace} 名`
+        : language === "ms" ? `${listing.name} — #${sharePlace} dalam ${shareWhere}`
         : `${listing.name} — #${sharePlace} ${useMarket ? "in" : "on"} ${shareWhere}`,
       text,
       url: shareUrl.toString(),
@@ -2430,9 +2632,9 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
         ...shareData,
         image: listing.iconUrl,
         description: listing.description,
-        language: state.language,
+        language,
         // The saved image must not print a 24h figure under an all-time label.
-        card: { period: state.activeWindow, capturedAt: cardStamp() },
+        card: { name: listing.name, place: sharePlace, where: shareWhere, joiner: useMarket ? "in" : "on", total, period: state.activeWindow, capturedAt: cardStamp() },
         onStatus: showToast,
       });
       return;
@@ -2466,13 +2668,7 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
     const trigger = event.target instanceof Element ? event.target.closest("[data-category]") : null;
     if (!(trigger instanceof HTMLElement)) return;
     const selected = trigger.dataset.category || DEFAULT_CATEGORY;
-    state.category = selected === DEFAULT_CATEGORY ? DEFAULT_CATEGORY : canonicalCategory(selected) || DEFAULT_CATEGORY;
-    boardPage = 1;
-    remotePagination = null;
-    remoteLeader = null;
-    saveState();
-    render();
-    void refreshBoardFromApi();
+    void changeBoardView({ category: selected === DEFAULT_CATEGORY ? DEFAULT_CATEGORY : canonicalCategory(selected) || DEFAULT_CATEGORY });
   });
 
   elements.categoryRail?.addEventListener("scroll", updateCategoryScrollControls, { passive: true });
@@ -2490,26 +2686,14 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
 
   elements.categorySelect?.addEventListener("change", (event) => {
     const value = event.currentTarget instanceof HTMLSelectElement ? event.currentTarget.value : categories[0];
-    state.category = value === "" ? DEFAULT_CATEGORY : canonicalCategory(value) || DEFAULT_CATEGORY;
-    boardPage = 1;
-    remotePagination = null;
-    remoteLeader = null;
-    saveState();
-    render();
-    void refreshBoardFromApi();
+    void changeBoardView({ category: value === "" ? DEFAULT_CATEGORY : canonicalCategory(value) || DEFAULT_CATEGORY });
   });
 
   elements.windowButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const nextWindow = button.dataset.boardWindow;
       if (nextWindow !== "all" && nextWindow !== "today") return;
-      state.activeWindow = nextWindow;
-      boardPage = 1;
-      remotePagination = null;
-      remoteLeader = null;
-      saveState();
-      render();
-      void refreshBoardFromApi();
+      void changeBoardView({ period: nextWindow });
     });
   });
 
@@ -2519,24 +2703,11 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
     const targetPage = Math.min(totalPages, Math.max(1, nextPage));
     if (targetPage === boardPage) return;
 
-    const previousPage = boardPage;
-    boardPage = targetPage;
     elements.boardPagination?.setAttribute("aria-busy", "true");
     elements.boardPageButtons.forEach((pageButton) => { pageButton.disabled = true; });
-
-    if (boardSource === "local") {
-      render();
-    } else {
-      const refreshed = await refreshBoardFromApi();
-      if (!refreshed) {
-        boardPage = previousPage;
-        renderPagination(total, state.listings.length);
-        showToast(state.language === "zh" ? "暂时无法载入下一页。" : "The next page could not be loaded yet.", "error");
-      }
-    }
-
+    const result = await changeBoardView({ page: targetPage });
     elements.boardPagination?.removeAttribute("aria-busy");
-    document.querySelector("#board")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (result === true) document.querySelector("#board")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   elements.boardPageButtons.forEach((button) => {
@@ -2554,9 +2725,8 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
 
   elements.boardRefresh?.addEventListener("click", async () => {
     elements.boardRefresh.disabled = true;
-    const refreshed = await refreshBoardFromApi();
+    await changeBoardView({ page: boardPage });
     elements.boardRefresh.disabled = false;
-    if (!refreshed) showToast(state.language === "zh" ? "暂时无法刷新榜单。" : "The board could not be refreshed yet.", "error");
   });
 
   elements.themeToggle?.addEventListener("click", () => {
@@ -2624,6 +2794,8 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
       openEntryForm();
       elements.inlineChallenge?.scrollIntoView({ behavior: "smooth", block: "center" });
       window.setTimeout(() => elements.inlineUrl?.focus(), 220);
+      // The hero buttons sit beside the form; opening it is feedback enough.
+      if (challengeTrigger.hasAttribute("data-hero-path")) return;
       showToast(state.language === "zh"
         ? `已按 ${money(suggestion)} 准备好挑战。填入你的网址即可继续。`
         : `Challenge prepared at ${money(suggestion)}. Add your product to continue.`);
@@ -2662,12 +2834,12 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
     card.click();
   });
 
-  elements.categorySelect?.addEventListener("change", (event) => {
-    void loadChosenMarket(String(event.target.value || ""));
-  });
-
-  elements.inlineChallenge?.addEventListener("submit", (event) => {
+  elements.inlineChallenge?.addEventListener("submit", async (event) => {
     event.preventDefault();
+    if (!canReviewPayment() || quoteLoading || checkoutPending) {
+      showToast(languageText("checkoutUnavailable"), "error");
+      return;
+    }
     if (!elements.inlineChallenge.reportValidity()) return;
 
     const formData = new FormData(elements.inlineChallenge);
@@ -2704,7 +2876,7 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
     // leaderboard, so listing outside the leader's trade is the normal case.
     const category = String(formData.get("productCategory") || "");
     if (!categories.includes(category)) {
-      showToast(state.language === "zh" ? "请先选择你的行业类别。" : "Choose the market this business belongs to.", "error");
+      showToast(state.language === "zh" ? "请先选择你的行业类别。" : "Choose the industry this business belongs to.", "error");
       return;
     }
     pendingChallenge = {
@@ -2729,6 +2901,20 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
       return;
     }
 
+    if (boardSource === "production") {
+      const challenge = pendingChallenge;
+      let ready = await loadChosenMarket(category);
+      if (pendingChallenge !== challenge || ready === null) return;
+      const existing = existingListingForPending();
+      if (ready && existing && canonicalCategory(existing.category) !== category) {
+        pendingChallenge.category = canonicalCategory(existing.category);
+        ready = await loadChosenMarket(pendingChallenge.category);
+      }
+      if (pendingChallenge !== challenge || ready !== true) {
+        if (ready === false) showToast(discoveryCopy(discoveryLanguage()).error, "error");
+        return;
+      }
+    }
     openBidDialog(elements.inlineChallenge);
   });
 
@@ -2736,6 +2922,10 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
 
   elements.bidForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
+    if (!canReviewPayment() || !hasCurrentQuote() || quoteLoading || checkoutPending) {
+      showToast(languageText("checkoutUnavailable"), "error");
+      return;
+    }
     if (!elements.bidForm || !elements.bidAmount || !activeBid) return;
     updateBidPreview();
     if (!elements.bidForm.checkValidity()) {
@@ -2758,6 +2948,8 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
     }
 
     if (boardSource === "production") {
+      checkoutPending = true;
+      syncCheckoutControls();
       const submitButton = elements.bidForm.querySelector('button[type="submit"]');
       if (submitButton) {
         submitButton.disabled = true;
@@ -2766,10 +2958,11 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
       try {
         await startLiveCheckout(amount);
       } catch (error) {
+        checkoutPending = false;
+        syncCheckoutControls();
         showToast(error?.isRankoffMessage ? error.message : languageText("checkoutUnavailable"), "error");
         document.querySelector("[data-checkout-support]")?.removeAttribute("hidden");
         if (submitButton) {
-          submitButton.disabled = false;
           submitButton.textContent = state.language === "zh" ? "继续付款" : "Continue to checkout";
         }
       }
@@ -2816,7 +3009,7 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
   }
 
   render();
-  if (requestedLanguage === "zh" || requestedLanguage === "en") saveState();
+  if (requestedLanguage === "zh" || requestedLanguage === "en" || requestedLanguage === "ms") saveState();
   void refreshBoardFromApi();
   {
     const returnLocation = new URL(window.location.href);

@@ -4,6 +4,7 @@ import { join } from "node:path";
 
 const roots = ["functions", "tests/backend", "workers"];
 const files = [];
+files.push("discovery.js", "board-preview.js");
 for (const root of roots) collect(root);
 files.push("platform-identity.js", "theme-boot.js", "meta-pixel.js", "locale-boot.js", "locale.js", "ms-copy.js", "ms-legal.js", "ms-answers.js", "support.js", "acquisition.js", "currency.js", "app.js", "about.js", "categories.js", "listing.js", "legal.js", "search.js", "share.js", "share-card.js", "admin.js");
 for (const file of files.sort()) execFileSync(process.execPath, ["--check", file], { stdio: "inherit" });

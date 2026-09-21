@@ -1,9 +1,11 @@
-import { currencyNotice } from "../currency.js";
 import { defaultBoardSlug, isProduction, marketLabel, requireDatabase } from "./_lib/config.js";
 import { escapeHtml, formatMoney } from "./_lib/product.js";
 import { displayName, profilePath } from "./_lib/platform.js";
 import { loadBoard, loadPublicBoard } from "./_lib/repository.js";
 import { applyLiveCurrency, localizeStaticPage } from "./_lib/static-localization.js";
+import { normalizePage, normalizePeriod } from "./_lib/validation.js";
+import { discoveryCopy } from "../discovery.js";
+import { pricingUnavailable } from "./_lib/unavailable.js";
 
 const LIMIT = 50;
 
@@ -62,37 +64,40 @@ export function renderRankingSchema(rankings, origin, language = "en") {
 export async function onRequestGet(context) {
   const url = new URL(context.request.url);
   const language = url.searchParams.get("lang") === "zh" ? "zh" : "en";
+  const discoveryLanguage = url.searchParams.get("lang") === "ms" ? "ms" : language;
+  const category = url.searchParams.get("category") || "all";
+  const period = normalizePeriod(url.searchParams.get("period"));
+  const page = normalizePage(url.searchParams.get("page"));
   // The home page must never depend on this function succeeding.
-  if (!context.env.ASSETS?.fetch) return context.next();
+  if (!context.env.ASSETS?.fetch) return isProduction(context.env) ? pricingUnavailable(context.request) : context.next();
   let html;
   try {
     const shell = await context.env.ASSETS.fetch(new Request(new URL("/index.html", url.origin)));
-    if (!shell.ok) return context.next();
+    if (!shell.ok) return isProduction(context.env) ? pricingUnavailable(context.request) : context.next();
     html = await shell.text();
   } catch {
-    return context.next();
+    return isProduction(context.env) ? pricingUnavailable(context.request) : context.next();
   }
 
   // Learned inside the production block, applied after localisation below.
   let liveFloor = "";
   let liveCurrency = "";
+  let minimumMinor = null;
   if (isProduction(context.env)) {
     try {
       const db = requireDatabase(context.env);
       const board = await loadBoard(db, defaultBoardSlug(context.env));
-      const payload = await loadPublicBoard(db, board, { category: "all", period: "all", limit: LIMIT, page: 1 });
+      const payload = await loadPublicBoard(db, board, { category, period, limit: LIMIT, page });
       const currency = String(payload.board?.currency || "USD").toUpperCase();
-      const markup = renderBoard(payload.rankings, currency, language);
-      const notice = currencyNotice(payload.board?.currency_conversion, language);
-      if (notice) html = html.replace('<p class="currency-note" data-currency-note hidden></p>', `<p class="currency-note" data-currency-note>${escapeHtml(notice)}</p>`);
-      if (markup) {
+      const markup = renderBoard(payload.rankings, currency, discoveryLanguage);
+      {
         html = html.replace(
           /(<div class="board-list" data-board-list[^>]*>)(<\/div>)/,
-          (match, open, close) => `${open}${markup}${close}`,
+          (match, open, close) => `${open}${markup || `<p class="empty-state">${escapeHtml(discoveryCopy(discoveryLanguage).empty)}</p>`}${close}`,
         );
       }
 
-      const rankingSchema = renderRankingSchema(payload.rankings, url.origin, language);
+      const rankingSchema = category === "all" && period === "all" && page === 1 ? renderRankingSchema(payload.rankings, url.origin, language) : "";
       if (rankingSchema) html = html.replace("</head>", `${rankingSchema}</head>`);
 
       // The headline price too: before the API answered the page briefly offered
@@ -102,19 +107,25 @@ export async function onRequestGet(context) {
         /(<strong data-hero-next-price[^>]*>)[\s\S]*?(<\/strong>)/,
         (match, open, close) => `${open}${escapeHtml(price)}${close}`,
       );
+      // The labelled "Take #1 now" figure is the same quote.
+      html = html.replace(
+        /(<strong[^>]*\bdata-hero-top-price\b[^>]*>)[\s\S]*?(<\/strong>)/,
+        (match, open, close) => `${open}${escapeHtml(price)}${close}`,
+      );
       // The static shell is also consumed by link unfurlers and assistive
       // technology before the browser bundle hydrates. Its provisional USD
       // wording is swapped for the board's currency — but only after
       // localisation, or the Chinese metadata is injected too late to be seen.
       liveFloor = formatMoney(payload.board?.min_increment_minor, currency).replace(" ", "\u00a0");
       liveCurrency = currency;
+      minimumMinor = Number(payload.board?.min_increment_minor);
     } catch {
-      /* The page still works: its own script draws the board a moment later. */
+      return pricingUnavailable(context.request);
     }
   }
 
   html = localizeStaticPage(html, "home", language);
-  html = applyLiveCurrency(html, liveFloor, liveCurrency);
+  html = applyLiveCurrency(html, liveFloor, liveCurrency, minimumMinor);
   return new Response(html, {
     headers: { "Content-Type": "text/html; charset=utf-8", "Content-Language": language === "zh" ? "zh-Hans" : "en", "Cache-Control": "public, max-age=60, must-revalidate" },
   });

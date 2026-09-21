@@ -2,11 +2,11 @@
 // never rewrite language, listing or checkout state in the shared store.
 (() => {
   const root = document.documentElement;
-  let theme = 'light';
+  let theme = 'dark';
   try {
     const saved = JSON.parse(localStorage.getItem('rankoff-mvp-demo-v3'));
-    if (!new URL(location.href).searchParams.has('reset') && saved?.theme === 'dark') theme = 'dark';
-  } catch { /* Unavailable or damaged storage uses the public light default. */ }
+    if (!new URL(location.href).searchParams.has('reset') && saved?.theme === 'light') theme = 'light';
+  } catch { /* Unavailable or damaged storage uses the public dark default. */ }
   root.dataset.theme = theme;
 
   // Page controllers still own their toggles; keep browser chrome in sync too.

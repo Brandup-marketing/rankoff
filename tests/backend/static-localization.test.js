@@ -5,11 +5,28 @@ import test from "node:test";
 import { applyLiveCurrency, localizeStaticPage, serveLocalizedAsset } from "../../functions/_lib/static-localization.js";
 import { onRequestGet as renderAbout } from "../../functions/about.js";
 import { onRequestGet as renderCategories } from "../../functions/categories.js";
-import { renderBoard, renderRankingSchema } from "../../functions/index.js";
+import { onRequestGet as renderHome, renderBoard, renderRankingSchema } from "../../functions/index.js";
+import { renderMalay } from "../../functions/_lib/malay.js";
+import { testDatabase, seedListing, seedPayment } from "../helpers/sqlite.js";
 
 const homeShell = readFileSync(new URL("../../index.html", import.meta.url), "utf8");
 const categoryShell = readFileSync(new URL("../../categories.html", import.meta.url), "utf8");
 const aboutShell = readFileSync(new URL("../../about.html", import.meta.url), "utf8");
+
+test("a failed production price read returns a retryable page without a price or payment form", async () => {
+  for (const language of ["en", "zh", "ms"]) {
+    for (const [handler, shell] of [[renderHome, homeShell], [renderAbout, aboutShell]]) {
+      const response = await handler({ request: new Request(`https://rankoff.my/?lang=${language}`),
+        env: { RANKOFF_MODE: "production", ASSETS: { fetch: async () => new Response(shell) } },
+        next: () => new Response("unexpected fallback") });
+      assert.equal(response.status, 503);
+      assert.equal(response.headers.get("Cache-Control"), "no-store");
+      assert.equal(response.headers.get("Retry-After"), "60");
+      assert.equal(response.headers.get("Content-Language"), language === "zh" ? "zh-Hans" : language);
+      assert.doesNotMatch(await response.text(), /US\$|RM\s*\d|<form\b|unexpected fallback/);
+    }
+  }
+});
 
 test("the English static pages pass through unchanged", () => {
   assert.equal(localizeStaticPage(homeShell, "home", "en"), homeShell);
@@ -29,7 +46,7 @@ test("the Chinese home page is indexable before JavaScript runs", () => {
   assert.match(html, /<meta property="og:locale:alternate" content="en_MY" \/>/);
   assert.match(html, /<h1 id="page-title"><strong data-hero-next-price>US\$ 1<\/strong>.*拿下.*data-hero-rank>第 1 名<\/span>.*<\/h1>/);
   assert.doesNotMatch(html, /class="(?:discovery-intro|claim-copy)"/);
-  assert.match(html, /data-i18n-placeholder="searchPlaceholder"[^>]*placeholder="搜索商家和市场…"/);
+  assert.match(html, /data-i18n-placeholder="searchPlaceholder"[^>]*placeholder="搜索商家和行业…"/);
   assert.match(html, /data-i18n-aria-label="rankingTimeframe"[^>]*aria-label="排名时间范围"/);
   assert.match(html, /data-entry-toggle-label>输入你的网站<\/span>/);
   assert.match(html, /data-share-heading>分享此排名<\/h2>/);
@@ -81,6 +98,50 @@ test("the live currency reaches the Chinese metadata, not just the English shell
   assert.equal(applyLiveCurrency(homeShell, "", "MYR"), homeShell);
 });
 
+test("initial HTML uses the active MYR or USD floor, symbols and one-unit controls in every language", async () => {
+  for (const [currency, minimum, symbol] of [["MYR", 500, "RM"], ["USD", 200, "US$"]]) {
+    const db = testDatabase(); seedListing(db);
+    db.sqlite.prepare("UPDATE boards SET currency = ?, min_increment_minor = ? WHERE id = 'board_global'").run(currency, minimum);
+    seedPayment(db, { id: `settled-${currency}`, amount: 1200, currency });
+    for (const language of ["en", "zh", "ms"]) {
+      const url = `https://rankoff.my/?lang=${language}`;
+      const response = await renderHome({
+        request: new Request(url),
+        env: { DB: db, RANKOFF_MODE: "production", ASSETS: { fetch: async () => new Response(homeShell) } },
+        next: () => new Response("missing", { status: 404 }),
+      });
+      let html = await response.text();
+      if (language === "ms") html = renderMalay(html, url);
+      const input = html.match(/<input\b[^>]*data-inline-bid[^>]*>/)[0];
+      assert.match(input, new RegExp(`min="${minimum / 100}"`));
+      assert.match(input, /step="1"/);
+      assert.equal(html.match(/data-currency-symbol>([^<]*)</)[1], symbol);
+      assert.equal(html.match(/data-dialog-price>([^<]*)</)[1], `${symbol} 0`);
+      for (const field of ["previous", "now", "after"]) {
+        assert.equal(html.match(new RegExp(`data-dialog-${field}>([^<]*)<`))[1], `${symbol} 0`);
+      }
+      const stepper = html.match(/<button[^>]*data-inline-adjust="-1"[^>]*>/)[0];
+      assert.ok(stepper.includes(`${symbol}1`));
+      const headline = html.match(/data-hero-next-price>([^<]*)</)[1];
+      assert.equal(headline, `${symbol}\u00a0${(1200 + minimum) / 100}`);
+      const floorCopy = html.match(/data-i18n="stepPayCopy">([^<]*)</)[1];
+      assert.ok(floorCopy.replaceAll("\u00a0", " ").includes(`${symbol} ${minimum / 100}`));
+      if (currency === "MYR") assert.doesNotMatch(html, /US\$/);
+      else assert.doesNotMatch(html, /\bRM\s*\d/);
+      if (language === "ms") assert.match(input, /Bayaran anda dalam (?:ringgit Malaysia|dolar AS)/);
+    }
+    db.sqlite.close();
+  }
+});
+
+test("currency copy changes do not relabel merchant prices or replace a live rank quote with the minimum", () => {
+  const source = homeShell.replace('data-hero-next-price>US$ 1', 'data-hero-next-price>RM 15')
+    + '<p data-description>Plans from US$100 and an earlier US$1 promotion.</p>';
+  const html = applyLiveCurrency(source, "RM 5", "MYR");
+  assert.match(html, /data-hero-next-price>RM 15</);
+  assert.match(html, /<p data-description>Plans from US\$100 and an earlier US\$1 promotion\.<\/p>/);
+});
+
 test("the ranking is declared as an ItemList that matches the rendered rows", () => {
   const rankings = [
     { rank: 1, listing: { hostname: "instagram:agent_ali", title: "Ali Property KL", category: "Property" }, bid: { amount_minor: 500 }, clicks: 4 },
@@ -118,13 +179,13 @@ test("search results keep native link navigation semantics", () => {
 test("the Chinese category page has localized metadata, controls and loading truth", () => {
   const html = localizeStaticPage(categoryShell, "categories", "zh");
 
-  assert.match(html, /<title>RANKOFF｜分类<\/title>/);
+  assert.match(html, /<title>RANKOFF｜行业<\/title>/);
   assert.match(html, /<link rel="canonical" href="https:\/\/rankoff\.my\/categories\?lang=zh" \/>/);
-  assert.match(html, /data-copy="heroCopy">每个市场都有自己的榜单/);
+  assert.match(html, /data-copy="heroCopy">每个行业都有自己的榜单/);
   assert.match(html, /aria-label="榜单状态"/);
   assert.match(html, /data-category-status>实时榜单<\/strong>/);
   assert.match(html, /data-category-count>正在载入…<\/span>/);
-  assert.match(html, /placeholder="搜索商家和市场…"/);
+  assert.match(html, /placeholder="搜索商家和行业…"/);
   assert.match(html, /href="\/\?lang=zh&amp;category=Property#board">房产与经纪<\/a>/);
   assert.doesNotMatch(html, /data-category-count>0 listings<\/span>/);
 });
@@ -155,7 +216,7 @@ test("the extensionless page handlers serve the requested language", async () =>
   assert.match(await aboutResponse.text(), /关于 RANKOFF/);
   assert.equal(categoriesResponse.status, 200);
   assert.equal(categoriesResponse.headers.get("content-language"), "zh-Hans");
-  assert.match(await categoriesResponse.text(), /浏览市场/);
+  assert.match(await categoriesResponse.text(), /浏览行业/);
 });
 
 test("a missing asset falls through instead of returning an empty localized page", async () => {

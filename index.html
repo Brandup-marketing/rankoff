@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,20 +17,20 @@
     <meta property="og:locale" content="en_MY" />
     <meta property="og:locale:alternate" content="zh_MY" />
     <meta property="og:title" content="RANKOFF | Start at US$1, compete for #1" />
-    <meta property="og:description" content="A public leaderboard for Malaysian businesses. US$1 to get on it — and every listing, payment and click is public." />
+    <meta property="og:description" content="A public sponsored leaderboard for businesses, products and services. Start at US$1; totals paid and tracked clicks stay visible." />
     <meta property="og:url" content="https://rankoff.my/" />
     <meta property="og:image" content="https://rankoff.my/assets/rankoff-og-claim.png" />
     <meta property="og:image:width" content="1730" />
     <meta property="og:image:height" content="909" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="RANKOFF | Start at US$1, compete for #1" />
-    <meta name="twitter:description" content="A public leaderboard for Malaysian businesses. US$1 to get on it — and every listing, payment and click is public." />
+    <meta name="twitter:description" content="A public sponsored leaderboard for businesses, products and services. Start at US$1; totals paid and tracked clicks stay visible." />
     <meta name="twitter:image" content="https://rankoff.my/assets/rankoff-og-claim.png" />
-    <meta name="theme-color" content="#faf7f5" />
+    <meta name="theme-color" content="#090a0c" />
     <title>RANKOFF | Pay-to-rank leaderboard, from US$1</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <script src="/theme-boot.js?v=1"></script>
-    <link rel="stylesheet" href="./styles.css?v=111" />
+    <script src="/theme-boot.js?v=2"></script>
+    <link rel="stylesheet" href="./styles.css?v=116" />
     <link rel="stylesheet" href="./answers.css?v=2" />
     <script id="website-schema" type="application/ld+json">
       {
@@ -38,7 +38,7 @@
         "@type": "WebSite",
         "name": "RANKOFF",
         "url": "https://rankoff.my/",
-        "description": "Rankoff is a public sponsored leaderboard where Malaysian businesses pay for visible rank. Rank, total paid and tracked clicks are public.",
+        "description": "Rankoff is a public sponsored leaderboard for businesses, products and services. Rank, total paid and tracked clicks are public.",
         "publisher": {
           "@type": "Organization",
           "name": "RANKOFF",
@@ -54,8 +54,8 @@
       }
     </script>
   <link rel="stylesheet" href="/locale.css?v=1" />
-    <script src="/locale-boot.js?v=1"></script>
-    <script type="module" src="/locale.js?v=2"></script>
+    <script src="/locale-boot.js?v=2"></script>
+    <script type="module" src="/locale.js?v=7"></script>
     <script defer src="/meta-pixel.js?v=2"></script>
   </head>
   <body>
@@ -67,17 +67,17 @@
           <img class="brand-mark" src="/assets/rankoff-favicon.png?v=1" alt="" width="40" height="40" /><span class="brand-word">RANKOFF</span>
         </a>
 
-        <nav class="site-nav" data-i18n-aria-label="mainNavigation" aria-label="Main navigation"><a href="/" data-language-link data-i18n="navBoard" aria-current="page">Board</a><a href="/categories" data-language-link data-i18n="navCategories">Categories</a><a href="/about" data-language-link data-i18n="navAbout">About</a></nav>
-        <button class="search-toggle" type="button" data-search-toggle aria-expanded="false" aria-controls="site-search" data-i18n-aria-label="searchPlaceholder" aria-label="Search businesses and markets"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.6 4.6"></path></svg></button>
+        <nav class="site-nav" data-i18n-aria-label="mainNavigation" aria-label="Main navigation"><a href="/" data-language-link data-i18n="navBoard" aria-current="page">Board</a><a href="/categories" data-language-link data-i18n="navCategories">Industries</a><a href="/about" data-language-link data-i18n="navAbout">About</a></nav>
+        <button class="search-toggle" type="button" data-search-toggle aria-expanded="false" aria-controls="site-search" data-i18n-aria-label="searchPlaceholder" aria-label="Search businesses and industries"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.6 4.6"></path></svg></button>
         <button class="language-toggle" type="button" data-language-toggle aria-pressed="false">中文</button>
-        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch colour theme" aria-pressed="false">Dark</button>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch colour theme" aria-pressed="true">Light</button>
       </header>
 
       <form class="site-search" id="site-search" data-site-search role="search" hidden>
         <div class="site-search-field">
           <span class="site-search-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.6 4.6"></path></svg></span>
-          <label class="visually-hidden" for="site-search-input" data-i18n="searchPlaceholder">Search businesses and markets…</label>
-          <input id="site-search-input" data-site-search-input data-i18n-placeholder="searchPlaceholder" type="search" autocomplete="off" placeholder="Search businesses and markets…" />
+          <label class="visually-hidden" for="site-search-input" data-i18n="searchPlaceholder">Search businesses and industries…</label>
+          <input id="site-search-input" data-site-search-input data-i18n-placeholder="searchPlaceholder" type="search" autocomplete="off" placeholder="Search businesses and industries…" />
           <button class="search-close" type="button" data-search-close data-i18n="close">Close</button>
         </div>
         <nav class="site-search-results" data-search-results data-i18n-aria-label="searchResults" aria-label="Search results" hidden></nav>
@@ -86,6 +86,16 @@
       <section class="claim-stage" id="claim" aria-labelledby="page-title">
         <div class="claim-panel">
           <h1 id="page-title"><span class="hero-word" data-hero-lead>Claim </span><span data-hero-rank>#1</span><span data-hero-market></span><span class="hero-word" data-hero-join> for </span><strong data-hero-next-price>US$ 1</strong></h1>
+          <!-- One short value line, then the two different prices side by side
+               and labelled: the floor to be listed at all, and what taking #1
+               costs right now. Both come from the board (server-rendered here,
+               refreshed by app.js). On wide screens they share one row. -->
+          <div class="hero-context"><span data-hero-context data-i18n="heroValue">Public business pages, sponsored rank, a link to your site.</span> <a class="hero-explore" href="#board" data-hero-explore data-i18n="heroExplore">Explore businesses ↓</a>
+            <div class="hero-paths" data-hero-paths>
+              <button class="hero-path hero-path-primary" type="button" data-hero-list data-hero-path data-prepare-challenge=""><span class="hero-path-label" data-i18n="heroListLabel">List your business</span><strong class="hero-path-price" data-hero-entry-price>from US$1</strong></button>
+              <button class="hero-path hero-path-secondary" type="button" data-hero-top data-hero-path data-prepare-challenge=""><span class="hero-path-label" data-i18n="heroTopLabel">Claim #1 now</span><strong class="hero-path-price" data-hero-top-price>US$ 1</strong></button>
+            </div>
+          </div>
 
           <div class="market-entry" data-market-entry data-entry-collapsed="true">
             <!-- B2 (agent/post-payment): phone-only entry-form toggle. Hidden on
@@ -110,9 +120,9 @@
               </label>
 
               <label class="field">
-                <span data-i18n="challengeCategory">Market</span>
+                <span data-i18n="challengeCategory">Industry</span>
                 <select name="productCategory" required data-category-select>
-                  <option value="" data-i18n="chooseMarket">Choose a market</option>
+                  <option value="" data-i18n="chooseMarket">Choose an industry</option>
                 </select>
               </label>
 
@@ -122,11 +132,11 @@
           </div>
 
           <section class="category-market" aria-labelledby="category-heading">
-            <h2 id="category-heading" data-i18n="markets">Markets</h2>
+            <h2 id="category-heading" data-i18n="markets">Industries</h2>
             <div class="category-scroll-shell">
-              <button class="category-scroll-control" type="button" data-category-scroll="-1" aria-label="Scroll markets left">‹</button>
-              <div class="category-rail" data-category-rail data-i18n-aria-label="filterCategory" aria-label="Filter by category"></div>
-              <button class="category-scroll-control" type="button" data-category-scroll="1" aria-label="Scroll markets right">›</button>
+              <button class="category-scroll-control" type="button" data-category-scroll="-1" aria-label="Scroll industries left">‹</button>
+              <div class="category-rail" data-category-rail data-i18n-aria-label="filterCategory" aria-label="Filter by industry"></div>
+              <button class="category-scroll-control" type="button" data-category-scroll="1" aria-label="Scroll industries right">›</button>
             </div>
           </section>
 
@@ -150,7 +160,6 @@
             </div>
           </div>
 
-          <p class="currency-note" data-currency-note hidden></p>
           <div class="top-three top-three-hero" data-top-three data-i18n-aria-label="topThree" aria-label="Top three sponsored listings"></div>
 
           <section class="board-interstitial activity-interstitial" data-i18n-aria-label="boardPulse" aria-label="Board pulse">
@@ -301,7 +310,7 @@
         <div class="dialog-heading">
           <div>
             <h2 id="share-dialog-title" data-share-heading>Share this rank</h2>
-            <p class="share-intro" data-share-intro>Send the exact position, board, and category.</p>
+            <p class="share-intro" data-share-intro>Send the exact position, board, and industry.</p>
           </div>
           <button class="icon-button" type="button" data-share-close aria-label="Close share options">×</button>
         </div>
@@ -337,11 +346,10 @@
 
     <div class="toast" data-toast role="status" aria-live="polite" aria-atomic="true"></div>
     <script src="/acquisition.js?v=2" defer></script>
-    <script src="./search.js?v=8" defer></script>
+    <script src="./search.js?v=9" defer></script>
     <script src="./share-card.js?v=12" type="module"></script>
     <script src="./share.js?v=9" defer></script>
-    <script type="module" src="./app.js?v=126"></script>
-    <script type="module" src="/currency.js?v=1"></script>
+    <script type="module" src="./app.js?v=133"></script>
   <script src="/support.js?v=1" defer></script>
   </body>
 </html>

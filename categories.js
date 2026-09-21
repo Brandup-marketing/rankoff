@@ -67,14 +67,14 @@
   };
 
   const staticCopy = {
-    en: { skipCategories: "Skip to categories", board: "Board", categories: "Categories", about: "About", footerParent: "A Brandup Marketing product", rules: "Rules", terms: "Terms", privacy: "Privacy", payments: "Payments", seeBoard: "See board", browseMarkets: "Browse the markets", heroCopy: "Every market has its own board. Pick yours and see who is on top.", activeHeading: "Most active categories", allHeading: "All categories", allCopy: "Choose a market to view its live board." },
-    zh: { skipCategories: "跳至分类", board: "榜单", categories: "分类", about: "关于", footerParent: "Brandup Marketing 旗下产品", rules: "规则", terms: "条款", privacy: "隐私", payments: "付款", seeBoard: "查看榜单", browseMarkets: "浏览市场", heroCopy: "每个市场都有自己的榜单。选你的行业，看看谁在榜首。", activeHeading: "最活跃的分类", allHeading: "全部分类", allCopy: "选择一个市场，查看其实时榜单。" },
+    en: { skipCategories: "Skip to industries", board: "Board", categories: "Industries", about: "About", footerParent: "A Brandup Marketing product", rules: "Rules", terms: "Terms", privacy: "Privacy", payments: "Payments", seeBoard: "See board", browseMarkets: "Browse the industries", heroCopy: "Every industry has its own board. Pick yours and see who is on top.", activeHeading: "Most active industries", allHeading: "All industries", allCopy: "Choose an industry to view its live board." },
+    zh: { skipCategories: "跳至行业", board: "榜单", categories: "行业", about: "关于", footerParent: "Brandup Marketing 旗下产品", rules: "规则", terms: "条款", privacy: "隐私", payments: "付款", seeBoard: "查看榜单", browseMarkets: "浏览行业", heroCopy: "每个行业都有自己的榜单。选你的行业，看看谁在榜首。", activeHeading: "最活跃的行业", allHeading: "全部行业", allCopy: "选择一个行业，查看其实时榜单。" },
   };
   const pageMetadata = {
     en: {
-      title: "RANKOFF | Categories",
-      description: "Explore Rankoff categories and see which products lead each sponsored market.",
-      socialDescription: "Every category has its own public sponsored leaderboard.",
+      title: "RANKOFF | Industries",
+      description: "Explore Rankoff industries and see which businesses lead each sponsored industry.",
+      socialDescription: "Every industry has its own public sponsored leaderboard.",
     },
     zh: {
       title: "RANKOFF｜分类",
@@ -84,12 +84,12 @@
   };
   const accessibilityCopy = {
     en: {
-      home: "RANKOFF home", tagline: "RANKOFF — pay-to-rank leaderboard", navigation: "Main navigation", search: "Search businesses and markets",
-      boardStatus: "Board status", timeframe: "Category timeframe", allMarkets: "All market categories", switchChinese: "Switch to Chinese", switchLight: "Switch to light theme", switchDark: "Switch to dark theme",
+      home: "RANKOFF home", tagline: "RANKOFF — pay-to-rank leaderboard", navigation: "Main navigation", search: "Search businesses and industries",
+      boardStatus: "Board status", timeframe: "Industry timeframe", allMarkets: "All industries", switchChinese: "Switch to Chinese", switchLight: "Switch to light theme", switchDark: "Switch to dark theme",
     },
     zh: {
-      home: "RANKOFF 首页", tagline: "RANKOFF — 付费排名榜", navigation: "主导航", search: "搜索商家和市场",
-      boardStatus: "榜单状态", timeframe: "分类时间范围", allMarkets: "全部市场分类", switchChinese: "切换为中文", switchLight: "切换至浅色主题", switchDark: "切换至深色主题",
+      home: "RANKOFF 首页", tagline: "RANKOFF — 付费排名榜", navigation: "主导航", search: "搜索商家和行业",
+      boardStatus: "榜单状态", timeframe: "行业时间范围", allMarkets: "全部行业", switchChinese: "切换为中文", switchLight: "切换至浅色主题", switchDark: "切换至深色主题",
     },
   };
 
@@ -104,10 +104,10 @@
     try {
       const saved = JSON.parse(window.localStorage.getItem(STORE_KEY));
       elements.language = languageFromUrl() || (saved?.language === "zh" ? "zh" : "en");
-      elements.root.dataset.theme = saved?.theme === "dark" ? "dark" : "light";
+      elements.root.dataset.theme = saved?.theme === "light" ? "light" : "dark";
     } catch {
       elements.language = languageFromUrl() || "en";
-      elements.root.dataset.theme = "light";
+      elements.root.dataset.theme = "dark";
     }
   }
 
@@ -307,7 +307,7 @@
     if (!ranked.length) {
       const empty = document.createElement("p");
       empty.className = "active-empty";
-      empty.textContent = elements.language === "zh" ? "还没有活跃分类。" : "No active categories yet.";
+      empty.textContent = elements.language === "zh" ? "还没有活跃行业。" : "No active industries yet.";
       elements.active.replaceChildren(empty);
       return;
     }
@@ -355,7 +355,7 @@
         : (elements.language === "zh" ? "还没有商家上榜" : "No business here yet");
       const copy = document.createElement("span");
       copy.textContent = today
-        ? (elements.language === "zh" ? "切换到全部时间可查看这个市场的榜单。" : "Switch to All-time to see this market's board.")
+        ? (elements.language === "zh" ? "切换到全部时间可查看这个行业的榜单。" : "Switch to All-time to see this industry's board.")
         : (elements.language === "zh" ? "第一个上榜的商家就是第 1 名。" : "The first business to list takes #1.");
       // "View board →" already sits in this card's header pointing at the same
       // URL. Two calls to action, one destination, fifteen cards.
@@ -534,8 +534,8 @@
       const notice = document.createElement("p");
       notice.className = "category-notice";
       notice.textContent = elements.language === "zh"
-        ? "近 24 小时还没有付款。切换到全部时间可查看每个市场的榜单。"
-        : "No payment in the past 24 hours yet. Switch to All-time to see every market's board.";
+        ? "近 24 小时还没有付款。切换到全部时间可查看每个行业的榜单。"
+        : "No payment in the past 24 hours yet. Switch to All-time to see every industry's board.";
       lead.push(notice);
     }
     elements.grid.replaceChildren(...lead, ...primary.map(({ config }) => cards(config)), ...populated.map(({ config }) => cards(config)));
@@ -543,8 +543,8 @@
     details.className = "category-more";
     const summary = document.createElement("summary");
     summary.textContent = today
-      ? (elements.language === "zh" ? `另外 ${empty.length} 个市场近 24 小时没有付款` : `${empty.length} more markets with no payment in the past 24 hours`)
-      : (elements.language === "zh" ? `查看另外 ${empty.length} 个尚未有条目的市场` : `Explore ${empty.length} more markets waiting for a first listing`);
+      ? (elements.language === "zh" ? `另外 ${empty.length} 个行业近 24 小时没有付款` : `${empty.length} more industries with no payment in the past 24 hours`)
+      : (elements.language === "zh" ? `查看另外 ${empty.length} 个尚未有条目的市场` : `Explore ${empty.length} more industries waiting for a first listing`);
     const grid = document.createElement("div");
     grid.className = "category-grid";
     grid.append(...empty.map(({ config }) => cards(config)));
@@ -560,7 +560,7 @@
   function savePreferences() {
     try {
       const saved = JSON.parse(window.localStorage.getItem(STORE_KEY)) || {};
-      window.localStorage.setItem(STORE_KEY, JSON.stringify({ ...saved, theme: elements.root.dataset.theme, language: elements.language }));
+      window.localStorage.setItem(STORE_KEY, JSON.stringify({ ...saved, theme: elements.root.dataset.theme, language: window.RankoffLocale?.isMalay ? "ms" : elements.language }));
     } catch { /* preference is optional */ }
   }
 

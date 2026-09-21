@@ -1,41 +1,41 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Explore Rankoff categories and see which products lead each sponsored market." />
+    <meta name="description" content="Explore Rankoff industries and see which businesses lead each sponsored industry." />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href="https://rankoff.my/categories" />
     <meta property="og:site_name" content="RANKOFF" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="en_MY" />
     <meta property="og:locale:alternate" content="zh_MY" />
-    <meta property="og:title" content="RANKOFF | Categories" />
-    <meta property="og:description" content="Every category has its own public sponsored leaderboard." />
+    <meta property="og:title" content="RANKOFF | Industries" />
+    <meta property="og:description" content="Every industry has its own public sponsored leaderboard." />
     <meta property="og:url" content="https://rankoff.my/categories" />
     <meta property="og:image" content="https://rankoff.my/assets/rankoff-og-claim.png" />
     <meta property="og:image:width" content="1730" />
     <meta property="og:image:height" content="909" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="RANKOFF | Categories" />
-    <meta name="twitter:description" content="Every category has its own public sponsored leaderboard." />
+    <meta name="twitter:title" content="RANKOFF | Industries" />
+    <meta name="twitter:description" content="Every industry has its own public sponsored leaderboard." />
     <meta name="twitter:image" content="https://rankoff.my/assets/rankoff-og-claim.png" />
     <link rel="alternate" hreflang="en" href="https://rankoff.my/categories" />
     <link rel="alternate" hreflang="zh-Hans" href="https://rankoff.my/categories?lang=zh" />
     <link rel="alternate" hreflang="x-default" href="https://rankoff.my/categories" />
-    <meta name="theme-color" content="#faf7f5" />
-    <title>RANKOFF | Categories</title>
+    <meta name="theme-color" content="#090a0c" />
+    <title>RANKOFF | Industries</title>
     <link rel="icon" href="./assets/rankoff-favicon.png?v=1" type="image/png" />
-    <script src="/theme-boot.js?v=1"></script>
-    <link rel="stylesheet" href="./styles.css?v=111" />
+    <script src="/theme-boot.js?v=2"></script>
+    <link rel="stylesheet" href="./styles.css?v=116" />
     <link rel="stylesheet" href="./categories.css?v=21" />
   <link rel="stylesheet" href="/locale.css?v=1" />
-    <script src="/locale-boot.js?v=1"></script>
-    <script type="module" src="/locale.js?v=2"></script>
+    <script src="/locale-boot.js?v=2"></script>
+    <script type="module" src="/locale.js?v=7"></script>
     <script defer src="/meta-pixel.js?v=2"></script>
   </head>
   <body>
-    <a class="skip-link" href="#categories" data-copy="skipCategories">Skip to categories</a>
+    <a class="skip-link" href="#categories" data-copy="skipCategories">Skip to industries</a>
 
     <main class="categories-shell">
       <header class="topbar categories-topbar" aria-label="RANKOFF">
@@ -45,21 +45,21 @@
 
         <nav class="site-nav categories-nav" aria-label="Main navigation">
           <a href="/" data-copy="board">Board</a>
-          <a href="/categories" aria-current="page" data-copy="categories">Categories</a>
+          <a href="/categories" aria-current="page" data-copy="categories">Industries</a>
           <a href="/about" data-copy="about">About</a>
         </nav>
-        <button class="search-toggle" type="button" data-search-toggle aria-expanded="false" aria-controls="site-search" aria-label="Search businesses and markets"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.6 4.6"></path></svg></button>
+        <button class="search-toggle" type="button" data-search-toggle aria-expanded="false" aria-controls="site-search" aria-label="Search businesses and industries"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.6 4.6"></path></svg></button>
         <div class="category-actions">
           <button class="language-toggle" type="button" data-language-toggle aria-pressed="false">中文</button>
-          <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch colour theme" aria-pressed="false">Dark</button>
+          <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch colour theme" aria-pressed="true">Light</button>
         </div>
       </header>
 
       <form class="site-search" id="site-search" data-site-search role="search" hidden>
         <div class="site-search-field">
           <span class="site-search-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.6 4.6"></path></svg></span>
-          <label class="visually-hidden" for="site-search-input">Search businesses and markets</label>
-          <input id="site-search-input" data-site-search-input type="search" autocomplete="off" placeholder="Search businesses and markets…" />
+          <label class="visually-hidden" for="site-search-input">Search businesses and industries</label>
+          <input id="site-search-input" data-site-search-input type="search" autocomplete="off" placeholder="Search businesses and industries…" />
           <button class="search-close" type="button" data-search-close>Close</button>
         </div>
         <nav class="site-search-results" data-search-results aria-label="Search results" hidden></nav>
@@ -75,16 +75,15 @@
       </section>
 
       <section class="category-hero" aria-labelledby="categories-title">
-        <p class="section-kicker" data-copy="browseMarkets">Browse the markets</p>
-        <h1 id="categories-title" data-copy="categories">Categories</h1>
-        <p data-copy="heroCopy">Every market has its own board. Pick yours and see who is on top.</p>
+        <p class="section-kicker" data-copy="browseMarkets">Browse the industries</p>
+        <h1 id="categories-title" data-copy="categories">Industries</h1>
+        <p data-copy="heroCopy">Every industry has its own board. Pick yours and see who is on top.</p>
       </section>
 
-      <p class="currency-note" data-currency-note hidden></p>
       <section class="active-section" aria-labelledby="active-heading">
         <div class="section-heading">
           <span class="section-dot" aria-hidden="true"></span>
-          <h2 id="active-heading" data-copy="activeHeading">Most active categories</h2>
+          <h2 id="active-heading" data-copy="activeHeading">Most active industries</h2>
         </div>
         <div class="active-category-list" data-active-categories></div>
       </section>
@@ -93,16 +92,16 @@
         <div class="section-heading section-heading-spread">
           <div>
             <span class="section-dot" aria-hidden="true"></span>
-            <h2 id="all-categories-heading" data-copy="allHeading">All categories</h2>
+            <h2 id="all-categories-heading" data-copy="allHeading">All industries</h2>
           </div>
-          <nav class="time-tabs" aria-label="Category timeframe">
+          <nav class="time-tabs" aria-label="Industry timeframe">
             <button type="button" data-category-window="all" aria-pressed="true">All-time</button>
             <button type="button" data-category-window="today" aria-pressed="false">Past 24h</button>
           </nav>
         </div>
         <div class="category-grid" data-category-grid></div>
         <noscript>
-          <p class="category-noscript" data-copy="allCopy">Choose a market to view its live board.</p>
+          <p class="category-noscript" data-copy="allCopy">Choose an industry to view its live board.</p>
           <ul class="category-seo-list">
             <li><a href="/?category=AI#board">AI Tools &amp; Agents</a></li>
             <li><a href="/?category=Creators#board">Creators &amp; Talent</a></li>
@@ -134,9 +133,8 @@
     </main>
 
     <script src="/acquisition.js?v=2" defer></script>
-    <script src="./search.js?v=8" defer></script>
-    <script src="./categories.js?v=31" defer></script>
-    <script type="module" src="/currency.js?v=1"></script>
+    <script src="./search.js?v=9" defer></script>
+    <script src="./categories.js?v=32" defer></script>
   <script src="/support.js?v=1" defer></script>
   </body>
 </html>

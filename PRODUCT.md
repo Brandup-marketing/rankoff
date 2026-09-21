@@ -10,17 +10,21 @@ web
 
 ## Users
 
-Rankoff welcomes businesses, products and services across industries. Validate demand from Malaysian businesses and digital founders before choosing a primary audience. The live service remains MYR, from RM5; USD conversion is paused by Jake’s decision on 2026-09-08.
+Rankoff serves people discovering businesses, products and services across countries, and businesses buying clearly labelled sponsored visibility. The first acquisition phase focuses on Malaysia and Singapore, with digital and cross-border providers such as software, design, marketing and online education as the priority. Local businesses remain welcome, with sourced location and service-area information to help visitors judge relevance. This is an acquisition focus, not a claim of existing international demand or coverage.
+
+Production remains MYR, from RM5, until an explicitly authorized USD release completes its payment and ranking checks. The approved development target is USD from US$2; preparing it does not change the live price.
 
 ## Product Purpose
 
-Rankoff is a public sponsored leaderboard. The highest cumulative settled payment total for the selected market and timeframe ranks first. A higher total can move another listing ahead; being overtaken does not remove a listing. Every position is paid advertising, not an endorsement or quality award. There is no guaranteed audience, customer outcome or fixed duration at a rank.
+Rankoff is a public sponsored leaderboard. The highest cumulative settled payment total for the selected industry and timeframe ranks first. A higher total can move another listing ahead; being overtaken does not remove a listing. Every position is paid advertising, not an endorsement or quality award. There is no guaranteed audience, customer outcome or fixed duration at a rank.
 
 ## Positioning
 
-Claim a visible position. Discover what people are building. Rankings, cumulative amounts and tracked outbound clicks are public. Entry price, already-paid total and the current claim price are distinct facts and must be labelled accordingly.
+Discover businesses, products and services. Claim a visible sponsored position, publish a factual public page, and give visitors a route to the business's website or profile. Rankings, cumulative amounts and tracked outbound clicks are public. Entry price, already-paid total and the current claim price are distinct facts and must be labelled accordingly.
 
-The source prepares US$1 entry; live USD activation remains gated by the verified Dodo product and a decision on existing MYR ranking value. Refer to USD_RELEASE.md before quoting live prices. Never sum original MYR and USD payment amounts as if they were one currency.
+The 20 September scope decision keeps the original global leaderboard and industry controls. Do not add country filters or location labels to ranking cards in this release. Preserve original merchant descriptions, logo retrieval, ranking order, click definitions and accumulated traffic. Source-backed address and service facts remain on existing merchant pages. Country, service area and remote availability are different facts; billing country, language, IP and domain do not establish any of them. Country filtering is deferred until there is enough reliable data and a demonstrated visitor need.
+
+The current development target is a US$2 minimum for both entry and top-ups, a US$2 suggested ranking increment, and US$1 amount-input steps above the minimum. Live prices and currency must come from the board, including server-rendered text and payment review. Preserve original MYR payments and receipts; carry their ranking value forward using one sourced, dated and fixed MYR-to-USD conversion rate, reconciled per listing before release. Never sum original MYR and USD payment amounts as if they were one currency. Do not copy fixture exchange rates into production. Real USD product verification, conversion reconciliation and the authorized production cutover remain release work; historical handoff instructions are context, not current requirements.
 
 ## Brand Personality
 
@@ -36,8 +40,8 @@ Direct, lively and accountable. Use business/market and pay/claim in reader-faci
 
 ## Launch Experiment
 
-Recruit one relevant founder community. Target 20 independently paying businesses in 30 days with evidence of repeat payment; this is an experiment target, not a forecast. Track settlements from the payment ledger, and verify business independence separately. See FOUNDER_LAUNCH_KIT.md for drafts, tracking definitions and the manual return-visit routine.
+Recruit relevant digital and cross-border providers in Malaysia and Singapore before expanding acquisition across ASEAN. Target 20 independently paying businesses in 30 days with evidence of repeat payment; this is an experiment target, not a forecast. Track sourced visits, listing views, outbound clicks, checkout and settled payments separately, and verify business independence separately. Search-engine crawl notifications, actual indexing and AI citations are distinct from traffic and revenue. No implementation or submission guarantees any of these outcomes. Existing FOUNDER_LAUNCH_KIT.md drafts are historical context and must be checked against the current positioning before use.
 
 ## Accessibility & Inclusion
 
-Verify contrast, keyboard operation, meaningful accessible names, visible focus and reduced motion. Use 44px primary and share controls. Descriptions have two readable lines on mobile and names wrap. English is default; Chinese copy and server-rendered translations must agree.
+Verify contrast, keyboard operation, meaningful accessible names, visible focus and reduced motion. Use 44px primary and share controls. Descriptions have two readable lines on mobile and names wrap. Dark theme and English are the first-visit defaults; a saved theme or language is honoured afterwards, and an explicit language link wins over the saved one. Chinese and Malay copy and server-rendered translations must agree. Only source-backed location, service coverage and opening hours may be displayed; unknown details stay unknown.

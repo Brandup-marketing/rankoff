@@ -28,7 +28,7 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
 
   const copy = {
     en: {
-      board: "Board", categories: "Categories", about: "About", legal: "Legal", contact: "Contact", skipListing: "Skip to listing details", back: "← Back to leaderboard", loading: "Loading ranking details…",
+      board: "Board", categories: "Industries", about: "About", legal: "Legal", contact: "Contact", skipListing: "Skip to listing details", back: "← Back to leaderboard", loading: "Loading ranking details…",
       notFoundTitle: "Listing not found", notFoundCopy: "This listing may have moved or is no longer on the public board.", returnBoard: "Return to the board",
       sponsored: "Sponsored", visit: "Visit website", viewInstagram: "View Instagram", viewFacebook: "View Facebook Page", viewTiktok: "View TikTok", viewProfile: "View profile", share: "Share rank", evidence: "Public ranking record", rank: "Current rank", bid: "Paid", allTimeBid: "All-time total", past24Bid: "Past 24h total", duration: "Duration", past24: "Past 24h",
       rule: "Highest total takes #1", claimNumberOne: "Claim #1 for", startClaim: "Claim this rank",
@@ -48,7 +48,7 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
       firstListed: "First listed", settledBids: "Payments", lastUpdated: "Latest payment",
     },
     zh: {
-      board: "榜单", categories: "分类", about: "关于", legal: "法律条款", contact: "联系", skipListing: "跳至条目详情", back: "← 返回榜单", loading: "正在加载排名信息…",
+      board: "榜单", categories: "行业", about: "关于", legal: "法律条款", contact: "联系", skipListing: "跳至条目详情", back: "← 返回榜单", loading: "正在加载排名信息…",
       notFoundTitle: "找不到此条目", notFoundCopy: "此条目可能已移动，或已不在公开榜单中。", returnBoard: "返回榜单",
       sponsored: "赞助", visit: "访问网站", viewInstagram: "查看 Instagram", viewFacebook: "查看 Facebook 专页", viewTiktok: "查看 TikTok", viewProfile: "查看主页", share: "分享排名", evidence: "公开排名记录", rank: "当前排名", bid: "已付", allTimeBid: "累计付款", past24Bid: "近 24 小时付款", duration: "有效期", past24: "近 24 小时",
       rule: "累计付款最高者第 1 名", claimNumberOne: "拿下第 1 名，只需", startClaim: "拿下此排名",
@@ -81,8 +81,8 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
     },
   };
   const accessibilityCopy = {
-    en: { home: "RANKOFF home", tagline: "RANKOFF — pay-to-rank leaderboard", navigation: "Main navigation", search: "Search businesses and markets", switchChinese: "Switch to Chinese", switchLight: "Switch to light theme", switchDark: "Switch to dark theme" },
-    zh: { home: "RANKOFF 首页", tagline: "RANKOFF — 付费排名榜", navigation: "主导航", search: "搜索商家和市场", switchChinese: "切换为中文", switchLight: "切换至浅色主题", switchDark: "切换至深色主题" },
+    en: { home: "RANKOFF home", tagline: "RANKOFF — pay-to-rank leaderboard", navigation: "Main navigation", search: "Search businesses and industries", switchChinese: "Switch to Chinese", switchLight: "Switch to light theme", switchDark: "Switch to dark theme" },
+    zh: { home: "RANKOFF 首页", tagline: "RANKOFF — 付费排名榜", navigation: "主导航", search: "搜索商家和行业", switchChinese: "切换为中文", switchLight: "切换至浅色主题", switchDark: "切换至深色主题" },
   };
 
   const elements = {
@@ -145,16 +145,16 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
   function loadPreferences() {
     try {
       const saved = JSON.parse(localStorage.getItem(STORE_KEY));
-      return { theme: saved?.theme === "dark" ? "dark" : "light", language: languageFromUrl() || (saved?.language === "zh" ? "zh" : "en"), listings: Array.isArray(saved?.listings) ? saved.listings : [] };
+      return { theme: saved?.theme === "light" ? "light" : "dark", language: languageFromUrl() || (saved?.language === "zh" ? "zh" : "en"), listings: Array.isArray(saved?.listings) ? saved.listings : [] };
     } catch {
-      return { theme: "light", language: languageFromUrl() || "en", listings: [] };
+      return { theme: "dark", language: languageFromUrl() || "en", listings: [] };
     }
   }
 
   function savePreferences() {
     try {
       const saved = JSON.parse(localStorage.getItem(STORE_KEY)) || {};
-      localStorage.setItem(STORE_KEY, JSON.stringify({ ...saved, theme: preferences.theme, language: preferences.language }));
+      localStorage.setItem(STORE_KEY, JSON.stringify({ ...saved, theme: preferences.theme, language: window.RankoffLocale?.isMalay ? "ms" : preferences.language }));
     } catch { /* Preference persistence is optional. */ }
   }
 

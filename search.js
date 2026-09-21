@@ -18,8 +18,8 @@
   }
   function copy() {
     return isChinese()
-      ? { category: "市场", product: "商家", open: "打开这个市场", sponsored: "赞助条目", empty: "没有找到匹配的商家或市场。", placeholder: "搜索商家和市场…", close: "关闭" }
-      : { category: "Market", product: "Business", open: "Open this market", sponsored: "Sponsored listing", empty: "No businesses or markets found.", placeholder: "Search businesses and markets…", close: "Close" };
+      ? { category: "行业", product: "商家", open: "打开这个行业", sponsored: "赞助条目", empty: "没有找到匹配的商家或行业。", placeholder: "搜索商家和行业…", close: "关闭" }
+      : { category: "Industry", product: "Business", open: "Open this industry", sponsored: "Sponsored listing", empty: "No businesses or industries found.", placeholder: "Search businesses and industries…", close: "Close" };
   }
 
   function syncCopy() {
