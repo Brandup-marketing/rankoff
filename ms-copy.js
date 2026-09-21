@@ -304,6 +304,8 @@ Why it exists|Mengapa Rankoff diwujudkan
 Rankoff started with one question.|Rankoff bermula dengan satu soalan.
 What if a business could buy the top spot in the open, not in a hidden ad auction? What if everyone could see who is on top, what it cost, and who is getting the clicks?|Bagaimana jika perniagaan boleh membeli tempat teratas secara terbuka, bukan melalui lelongan iklan tersembunyi? Bagaimana jika semua orang boleh melihat siapa di atas, kosnya dan siapa mendapat klik?
 Rankoff is the answer: a public board where the price, the position and the clicks are all on show, and every listing is labelled as sponsored.|Rankoff ialah jawapannya: papan awam yang memaparkan harga, kedudukan dan klik, serta melabelkan setiap penyenaraian sebagai tajaan.
+Rankoff is a public sponsored leaderboard for businesses, products and services. List from US$1. Positions are ranked by cumulative payments, with rank, total paid and tracked outbound clicks displayed publicly.|Rankoff ialah papan kedudukan tajaan awam untuk perniagaan, produk dan perkhidmatan. Senaraikan dari US$1. Kedudukan ditentukan oleh jumlah bayaran terkumpul, dengan kedudukan, jumlah dibayar dan klik keluar yang direkodkan dipaparkan secara terbuka.
+Every listing has its own public business page, including a description, sponsored rank and a tracked link to its website or social profile. Structured data and crawlable content help search engines and AI search tools discover and understand the business.|Setiap penyenaraian mempunyai halaman perniagaan awam sendiri, termasuk penerangan, kedudukan tajaan dan pautan direkodkan ke laman web atau profil sosialnya. Data berstruktur dan kandungan yang boleh dirangkak membantu enjin carian dan alat carian AI menemui serta memahami perniagaan itu.
 Visible|Terbuka
 Public by default|Terbuka kepada umum
 Every listing shows its rank, its total paid, and what the business does.|Setiap penyenaraian menunjukkan kedudukan, jumlah dibayar dan kegiatan perniagaan.
@@ -414,26 +416,35 @@ export function translateMs(value) {
   const original = String(value);
   const key = normalizeCopy(original);
   if (!key) return original;
-  let translated = MS_COPY[key];
+  // The server replaces the provisional floor with the live amount before this
+  // middleware runs. Match the copy using its stable placeholder, then restore
+  // the live amount in the Malay result.
+  const livePrices = [];
+  const lookupKey = key.replace(/US\$[\s\u00a0]*\d+(?:[.,]\d+)*/g, match => {
+    livePrices.push(match);
+    return 'US$1';
+  });
+  let translated = MS_COPY[lookupKey];
   // Existing answer pages combine EN/ZH in FAQ questions and JSON-LD answers.
   if (!translated && /[\u3400-\u9fff]/.test(key)) {
-    const english = key.split(/\s+\/\s+|\s+(?=[\u3400-\u9fff])/)[0];
+    const english = lookupKey.split(/\s+\/\s+|\s+(?=[\u3400-\u9fff])/)[0];
     translated = MS_COPY[english];
   }
   if (!translated) {
-    const arrow = key.match(/^(.*?) (↗|→)$/);
+    const arrow = lookupKey.match(/^(.*?) (↗|→)$/);
     if (arrow && MS_COPY[arrow[1]]) translated = `${MS_COPY[arrow[1]]} ${arrow[2]}`;
   }
   if (!translated) for (const [pattern, render] of MS_PATTERNS) {
-    const match = key.match(pattern);
+    const match = lookupKey.match(pattern);
     if (match) { translated = render(...match.slice(1)); break; }
   }
-  if (!translated && key.includes('. ')) {
-    const parts = key.split(/(?<=\.) /);
+  if (!translated && lookupKey.includes('. ')) {
+    const parts = lookupKey.split(/(?<=\.) /);
     const result = parts.map(part => translateMs(part)).join(' ');
     if (result !== key) translated = result;
   }
   if (!translated) return original;
+  for (const price of livePrices) translated = translated.replace('US$1', price);
   return original.match(/^\s*/)[0] + translated + original.match(/\s*$/)[0];
 }
 

@@ -22,9 +22,9 @@ const STATIC_LOCALIZED_METADATA = Object.freeze({
   about: Object.freeze({
     path: "/about",
     title: "关于 RANKOFF",
-    description: "通过 Rankoff 发现商家、产品与服务：公开资料页、透明的赞助位置，以及追踪站外点击。",
+    description: "Rankoff 是面向商家、产品与服务的公开赞助榜单。US$1 起即可上榜，排名、累计已付与追踪站外点击均公开。",
     socialTitle: "关于 RANKOFF",
-    socialDescription: "通过 Rankoff 发现商家、产品与服务：公开资料页、透明的赞助位置，以及追踪站外点击。",
+    socialDescription: "Rankoff 是面向商家、产品与服务的公开赞助榜单。US$1 起即可上榜，排名、累计已付与追踪站外点击均公开。",
   }),
 });
 
@@ -71,6 +71,8 @@ const ABOUT_STATIC_COPY = Object.freeze({
   "Why it exists": "为什么有 Rankoff", "Rankoff started with one question.": "Rankoff 始于一个问题。",
   "What if a business could buy the top spot in the open, not in a hidden ad auction? What if everyone could see who is on top, what it cost, and who is getting the clicks?": "如果商家可以光明正大买下最显眼的位置，而不是在看不见的广告竞价里？如果每个人都能看到谁在榜首、花了多少钱、谁拿到了点击？",
   "Rankoff is the answer: a public board where the price, the position and the clicks are all on show, and every listing is labelled as sponsored.": "Rankoff 就是答案：一个公开榜单，价格、排名、点击全部公开，每个条目都标明是赞助。",
+  "Rankoff is a public sponsored leaderboard for businesses, products and services. List from US$1. Positions are ranked by cumulative payments, with rank, total paid and tracked outbound clicks displayed publicly.": "Rankoff 是面向商家、产品与服务的公开赞助榜单。US$1 起即可上榜。排名按累计付款计算，排名、累计已付与追踪站外点击均公开显示。",
+  "Every listing has its own public business page, including a description, sponsored rank and a tracked link to its website or social profile. Structured data and crawlable content help search engines and AI search tools discover and understand the business.": "每个条目都有自己的公开商家页，包含介绍、赞助排名，以及通往网站或社交主页的追踪链接。结构化数据与可抓取内容帮助搜索引擎和 AI 搜索工具发现并理解这家商家。",
   Visible: "可见", "Public by default": "默认公开", "Every listing shows its rank, its total paid, and what the business does.": "每个条目都显示排名、累计付款，以及这家生意是做什么的。",
   Simple: "简明", "One clear rule": "一条规则", "Pay more than the listing above you and you move up. That is the whole rule.": "付得比上面那家多，你就往上走。规则就这么简单。",
   Measured: "可衡量", "Evidence over promises": "数据胜于承诺", "Clicks are tracked redirects, counted by Rankoff and shown in public. No promises, just the number.": "点击是 Rankoff 记录的跳转次数，公开显示。不承诺效果，只给你数字。",
@@ -113,6 +115,8 @@ export function applyLiveCurrency(html, floor, currency, minimumMinor = null) {
       (match, open, tag, copy, close) => `${open}${priceCopy(copy)}${close}`)
     // "List your business from US$1" — the floor, never the price of #1.
     .replace(/(<strong[^>]*\bdata-hero-entry-price\b[^>]*>)([\s\S]*?)(<\/strong>)/,
+      (match, open, copy, close) => `${open}${priceCopy(copy)}${close}`)
+    .replace(/(<[^>]*\bdata-live-currency-copy\b[^>]*>)([\s\S]*?)(<\/[^>]+>)/g,
       (match, open, copy, close) => `${open}${priceCopy(copy)}${close}`)
     .replace(/(<span>)(Enter your website,[^<]*pay from (?:US\$|RM)[^<]*|输入网站[^<]*起付款。)(<\/span>)/g,
       (match, open, copy, close) => `${open}${priceCopy(copy)}${close}`)
