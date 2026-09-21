@@ -112,6 +112,16 @@ export async function onRequestGet(context) {
         /(<strong[^>]*\bdata-hero-top-price\b[^>]*>)[\s\S]*?(<\/strong>)/,
         (match, open, close) => `${open}${escapeHtml(price)}${close}`,
       );
+      // One offer, one button: while the minimum payment already takes #1 the
+      // entry price and the #1 price are the same purchase, so only "Claim #1
+      // now" shows. Past 24h has no #1 quote and offers listing instead. Set
+      // here so the first paint matches what app.js keeps.
+      const solo = period === "today" ? "list"
+        : (Number(payload.next_bid_minor) <= Number(payload.board?.min_increment_minor) ? "top" : "");
+      if (solo) {
+        html = html.replace('<div class="hero-paths" data-hero-paths>', `<div class="hero-paths" data-hero-paths data-solo="${solo}">`);
+        html = html.replace(solo === "top" ? /(<button\b[^>]*\bdata-hero-list\b)/ : /(<button\b[^>]*\bdata-hero-top\b)/, "$1 hidden");
+      }
       // The static shell is also consumed by link unfurlers and assistive
       // technology before the browser bundle hydrates. Its provisional USD
       // wording is swapped for the board's currency — but only after

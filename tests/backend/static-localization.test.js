@@ -7,6 +7,7 @@ import { onRequestGet as renderAbout } from "../../functions/about.js";
 import { onRequestGet as renderCategories } from "../../functions/categories.js";
 import { onRequestGet as renderHome, renderBoard, renderRankingSchema } from "../../functions/index.js";
 import { renderMalay } from "../../functions/_lib/malay.js";
+import { priceAboveMinor } from "../../functions/_lib/pricing.js";
 import { testDatabase, seedListing, seedPayment } from "../helpers/sqlite.js";
 
 const homeShell = readFileSync(new URL("../../index.html", import.meta.url), "utf8");
@@ -123,7 +124,8 @@ test("initial HTML uses the active MYR or USD floor, symbols and one-unit contro
       const stepper = html.match(/<button[^>]*data-inline-adjust="-1"[^>]*>/)[0];
       assert.ok(stepper.includes(`${symbol}1`));
       const headline = html.match(/data-hero-next-price>([^<]*)</)[1];
-      assert.equal(headline, `${symbol}\u00a0${(1200 + minimum) / 100}`);
+      // One whole unit above the RM/US$12 leader, never below the minimum.
+      assert.equal(headline, `${symbol}\u00a0${priceAboveMinor(1200, minimum) / 100}`);
       const floorCopy = html.match(/data-i18n="stepPayCopy">([^<]*)</)[1];
       assert.ok(floorCopy.replaceAll("\u00a0", " ").includes(`${symbol} ${minimum / 100}`));
       if (currency === "MYR") assert.doesNotMatch(html, /US\$/);

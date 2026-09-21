@@ -46,7 +46,7 @@ function context() {
     languageText: (key) => key, discoveryLanguage: () => state.language,
     toasts: [], showToast(message) { env.toasts.push(message); },
   };
-  for (const name of ['canReviewPayment', 'hasCurrentQuote', 'paymentPreviewPeriod', 'syncCheckoutControls', 'invalidateQuote', 'dollarsFromMinor', 'normalizedClickCount', 'normalizeApiRanking', 'existingListingForPending', 'boardMinimum', 'loadChosenMarket', 'overallRank', 'projectedRank', 'updateBidPreview', 'refreshBoardFromApi', 'changeBoardView']) env[name] = bind(name, env);
+  for (const name of ['canReviewPayment', 'hasCurrentQuote', 'paymentPreviewPeriod', 'syncCheckoutControls', 'invalidateQuote', 'dollarsFromMinor', 'normalizedClickCount', 'normalizeApiRanking', 'existingListingForPending', 'boardMinimum', 'nextWholeAbove', 'priceAbove', 'loadChosenMarket', 'overallRank', 'projectedRank', 'updateBidPreview', 'refreshBoardFromApi', 'changeBoardView']) env[name] = bind(name, env);
   env.initialsFor = () => 'R';
   return env;
 }

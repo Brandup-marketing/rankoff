@@ -1774,3 +1774,9 @@ html[data-theme="light"] .category-logo:not(.has-icon) {
   .featured-listing:has(.card-visit-overlay) { cursor: pointer; }
   .featured-listing:has(.card-visit-overlay:hover) { border-color: var(--accent); }
 }
+
+/* One offer, one button (2026-09-21): while the minimum payment already takes
+   #1, only "Claim #1 now" shows, and it becomes the filled primary action. */
+.hero-paths[data-solo="top"] .hero-path-secondary { border-color: var(--accent-fill, var(--accent)); background: var(--accent-fill, var(--accent)); color: white; }
+.hero-paths[data-solo="top"] .hero-path-secondary .hero-path-price { color: white; }
+.hero-paths[data-solo="top"] .hero-path-secondary:hover { background: var(--accent-strong); }

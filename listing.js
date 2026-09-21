@@ -621,7 +621,7 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
   }
 
   function claimSuggested(existing) {
-    const target = model?.nextBid || (model?.bid || 0) + (boardFloor || 1);
+    const target = model?.nextBid || Math.max(boardFloor || 1, Math.floor(model?.bid || 0) + 1);
     const gap = existing ? target - existing.bid : target;
     return Math.max(boardFloor || 1, Math.ceil(gap));
   }
@@ -671,7 +671,7 @@ import { accountFrom, listingIdentity } from "./platform-identity.js?v=1";
       ? (zh ? `已付 ${money.format(previous)} · 付款后累计 <strong>${money.format(total)}</strong>` : `Already paid ${money.format(previous)} · Total after <strong>${money.format(total)}</strong>`)
       : (zh ? "新条目" : "New listing");
     // Say so when the minimum payment, not the gap, is what sets the amount.
-    const floorNote = boardFloor && existing && (model.nextBid || model.bid + boardFloor) - existing.bid < boardFloor && amount <= boardFloor
+    const floorNote = boardFloor && existing && (model.nextBid || Math.max(boardFloor, Math.floor(model.bid) + 1)) - existing.bid < boardFloor && amount <= boardFloor
       ? (zh ? ` · 最低付款 ${money.format(boardFloor)}` : ` · Minimum payment ${money.format(boardFloor)}`)
       : "";
     node.innerHTML = `${zh ? "预计：" : "Expected: "}${position} · ${paid}${floorNote}`;

@@ -1,3 +1,4 @@
+import { priceAboveMinor } from "./pricing.js";
 import { marketCategoryMembers } from "./config.js";
 
 const DEMO_LISTINGS = Object.freeze([
@@ -113,7 +114,7 @@ export function demoBoard({ category = "all", period = "all", limit = 50, page =
       has_previous: page > 1,
       has_next: offset + rows.length < matchingRows.length,
     },
-    next_bid_minor: Math.ceil((topAmount + 200) / 100) * 100,
+    next_bid_minor: priceAboveMinor(topAmount, 200),
   };
 }
 

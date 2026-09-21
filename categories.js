@@ -384,13 +384,13 @@
       });
     }
     card.append(head, rankings);
-    // The price of first place in this market: the board's step above the
-    // leader — the server's next_bid rule.
+    // The price of first place in this industry: one whole unit above the
+    // leader, never below the minimum payment — the server's next_bid rule.
     if (rows.length && elements.floorUnits > 0) {
       const claim = document.createElement("a");
       claim.className = "category-claim";
       claim.href = claimHrefFor(config.id);
-      const price = currency.format(Math.ceil(rows[0].bid + elements.floorUnits));
+      const price = currency.format(Math.max(elements.floorUnits, Math.floor(rows[0].bid) + 1));
       const label = document.createElement("span");
       const amount = document.createElement("strong");
       amount.textContent = price;
@@ -587,8 +587,8 @@
       const allPayload = allResult.value;
       const todayPayload = todayResult.status === "fulfilled" ? todayResult.value : { rankings: [] };
       currency = boardCurrencyFormat(String(allPayload.board?.currency || "USD").toUpperCase());
-      // The board's step, which is also its floor: first place costs this
-      // much more than the market's leader — the server's next_bid rule.
+      // The board's minimum payment. First place costs one whole unit more
+      // than the industry's leader, never less than this.
       // Without it in the payload no price is shown.
       elements.floorUnits = Number(allPayload.board?.min_increment_minor) > 0 ? Number(allPayload.board.min_increment_minor) / 100 : 0;
       const allRows = normalizeRows(allPayload, "all");

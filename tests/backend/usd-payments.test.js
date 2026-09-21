@@ -71,7 +71,8 @@ test('MYR originals survive conversion; ranking, category, stats, records and sn
   seedPayment(db, { id: 'other-payment', listing: 'other', amount: 200, currency: 'USD' });
   const payload = await readBoard(db);
   assert.deepEqual(payload.rankings.map((r) => [r.listing.id, r.bid.amount_minor, r.bid.currency]), [['example', 225, 'USD'], ['other', 200, 'USD']]);
-  assert.equal(payload.next_bid_minor, 400);
+  // One whole unit above the US$2.25 leader (functions/_lib/pricing.js).
+  assert.equal(payload.next_bid_minor, 300);
   const category = await readBoard(db, { category: 'Marketing' });
   assert.equal(category.rankings[0].bid.amount_minor, 225);
   assert.equal((await loadPublicStats(db, await boardOf(db))).settled_revenue_minor, 425);
@@ -125,7 +126,7 @@ test('conversion rounds each original payment and retains the existing tie-break
   seedPayment(db, { id: 'earlier-usd', listing: 'earlier', amount: 250, currency: 'USD', at: '2026-09-01T00:00:00.000Z' });
   const board = await readBoard(db);
   assert.deepEqual(board.rankings.map((entry) => [entry.listing.id, entry.bid.amount_minor]), [['earlier', 250], ['example', 250]]);
-  assert.equal(board.next_bid_minor, 500);
+  assert.equal(board.next_bid_minor, 300);
   assert.equal(db.sqlite.prepare("SELECT SUM(amount_minor) AS original FROM bids WHERE listing_id = 'example'").get().original, 1002);
   db.sqlite.close();
 });
@@ -176,7 +177,7 @@ test('US$2 is the same floor for a first payment and a repeat payment, independe
     providerCalls++;
     return Response.json(url.includes('/products/') ? product : { session_id: 'test-session', checkout_url: 'https://checkout.example.com/test' });
   });
-  assert.equal((await readBoard(db)).next_bid_minor, 1400);
+  assert.equal((await readBoard(db)).next_bid_minor, 1300);
   for (const amount of [100, 199]) {
     await assert.rejects(checkout({ data: {}, env: envFor(db), request: paymentRequest(amount) }), { code: 'bid_too_low' });
   }

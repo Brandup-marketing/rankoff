@@ -1,3 +1,4 @@
+import { priceAboveMinor } from "./pricing.js";
 import { ApiError, marketCategoryMembers } from "./config.js";
 
 
@@ -208,9 +209,9 @@ export async function loadPublicBoard(db, board, { category, period, limit, page
       has_previous: page > 1,
       has_next: page * limit < total,
     },
-    // Converted legacy totals can contain cents. New payments remain whole
-    // currency units, so round the suggested price upward after the increment.
-    next_bid_minor: Math.ceil((topAmount + Number(board.min_increment_minor)) / 100) * 100,
+    // One whole unit above the leader, never below the minimum payment
+    // (functions/_lib/pricing.js). The minimum is not the step.
+    next_bid_minor: priceAboveMinor(topAmount, Number(board.min_increment_minor)),
   };
 }
 

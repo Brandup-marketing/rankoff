@@ -220,6 +220,7 @@ import { readCompleteBoard } from "./board-preview.js?v=1";
     heroTopPrice: document.querySelector("[data-hero-top-price]"),
     heroList: document.querySelector("[data-hero-list]"),
     heroTop: document.querySelector("[data-hero-top]"),
+    heroPaths: document.querySelector("[data-hero-paths]"),
     boardState: document.querySelector("[data-board-state]"),
     inlineSubmit: document.querySelector("[data-inline-submit]"),
     currentLeader: document.querySelector("[data-current-leader]"),
@@ -1381,8 +1382,8 @@ import { readCompleteBoard } from "./board-preview.js?v=1";
   function getMinimumForPosition(position, ranked = rankedListings()) {
     if (!ranked.length) return 1;
     const index = Math.max(0, position - 1);
-    if (index <= 0) return Math.ceil(getBid(ranked[0]) + boardMinimum());
-    return Math.ceil(getBid(ranked[index - 1]) + boardMinimum());
+    if (index <= 0) return priceAbove(getBid(ranked[0]));
+    return priceAbove(getBid(ranked[index - 1]));
   }
 
   document.addEventListener("input", (event) => {
@@ -1414,6 +1415,17 @@ import { readCompleteBoard } from "./board-preview.js?v=1";
    */
   function boardMinimum() {
     return boardSource === "local" ? 2 : Math.max(1, remoteMinIncrement);
+  }
+
+  // Mirrors priceAboveMinor in functions/_lib/pricing.js (a test checks that
+  // they agree): one whole unit above the total holding a place, never below
+  // the minimum payment. The minimum is the smallest payment, not the step.
+  function nextWholeAbove(total) {
+    return Math.floor(Math.max(0, Number(total) || 0)) + 1;
+  }
+
+  function priceAbove(total) {
+    return Math.max(boardMinimum(), nextWholeAbove(total));
   }
 
   function paymentPreviewPeriod() {
@@ -1451,23 +1463,23 @@ import { readCompleteBoard } from "./board-preview.js?v=1";
     if (activeBid?.type === "new") {
       const existing = existingListingForPending();
       const leader = ranked[0];
-      // Every place costs the board's step more than the one holding it, and
-      // the step is the minimum payment, so every figure stays a round one.
+      // Every place costs one whole unit more than the total holding it, and
+      // never less than the minimum payment.
       if (existing && leader && existing.id !== leader.id) {
-        return Math.max(boardMinimum(), Math.ceil(getBid(leader, period) - getBid(existing, period) + boardMinimum()));
+        return Math.max(boardMinimum(), Math.ceil(nextWholeAbove(getBid(leader, period)) - getBid(existing, period)));
       }
       if (existing && leader && existing.id === leader.id) return boardMinimum();
-      return Math.ceil(getBid(leader, period) + boardMinimum());
+      return priceAbove(getBid(leader, period));
     }
 
     const listing = state.listings.find((item) => item.id === activeBid?.listingId);
-    if (!listing) return Math.ceil(getBid(ranked[0], period) + boardMinimum());
+    if (!listing) return priceAbove(getBid(ranked[0], period));
     const index = ranked.findIndex((item) => item.id === listing.id);
     // A top-up ADDS to this listing's existing total, so the suggestion is the
     // gap to close — not the rival's total. Suggesting the rival's total
     // overcharged every returning customer by everything they had already paid.
     if (index <= 0) return boardMinimum();
-    const gap = getBid(ranked[index - 1], period) - getBid(listing, period) + boardMinimum();
+    const gap = nextWholeAbove(getBid(ranked[index - 1], period)) - getBid(listing, period);
     return Math.max(boardMinimum(), Math.ceil(gap));
   }
 
@@ -1507,7 +1519,7 @@ import { readCompleteBoard } from "./board-preview.js?v=1";
         boardTotals: Array.isArray(board?.rankings)
           ? board.rankings.map((entry) => (Number(entry.bid?.amount_minor || 0) / 100))
           : null,
-        nextBid: Math.ceil(Number(payload.rankings[0]?.bid?.amount_minor || 0) / 100 + boardMinimum()),
+        nextBid: priceAbove(Number(payload.rankings[0]?.bid?.amount_minor || 0) / 100),
       };
     } catch {
       return requestId === quoteRequestId ? false : null;
@@ -1724,9 +1736,10 @@ import { readCompleteBoard } from "./board-preview.js?v=1";
     // leader's price, so taking #2 off a US$ 1 listing was advertised at the
     // RM 15 it costs to take #1. A position is taken by exceeding the total
     // that holds it, and a tie loses because it settles later.
-    // The price of this listing's place: the board's step above what it
-    // holds. For #1 the server's own next bid wins if higher.
-    const ownPrice = Math.ceil(getBid(listing) + boardMinimum());
+    // The price of this listing's place: one whole unit above what it holds,
+    // never below the minimum payment. For #1 the server's own next bid wins
+    // if higher.
+    const ownPrice = priceAbove(getBid(listing));
     const minimum = position === 1 && boardSource !== "local" && remoteNextBid
       ? Math.max(remoteNextBid, ownPrice)
       : ownPrice;
@@ -1800,6 +1813,11 @@ import { readCompleteBoard } from "./board-preview.js?v=1";
   // payload, never from copy, so they cannot drift from the checkout amounts.
   function renderHeroPaths(topPrice) {
     const floor = boardMinimum();
+    // One offer, one button: while the minimum payment already takes #1 the two
+    // prices are the same purchase, so only "Claim #1 now" shows. Past 24h has
+    // no #1 quote and offers listing instead. functions/index.js sets the same
+    // state in the first paint.
+    const solo = state.activeWindow === "today" ? "list" : (topPrice <= floor ? "top" : "");
     if (elements.heroEntryPrice) elements.heroEntryPrice.textContent = state.language === "zh" ? `${money(floor)} 起` : `from ${money(floor)}`;
     if (elements.heroList) elements.heroList.dataset.prepareChallenge = String(floor);
     if (elements.heroList) elements.heroList.setAttribute("aria-label", state.language === "zh" ? `让生意上榜，${money(floor)} 起` : `List your business from ${money(floor)}`);
@@ -1807,8 +1825,12 @@ import { readCompleteBoard } from "./board-preview.js?v=1";
     if (elements.heroTop) {
       elements.heroTop.dataset.prepareChallenge = String(topPrice);
       elements.heroTop.setAttribute("aria-label", state.language === "zh" ? `立即以 ${money(topPrice)} 拿下第 1 名` : `Claim #1 now for ${money(topPrice)}`);
-      // "Take #1" prices the all-time board; Past 24h is a different ranking.
-      elements.heroTop.hidden = state.activeWindow === "today";
+      elements.heroTop.hidden = solo === "list";
+    }
+    if (elements.heroList) elements.heroList.hidden = solo === "top";
+    if (elements.heroPaths) {
+      if (solo) elements.heroPaths.dataset.solo = solo;
+      else delete elements.heroPaths.dataset.solo;
     }
     if (elements.heroContext) elements.heroContext.textContent = languageText("heroValue");
   }
@@ -1832,7 +1854,7 @@ import { readCompleteBoard } from "./board-preview.js?v=1";
     // the board: a hardware shop pre-filled with the leader's Marketing can reach
     // checkout without anyone noticing it was filed in the wrong trade.
     const leaderCategory = canonicalCategory(leader.category) || "Other";
-    const nextPrice = boardSource === "local" || !remoteNextBid ? Math.ceil(getBid(leader) + boardMinimum()) : remoteNextBid;
+    const nextPrice = boardSource === "local" || !remoteNextBid ? priceAbove(getBid(leader)) : remoteNextBid;
 
     renderHeroMarket();
     if (elements.heroPrice) elements.heroPrice.textContent = money(nextPrice);

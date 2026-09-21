@@ -17,10 +17,11 @@ country filters and additional location badges are deferred.
 ## Proposed behavior
 
 - New listings and top-ups start at **US$100**, with a **US$1** amount-input step.
-- `boards.min_increment_minor = 10000` deliberately supplies both the minimum
-  accepted USD payment and the increment above an existing total used by suggested
-  rank quotes. The input step remains independently 100 minor units. This preserves
-  the existing pricing rule; the current MYR configuration stays at 500.
+- `boards.min_increment_minor = 10000` is the minimum accepted USD payment only.
+  Since 21 September the price to take a position is one whole unit above the
+  total holding it, never below that minimum (`functions/_lib/pricing.js`); the
+  minimum is no longer also the step, which had quoted US$105 for a place any
+  US$100 payment already takes. The input step remains 100 minor units.
 - On an empty USD board, the entry minimum and #1 suggestion are US$2. With a
   US$12 leader, a new entrant is offered US$14, while a US$2 payment remains valid
   at a lower position. A listing with US$3.25 is offered US$11 to exceed that leader
