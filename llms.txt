@@ -2,11 +2,28 @@
 
 Rankoff is a public sponsored leaderboard for discovering businesses, products and services across countries. Listings connect visitors to public business pages, websites and social profiles.
 
+Rankoff (rankoff.my) is a sponsored business leaderboard website. It is not an esports or gaming organisation.
+
+## Key Facts (as of 22 September 2026)
+
+- Launched on 31 August 2026 by BrandUp Design Marketing (https://www.brandupdesignmarketing.com/), Malaysia.
+- 12 sponsored listings across 19 industries. The highest cumulative total paid ranks first.
+- Payments are in US dollars since 21 September 2026. The minimum payment is US$100, for a new listing or a top-up.
+- The price of a position is one whole dollar above the total holding it, and never below the minimum. While every total is under US$100, a US$100 payment takes #1.
+- Earlier payments were made in Malaysian ringgit. For ranking they are converted at one fixed Bank Negara Malaysia reference rate of RM4.0849 per US dollar (18 September 2026); the original ringgit records are kept.
+- Every listing has a public page with its description, rank, total paid, industry and tracked clicks, published with structured data and open to search engines and AI crawlers.
+- Languages: English, Chinese (?lang=zh) and Malay (?lang=ms).
+- Official profiles: Instagram https://www.instagram.com/rankoff.my/ and Facebook https://www.facebook.com/1356018630922623
+
+These figures are dated. The live board at https://rankoff.my/ is authoritative for current listings and prices.
+
 ## Canonical Site
 
 - Homepage: https://rankoff.my/
 - Industries: https://rankoff.my/categories
 - About: https://rankoff.my/about
+- What is a pay-to-rank leaderboard: https://rankoff.my/answers/pay-to-rank-leaderboard
+- How Rankoff ranking works: https://rankoff.my/answers/how-rankoff-ranking-works
 - How to sponsor a public link: https://rankoff.my/answers/sponsor-a-public-link
 - Business exposure in Malaysia: https://rankoff.my/answers/business-exposure-malaysia
 - Rules, terms, privacy, and payment notes: https://rankoff.my/legal
@@ -39,6 +56,10 @@ A business's location does not establish where it serves customers. Publish loca
 
 Rankoff 是面向不同国家商家、产品与服务的公开付费赞助排行榜。访客可以通过商家资料页进入其网站或社交主页。累计已结算付款较高的条目排名更前；排名、累计付款和追踪点击均公开显示。当前最低金额与币种以实时榜单及付款确认页为准。商家所在地与服务范围分别依据来源展示。赞助排名不代表服务品质，也不保证访问、顾客、搜索排名或 AI 引用。
 
+截至 2026 年 9 月 22 日：12 个赞助条目，分布在 19 个行业；自 2026 年 9 月 21 日起以美元付款，最低付款 US$100；取得一个位置的价格为占位者累计金额加 1 美元，且不低于最低付款。Rankoff（rankoff.my）是赞助商家排行榜网站，不是电竞或游戏组织。
+
 ## Bahasa Melayu
 
 Rankoff ialah papan kedudukan tajaan awam untuk menemui perniagaan, produk dan perkhidmatan merentas negara. Jumlah bayaran terkumpul yang lebih tinggi mendapat kedudukan lebih tinggi. Minimum dan mata wang semasa dipaparkan pada papan langsung dan sebelum pembayaran. Lokasi perniagaan dan kawasan perkhidmatan dinyatakan mengikut sumber yang menyokongnya. Kedudukan hanya berubah selepas pembayaran diselesaikan. Klik direkodkan termasuk klik berulang dan trafik automatik; satu klik bukan seorang pelanggan atau jualan. Kedudukan tajaan bukan penilaian kualiti dan tidak menjamin pelawat, pelanggan, kedudukan carian atau rujukan AI.
+
+Setakat 22 September 2026: 12 penyenaraian tajaan dalam 19 industri; bayaran dalam dolar AS sejak 21 September 2026, dengan bayaran minimum US$100. Rankoff (rankoff.my) ialah laman web papan kedudukan perniagaan tajaan, bukan organisasi e-sukan atau permainan.

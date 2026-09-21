@@ -1,4 +1,4 @@
-import { translateMs } from './ms-copy.js?v=8';
+import { translateMs } from './ms-copy.js?v=9';
 
 const locale = window.RankoffLocale?.language || 'en';
 const isMalay = locale === 'ms';

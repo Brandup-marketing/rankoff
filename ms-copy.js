@@ -408,6 +408,7 @@ All industries|Semua industri
 No active industries yet.|Belum ada industri aktif.
 Choose an industry to view its live board.|Pilih industri untuk melihat papan langsungnya.
 Enter your website, choose an industry, and pay from US$1.|Masukkan laman web anda, pilih industri, dan bayar dari US$1.
+Entry is currently US$1. The live board shows the current minimum and currency. The applicable published price is shown before payment.|Harga masuk kini US$1. Papan langsung menunjukkan minimum dan mata wang semasa. Harga yang berkenaan dipaparkan sebelum pembayaran.
 `.trim().split('\n').map(line => { const at = line.indexOf('|'); return [line.slice(0, at), line.slice(at + 1)]; }))});
 
 export const normalizeCopy = value => String(value).replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
@@ -450,6 +451,7 @@ export function translateMs(value) {
 
 const MS_PATTERNS = [
   [/^top total (.+)$/, amount => `jumlah tertinggi ${amount}`],
+  [/^(\d+) live listings?, (.+) in total paid( \(earlier ringgit payments converted at a fixed rate\))? and (\d+) tracked clicks?$/, (count, price, converted, clicks) => `${count} penyenaraian aktif, ${price} jumlah dibayar${converted ? ' (bayaran ringgit terdahulu ditukar pada kadar tetap)' : ''} dan ${clicks} klik direkodkan`],
   [/^from ((?:RM|US\$)[\s\u00a0]*[\d.,]+)$/, price => `dari ${price}`],
   [/^Visit (.+) ↗$/, target => `Lawati ${target === 'website' ? 'web' : target} ↗`],
   [/^Claimed (\d+) days? ago$/, count => `Kedudukan diperoleh ${count} hari lalu`],
