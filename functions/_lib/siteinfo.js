@@ -19,12 +19,20 @@ export function decodeEntities(value) {
     .trim();
 }
 
+// An attribute value ends at the quote that opened it. Matching "either quote"
+// cut "Let's GO" to "Let" and "Kim's Salon" to "Kim", because an apostrophe is
+// a legal character inside a double-quoted value.
+function attr(tag, name) {
+  const match = String(tag || "").match(new RegExp(`(?:^|[\\s"'/])${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)')`, "i"));
+  return match ? (match[1] ?? match[2] ?? "") : "";
+}
+
 function linkHref(html, patterns) {
   for (const pattern of patterns) {
     const tag = html.match(pattern);
     if (!tag) continue;
     // A .ico is the 16px relic; only a real image is worth a card tile.
-    const href = tag[0].match(/href=["']([^"']*)["']/i)?.[1] || "";
+    const href = attr(tag[0], "href");
     if (href && !/\.ico(\?|$)/i.test(href)) return decodeEntities(href);
   }
   return "";
@@ -34,7 +42,7 @@ function linkHref(html, patterns) {
 // the header. It is named "logo" often enough to be worth asking for.
 function markupLogo(html) {
   const tag = html.match(/<img[^>]+(?:src|class|alt|id)=["'][^"']*logo[^"']*["'][^>]*>/i);
-  const src = tag?.[0].match(/src=["']([^"']+)["']/i)?.[1] || "";
+  const src = attr(tag?.[0], "src");
   return /\.(png|jpe?g|webp|svg)(\?|$)/i.test(src) ? decodeEntities(src) : "";
 }
 
@@ -42,8 +50,7 @@ function metaContent(html, patterns) {
   for (const pattern of patterns) {
     const tag = html.match(pattern);
     if (!tag) continue;
-    const content = tag[0].match(/content=["']([^"']*)["']/i);
-    const value = decodeEntities(content?.[1]);
+    const value = decodeEntities(attr(tag[0], "content"));
     if (value) return value;
   }
   return "";
