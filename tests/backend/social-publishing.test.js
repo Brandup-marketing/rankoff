@@ -137,3 +137,27 @@ test('publishing requires explicit destinations and never falls back to agency a
   await assert.rejects(runSocialPublisher(env), { message: 'rankoff_publishing_accounts_required' });
   assert.equal(db.sqlite.prepare('SELECT COUNT(*) n FROM social_jobs').get().n, 0); db.sqlite.close();
 });
+
+test('an Instagram action block holds the post for review instead of retrying, and Facebook still publishes', async () => {
+  const db = setup(), calls = [];
+  const blocked = () => Response.json({ error: { code: 4, error_subcode: 2207051, message: 'restricted' } }, { status: 403 });
+  const fetcher = meta(calls, (url) => url.pathname.endsWith('/media') ? blocked() : null);
+  const first = await runSocialPublisher(envFor(db), { now, renderImage: async () => jpeg, fetcher });
+  assert.equal(first.review, true);
+  assert.deepEqual(deliveries(db).map((d) => [d.platform, d.state]), [['facebook', 'published'], ['instagram', 'review']]);
+  assert.equal(deliveries(db)[1].last_error, 'meta_http_403_code_4_subcode_2207051');
+  // Later runs must not touch Meta again for this job.
+  for (const later of ['2026-09-14T07:00:00.000Z', '2026-09-15T06:00:00.000Z']) {
+    assert.equal((await runSocialPublisher(envFor(db), { now: later, fetcher })).processed, 0);
+  }
+  assert.equal(calls.filter((c) => c.path.endsWith('/media')).length, 1);
+  assert.equal(calls.filter((c) => c.path.endsWith('/photos')).length, 1); db.sqlite.close();
+});
+
+test('other Instagram refusals still retry with backoff', async () => {
+  const db = setup(), calls = [];
+  const fetcher = meta(calls, (url) => url.pathname.endsWith('/media') ? Response.json({ error: { code: 2, error_subcode: 0 } }, { status: 500 }) : null);
+  const first = await runSocialPublisher(envFor(db), { now, renderImage: async () => jpeg, fetcher });
+  assert.equal(first.review, false);
+  assert.equal(deliveries(db).find((d) => d.platform === 'instagram').state, 'pending'); db.sqlite.close();
+});

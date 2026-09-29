@@ -35,8 +35,13 @@ export async function discoverSocialJobs(db, startAt, now) {
 }
 
 class MetaError extends Error {
-  constructor(code, ambiguous = false) { super(code); this.ambiguous = ambiguous; }
+  constructor(code, ambiguous = false, blocked = false) { super(code); this.ambiguous = ambiguous; this.blocked = blocked; }
 }
+
+// Instagram's anti-spam refusal ("we restrict certain activity to protect our
+// community"). It describes the account, not the request, and is not transient:
+// retrying on a schedule can only prolong it, so the post is held for a person.
+const ACTION_BLOCKED = { code: 4, subcode: 2207051 };
 
 export async function graph(env, path, fields, method = 'GET', fetcher = fetch, token = env.META_ACCESS_TOKEN) {
   const version = /^v\d+\.\d+$/.test(env.META_GRAPH_API_VERSION || '') ? env.META_GRAPH_API_VERSION : 'v25.0';
@@ -51,8 +56,9 @@ export async function graph(env, path, fields, method = 'GET', fetcher = fetch, 
   } catch { throw new MetaError('meta_response_uncertain', method === 'POST'); }
   if (!response.ok || data.error) {
     // Persist numeric diagnostics only; Graph can echo credentials in messages.
-    throw new MetaError(`meta_http_${response.status}_code_${Number(data.error?.code || 0)}_subcode_${Number(data.error?.error_subcode || 0)}`,
-      method === 'POST' && response.status >= 500);
+    const code = Number(data.error?.code || 0), subcode = Number(data.error?.error_subcode || 0);
+    throw new MetaError(`meta_http_${response.status}_code_${code}_subcode_${subcode}`,
+      method === 'POST' && response.status >= 500, code === ACTION_BLOCKED.code && subcode === ACTION_BLOCKED.subcode);
   }
   return data;
 }
@@ -122,7 +128,8 @@ async function deliver(db, env, job, platform, fetcher) {
     }
   } catch (error) {
     const uncertain = publishing && (!(error instanceof MetaError) || error.ambiguous);
-    await deliveryUpdate(db, job.id, platform, uncertain ? 'review' : 'pending',
+    const blocked = error instanceof MetaError && error.blocked;
+    await deliveryUpdate(db, job.id, platform, uncertain || blocked ? 'review' : 'pending',
       error instanceof MetaError ? error.message : 'delivery_storage_failed');
   }
 }
